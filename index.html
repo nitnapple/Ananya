@@ -5,16 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Denied</title>
     <style>
-        body {
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
             background-color: #f8f9fa;
             color: #333;
         }
+
         .container {
             text-align: center;
             padding: 20px;
@@ -22,36 +30,55 @@
             border-radius: 10px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            width: 400px;
         }
+
         .container h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #dc3545;
+            margin-bottom: 10px;
         }
+
         .container p {
-            margin-top: 10px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
+
         .container a {
-            margin-top: 20px;
-            display: inline-block;
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #dc3545;
             color: #fff;
             border-radius: 5px;
             font-weight: bold;
             transition: background-color 0.3s;
+            display: inline-block;
         }
+
         .container a:hover {
             background-color: #b02a37;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            .container h1 {
+                font-size: 2rem;
+            }
+            .container p {
+                font-size: 1rem;
+            }
+            .container a {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Access Denied</h1>
-        <p>Sorry, you do not have permission to access this page. Please
-        Contact Admin.</p>
+        <p>Sorry, you do not have permission to access this page.</p>
         <a href="/">Go Back to Home</a>
     </div>
 </body>
