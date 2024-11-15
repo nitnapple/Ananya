@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-   h1 {text-align: center;}
-   p {text-align: center;}
-   div {text-align: center;}
-</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Progress Bar Website</title>
+    <title>Access Denied</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #dc3545;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .container h1 {
+            font-size: 3rem;
+            color: #dc3545;
+        }
+        .container p {
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+        .container a {
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .container a:hover {
+            background-color: #b02a37;
+        }
+    </style>
 </head>
 <body>
-<h1>Hi! Ananya, It's your attendance progress bar</h1>
-<div class="progress-container">
-    <div class="progress-bar" id="myBar">
-        <div class="progress-text">0%</div>
+    <div class="container">
+        <h1>Access Denied</h1>
+        <p>Sorry, you do not have permission to access this page. Please
+        Contact Admin.</p>
+        <a href="/">Go Back to Home</a>
     </div>
-</div>
-
-<script src="script.js"></script>
-
 </body>
 </html>
