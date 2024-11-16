@@ -109,7 +109,7 @@
             color: #4a3b28;
             margin-top: 0.5em;
         }
-        .Download-button {
+        .download-button {
             display: inline-block;
             margin-top: 0.5em;
             padding: 0.5em 1em;
@@ -120,7 +120,7 @@
             text-decoration: none;
             transition: background-color 0.3s ease;
         }
-        .Download-button:hover {
+        .download-button:hover {
             background-color: #c79c6d;
         }
 
@@ -202,7 +202,9 @@
     <header class="header">
         <h1>Bookshelf</h1>
         <div class="nav-buttons">
-        <a href="#"><img src="https://github.com/nitnapple/IIR/blob/main/profile-icon.png?raw=true" width="30"></a>
+            <a href="#">Books</a>
+            <a href="#">AudioBooks</a>
+            <a href="#"><img src="https://github.com/nitnapple/IIR/blob/main/profile-icon.png?raw=true" width="30" alt="Profile Icon"></a>
         </div>
     </header>
 
@@ -212,69 +214,118 @@
         <div class="search-bar">
             <input type="text" placeholder="Titles, author, or topics">
         </div>
-        
+
         <!-- Featured Book Section -->
-        <h2>Introduction to International Relations, Sem V, BA Programme.</h2>
+        <h2>Introduction to International Relations, Sem V, BA Programme</h2>
         <div class="featured-book">
             <a href="https://raw.githubusercontent.com/nitnapple/IIR/b7262ba514f7d24302b49d2868952837682ec62d/Unit%201-4%20IIR.pdf" download>
                 <img src="https://github.com/nitnapple/IIR/blob/main/featured-book.jpg?raw=true" alt="Download PDF" style="width:150px;height:auto;">
-           <a href="https://raw.githubusercontent.com/nitnapple/IIR/b7262ba514f7d24302b49d2868952837682ec62d/Unit%201-4%20IIR.pdf" target="_blank"></a>
-            
+            </a>
         </div>
 
         <!-- Book List -->
         <h2>Articles</h2>
         <div class="book-list">
+            <!-- Repeat for each book -->
             <div class="book-card">
                 <h4>Abhydaya, 420</h4>
                 <a href="https://raw.githubusercontent.com/nitnapple/IIR/dcca062d3c14ba4ae06e1730f010a253e2d5179c/Abhyudaya.pdf" download>
-                <img src="https://github.com/nitnapple/IIR/blob/main/Abhyudaya.png?raw=true" alt="Abhyudaya 420" style="width:150px;height:auto;">
-                <a href="https://raw.githubusercontent.com/nitnapple/IIR/dcca062d3c14ba4ae06e1730f010a253e2d5179c/Abhyudaya.pdf" target="_blank"></a>
-                           </div>
+                    <img src="https://github.com/nitnapple/IIR/blob/main/Abhyudaya.png?raw=true" alt="Abhyudaya 420">
+                </a>
+            </div>
             <div class="book-card">
                 <h4>Durgesh, 473</h4>
-                 <a href="https://raw.githubusercontent.com/nitnapple/IIR/5f10989739c04f7779bcc6f26c7034176fb3bcfc/Durgesh.pdf" download>
-                 <img src="https://github.com/nitnapple/IIR/blob/main/Durgesh.jpg?raw=true" alt="Durgesh 473" style="width:150px;height:auto;">
-                <a href="https://raw.githubusercontent.com/nitnapple/IIR/5f10989739c04f7779bcc6f26c7034176fb3bcfc/Durgesh.pdf" target="_blank"</a>
+                <a href="https://raw.githubusercontent.com/nitnapple/IIR/5f10989739c04f7779bcc6f26c7034176fb3bcfc/Durgesh.pdf" download>
+                    <img src="https://github.com/nitnapple/IIR/blob/main/Durgesh.jpg?raw=true" alt="Durgesh 473" style="width:150px;height:auto;">
+                </a>
             </div>
-                        
+            
             <div class="book-card">
                 <h4>Pushkar, 629</h4>
-              
+                
             </div>
             <div class="book-card">
                 <h4>Prince Pal, 635</h4>
-                <a href="https://raw.githubusercontent.com/nitnapple/IIR/5c8d95d7b17faa518fcce2ba6ebfa637a4bef6e7/Prince.pdf" download>
-                <img src="https://github.com/nitnapple/IIR/blob/main/Prince.jpg?raw=true" alt="Prince Pal, 635" style="width:150px;height:auto;">
-                 <a href="https://raw.githubusercontent.com/nitnapple/IIR/5c8d95d7b17faa518fcce2ba6ebfa637a4bef6e7/Prince.pdf" target="_blank">
-                     
             </div>
-              <div class="book-card">
-                <img src="book5.jpg" alt="Book 5">
+
+             <div class="book-card">
                 <h4>Aradhya, 654</h4>
-                <a href="#" class="Download-button">Download Now</a>
-                
-            </div>
-             <div class="book-card">
-                <img src="book6.jpg" alt="Book 6">
-                <h4>Nitin , 656</h4>
+            </div> 
             
-            </div>
+             <div class="book-card">
+                <h4>Nitin, 656</h4>
+                 
+            </div> 
             <div class="book-card">
-                <img src="book7.jpg" alt="Book 7">
                 <h4>Anurag Srivastava, 693</h4>
+            </div> 
             
-            </div>
-                 <div class="book-card">
-                <h4>Abhydaya, 420</h4>
-                <a href="https://raw.githubusercontent.com/nitnapple/IIR/dcca062d3c14ba4ae06e1730f010a253e2d5179c/Abhyudaya.pdf" download>
-                <img src="https://github.com/nitnapple/IIR/blob/main/Abhyudaya.png?raw=true" alt="Abhyudaya 420" style="width:150px;height:auto;">
-                <a href="https://raw.githubusercontent.com/nitnapple/IIR/dcca062d3c14ba4ae06e1730f010a253e2d5179c/Abhyudaya.pdf" target="_blank"></a>
-                           </div>                     
-             <div class="book-card">
-                <img src="book8.jpg" alt="Book 8">
+            <div class="book-card">
                 <h4>Rohit, 697</h4>
-                <a href="#" class="Download-button">Buy Now</a>
+            </div> 
+            
+            <div class="book-card">
+                <h4>Praveen, 718</h4>
+            </div> 
+            
+            <div class="book-card">
+                <h4>Tarun, 720</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Ayush, 725</h4>
+            </div>
+            
+            <div class="book-card">
+                <h4>Sudhansh, 738</h4>
+            </div>
+            
+            <div class="book-card">
+                <h4>Tulika, 762</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Juhi, 784</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Kohinoor, 813</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Neha, 825</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+            </div>
+
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
             </div>
         </div>
 
@@ -285,12 +336,6 @@
                 <input type="text" placeholder="Your Name">
                 <textarea placeholder="Write your comment here..."></textarea>
                 <button class="submit-button">Submit</button>
-            </div>
-
-            <!-- Existing Comments -->
-            <div class="comments-list">
-             
-                </div>
             </div>
         </div>
     </div>
