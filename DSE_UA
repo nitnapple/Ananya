@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf - Share Books and Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #0078D4;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #005a9e;
+            padding: 0.5rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+
+        .book-list, .note-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .item {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1rem;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .item img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .item h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .item p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .item a {
+            display: inline-block;
+            margin-top: 0.5rem;
+            text-decoration: none;
+            color: #0078D4;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #005a9e;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bookshelf</h1>
+        <p>Your platform to share and discover books and notes online</p>
+    </header>
+    <nav>
+        <a href="#books">Books</a>
+        <a href="#notes">Notes</a>
+        <a href="#upload">Upload</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <div class="container">
+        <section id="books">
+            <h2>Books</h2>
+            <div class="book-list">
+                <div class="item">
+                    <img src="placeholder.jpg" alt="Book Cover">
+                    <h3>Book Title</h3>
+                    <p>Author: Author Name</p>
+                    <a href="#">Read More</a>
+                </div>
+                <!-- Add more books here -->
+            </div>
+        </section>
+        <section id="notes">
+            <h2>Notes</h2>
+            <div class="note-list">
+                <div class="item">
+                    <img src="placeholder.jpg" alt="Notes Thumbnail">
+                    <h3>Note Title</h3>
+                    <p>Description: Brief description of the notes.</p>
+                    <a href="#">Read More</a>
+                </div>
+                <!-- Add more notes here -->
+            </div>
+        </section>
+        <section id="upload">
+            <h2>Upload</h2>
+            <p>Coming soon: Upload your books and notes to share with the community!</p>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2024 Bookshelf. All rights reserved.</p>
+    </footer>
+</body>
+</html>
