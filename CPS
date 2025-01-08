@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - Share Notes and Resources</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        header {
+            background-color: #1f4b57;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        header nav a {
+            text-decoration: none;
+            color: white;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        header nav a:hover {
+            color: #ff9933;
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px 20px;
+            background-color: #fdf6e4;
+            min-height: 90vh;
+        }
+        .hero-text {
+            max-width: 50%;
+        }
+        .hero h1 {
+            font-size: 3em;
+            color: #1f4b57;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #555;
+            margin: 20px 0;
+        }
+        .hero button {
+            background-color: #ff9933;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .hero button:hover {
+            background-color: #e67e22;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .hero img {
+            max-width: 40%;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .book-section {
+            padding: 40px 20px;
+            background-color: #ffffff;
+        }
+        .book-section h2 {
+            text-align: center;
+            color: #1f4b57;
+            margin-bottom: 20px;
+        }
+        .book-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .book-card {
+            background-color: #fdf6e4;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+        .book-card img {
+            width: 100%;
+            height: auto;
+        }
+        .book-card h3 {
+            margin: 15px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .book-card p {
+            margin: 15px;
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.5;
+        }
+        footer {
+            background-color: #1f4b57;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 0.9em;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Books</h1>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="newpage.html">New Page</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Welcome to Books</h1>
+            <p>Connect with fellow students from Hindu College and share books, notes, and resources online. Collaborate and grow together.</p>
+            <button>Get Started</button>
+        </div>
+        <img src="/mnt/data/online-library-app-for-reading-banner-website-template-electronic-book-store-application-on-background-with-bookshelves-digital-technologies-in-education-graphic-vector_2.jpg" alt="Books illustration">
+    </section>
+
+    <section class="book-section">
+        <h2>Available Books</h2>
+        <div class="book-cards">
+            <div class="book-card">
+                <img src="https://via.placeholder.com/250x150" alt="Book 1">
+                <h3>Introduction to Economics</h3>
+                <p>A beginner's guide to understanding the fundamentals of economics.</p>
+            </div>
+            <div class="book-card">
+                <img src="https://via.placeholder.com/250x150" alt="Book 2">
+                <h3>Modern Physics</h3>
+                <p>Explore the concepts of relativity and quantum mechanics.</p>
+            </div>
+            <div class="book-card">
+                <img src="https://via.placeholder.com/250x150" alt="Book 3">
+                <h3>Shakespeare's Plays</h3>
+                <p>Discover the timeless works of William Shakespeare.</p>
+            </div>
+            <div class="book-card">
+                <img src="https://via.placeholder.com/250x150" alt="Book 4">
+                <h3>Advanced Mathematics</h3>
+                <p>Dive deep into calculus, linear algebra, and differential equations.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Books. All rights reserved. Designed for Hindu College students.</p>
+    </footer>
+</body>
+</html>
+
+<!-- New Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Page</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        header {
+            background-color: #1f4b57;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        header nav a {
+            text-decoration: none;
+            color: white;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        header nav a:hover {
+            color: #ff9933;
+        }
+        .content {
+            padding: 40px;
+            text-align: center;
+        }
+        .content h1 {
+            color: #1f4b57;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Books</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Welcome to the New Page</h1>
+        <p>This is an additional page where more content can be added.</p>
+    </div>
+</body>
+</html>
