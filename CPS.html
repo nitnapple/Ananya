@@ -77,46 +77,33 @@
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .book-section {
-            padding: 40px 20px;
-            background-color: #ffffff;
-        }
-        .book-section h2 {
-            text-align: center;
-            color: #1f4b57;
-            margin-bottom: 20px;
-        }
-        .book-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
+        /* Book List */
+        .book-list {
+            margin-top: 2em;
+            display: flex;
+            gap: 1.5em;
+            overflow-x: auto;
         }
         .book-card {
-            background-color: #fdf6e4;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-        .book-card:hover {
-            transform: scale(1.05);
+            flex: 0 0 150px;
+            background-color: #fdf9f4;
+            padding: 1em;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .book-card img {
             width: 100%;
             height: auto;
+            border-radius: 5px;
         }
-        .book-card h3 {
-            margin: 15px;
-            font-size: 1.2em;
-            color: #333;
+        .book-card h4 {
+            font-size: 1em;
+            color: #4a3b28;
+            margin-top: 0.5em;
         }
-        .book-card p {
-            margin: 15px;
-            font-size: 0.9em;
-            color: #555;
-            line-height: 1.5;
-        }
+
+    
         footer {
             background-color: #1f4b57;
             padding: 20px;
@@ -141,6 +128,36 @@
     <section class="hero">
         <div class="hero-text">
                     </div>
+
+<!-- Book List -->
+        <h2>Articles</h2>
+        <div class="book-list">
+            <!-- Repeat for each book -->
+            <div class="book-card">
+                <h4>Abhydaya, 420</h4>
+                <a href="https://raw.githubusercontent.com/nitnapple/IIR/dcca062d3c14ba4ae06e1730f010a253e2d5179c/Abhyudaya.pdf" download>
+                    <img src="https://github.com/nitnapple/IIR/blob/main/Abhyudaya.png?raw=true" alt="Abhyudaya 420">
+                </a>
+            </div>
+            <div class="book-card">
+                <h4>Durgesh, 473</h4>
+                <a href="https://raw.githubusercontent.com/nitnapple/IIR/5f10989739c04f7779bcc6f26c7034176fb3bcfc/Durgesh.pdf" download>
+                    <img src="https://github.com/nitnapple/IIR/blob/main/Durgesh.jpg?raw=true" alt="Durgesh 473" style="width:150px;height:auto;">
+                </a>
+            </div>
+            
+            <div class="book-card">
+                <h4>Pushkar, 629</h4>
+                <a  href="https://raw.githubusercontent.com/nitnapple/IIR/5f10989739c04f7779bcc6f26c7034176fb3bcfc/Durgesh.pdf" download>
+                    <img src="https://github.com/nitnapple/IIR/blob/main/Pushkar.jpg?raw=true" alt="Pushkat 629" style="width:150px;height:auto;">
+                </a>
+            </div>
+            <div class="book-card">
+                <h4>Prince Pal, 635</h4>
+                    <a href="https://raw.githubusercontent.com/nitnapple/IIR/6aa0fd00e392cd33fab4a2b02da2df6ae138f63c/Prince.pdf download>
+                    <img src="https://github.com/nitnapple/IIR/blob/main/Durgesh.jpg?raw=true" alt="Durgesh 473" style="width:150px;height:auto;">
+                    </a>
+        
         <img src="/mnt/data/online-library-app-for-reading-banner-website-template-electronic-book-store-application-on-background-with-bookshelves-digital-technologies-in-education-graphic-vector_2.jpg" alt="Books illustration">
     </section>
 
@@ -148,55 +165,4 @@
         <p>&copy; 2025 Books. All rights reserved. Designed for Hindu College students.</p>
     </footer>
 </body>
-</html>
-
-<!-- New Page -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Page</title>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        header {
-            background-color: #1f4b57;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        header h1 {
-            margin: 0;
-            font-size: 1.8em;
-        }
-        header nav a {
-            text-decoration: none;
-            color: white;
-            margin: 0 15px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        header nav a:hover {
-            color: #ff9933;
-        }
-        .content {
-            padding: 40px;
-            text-align: center;
-        }
-        .content h1 {
-            color: #1f4b57;
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-
 </html>
