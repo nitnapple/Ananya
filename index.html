@@ -76,11 +76,25 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Access Denied</h1>
-        <p>Sorry, you do not have permission to access this page.</p>
-        <a href="https://nitnapple.github.io/Ananya/Bookshelf" target="_blank">Go Back to Home</a>
-    
+     <div id="login">
+        <h2>Enter Password to Access</h2>
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="error" style="color: red; display: none;">Incorrect Password!</p>
     </div>
+     <script>
+        function checkPassword() {
+            var enteredPassword = document.getElementById("password").value;
+            var correctPassword = "15062004";  // Change this to your password
+            
+            if (enteredPassword === correctPassword) {
+                document.getElementById("login").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            } else {
+                document.getElementById("error").style.display = "block";
+            }
+        }
+    </script>
+    
 </body>
 </html>
