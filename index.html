@@ -76,6 +76,15 @@
     </style>
 </head>
 <body>
+    
+    
+     <div id="login">
+        <h2>Enter Password to Access</h2>
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="error" style="color: red; display: none;">Incorrect Password!</p>
+    </div>
+    
     <div>
          <section>
         <h2>Get in Touch</h2>
@@ -93,13 +102,6 @@
         </form>
     </section>
        </div>
-    
-     <div id="login">
-        <h2>Enter Password to Access</h2>
-        <input type="password" id="password" placeholder="Enter Password">
-        <button onclick="checkPassword()">Submit</button>
-        <p id="error" style="color: red; display: none;">Incorrect Password!</p>
-    </div>
      <script>
         function checkPassword() {
             var enteredPassword = document.getElementById("password").value;
