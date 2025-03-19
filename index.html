@@ -3,126 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Denied</title>
+    <title>Coming Soon</title>
     <style>
-        /* Reset some default styles */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-        }
-
-        body {
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f8f9fa;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 24px;
             color: #333;
         }
-
-        .container {
-            text-align: center;
-            padding: 20px;
-            border: 2px solid #dc3545;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 90%;
-            width: 400px;
-        }
-
-        .container h1 {
-            font-size: 2.5rem;
-            color: #dc3545;
-            margin-bottom: 10px;
-        }
-
-        .container p {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-
-        .container a {
-            text-decoration: none;
-            padding: 12px 24px;
-            background-color: #dc3545;
-            color: #fff;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            display: inline-block;
-        }
-
-        .container a:hover {
-            background-color: #b02a37;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 480px) {
-            .container h1 {
-                font-size: 2rem;
-            }
-            .container p {
-                font-size: 1rem;
-            }
-            .container a {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
+        p {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    
-    
-     <div id="login">
-        <h2>Enter Password to Access</h2>
-        <input type="password" id="password" placeholder="Enter Password">
-        <button onclick="checkPassword()">Submit</button>
-        <p id="error" style="color: red; display: none;">Incorrect Password!</p>
+    <div class="container">
+        <h1>I'm Working on It, Please be Patient.</h1>
+        <p>Thank You.</p>
     </div>
-    
-    <div>
-         <div id="content" class="container">
-        <h1>Welcome to the Protected Page</h1>
-        <p>Congratulations! You've entered the correct password.
-             <section>
-        <h2>Get in Touch</h2>
-        <form>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-
-            <label for="message">Message:</label><br>
-            <textarea id="message" name="message" rows="4" required></textarea><br><br>
-
-            <button type="submit">Send</button>
-        </form>
-    </section>
-       </div>
-            
-        </p>
-    </div>
-        
-        
-     <script>
-        function checkPassword() {
-            var enteredPassword = document.getElementById("password").value;
-            var correctPassword = "15062004";  // Change this to your password
-            
-            if (enteredPassword === correctPassword) {
-                document.getElementById("login").style.display = "none";
-                document.getElementById("content").style.display = "block";
-            } else {
-                document.getElementById("error").style.display = "block";
-            }
-        }
-    </script>
-    
 </body>
 </html>
