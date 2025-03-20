@@ -24,6 +24,7 @@
             background: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
+            display: none; /* Hide content initially */
         }
         h1 {
             font-size: 24px;
@@ -35,9 +36,20 @@
             color: #666;
         }
     </style>
+    <script>
+        function checkPassword() {
+            var password = prompt("Enter the password:");
+            if (password === "Ananya123") { // Change the password as needed
+                document.getElementById("content").style.display = "block";
+            } else {
+                alert("Incorrect password. Access denied.");
+                document.body.innerHTML = ""; // Clear the page for security
+            }
+        }
+    </script>
 </head>
-<body>
-    <div class="container">
+<body onload="checkPassword()">
+    <div class="container" id="content">
         <h1>Hi! Ananya, I'm Working on It, Please be Patient.</h1>
         <p>Thank You.</p>
     </div>
