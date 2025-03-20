@@ -3,55 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
+    <title>Books & Notes Sharing - Ananya</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
         }
-        body {
+        header {
+            background: #6200ea;
+            color: white;
+            padding: 20px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-            text-align: center;
+            gap: 20px;
         }
-        .container {
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        section {
+            margin: 20px;
             padding: 20px;
             background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            display: none; /* Hide content initially */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            font-size: 24px;
-            color: #333;
+        .book-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 10px;
         }
-        p {
+        .book-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .book-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        button {
+            background: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
             margin-top: 10px;
-            font-size: 18px;
-            color: #666;
+        }
+        button:hover {
+            background: #3700b3;
+        }
+        @media (max-width: 600px) {
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .book-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Ananya's Book & Note Sharing</h1>
+        <nav>
+            <ul>
+                <li><a href="#books">Books</a></li>
+                <li><a href="#notes">Notes</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="books">
+        <h2>Books</h2>
+        <p>Upload and download books easily.</p>
+        <input type="file" id="bookUpload">
+        <button onclick="uploadBook()">Upload Book</button>
+        <div class="book-container" id="bookList">
+            <div class="book-card">
+                <img src="https://via.placeholder.com/150" alt="Book Cover">
+                <p>The Art of War</p>
+            </div>
+            <div class="book-card">
+                <img src="https://via.placeholder.com/150" alt="Book Cover">
+                <p>1984 by George Orwell</p>
+            </div>
+            <div class="book-card">
+                <img src="https://via.placeholder.com/150" alt="Book Cover">
+                <p>Pride and Prejudice</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="notes">
+        <h2>Notes</h2>
+        <p>Share your notes with friends.</p>
+        <input type="file" id="noteUpload">
+        <button onclick="uploadNote()">Upload Note</button>
+        <ul id="noteList"></ul>
+    </section>
+    
     <script>
-        function checkPassword() {
-            var password = prompt("Enter the password:");
-            if (password === "15062004") { // Change the password as needed
-                document.getElementById("content").style.display = "block";
-            } else {
-                alert("Incorrect password. Access denied.");
-                document.body.innerHTML = ""; // Clear the page for security
+        function uploadBook() {
+            const bookInput = document.getElementById("bookUpload");
+            const bookList = document.getElementById("bookList");
+            if (bookInput.files.length > 0) {
+                const file = bookInput.files[0];
+                const card = document.createElement("div");
+                card.className = "book-card";
+                const img = document.createElement("img");
+                img.src = "https://via.placeholder.com/150";
+                const title = document.createElement("p");
+                title.textContent = file.name;
+                card.appendChild(img);
+                card.appendChild(title);
+                bookList.appendChild(card);
+            }
+        }
+        
+        function uploadNote() {
+            const noteInput = document.getElementById("noteUpload");
+            const noteList = document.getElementById("noteList");
+            if (noteInput.files.length > 0) {
+                const listItem = document.createElement("li");
+                listItem.textContent = noteInput.files[0].name;
+                noteList.appendChild(listItem);
             }
         }
     </script>
-</head>
-<body onload="checkPassword()">
-    <div class="container" id="content">
-        <h1>Hi! Ananya, I'm Working on It, Please be Patient.</h1>
-        <p>Thank You.</p>
-    </div>
 </body>
 </html>
