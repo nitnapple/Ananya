@@ -4,181 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Books & Notes Sharing - Ananya</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            background-color: #f4f4f4;
-        }
-        header {
-            background: #6200ea;
-            color: white;
-            padding: 20px;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        nav ul li {
-            display: inline;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        section {
-            margin: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .book-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            padding: 10px;
-        }
-        .book-card {
-            background: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .book-card img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-        button {
-            background: #6200ea;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #3700b3;
-        }
-        @media (max-width: 600px) {
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .book-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <h1>Welcome, Ananya. Here are all your assignments and presentations.</h1>
-        <nav>
-            <ul>
-                <li><a href="#assignments">Assignments</a></li>
-                <li><a href="#Presentations">Presentations</a></li>
+<body class="bg-gray-100 text-gray-900">
+    
+    <!-- Header Section -->
+    <header class="bg-purple-700 text-white py-6 text-center shadow-lg">
+        <h1 class="text-3xl font-bold">Welcome, Ananya</h1>
+        <p class="text-lg">Here are all your assignments and presentations.</p>
+        <nav class="mt-4">
+            <ul class="flex justify-center space-x-6">
+                <li><a href="#assignments" class="hover:text-gray-300 transition">Assignments</a></li>
+                <li><a href="#presentations" class="hover:text-gray-300 transition">Presentations</a></li>
+                <li><a href="#messages" class="hover:text-gray-300 transition">Messages</a></li>
             </ul>
         </nav>
     </header>
-    
-    <section id="assignments">
-        <h2>Assignments</h2>
-      
-        <div class="book-container" id="bookList">
-            <div class="book-card">
+
+    <!-- Assignments Section -->
+    <section id="assignments" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">Assignments</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
                 <a href="blob:https://github.com/535a303f-b2cc-44ef-aa1c-30da59c19f95" download>
-                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg?quality=50&strip=all" alt="Book Cover">
-                    <p><h3>DSE: Sanskrit, Art of Balance Living. </h3><a href="blob:https://github.com/535a303f-b2cc-44ef-aa1c-30da59c19f95"></a></p>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" alt="Assignment Cover" class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">DSE: Sanskrit, Art of Balanced Living</h3>
+                </a>
             </div>
-            <div class="book-card">
-                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg?quality=50&strip=all" alt="Book Cover">
-                <p><h3>PPA Assignment<h3/></p>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" alt="Assignment Cover" class="w-full h-32 object-cover rounded">
+                <h3 class="mt-2 font-medium">PPA Assignment</h3>
             </div>
-            <div class="book-card">
-                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg?quality=50&strip=all" alt="Book Cover">
-                <p><h3>GE: Legal Philosophy Assignment<h3/></p>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" alt="Assignment Cover" class="w-full h-32 object-cover rounded">
+                <h3 class="mt-2 font-medium">GE: Legal Philosophy Assignment</h3>
             </div>
-            <div class="book-card">
-                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg?quality=50&strip=all" alt="Book Cover">
-                <p><h3>Comparative Political Systems Assignment<h3/></p>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" alt="Assignment Cover" class="w-full h-32 object-cover rounded">
+                <h3 class="mt-2 font-medium">Comparative Political Systems Assignment</h3>
+            </div>
         </div>
     </section>
-    
-    <section id="Presentations">
-        <h2>Presentations</h2>
-        <p>Share your notes with friends.</p>
-        <input type="file" id="noteUpload">
-        <button onclick="uploadNote()">Upload Note</button>
-        <ul id="noteList"></ul>
+
+    <!-- Presentations Section -->
+    <section id="presentations" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">Presentations</h2>
+        <p class="mt-2 text-gray-600">Share your notes with friends.</p>
+
+        <div class="mt-4 flex flex-col md:flex-row items-center gap-4">
+            <input type="file" id="noteUpload" class="border border-gray-300 rounded p-2">
+            <button onclick="uploadNote()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-800 transition">
+                Upload Note
+            </button>
+        </div>
+
+        <ul id="noteList" class="mt-4 text-gray-700"></ul>
     </section>
-    
-    <section id="Messages">
-         <h2>Messages</h2>
-   <div class="left-align">
-        <h2>Academic Schedule & Deadlines – March 2025</h2>
-        <ol>
-            <li>
-                <strong>Comparative Political Systems</strong> – Presentation and Assignment (In Progress) ⚠️  
-                <em>[Deadline: Thursday, 20 March 2025]</em>
+
+    <!-- Messages Section -->
+    <section id="messages" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">Academic Schedule & Deadlines – March 2025</h2>
+
+        <ol class="list-decimal mt-4 space-y-3 pl-5">
+            <li class="text-gray-700">
+                <strong>Comparative Political Systems</strong> – Presentation and Assignment <span class="text-yellow-600 font-bold">⚠️ In Progress</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 20 March 2025]</em>
             </li>
-            <li>
-                <strong>DSE Sanskrit</strong> – Assignment (Completed) ✅  
-                <em>[Deadline: Friday, 7 March 2025]</em>
+            <li class="text-gray-700">
+                <strong>DSE Sanskrit</strong> – Assignment <span class="text-green-600 font-bold">✅ Completed</span>
+                <em class="block text-gray-500">[Deadline: Friday, 7 March 2025]</em>
             </li>
-            <li>
-                <strong>GE Philosophy</strong> – Presentation and Assignment (In Progress) ⚠️  
-                <em>[Deadline: Friday, 17 March 2025 (Flexible)]</em>
+            <li class="text-gray-700">
+                <strong>GE Philosophy</strong> – Presentation and Assignment <span class="text-yellow-600 font-bold">⚠️ In Progress</span>
+                <em class="block text-gray-500">[Deadline: Friday, 17 March 2025 (Flexible)]</em>
             </li>
-            <li>
-                <strong>PPA</strong> – Internal Assessment Assignment (In Progress) ⚠️  
-                <em>[Deadline: Tuesday, 25 March 2025]</em>
+            <li class="text-gray-700">
+                <strong>PPA</strong> – Internal Assessment Assignment <span class="text-yellow-600 font-bold">⚠️ In Progress</span>
+                <em class="block text-gray-500">[Deadline: Tuesday, 25 March 2025]</em>
             </li>
-            <li>
-                <strong>Sanskrit Literature</strong> – <em>No Pending Work</em> ✨  
+            <li class="text-gray-700">
+                <strong>Sanskrit Literature</strong> – <span class="text-green-600 font-bold">✨ No Pending Work</span>
             </li>
         </ol>
-        <p><em>Updated on Friday, 14 March 2025</em></p>
-    </div>
+
+        <p class="mt-4 text-gray-500 italic">Updated on Friday, 14 March 2025</p>
     </section>
+
+    <!-- JavaScript -->
     <script>
-        function uploadBook() {
-            const bookInput = document.getElementById("bookUpload");
-            const bookList = document.getElementById("bookList");
-            if (bookInput.files.length > 0) {
-                const file = bookInput.files[0];
-                const card = document.createElement("div");
-                card.className = "book-card";
-                const img = document.createElement("img");
-                img.src = "https://via.placeholder.com/150";
-                const title = document.createElement("p");
-                title.textContent = file.name;
-                card.appendChild(img);
-                card.appendChild(title);
-                bookList.appendChild(card);
-            }
-        }
-        
         function uploadNote() {
             const noteInput = document.getElementById("noteUpload");
             const noteList = document.getElementById("noteList");
             if (noteInput.files.length > 0) {
                 const listItem = document.createElement("li");
+                listItem.className = "bg-gray-200 p-2 rounded mt-2";
                 listItem.textContent = noteInput.files[0].name;
                 noteList.appendChild(listItem);
             }
         }
     </script>
+
 </body>
 </html>
