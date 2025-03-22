@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Books & Notes Sharing - Ananya</title>
-  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/crown.icog">
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/crown.ico">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -137,8 +137,7 @@
     <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">💡 Suggestion Box</h2>
     <p class="text-gray-600 mt-2">Share your feedback, suggestions, or requests below:</p>
 
-    <form id="suggestionForm" action="https://formspree.io/f/xyzewypp" method="POST" class="mt-4">
-        <!-- The 'name' attribute is required for Formspree to identify the form field -->
+    <form id="suggestionForm" class="mt-4">
         <textarea name="suggestion" id="suggestionInput" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" rows="4" placeholder="Type your suggestion here..." required></textarea>
         <button type="submit" class="mt-3 bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-800 transition">Submit</button>
     </form>
@@ -147,6 +146,46 @@
         ✅ Thank you for your suggestion!
     </div>
 </section>
+
+<!-- JavaScript -->
+<script>
+document.getElementById("suggestionForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevents the default form submission
+
+    const suggestionInput = document.getElementById("suggestionInput").value.trim();
+    const confirmationMessage = document.getElementById("confirmationMessage");
+
+    if (suggestionInput === "") {
+        alert("Please enter a suggestion before submitting.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("suggestion", suggestionInput);
+
+    fetch("https://formspree.io/f/xyzewypp", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok) {
+            confirmationMessage.classList.remove("hidden");
+            document.getElementById("suggestionInput").value = ""; // Clear input field
+        } else {
+            alert("Error submitting suggestion. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again later.");
+    });
+});
+</script>
+
     
 
     <!-- JavaScript -->
