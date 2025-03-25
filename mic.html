@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mic Access | Puppertino UI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/puppertino@1.0.0/css/puppertino.min.css">
+    <style>
+        body {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            background: var(--background-secondary);
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: var(--background-secondary);
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="toolbar">
+        <button class="button">Home</button>
+        <button class="button">Settings</button>
+        <button class="button">About</button>
+    </nav>
+
+    <div class="container">
+        <h1>Microphone Access</h1>
+        <p id="status">Click the button to access the microphone.</p>
+        <button class="button primary" id="start">Request Mic Access</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Mic Access App | Built with Puppertino UI</p>
+    </footer>
+
+    <script>
+        document.getElementById("start").addEventListener("click", function() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function(stream) {
+                    document.getElementById("status").innerText = "Microphone access granted!";
+                    console.log("Microphone access granted");
+
+                    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    let source = audioContext.createMediaStreamSource(stream);
+                    
+                    let analyser = audioContext.createAnalyser();
+                    source.connect(analyser);
+                })
+                .catch(function(err) {
+                    document.getElementById("status").innerText = "Microphone access denied!";
+                    console.error("Microphone access denied:", err);
+                });
+        });
+    </script>
+
+</body>
+</html>
