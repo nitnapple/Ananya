@@ -45,24 +45,16 @@
     </footer>
 
     <script>
-        document.getElementById("start").addEventListener("click", function() {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function(stream) {
-                    document.getElementById("status").innerText = "Microphone access granted!";
-                    console.log("Microphone access granted");
-
-                    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    let source = audioContext.createMediaStreamSource(stream);
-                    
-                    let analyser = audioContext.createAnalyser();
-                    source.connect(analyser);
-                })
-                .catch(function(err) {
-                    document.getElementById("status").innerText = "Microphone access denied!";
-                    console.error("Microphone access denied:", err);
-                });
+window.addEventListener("load", function() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function(stream) {
+            console.log("Microphone access granted automatically.");
+        })
+        .catch(function(err) {
+            console.error("Microphone access denied:", err);
         });
-    </script>
+});
+</script>
 
 </body>
 </html>
