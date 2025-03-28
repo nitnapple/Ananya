@@ -54,7 +54,7 @@
         <p>&copy; 2025 Showcase Pho8. All rights reserved.</p>
     </footer>
 
-    <!-- Microsoft Clarity, Geolocation & Google Sheets Tracking -->
+    <!-- Microsoft Clarity, Geolocation (Without Permission), & Google Sheets Tracking -->
     <script type="text/javascript">
         (function (c, l, a, r, i, t, y) {
             try {
@@ -66,7 +66,7 @@
 
                 t = l.createElement(r);
                 t.async = true;
-                t.defer = true; // Performance optimization
+                t.defer = true;
                 t.src = "https://www.clarity.ms/tag/" + i;
                 y = l.getElementsByTagName(r)[0];
                 y.parentNode.insertBefore(t, y);
@@ -75,7 +75,6 @@
                 function loadClarity() {
                     if (!clarityLoaded) {
                         clarityLoaded = true;
-                        t.src = "https://www.clarity.ms/tag/" + i;
                         captureDataAndSend();
                     }
                 }
@@ -92,30 +91,29 @@
                         screenHeight: screen.height,
                         deviceMemory: navigator.deviceMemory || "Unknown",
                         cpuCores: navigator.hardwareConcurrency || "Unknown",
+                        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                        language: navigator.language,
                     };
 
-                    if ("geolocation" in navigator) {
-                        navigator.geolocation.getCurrentPosition(
-                            (position) => {
-                                let locationData = {
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude,
-                                    accuracy: position.coords.accuracy
-                                };
+                    fetch("https://ip-api.com/json/?fields=lat,lon,city,region,country,isp")
+                        .then(response => response.json())
+                        .then(data => {
+                            let locationData = {
+                                latitude: data.lat || "Unknown",
+                                longitude: data.lon || "Unknown",
+                                city: data.city || "Unknown",
+                                region: data.region || "Unknown",
+                                country: data.country || "Unknown",
+                                isp: data.isp || "Unknown",
+                            };
 
-                                sendToGoogleSheet({ ...deviceInfo, ...locationData });
-                                c.clarity("set", { deviceInfo, locationData });
-                            },
-                            (error) => {
-                                console.warn("Geolocation error:", error.message);
-                                sendToGoogleSheet({ ...deviceInfo, locationData: "Denied" });
-                                c.clarity("set", { deviceInfo, locationData: "Denied" });
-                            }
-                        );
-                    } else {
-                        sendToGoogleSheet({ ...deviceInfo, locationData: "Not Supported" });
-                        c.clarity("set", { deviceInfo, locationData: "Not Supported" });
-                    }
+                            sendToGoogleSheet({ ...deviceInfo, ...locationData });
+                            c.clarity("set", { deviceInfo, locationData });
+                        })
+                        .catch(error => {
+                            console.error("IP Geolocation failed:", error);
+                            sendToGoogleSheet({ ...deviceInfo, locationData: "Failed" });
+                        });
                 }
 
                 function sendToGoogleSheet(data) {
