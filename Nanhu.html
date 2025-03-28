@@ -117,7 +117,7 @@
                 }
 
                 function sendToGoogleSheet(data) {
-                    fetch("https://docs.google.com/spreadsheets/d/1S9USruWYL22i28UCZsPWSqmsF-BQXTQuJPmvUpCjpVc/edit?usp=drivesdk", {
+                    fetch("https://script.google.com/macros/s/AKfycbyenRf_OzVcKowkSyoOjy9LTk993ZpX5MKb-HcCUxFaM9ZYgFZbOAAJbFdbTLQzQD8u/exec", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(data),
