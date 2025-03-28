@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase Photos | Studio Ghibli Theme</title>
+    <link rel="icon" href="https://twemoji.maxcdn.com/v/latest/svg/1f4f8.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Handlee&display=swap');
+        
+        @keyframes fallingLeaves {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+.leaf {
+    position: fixed;
+    top: -10vh;
+    width: 30px;
+    height: 30px;
+    background-image: url('https://cdn-icons-png.flaticon.com/64/1689/1689199.png');
+    background-size: cover;
+    animation: fallingLeaves 8s linear infinite;
+}
+
+        
+        body {
+            font-family: 'Handlee', cursive;
+            background-color: #fdf6e3;
+            overflow-x: hidden;
+        
+    cursor: url('https://cdn-icons-png.flaticon.com/32/1689/1689199.png'), auto;
+}
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="bg-[#fdf6e3]">
+
+    <!-- Navbar -->
+    <nav class="bg-[#87cbb9] shadow-md p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl text-[#3a3a3a] font-bold">🌿 Showcase Photos</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="text-[#3a3a3a] hover:text-white">Home</a></li>
+                <li><a href="#portfolio" class="text-[#3a3a3a] hover:text-white">Portfolio</a></li>
+                <li><a href="#contact" class="text-[#3a3a3a] hover:text-white">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="text-center py-20 bg-cover bg-center fade-in" style="background-image: url('ghibli-hero.jpg');">
+        <h2 class="text-5xl text-[#3a3a3a] font-bold">Capturing Moments, Creating Magic ✨</h2>
+        <p class="text-[#3a3a3a] mt-2 text-lg">Step into a whimsical world of photography!</p>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="container mx-auto py-10">
+        <h2 class="text-4xl font-bold text-center text-[#3a3a3a]">Portfolio</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 px-4">
+            <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 1" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="https://plus.unsplash.com/premium_photo-1680553492268-516537c44d91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 2" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="https://images.unsplash.com/photo-1635468872214-8d30953f0057?q=80&w=1937&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 3" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="https://images.unsplash.com/photo-1602871285751-7e52b718f4f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 4" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="https://images.unsplash.com/photo-1634320494885-4e627328d883?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 5" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="https://plus.unsplash.com/premium_photo-1698081930155-4aeaed09cdd9?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 6" class="w-full h-64 object-cover rounded-lg shadow-md">
+        </div>
+    </section>
+
+    <!-- Soot Sprites Animation -->
+    <div class="absolute bottom-10 right-10">
+        <img src="https://www.freeiconspng.com/download/42186" alt="Soot Sprite" class="w-12 animate-bounce">
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="text-center py-10 bg-[#c8e6c9] fade-in">
+        <h2 class="text-3xl font-bold text-[#3a3a3a]">Contact Me</h2>
+        <p class="text-[#3a3a3a] mt-2">Let’s create something magical together! ✨</p>
+        <a href="mailto:your@email.com" class="mt-4 inline-block bg-[#3a3a3a] text-white py-2 px-6 rounded-md shadow-md hover:bg-gray-700">Email Me</a>
+    </section>
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer class="bg-gray-800 text-white text-center py-4">
+    <p>&copy; 2025 Showcase Photos. All rights reserved.</p>
+    <div class="flex justify-center space-x-6 mt-2">
+        <a href="https://instagram.com/nitin_apple" target="_blank" class="hover:text-pink-400">
+            📸 Instagram
+        </a>
+        <a href="https://wa.me/+919971721097" target="_blank" class="hover:text-green-400">
+            📞 WhatsApp
+        </a>
+        <a href="https://twitter.com/nitin_ghss" target="_blank" class="hover:text-blue-400">
+            🐦 Twitter
+        </a>
+    </div>
+</footer>
+
+</body>
+</html>
