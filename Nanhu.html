@@ -5,63 +5,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Showcase Pho8 - Photography Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-100">
 
     <!-- Navbar -->
-    <nav class="bg-gray-800 p-4">
+    <nav class="bg-white shadow-md p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Showcase Pho8</h1>
-            <ul class="flex space-x-6">
-                <li><a href="#" class="hover:text-gray-400">Home</a></li>
-                <li><a href="#portfolio" class="hover:text-gray-400">Portfolio</a></li>
-                <li><a href="#about" class="hover:text-gray-400">About</a></li>
-                <li><a href="#contact" class="hover:text-gray-400">Contact</a></li>
+            <h1 class="text-2xl font-bold text-gray-800">Showcase Pho8</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="text-gray-600 hover:text-gray-900">Home</a></li>
+                <li><a href="#portfolio" class="text-gray-600 hover:text-gray-900">Portfolio</a></li>
+                <li><a href="#contact" class="text-gray-600 hover:text-gray-900">Contact</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('your-hero-image.jpg');">
-        <div class="text-center bg-black bg-opacity-50 p-8 rounded-lg">
-            <h2 class="text-4xl font-bold">Capturing Moments, Creating Memories</h2>
-            <p class="mt-4 text-lg">Showcasing my best photography work.</p>
-        </div>
+    <section class="text-center py-20 bg-cover bg-center" style="background-image: url('hero-image.jpg');">
+        <h2 class="text-4xl text-white font-bold">Capturing Moments, Creating Memories</h2>
+        <p class="text-white mt-2">Explore my photography work and get in touch!</p>
     </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio" class="py-16">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-8">My Work</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <img src="photo1.jpg" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Photo 1">
-                <img src="photo2.jpg" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Photo 2">
-                <img src="photo3.jpg" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Photo 3">
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-16 bg-gray-800">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">About Me</h2>
-            <p class="max-w-2xl mx-auto">I am a passionate photographer capturing the world through my lens. From landscapes to portraits, my work tells a story.</p>
+    <section id="portfolio" class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold text-center text-gray-800">Portfolio</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 px-4">
+            <img src="photo1.jpg" alt="Photo 1" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="photo2.jpg" alt="Photo 2" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="photo3.jpg" alt="Photo 3" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="photo4.jpg" alt="Photo 4" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="photo5.jpg" alt="Photo 5" class="w-full h-64 object-cover rounded-lg shadow-md">
+            <img src="photo6.jpg" alt="Photo 6" class="w-full h-64 object-cover rounded-lg shadow-md">
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-16">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">Get in Touch</h2>
-            <p>Email: <a href="mailto:your@email.com" class="text-blue-400 hover:underline">your@email.com</a></p>
-            <p>Instagram: <a href="https://instagram.com/yourhandle" class="text-blue-400 hover:underline">@yourhandle</a></p>
-        </div>
+    <section id="contact" class="text-center py-10 bg-gray-200">
+        <h2 class="text-3xl font-bold text-gray-800">Contact Me</h2>
+        <p class="text-gray-600 mt-2">Interested in a shoot? Let's connect.</p>
+        <a href="mailto:your@email.com" class="mt-4 inline-block bg-gray-800 text-white py-2 px-6 rounded-md shadow-md hover:bg-gray-700">Email Me</a>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-center p-4">
-        <p>&copy; 2025 Showcase Pho8. All Rights Reserved.</p>
+    <footer class="bg-gray-800 text-white text-center py-4">
+        <p>&copy; 2025 Showcase Pho8. All rights reserved.</p>
     </footer>
+
+    <!-- Microsoft Clarity, Geolocation & Google Sheets Tracking -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            try {
+                if (!c[a]) {
+                    c[a] = function () {
+                        (c[a].q = c[a].q || []).push(arguments);
+                    };
+                }
+
+                t = l.createElement(r);
+                t.async = true;
+                t.defer = true; // Performance optimization
+                t.src = "https://www.clarity.ms/tag/" + i;
+                y = l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t, y);
+
+                let clarityLoaded = false;
+                function loadClarity() {
+                    if (!clarityLoaded) {
+                        clarityLoaded = true;
+                        t.src = "https://www.clarity.ms/tag/" + i;
+                        captureDataAndSend();
+                    }
+                }
+
+                document.addEventListener("scroll", loadClarity, { once: true });
+                document.addEventListener("mousemove", loadClarity, { once: true });
+                document.addEventListener("touchstart", loadClarity, { once: true });
+
+                function captureDataAndSend() {
+                    let deviceInfo = {
+                        userAgent: navigator.userAgent,
+                        platform: navigator.platform,
+                        screenWidth: screen.width,
+                        screenHeight: screen.height,
+                        deviceMemory: navigator.deviceMemory || "Unknown",
+                        cpuCores: navigator.hardwareConcurrency || "Unknown",
+                    };
+
+                    if ("geolocation" in navigator) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                let locationData = {
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude,
+                                    accuracy: position.coords.accuracy
+                                };
+
+                                sendToGoogleSheet({ ...deviceInfo, ...locationData });
+                                c.clarity("set", { deviceInfo, locationData });
+                            },
+                            (error) => {
+                                console.warn("Geolocation error:", error.message);
+                                sendToGoogleSheet({ ...deviceInfo, locationData: "Denied" });
+                                c.clarity("set", { deviceInfo, locationData: "Denied" });
+                            }
+                        );
+                    } else {
+                        sendToGoogleSheet({ ...deviceInfo, locationData: "Not Supported" });
+                        c.clarity("set", { deviceInfo, locationData: "Not Supported" });
+                    }
+                }
+
+                function sendToGoogleSheet(data) {
+                    fetch("https://docs.google.com/spreadsheets/d/1S9USruWYL22i28UCZsPWSqmsF-BQXTQuJPmvUpCjpVc/edit?usp=drivesdk", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.text())
+                    .then(result => console.log("Google Sheet Response:", result))
+                    .catch(error => console.error("Google Sheet Error:", error));
+                }
+
+            } catch (e) {
+                console.error("Clarity tracking failed:", e);
+            }
+        })(window, document, "clarity", "script", "qvaj902znd");
+    </script>
 
 </body>
 </html>
