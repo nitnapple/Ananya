@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase Pho8 - Photography Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Showcase Pho8</h1>
+            <ul class="flex space-x-6">
+                <li><a href="#" class="hover:text-gray-400">Home</a></li>
+                <li><a href="#portfolio" class="hover:text-gray-400">Portfolio</a></li>
+                <li><a href="#about" class="hover:text-gray-400">About</a></li>
+                <li><a href="#contact" class="hover:text-gray-400">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('your-hero-image.jpg');">
+        <div class="text-center bg-black bg-opacity-50 p-8 rounded-lg">
+            <h2 class="text-4xl font-bold">Capturing Moments, Creating Memories</h2>
+            <p class="mt-4 text-lg">Showcasing my best photography work.</p>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-8">My Work</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <img src="photo1.jpg" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Photo 1">
+                <img src="photo2.jpg" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Photo 2">
+                <img src="photo3.jpg" class="w-full h-64 object-cover rounded-lg shadow-lg" alt="Photo 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-800">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">About Me</h2>
+            <p class="max-w-2xl mx-auto">I am a passionate photographer capturing the world through my lens. From landscapes to portraits, my work tells a story.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Get in Touch</h2>
+            <p>Email: <a href="mailto:your@email.com" class="text-blue-400 hover:underline">your@email.com</a></p>
+            <p>Instagram: <a href="https://instagram.com/yourhandle" class="text-blue-400 hover:underline">@yourhandle</a></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-center p-4">
+        <p>&copy; 2025 Showcase Pho8. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
