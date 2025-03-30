@@ -52,10 +52,11 @@ document.addEventListener("DOMContentLoaded", renderFeedback);
 // Inject Like/Dislike buttons into HTML
 const feedbackContainer = document.createElement("div");
 feedbackContainer.innerHTML = `
-  <div class="flex space-x-4 mt-4">
+  <div class="flex justify-center space-x-4 mt-4">
     <button id="like-btn" class="px-4 py-2 bg-green-500 text-white rounded-lg">👍 Like (<span id="like-count">0</span>)</button>
     <button id="dislike-btn" class="px-4 py-2 bg-red-500 text-white rounded-lg">👎 Dislike (<span id="dislike-count">0</span>)</button>
-  </div>
+</div>
+
 `;
 document.body.appendChild(feedbackContainer);
 
