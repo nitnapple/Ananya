@@ -98,20 +98,35 @@
 
 
 <style>
-        @keyframes scrollText {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
-        }
-        .scrolling-text {
-            white-space: nowrap;
-            overflow: hidden;
-            display: block;
-            animation: scrollText 15s linear infinite;
-        }
-    </style>
+    @keyframes scrollText {
+        from { transform: translateX(100%); }
+        to { transform: translateX(-100%); }
+    }
+    
+    .scrolling-text-container {
+        position: relative; 
+        width: 100vw;
+        overflow: hidden;
+        background-color: #6b46c1; /* Tailwind bg-purple-500 */
+        color: white;
+        text-align: center;
+        padding: 12px 0; /* py-3 equivalent */
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 600; /* font-semibold */
+        z-index: 10; /* Ensures it appears above other elements */
+        margin-top: 60px; /* Adjust based on your menu height */
+    }
+
+    .scrolling-text {
+        display: inline-block;
+        white-space: nowrap;
+        animation: scrollText 15s linear infinite;
+    }
+</style>
+
 <!-- Scrolling Text Section -->
-<div class="bg-purple-500 text-white py-3 text-center overflow-hidden">
-    <p class="scrolling-text text-lg font-semibold">All your presentations will be completed soon DW.</p>
+<div class="scrolling-text-container">
+    <p class="scrolling-text">All your presentations will be completed soon DW.</p>
 </div>
     
 <!-- What's New Section -->
