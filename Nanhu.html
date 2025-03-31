@@ -9,29 +9,6 @@
         body { font-family: 'Arial', sans-serif; }
     </style>
     
-      <script  // Function to toggle dark mode
-function toggleDarkMode() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle("dark-mode");
-    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-}
-
-// Function to apply the saved theme on page load
-function applyTheme() {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-    }
-}
-
-// Apply theme when the page loads
-document.addEventListener("DOMContentLoaded", applyTheme);
-      </script>
-    <style> .dark-mode {
-    background-color: #121212;
-    color: #ffffff;
-}
-</style>
 
     
 </head>
@@ -48,8 +25,6 @@ document.addEventListener("DOMContentLoaded", applyTheme);
             </ul>
         </div>
     </nav>
-    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-
 
     <!-- Hero Section -->
     <section class="text-center py-20 bg-cover bg-center" style="background-image: url('hero-image.jpg');">
