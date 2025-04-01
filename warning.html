@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center h-screen bg-red-100">
+    <div class="bg-red-700 text-white p-6 rounded-lg text-center shadow-lg text-lg">
+        <strong class="text-xl">⚠ Warning!</strong><br>
+        Don't copy the assignments and presentations from this website.<br>
+        Information is available for all students.
+        <div class="mt-4">
+            <input type="checkbox" id="agree" class="mr-2">
+            <label for="agree">I understand and agree</label>
+        </div>
+        <button id="proceed" class="mt-4 bg-white text-red-700 px-4 py-2 rounded cursor-not-allowed opacity-50" disabled>
+            Proceed to Website
+        </button>
+    </div>
+    <script>
+        document.getElementById('agree').addEventListener('change', function() {
+            const button = document.getElementById('proceed');
+            button.disabled = !this.checked;
+            button.classList.toggle('cursor-not-allowed');
+            button.classList.toggle('opacity-50');
+        });
+
+        document.getElementById('proceed').addEventListener('click', function() {
+            window.location.href = 'Index.html'; // Replace with your actual homepage URL
+        });
+    </script>
+</body>
+</html>
