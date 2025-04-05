@@ -52,7 +52,7 @@
   </div>
 
   <!-- Sound -->
-  <audio id="splash-sound" src="https://www.myinstants.com/media/sounds/splash.mp3"></audio>
+  <audio id="splash-sound" src="https://www.myinstants.com/media/sounds/splash.mp3" preload="auto"></audio>
 
   <script>
     const gameArea = document.getElementById('game-area');
@@ -84,14 +84,18 @@
         scoreEl.textContent = score;
         ant.remove();
         showBlood(x, y);
+
+        // Play kill sound
+        splashSound.pause();
         splashSound.currentTime = 0;
         splashSound.play();
+
         if (navigator.vibrate) navigator.vibrate(100);
         adjustDifficulty();
       }
 
       ant.addEventListener('click', killAnt);
-      ant.addEventListener('touchstart', killAnt);
+      ant.addEventListener('touchstart', killAnt, { passive: true });
       gameArea.appendChild(ant);
 
       setTimeout(() => {
@@ -100,11 +104,13 @@
     }
 
     function showBlood(x, y) {
-      const blood = document.createElement('div');
-      blood.className = 'absolute text-xl';
-      blood.textContent = '🩸';
+      const blood = document.createElement('img');
+      blood.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/blood-bloods-splash.gif';
+      blood.className = 'absolute pointer-events-none';
       blood.style.left = `${x}px`;
       blood.style.top = `${y}px`;
+      blood.style.width = '50px';
+      blood.style.height = '50px';
       gameArea.appendChild(blood);
       setTimeout(() => blood.remove(), 800);
     }
@@ -135,7 +141,6 @@
     }
 
     function startGame() {
-      // Reset game state
       score = 0;
       timeLeft = 60;
       spawnRate = 700;
