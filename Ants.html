@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kill the Ants</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes crawlAnt {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(30px, 10px) rotate(10deg);
+      }
+      50% {
+        transform: translate(60px, 0px) rotate(-10deg);
+      }
+      75% {
+        transform: translate(90px, 10px) rotate(5deg);
+      }
+      100% {
+        transform: translate(120px, 0px) rotate(0deg);
+      }
+    }
+  </style>
+</head>
+<body class="bg-black flex flex-col items-center justify-center w-screen h-screen overflow-hidden select-none">
+  <div class="absolute top-4 left-4 text-4xl font-bold text-white drop-shadow-lg">Kill the Ants</div>
+  <div class="absolute top-4 right-4 text-xl font-semibold text-white drop-shadow space-x-4">
+    <span>Score: <span id="score">0</span></span>
+    <span>Time: <span id="timer">60</span>s</span>
+  </div>  <div id="game-area" class="relative w-full h-full overflow-hidden"></div>
+  <audio id="splash-sound" src="https://www.myinstants.com/media/sounds/splash.mp3"></audio>  <script>
+    const gameArea = document.getElementById('game-area');
+    const scoreEl = document.getElementById('score');
+    const timerEl = document.getElementById('timer');
+    const splashSound = document.getElementById('splash-sound');
+
+    let score = 0;
+    let antInterval;
+    let spawnRate = 700;
+    let timerInterval;
+    let timeLeft = 60;
+
+    function createAnt() {
+      const ant = document.createElement('div');
+      ant.textContent = '🐜';
+      ant.className = 'absolute text-3xl cursor-pointer';
+      ant.style.transition = 'transform 1s ease-in-out';
+      ant.style.animation = 'crawlAnt 2s linear infinite';
+
+      const size = 40;
+      const x = Math.random() * (window.innerWidth - size);
+      const y = Math.random() * (window.innerHeight - size);
+      ant.style.left = `${x}px`;
+      ant.style.top = `${y}px`;
+
+      function killAnt() {
+        score++;
+        scoreEl.textContent = score;
+        ant.remove();
+        showBlood(x, y);
+        splashSound.currentTime = 0;
+        splashSound.play();
+        if (navigator.vibrate) navigator.vibrate(100);
+        adjustDifficulty();
+      }
+
+      ant.addEventListener('click', killAnt);
+      ant.addEventListener('touchstart', killAnt);
+
+      gameArea.appendChild(ant);
+
+      setTimeout(() => {
+        if (gameArea.contains(ant)) ant.remove();
+      }, 2000);
+    }
+
+    function adjustDifficulty() {
+      clearInterval(antInterval);
+      if (score >= 30) {
+        spawnRate = 200;
+      } else if (score >= 20) {
+        spawnRate = 400;
+      } else if (score >= 10) {
+        spawnRate = 550;
+      }
+      antInterval = setInterval(createAnt, spawnRate);
+    }
+
+    function showBlood(x, y) {
+      const blood = document.createElement('div');
+      blood.className = 'absolute text-xl';
+      blood.textContent = '🩸';
+      blood.style.left = `${x}px`;
+      blood.style.top = `${y}px`;
+      gameArea.appendChild(blood);
+      setTimeout(() => blood.remove(), 800);
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          clearInterval(antInterval);
+          alert(`Game Over! Your score: ${score}`);
+          startGame();
+        }
+      }, 1000);
+    }
+
+    function startGame() {
+      score = 0;
+      timeLeft = 60;
+      spawnRate = 700;
+      scoreEl.textContent = score;
+      timerEl.textContent = timeLeft;
+      clearInterval(timerInterval);
+      clearInterval(antInterval);
+      antInterval = setInterval(createAnt, spawnRate);
+      startTimer();
+    }
+
+    window.onload = startGame;
+  </script></body>
+</html>
