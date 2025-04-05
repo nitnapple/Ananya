@@ -6,8 +6,9 @@
   <title>Skull Emoji Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white flex items-center justify-center h-screen">
-  <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" autoplay></audio>
+<body class="bg-black text-white flex items-center justify-center h-screen relative">
+
+  <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
 
   <div class="text-center">
     <div class="text-9xl animate-pulse">💀</div>
@@ -15,12 +16,21 @@
     <p class="mt-2 text-lg text-gray-400">Embrace the 💀 vibes.</p>
   </div>
 
+  <div id="click-message" class="absolute bottom-10 text-sm text-gray-500 animate-pulse">
+    Click anywhere to enter... if you dare.
+  </div>
+
   <script>
-    // Optional: Ensure sound plays on user interaction for autoplay restrictions
     const audio = document.getElementById('scary-sound');
-    document.body.addEventListener('click', () => {
+    const message = document.getElementById('click-message');
+
+    const playAudio = () => {
       audio.play();
-    }, { once: true });
+      message.style.display = 'none';
+      document.body.removeEventListener('click', playAudio);
+    };
+
+    document.body.addEventListener('click', playAudio);
   </script>
 </body>
 </html>
