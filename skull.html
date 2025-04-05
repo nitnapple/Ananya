@@ -3,89 +3,74 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skull Emoji Page</title>
+  <title>Skull Heaping</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    body {
+      overflow: hidden;
+    }
+
     .skull {
       position: absolute;
       font-size: 2rem;
-      pointer-events: none;
-      animation: fadeInScale 0.3s ease-out;
+      animation: fadeIn 0.3s ease-out;
+      transition: top 0.2s;
     }
 
-    @keyframes fadeInScale {
-      from {
-        opacity: 0;
-        transform: scale(0.5);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
-<body class="bg-black text-white overflow-hidden">
+<body class="bg-black text-white relative h-screen">
 
   <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
 
-  <div class="text-center mt-10">
+  <div class="text-center mt-10 z-10 relative">
     <div class="text-9xl animate-pulse">💀</div>
     <h1 class="text-3xl mt-4 font-bold">Welcome to the Skull Zone</h1>
-    <p class="mt-2 text-lg text-gray-400">Tap to drop more skulls 💀</p>
+    <p class="mt-2 text-lg text-gray-400">Tap to drop skulls. Watch the heap grow. 💀</p>
   </div>
 
-  <div id="skull-container" class="absolute inset-0"></div>
+  <div id="skull-container" class="absolute inset-0 pointer-events-none"></div>
 
   <script>
-    const audio = document.getElementById('scary-sound');
     const skullContainer = document.getElementById('skull-container');
-    const skulls = [];
+    const audio = document.getElementById('scary-sound');
+
+    const columnWidth = 30; // Width per stack column
+    const screenWidth = window.innerWidth;
+    const numColumns = Math.floor(screenWidth / columnWidth);
+    const heights = new Array(numColumns).fill(0); // Track skulls stacked per column
+    const skullSize = 32; // Approx height of each skull in px
 
     document.body.addEventListener('click', (e) => {
+      // Play sound
       audio.currentTime = 0;
       audio.play();
+
+      // Determine column
+      const column = Math.floor(e.clientX / columnWidth);
+      const x = column * columnWidth + columnWidth / 4; // center in column
+      const y = window.innerHeight - skullSize - heights[column];
 
       const skull = document.createElement('div');
       skull.textContent = '💀';
       skull.className = 'skull';
-      skull.style.left = `${e.clientX}px`;
-      skull.style.top = `${e.clientY}px`;
+      skull.style.left = `${x}px`;
+      skull.style.top = `-50px`; // start from top
 
       skullContainer.appendChild(skull);
 
-      // Physics setup
-      skulls.push({
-        el: skull,
-        x: e.clientX,
-        y: e.clientY,
-        velocityY: 0,
-      });
+      // Animate falling
+      setTimeout(() => {
+        skull.style.top = `${y}px`;
+      }, 10);
+
+      // Increase stack height for column
+      heights[column] += skullSize;
     });
-
-    // Gravity simulation
-    function animate() {
-      const gravity = 0.6;
-      const ground = window.innerHeight - 30;
-
-      skulls.forEach((skull) => {
-        if (skull.y < ground) {
-          skull.velocityY += gravity;
-          skull.y += skull.velocityY;
-
-          if (skull.y >= ground) {
-            skull.y = ground;
-            skull.velocityY = 0;
-          }
-
-          skull.el.style.top = `${skull.y}px`;
-        }
-      });
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
   </script>
 </body>
 </html>
