@@ -10,12 +10,17 @@
       overflow: hidden;
     }
 
-    .skull {
-      position: absolute;
-      font-size: 2rem;
+    .skull-img {
+      width: 32px;
+      height: 32px;
       animation: fallFade 0.5s ease-out;
       transition: top 0.3s ease-in-out;
+      position: absolute;
       z-index: 5;
+    }
+
+    .glow {
+      filter: drop-shadow(0 0 6px white) drop-shadow(0 0 10px white);
     }
 
     .blood {
@@ -49,7 +54,7 @@
   <audio id="bg-music" src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/terror-213743.mp3" preload="auto" loop></audio>
 
   <div class="text-center mt-10 z-10 relative pointer-events-none">
-    <div class="text-9xl animate-pulse">💀</div>
+    <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif" class="mx-auto w-24 h-24 animate-pulse glow" />
     <h1 class="text-3xl mt-4 font-bold">Haunted Skull Zone</h1>
     <p class="mt-2 text-lg text-gray-400">Tap to drop skulls. Blood. Bones. Bounce. 💀</p>
   </div>
@@ -67,7 +72,6 @@
     const heights = new Array(numColumns).fill(0);
     const skullSize = 32;
 
-    // Play ambient loop after user taps
     let bgStarted = false;
 
     document.body.addEventListener('click', (e) => {
@@ -77,7 +81,6 @@
         bgStarted = true;
       }
 
-      // Play drop sound
       dropSound.currentTime = 0;
       dropSound.play();
 
@@ -85,20 +88,18 @@
       const x = column * columnWidth + columnWidth / 4;
       const y = window.innerHeight - skullSize - heights[column];
 
-      // Create skull
-      const skull = document.createElement('div');
-      skull.textContent = '💀';
-      skull.className = 'skull';
+      // Create GIF skull
+      const skull = document.createElement('img');
+      skull.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif';
+      skull.className = 'skull-img glow';
       skull.style.left = `${x}px`;
       skull.style.top = `-50px`;
 
       skullContainer.appendChild(skull);
 
-      // Animate fall
       setTimeout(() => {
         skull.style.top = `${y}px`;
 
-        // Add bounce effect
         skull.style.transition = 'top 0.2s ease-in-out';
         setTimeout(() => {
           skull.style.top = `${y - 10}px`;
@@ -107,14 +108,12 @@
           }, 100);
         }, 250);
 
-        // Blood splatter
         const blood = document.createElement('div');
         blood.className = 'blood';
         blood.style.left = `${x + 8}px`;
         blood.style.top = `${y + 24}px`;
         skullContainer.appendChild(blood);
 
-        // Remove blood splatter after animation
         setTimeout(() => blood.remove(), 500);
       }, 20);
 
