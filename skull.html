@@ -5,34 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skull Emoji Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in {
+      animation: fadeInScale 0.5s ease-out;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
 </head>
-<body class="bg-black text-white flex items-center justify-center h-screen relative">
+<body class="bg-black text-white flex flex-col items-center justify-center h-screen relative overflow-hidden">
 
-  <audio id="scary-sound" src="https://cdn.pixabay.com/download/audio/2024/05/31/audio_e9c7c6b657.mp3?filename=terror-213743.mp3" preload="auto" autoplay></audio>
+  <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
 
-  <div class="text-center">
+  <div class="text-center z-10">
     <div class="text-9xl animate-pulse">💀</div>
     <h1 class="text-3xl mt-4 font-bold">Welcome to the Skull Zone</h1>
-    <p class="mt-2 text-lg text-gray-400">Embrace the 💀 vibes.</p>
+    <p class="mt-2 text-lg text-gray-400">Tap to summon more 💀</p>
   </div>
 
-  <div id="click-message" class="absolute bottom-10 text-sm text-gray-500 animate-pulse hidden">
-    Click anywhere to enter... if you dare.
-  </div>
+  <div id="skull-container" class="absolute inset-0 z-0"></div>
 
   <script>
     const audio = document.getElementById('scary-sound');
-    const message = document.getElementById('click-message');
+    const skullContainer = document.getElementById('skull-container');
 
-    window.addEventListener('load', () => {
-      audio.play().catch(() => {
-        // Autoplay was blocked, show message and wait for user interaction
-        message.style.display = 'block';
-        document.body.addEventListener('click', () => {
-          audio.play();
-          message.style.display = 'none';
-        }, { once: true });
-      });
+    document.body.addEventListener('click', (e) => {
+      // Play sound
+      audio.currentTime = 0;
+      audio.play();
+
+      // Create skull
+      const skull = document.createElement('div');
+      skull.textContent = '💀';
+      skull.className = 'absolute text-4xl fade-in pointer-events-none';
+      skull.style.left = `${e.clientX}px`;
+      skull.style.top = `${e.clientY}px`;
+      skullContainer.appendChild(skull);
+
+      // Optional: remove skull after some time to avoid overflow
+      setTimeout(() => {
+        skull.remove();
+      }, 5000);
     });
   </script>
 </body>
