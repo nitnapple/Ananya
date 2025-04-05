@@ -6,56 +6,86 @@
   <title>Skull Emoji Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .fade-in {
-      animation: fadeInScale 0.5s ease-out;
+    .skull {
+      position: absolute;
+      font-size: 2rem;
+      pointer-events: none;
+      animation: fadeInScale 0.3s ease-out;
     }
 
     @keyframes fadeInScale {
-      0% {
+      from {
         opacity: 0;
         transform: scale(0.5);
       }
-      100% {
+      to {
         opacity: 1;
         transform: scale(1);
       }
     }
   </style>
 </head>
-<body class="bg-black text-white flex flex-col items-center justify-center h-screen relative overflow-hidden">
+<body class="bg-black text-white overflow-hidden">
 
   <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
 
-  <div class="text-center z-10">
+  <div class="text-center mt-10">
     <div class="text-9xl animate-pulse">💀</div>
     <h1 class="text-3xl mt-4 font-bold">Welcome to the Skull Zone</h1>
-    <p class="mt-2 text-lg text-gray-400">Tap to summon more 💀</p>
+    <p class="mt-2 text-lg text-gray-400">Tap to drop more skulls 💀</p>
   </div>
 
-  <div id="skull-container" class="absolute inset-0 z-0"></div>
+  <div id="skull-container" class="absolute inset-0"></div>
 
   <script>
     const audio = document.getElementById('scary-sound');
     const skullContainer = document.getElementById('skull-container');
+    const skulls = [];
 
     document.body.addEventListener('click', (e) => {
-      // Play sound
       audio.currentTime = 0;
       audio.play();
 
-      // Create skull
       const skull = document.createElement('div');
       skull.textContent = '💀';
-      skull.className = 'absolute text-4xl fade-in pointer-events-none';
+      skull.className = 'skull';
       skull.style.left = `${e.clientX}px`;
       skull.style.top = `${e.clientY}px`;
+
       skullContainer.appendChild(skull);
 
-      // Optional: remove skull after some time to avoid overflow
-      setTimeout((20) => {
-        skull.remove();
-      }, 5000);
+      // Physics setup
+      skulls.push({
+        el: skull,
+        x: e.clientX,
+        y: e.clientY,
+        velocityY: 0,
+      });
     });
+
+    // Gravity simulation
+    function animate() {
+      const gravity = 0.6;
+      const ground = window.innerHeight - 30;
+
+      skulls.forEach((skull) => {
+        if (skull.y < ground) {
+          skull.velocityY += gravity;
+          skull.y += skull.velocityY;
+
+          if (skull.y >= ground) {
+            skull.y = ground;
+            skull.velocityY = 0;
+          }
+
+          skull.el.style.top = `${skull.y}px`;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   </script>
 </body>
 </html>
