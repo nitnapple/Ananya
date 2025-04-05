@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Haunted Skull Zone</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -10,17 +10,15 @@
       overflow: hidden;
     }
 
-    .skull-img {
+    .skull {
+      position: absolute;
       width: 32px;
       height: 32px;
-      animation: fallFade 0.5s ease-out, rotateSkull 2s linear infinite;
+      background: url('https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif') no-repeat center/cover;
+      animation: fallFade 0.5s ease-out;
       transition: top 0.3s ease-in-out;
-      position: absolute;
+      filter: drop-shadow(0 0 6px white);
       z-index: 5;
-    }
-
-    .glow {
-      filter: drop-shadow(0 0 6px white) drop-shadow(0 0 12px white);
     }
 
     .blood {
@@ -44,93 +42,106 @@
       100% { transform: scale(1.5) rotate(45deg); opacity: 0; }
     }
 
-    @keyframes rotateSkull {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-10px, 0); }
+      40% { transform: translate(10px, 0); }
+      60% { transform: translate(-10px, 0); }
+      80% { transform: translate(10px, 0); }
     }
 
-    @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        background-color: black;
-      }
-      20%, 22%, 24%, 55% {
-        background-color: #111;
-      }
-    }
-
-    .flicker {
-      animation: flicker 2s infinite;
+    .shake {
+      animation: shake 0.4s ease-in-out;
     }
   </style>
 </head>
-<body class="bg-black text-white relative h-screen flicker">
+<body class="bg-black text-white relative h-screen select-none transition-all duration-300" id="game-body">
 
-  <!-- Skull Drop Sound -->
-  <audio id="drop-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
-  
-  <!-- Background Ambient -->
+  <!-- AUDIO FILES -->
+  <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
   <audio id="bg-music" src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/terror-213743.mp3" preload="auto" loop></audio>
+  <audio id="laugh-sound" src="https://cdn.pixabay.com/audio/2023/03/07/audio_a1a4a88b8b.mp3" preload="auto"></audio>
 
-  <!-- Random Screams -->
-  <audio id="scream-sound" src="https://cdn.pixabay.com/audio/2023/01/03/audio_31d8b4e5cb.mp3" preload="auto"></audio>
-
-  <div class="text-center mt-10 z-10 relative pointer-events-none">
-    <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif" class="mx-auto w-24 h-24 animate-pulse glow" />
-    <h1 class="text-3xl mt-4 font-bold">Haunted Skull Zone</h1>
-    <p class="mt-2 text-lg text-gray-400">Tap to drop skulls. Screams. Blood. Rotating doom. 💀</p>
+  <!-- START SCREEN -->
+  <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-black z-50 text-center">
+    <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif" alt="Skull GIF" class="w-32 h-32 mb-4" />
+    <h1 class="text-5xl font-bold mb-2">Haunted Skull Zone</h1>
+    <p class="text-gray-400 text-lg">Tap to start... if you dare.</p>
   </div>
 
+  <!-- TOP HUD -->
+  <div class="absolute top-2 right-4 text-sm z-30">
+    <div>Time left: <span id="timer">60</span>s</div>
+    <div>Score: <span id="score">0</span></div>
+  </div>
+
+  <!-- SKULL CONTAINER -->
   <div id="skull-container" class="absolute inset-0 pointer-events-none"></div>
 
   <script>
     const skullContainer = document.getElementById('skull-container');
-    const dropSound = document.getElementById('drop-sound');
+    const dropSound = document.getElementById('scary-sound');
     const bgMusic = document.getElementById('bg-music');
-    const screamSound = document.getElementById('scream-sound');
+    const laughSound = document.getElementById('laugh-sound');
+    const startScreen = document.getElementById('start-screen');
+    const timerEl = document.getElementById('timer');
+    const scoreEl = document.getElementById('score');
+    const gameBody = document.getElementById('game-body');
 
     const columnWidth = 30;
     const screenWidth = window.innerWidth;
     const numColumns = Math.floor(screenWidth / columnWidth);
     const heights = new Array(numColumns).fill(0);
     const skullSize = 32;
+    let score = 0;
+    let timeLeft = 60;
+    let gameStarted = false;
+    let timerInterval;
 
-    let bgStarted = false;
+    const startGame = () => {
+      bgMusic.volume = 0.4;
+      bgMusic.play();
+      startScreen.style.display = 'none';
+      gameStarted = true;
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert(`Game Over! Your final score is ${score}`);
+        }
+      }, 1000);
+    };
+
+    const triggerShake = () => {
+      gameBody.classList.add('shake');
+      setTimeout(() => {
+        gameBody.classList.remove('shake');
+      }, 400);
+    };
 
     document.body.addEventListener('click', (e) => {
-      if (!bgStarted) {
-        bgMusic.volume = 0.4;
-        bgMusic.play();
-        bgStarted = true;
+      if (!gameStarted) {
+        startGame();
       }
 
       dropSound.currentTime = 0;
       dropSound.play();
 
-      // Randomly play scream
-      if (Math.random() < 0.3) {
-        screamSound.currentTime = 0;
-        screamSound.volume = 0.6;
-        screamSound.play();
-      }
-
       const column = Math.floor(e.clientX / columnWidth);
       const x = column * columnWidth + columnWidth / 4;
       const y = window.innerHeight - skullSize - heights[column];
 
-      // Skull
-      const skull = document.createElement('img');
-      skull.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif';
-      skull.className = 'skull-img glow';
+      const skull = document.createElement('div');
+      skull.className = 'skull';
       skull.style.left = `${x}px`;
       skull.style.top = `-50px`;
-
       skullContainer.appendChild(skull);
 
-      // Animate fall
       setTimeout(() => {
         skull.style.top = `${y}px`;
 
-        // Bounce
         skull.style.transition = 'top 0.2s ease-in-out';
         setTimeout(() => {
           skull.style.top = `${y - 10}px`;
@@ -139,7 +150,6 @@
           }, 100);
         }, 250);
 
-        // Blood splatter
         const blood = document.createElement('div');
         blood.className = 'blood';
         blood.style.left = `${x + 8}px`;
@@ -150,6 +160,14 @@
       }, 20);
 
       heights[column] += skullSize;
+      score++;
+      scoreEl.textContent = score;
+
+      if (heights[column] >= window.innerHeight - skullSize) {
+        laughSound.currentTime = 0;
+        laughSound.play();
+        triggerShake();
+      }
     });
   </script>
 </body>
