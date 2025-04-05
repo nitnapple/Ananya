@@ -3,77 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HTML Games Hub</title>
+  <title>GameHub – HTML Games</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Rubik', sans-serif;
     }
-  </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
-
-  <!-- Hero Section -->
-  <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white py-20 px-6 text-center">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-bounce">🎮 GameHub</h1>
-    <p class="text-lg md:text-xl max-w-2xl mx-auto animate-fade-in-up">Explore a world of fun with our collection of free games!</p>
-    <a href="#games" class="inline-block mt-6 px-6 py-3 bg-white text-indigo-600 font-semibold rounded-full shadow hover:bg-gray-200 transition-all duration-300">Browse Games</a>
-  </header>
-
-  <!-- Featured Games Section -->
-  <section id="games" class="py-16 px-6 max-w-7xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-12">🔥 Featured Games</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Game Card -->
-      <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-lg transition duration-300 animate-fade-in-up">
-        <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/f559b0b37b53412ad61200e3ac9e46af.jpg" alt="Game 1" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h3 class="text-xl font-semibold"><a href="https://nitnapple.github.io/Ananya/skull.html" class="hover:underline">Haunted Skull Zone</a></h3>
-        </div>
-      </div>
-
-      <!-- Game Card -->
-      <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-lg transition duration-300 animate-fade-in-up delay-100">
-        <img src="https://streamline.imgix.net/1cca8323-3187-498c-8b25-aaba2dd01e48/edb5f1c1-2a54-436f-8223-32a014956991/Website Thumbnails (5).png?ixlib=rb-1.1.0&w=2000&h=2000&fit=max&or=0&s=fceb7099bafc8e550eb1ac1684f1ccde" alt="Game 2" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h3 class="text-xl font-semibold"><a href="https://nitnapple.github.io/Ananya/Ants.html" class="hover:underline">Kill the Ants</a></h3>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="bg-white py-16 px-6 text-center">
-    <h2 class="text-3xl font-bold mb-4">About Game Hub</h2>
-    <p class="text-lg max-w-3xl mx-auto text-gray-600">Game Hub is a browser-based arcade where you can enjoy simple, fun, and fast HTML games – anytime, anywhere, on any device.</p>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-400 text-center py-6">
-    <p>&copy; 2025 Game Hub All rights reserved.</p>
-  </footer>
-
-  <!-- Custom Animations -->
-  <style>
     @keyframes fade-in-up {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .animate-fade-in-up {
       animation: fade-in-up 0.8s ease-out both;
     }
-    .delay-100 { animation-delay: 0.1s; }
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-300 { animation-delay: 0.3s; }
   </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-white text-gray-800">
+
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-tr from-indigo-700 via-purple-600 to-pink-500 text-white py-24 px-6 text-center shadow-lg">
+    <h1 class="text-5xl font-extrabold mb-4 drop-shadow-lg animate-bounce">🎮 GameHub</h1>
+    <p class="text-xl max-w-2xl mx-auto opacity-90">Play addictively fun HTML games directly from your browser—no installs, just vibes.</p>
+    <a href="#games" class="mt-8 inline-block px-8 py-3 bg-white text-indigo-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300">Browse Games</a>
+  </header>
+
+  <!-- Featured Games -->
+  <section id="games" class="py-20 px-6 max-w-7xl mx-auto">
+    <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">🔥 Featured Games</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+
+      <!-- Game Card 1 -->
+      <div class="bg-white bg-opacity-70 backdrop-blur-lg rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transform hover:scale-[1.03] transition duration-300 animate-fade-in-up">
+        <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/f559b0b37b53412ad61200e3ac9e46af.jpg" alt="Haunted Skull Zone" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-xl font-semibold text-gray-800 mb-1"><a href="https://nitnapple.github.io/Ananya/skull.html" class="hover:underline">Haunted Skull Zone</a></h3>
+          <p class="text-sm text-gray-500">Face your fears in this bone-chilling mini horror game.</p>
+        </div>
+      </div>
+
+      <!-- Game Card 2 -->
+      <div class="bg-white bg-opacity-70 backdrop-blur-lg rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transform hover:scale-[1.03] transition duration-300 animate-fade-in-up delay-100">
+        <img src="https://streamline.imgix.net/1cca8323-3187-498c-8b25-aaba2dd01e48/edb5f1c1-2a54-436f-8223-32a014956991/Website Thumbnails (5).png?ixlib=rb-1.1.0&w=2000&h=2000&fit=max&or=0&s=fceb7099bafc8e550eb1ac1684f1ccde" alt="Kill the Ants" class="w-full h-48 object-cover">
+        <div class="p-5">
+          <h3 class="text-xl font-semibold text-gray-800 mb-1"><a href="https://nitnapple.github.io/Ananya/Ants.html" class="hover:underline">Kill the Ants</a></h3>
+          <p class="text-sm text-gray-500">Tap fast and exterminate waves of sneaky ants.</p>
+        </div>
+      </div>
+
+      <!-- Add More Cards Here -->
+      <!-- <div class="...">New Game Card</div> -->
+
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="bg-gray-50 py-20 text-center px-6">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4">About GameHub</h2>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto">GameHub is your go-to destination for free-to-play, instantly loaded games built with HTML, CSS, and JavaScript. No accounts. No paywalls. Just pure play.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-6 text-center">
+    <p class="text-sm">&copy; 2025 GameHub. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
-
