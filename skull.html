@@ -13,14 +13,14 @@
     .skull-img {
       width: 32px;
       height: 32px;
-      animation: fallFade 0.5s ease-out;
+      animation: fallFade 0.5s ease-out, rotateSkull 2s linear infinite;
       transition: top 0.3s ease-in-out;
       position: absolute;
       z-index: 5;
     }
 
     .glow {
-      filter: drop-shadow(0 0 6px white) drop-shadow(0 0 10px white);
+      filter: drop-shadow(0 0 6px white) drop-shadow(0 0 12px white);
     }
 
     .blood {
@@ -43,28 +43,50 @@
       0% { transform: scale(0.2); opacity: 0.5; }
       100% { transform: scale(1.5) rotate(45deg); opacity: 0; }
     }
+
+    @keyframes rotateSkull {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        background-color: black;
+      }
+      20%, 22%, 24%, 55% {
+        background-color: #111;
+      }
+    }
+
+    .flicker {
+      animation: flicker 2s infinite;
+    }
   </style>
 </head>
-<body class="bg-black text-white relative h-screen">
+<body class="bg-black text-white relative h-screen flicker">
 
   <!-- Skull Drop Sound -->
-  <audio id="scary-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
+  <audio id="drop-sound" src="https://cdn.pixabay.com/audio/2022/10/24/audio_1e7f5cbb6c.mp3" preload="auto"></audio>
   
-  <!-- Ambient Loop -->
+  <!-- Background Ambient -->
   <audio id="bg-music" src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/terror-213743.mp3" preload="auto" loop></audio>
+
+  <!-- Random Screams -->
+  <audio id="scream-sound" src="https://cdn.pixabay.com/audio/2023/01/03/audio_31d8b4e5cb.mp3" preload="auto"></audio>
 
   <div class="text-center mt-10 z-10 relative pointer-events-none">
     <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif" class="mx-auto w-24 h-24 animate-pulse glow" />
     <h1 class="text-3xl mt-4 font-bold">Haunted Skull Zone</h1>
-    <p class="mt-2 text-lg text-gray-400">Tap to drop skulls. Blood. Bones. Bounce. 💀</p>
+    <p class="mt-2 text-lg text-gray-400">Tap to drop skulls. Screams. Blood. Rotating doom. 💀</p>
   </div>
 
   <div id="skull-container" class="absolute inset-0 pointer-events-none"></div>
 
   <script>
     const skullContainer = document.getElementById('skull-container');
-    const dropSound = document.getElementById('scary-sound');
+    const dropSound = document.getElementById('drop-sound');
     const bgMusic = document.getElementById('bg-music');
+    const screamSound = document.getElementById('scream-sound');
 
     const columnWidth = 30;
     const screenWidth = window.innerWidth;
@@ -84,11 +106,18 @@
       dropSound.currentTime = 0;
       dropSound.play();
 
+      // Randomly play scream
+      if (Math.random() < 0.3) {
+        screamSound.currentTime = 0;
+        screamSound.volume = 0.6;
+        screamSound.play();
+      }
+
       const column = Math.floor(e.clientX / columnWidth);
       const x = column * columnWidth + columnWidth / 4;
       const y = window.innerHeight - skullSize - heights[column];
 
-      // Create GIF skull
+      // Skull
       const skull = document.createElement('img');
       skull.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif';
       skull.className = 'skull-img glow';
@@ -97,9 +126,11 @@
 
       skullContainer.appendChild(skull);
 
+      // Animate fall
       setTimeout(() => {
         skull.style.top = `${y}px`;
 
+        // Bounce
         skull.style.transition = 'top 0.2s ease-in-out';
         setTimeout(() => {
           skull.style.top = `${y - 10}px`;
@@ -108,6 +139,7 @@
           }, 100);
         }, 250);
 
+        // Blood splatter
         const blood = document.createElement('div');
         blood.className = 'blood';
         blood.style.left = `${x + 8}px`;
