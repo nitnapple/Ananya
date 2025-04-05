@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ultimate Drawing Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+  <h1 class="text-3xl font-bold mb-4">🎨 Ultimate Drawing Game</h1>
+
+  <div class="mb-4 flex flex-wrap justify-center gap-3">
+    <!-- Tool Buttons -->
+    <button class="tool bg-gray-700 hover:bg-gray-600 p-2 rounded" data-size="1" title="Pencil">
+      ✏️
+    </button>
+    <button class="tool bg-gray-700 hover:bg-gray-600 p-2 rounded" data-size="3" title="Pen">
+      🖊️
+    </button>
+    <button class="tool bg-gray-700 hover:bg-gray-600 p-2 rounded" data-size="8" title="Brush">
+      🖌️
+    </button>
+    <button id="eraserBtn" class="bg-pink-600 hover:bg-pink-500 p-2 rounded" title="Eraser">
+      🧽
+    </button>
+
+    <!-- Color Picker -->
+    <input type="color" id="colorPicker" value="#ffffff" class="w-10 h-10 rounded border-2 border-white cursor-pointer">
+
+    <!-- Buttons -->
+    <button id="clearBtn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded shadow">Clear</button>
+    <button id="saveBtn" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded shadow">Save</button>
+  </div>
+
+  <canvas id="canvas" width="800" height="500" class="bg-white border-4 border-white rounded shadow-lg touch-none"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let painting = false;
+    let strokeWidth = 1;
+    let strokeColor = '#ffffff';
+    let isErasing = false;
+
+    const colorPicker = document.getElementById('colorPicker');
+    const clearBtn = document.getElementById('clearBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const eraserBtn = document.getElementById('eraserBtn');
+
+    // Set default color
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Tool size selection
+    document.querySelectorAll('.tool').forEach(button => {
+      button.addEventListener('click', () => {
+        strokeWidth = parseInt(button.dataset.size);
+        isErasing = false;
+      });
+    });
+
+    // Eraser tool
+    eraserBtn.addEventListener('click', () => {
+      isErasing = true;
+    });
+
+    // Color Picker
+    colorPicker.addEventListener('input', (e) => {
+      strokeColor = e.target.value;
+    });
+
+    // Clear Canvas
+    clearBtn.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // Save Canvas as Image
+    saveBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'my_drawing.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+
+    // Drawing Functions
+    function getXY(e) {
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches) {
+        return {
+          x: e.touches[0].clientX - rect.left,
+          y: e.touches[0].clientY - rect.top
+        };
+      } else {
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+    }
+
+    function startPosition(e) {
+      painting = true;
+      draw(e);
+    }
+
+    function endPosition() {
+      painting = false;
+      ctx.beginPath();
+    }
+
+    function draw(e) {
+      if (!painting) return;
+      const { x, y } = getXY(e);
+
+      ctx.lineWidth = strokeWidth;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = isErasing ? 'white' : strokeColor;
+
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+
+    // Mouse Events
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseleave', endPosition);
+
+    // Touch Events
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      startPosition(e);
+    });
+    canvas.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      endPosition(e);
+    });
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      draw(e);
+    });
+  </script>
+</body>
+</html>
