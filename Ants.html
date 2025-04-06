@@ -6,6 +6,11 @@
   <title>Kill the Ants</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    body {
+      background: url('https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/wood.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
     @keyframes crawlAnt {
       0% { transform: translate(0, 0) rotate(0deg); }
       25% { transform: translate(30px, 10px) rotate(10deg); }
@@ -16,6 +21,11 @@
 
     .glow {
       filter: drop-shadow(0 0 5px #ff0000) drop-shadow(0 0 10px #ff0000);
+    }
+
+    .white-glow {
+      box-shadow: 0 0 10px 4px white;
+      border-radius: 50%;
     }
 
     .ant-img {
@@ -31,34 +41,40 @@
       background-size: contain !important;
     }
 
-    body {
-      background: url('https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/wood.jpg') no-repeat center center fixed;
-      background-size: cover;
+    .health-bar {
+      width: 100px;
+      height: 10px;
+      background: #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .health-fill {
+      height: 100%;
+      background: red;
+      transition: width 0.3s ease;
     }
   </style>
 </head>
-<body class="flex items-center justify-center w-screen h-screen overflow-hidden select-none">
+<body class="flex items-center justify-center w-screen h-screen overflow-hidden select-none relative">
 
   <!-- Start Screen -->
-  <div id="start-screen" class="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 space-y-4 text-white">
-    <p class="text-2xl">Tap to smash red ants — avoid black ants!</p>
+  <div id="start-screen" class="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center z-50 text-white space-y-6">
+    <div class="text-2xl text-center">Tap to smash red ants, avoid black ants!</div>
     <button onclick="startGame()" class="bg-red-600 text-white px-6 py-3 rounded-xl text-2xl font-bold hover:bg-red-700">Start Game</button>
   </div>
 
   <!-- Header -->
-  <div class="absolute top-4 left-4 text-4xl font-bold text-white drop-shadow-lg">Kill the Ants</div>
-  <div class="absolute top-4 right-4 flex flex-col items-end space-y-1 text-white text-sm sm:text-base">
-    <div class="flex space-x-2 items-center">
-      <span class="font-bold">Score:</span><span id="score">0</span>
-      <span class="font-bold">Time:</span><span id="timer">60</span>s
-    </div>
-    <div class="flex items-center space-x-2">
-      <span class="font-bold">Black Ant Lives:</span>
-      <div id="health-bar" class="w-24 h-3 bg-red-300 rounded">
-        <div id="health-fill" class="h-full bg-green-600 rounded" style="width: 100%;"></div>
-      </div>
-      <button id="mute-btn" onclick="toggleMute()" class="bg-white text-black px-2 py-1 rounded hover:bg-gray-200">🔊</button>
-    </div>
+  <div class="absolute top-4 left-4 text-white space-y-2">
+    <div class="text-4xl font-bold drop-shadow-lg">Kill the Ants</div>
+    <div class="text-lg">🖤 Black Ant Lives Left: <span id="blackLives">3</span></div>
+    <div class="health-bar"><div id="healthFill" class="health-fill w-full"></div></div>
+  </div>
+
+  <div class="absolute top-4 right-4 text-xl font-semibold text-white drop-shadow space-x-4">
+    <span>Score: <span id="score">0</span></span>
+    <span>Time: <span id="timer">60</span>s</span>
+    <button id="mute-btn" onclick="toggleMute()" class="ml-4 bg-gray-700 px-3 py-1 rounded hover:bg-gray-600">🔊</button>
   </div>
 
   <!-- Game Area -->
@@ -71,8 +87,10 @@
     <button onclick="startGame()" class="bg-green-600 px-6 py-2 rounded-lg text-xl hover:bg-green-700">Play Again</button>
   </div>
 
-  <!-- Sounds -->
+  <!-- Sound Effects -->
   <audio id="splash-sound" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_78ed737a85.mp3?filename=splash-death-splash-46048.mp3" preload="auto"></audio>
+
+  <!-- Background Music -->
   <audio id="bg-music" src="https://cdn.pixabay.com/download/audio/2025/01/29/audio_6477f2bfbc.mp3?filename=level-iii-medium-294426.mp3" preload="auto" loop></audio>
 
   <script>
@@ -81,22 +99,32 @@
     const timerEl = document.getElementById('timer');
     const splashSound = document.getElementById('splash-sound');
     const bgMusic = document.getElementById('bg-music');
+    const muteBtn = document.getElementById('mute-btn');
+
     const startScreen = document.getElementById('start-screen');
     const endScreen = document.getElementById('end-screen');
     const finalScoreEl = document.getElementById('final-score');
-    const healthFill = document.getElementById('health-fill');
+    const blackLivesEl = document.getElementById('blackLives');
+    const healthFill = document.getElementById('healthFill');
 
     let score = 0;
     let timeLeft = 60;
     let spawnRate = 700;
     let antInterval, timerInterval;
     let blackAntLives = 3;
+    let isMuted = false;
 
     function createAnt() {
       const ant = document.createElement('div');
-      const isBlack = Math.random() < 0.25;
-      ant.className = 'absolute cursor-pointer ant-img glow';
-      if (isBlack) ant.classList.add('black-ant');
+      ant.className = 'absolute cursor-pointer ant-img';
+      
+      const isBlack = Math.random() < 0.2;
+      if (isBlack) {
+        ant.classList.add('black-ant', 'white-glow');
+        ant.dataset.black = 'true';
+      } else {
+        ant.classList.add('glow');
+      }
 
       const size = 40;
       const x = Math.random() * (window.innerWidth - size);
@@ -105,22 +133,22 @@
       ant.style.top = `${y}px`;
 
       function killAnt() {
+        const isBlack = ant.dataset.black === 'true';
         ant.remove();
         showBlood(x, y);
 
-        splashSound.pause();
-        splashSound.currentTime = 0;
-        splashSound.play();
+        if (!isMuted) {
+          splashSound.pause();
+          splashSound.currentTime = 0;
+          splashSound.play();
+        }
 
         if (navigator.vibrate) navigator.vibrate(100);
 
         if (isBlack) {
           blackAntLives--;
-          updateHealth();
-          if (blackAntLives <= 0) {
-            endGame();
-            return;
-          }
+          updateHealthBar();
+          if (blackAntLives <= 0) return endGame();
         } else {
           score++;
           scoreEl.textContent = score;
@@ -137,6 +165,12 @@
       }, 2000);
     }
 
+    function updateHealthBar() {
+      blackLivesEl.textContent = blackAntLives;
+      const percent = (blackAntLives / 3) * 100;
+      healthFill.style.width = `${percent}%`;
+    }
+
     function showBlood(x, y) {
       const blood = document.createElement('img');
       blood.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/blood-bloods-splash.gif';
@@ -147,12 +181,6 @@
       blood.style.height = '50px';
       gameArea.appendChild(blood);
       setTimeout(() => blood.remove(), 800);
-    }
-
-    function updateHealth() {
-      const width = (blackAntLives / 3) * 100;
-      healthFill.style.width = `${width}%`;
-      healthFill.className = `h-full rounded ${blackAntLives === 3 ? 'bg-green-600' : blackAntLives === 2 ? 'bg-yellow-500' : 'bg-red-600'}`;
     }
 
     function adjustDifficulty() {
@@ -176,43 +204,54 @@
     }
 
     function endGame() {
+      clearInterval(timerInterval);
+      clearInterval(antInterval);
       finalScoreEl.textContent = score;
       endScreen.classList.remove('hidden');
+      bgMusic.pause();
     }
 
     function startGame() {
       score = 0;
       timeLeft = 60;
-      blackAntLives = 3;
       spawnRate = 700;
+      blackAntLives = 3;
       scoreEl.textContent = score;
       timerEl.textContent = timeLeft;
+      blackLivesEl.textContent = blackAntLives;
+      updateHealthBar();
       gameArea.innerHTML = '';
       endScreen.classList.add('hidden');
       startScreen.classList.add('hidden');
-      updateHealth();
 
       clearInterval(timerInterval);
       clearInterval(antInterval);
 
-      bgMusic.currentTime = 0;
-      bgMusic.play().catch(e => {
-        console.warn('Background music could not play automatically:', e);
-      });
+      if (!isMuted) {
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(e => {
+          console.warn('Background music could not play automatically:', e);
+        });
+      }
 
       antInterval = setInterval(createAnt, spawnRate);
       startTimer();
     }
 
     function toggleMute() {
-      bgMusic.muted = !bgMusic.muted;
-      const muteBtn = document.getElementById('mute-btn');
-      muteBtn.textContent = bgMusic.muted ? '🔇' : '🔊';
+      isMuted = !isMuted;
+      bgMusic.muted = isMuted;
+      splashSound.muted = isMuted;
+      muteBtn.textContent = isMuted ? '🔇' : '🔊';
+      if (isMuted) {
+        bgMusic.pause();
+      } else {
+        bgMusic.play().catch(() => {});
+      }
     }
 
-    // Preload
-    new Image().src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/giphy.gif';
-    new Image().src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/black-ant.gif';
+    const preload = new Image();
+    preload.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/giphy.gif';
   </script>
 </body>
 </html>
