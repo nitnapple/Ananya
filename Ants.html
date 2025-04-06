@@ -51,14 +51,18 @@
     <button onclick="startGame()" class="bg-green-600 px-6 py-2 rounded-lg text-xl hover:bg-green-700">Play Again</button>
   </div>
 
-  <!-- Sound -->
+  <!-- Sound Effects -->
   <audio id="splash-sound" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_78ed737a85.mp3?filename=splash-death-splash-46048.mp3" preload="auto"></audio>
+
+  <!-- Background Music -->
+  <audio id="bg-music" src="https://cdn.pixabay.com/download/audio/2025/01/29/audio_6477f2bfbc.mp3?filename=level-iii-medium-294426.mp3" preload="auto" loop></audio>
 
   <script>
     const gameArea = document.getElementById('game-area');
     const scoreEl = document.getElementById('score');
     const timerEl = document.getElementById('timer');
     const splashSound = document.getElementById('splash-sound');
+    const bgMusic = document.getElementById('bg-music');
 
     const startScreen = document.getElementById('start-screen');
     const endScreen = document.getElementById('end-screen');
@@ -85,7 +89,6 @@
         ant.remove();
         showBlood(x, y);
 
-        // Play kill sound
         splashSound.pause();
         splashSound.currentTime = 0;
         splashSound.play();
@@ -153,11 +156,16 @@
       clearInterval(timerInterval);
       clearInterval(antInterval);
 
+      bgMusic.currentTime = 0;
+      bgMusic.play().catch(e => {
+        console.warn('Background music could not play automatically:', e);
+      });
+
       antInterval = setInterval(createAnt, spawnRate);
       startTimer();
     }
 
-    // Optional: preload image
+    // Optional preload
     const antImg = new Image();
     antImg.src = 'https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/giphy.gif';
   </script>
