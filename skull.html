@@ -16,19 +16,19 @@
       height: 32px;
       background: url('https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif') no-repeat center/cover;
       animation: fallFade 0.5s ease-out;
-      transition: top 0.3s ease-in-out;
       filter: drop-shadow(0 0 6px white);
       z-index: 5;
+      transition: transform 0.2s ease;
     }
 
     .blood {
       position: absolute;
-      width: 24px;
-      height: 24px;
-      background: red;
-      border-radius: 50%;
-      opacity: 0.7;
-      animation: splatter 0.3s ease-out;
+      width: 64px;
+      height: 64px;
+      background: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXBvaWo5cjV4Y3NpOHFrM3dqOXVyc2RrY3czcnU5OXdsd3UzZHVwaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUPGcnRH3DNfyUXWqA/giphy.gif') no-repeat center/cover;
+      background-size: contain;
+      opacity: 1;
+      animation: splatter 0.4s ease-out forwards;
       z-index: 4;
     }
 
@@ -39,7 +39,7 @@
 
     @keyframes splatter {
       0% { transform: scale(0.2); opacity: 0.5; }
-      100% { transform: scale(1.5) rotate(45deg); opacity: 0; }
+      100% { transform: scale(1.2) rotate(10deg); opacity: 0; }
     }
 
     @keyframes shake {
@@ -52,6 +52,15 @@
 
     .shake {
       animation: shake 0.4s ease-in-out;
+    }
+
+    .explode {
+      animation: explode 0.4s forwards ease-out;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(10) rotate(0deg); opacity: 1; }
+      100% { transform: scale(12) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
@@ -66,7 +75,7 @@
   <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-black z-50 text-center">
     <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/skull-laughing.gif" alt="Skull GIF" class="w-32 h-32 mb-4" />
     <h1 class="text-5xl font-bold mb-2">Haunted Skull Zone</h1>
-    <p class="text-gray-400 text-lg">Tap to start... if you dare.</p>
+    <p class="text-gray-400 text-lg">Tap or Hold to play... if you dare.</p>
   </div>
 
   <!-- TOP HUD -->
@@ -88,15 +97,12 @@
     const scoreEl = document.getElementById('score');
     const gameBody = document.getElementById('game-body');
 
-    const columnWidth = 30;
-    const screenWidth = window.innerWidth;
-    const numColumns = Math.floor(screenWidth / columnWidth);
-    const heights = new Array(numColumns).fill(0);
-    const skullSize = 32;
     let score = 0;
     let timeLeft = 60;
     let gameStarted = false;
     let timerInterval;
+    let activeSkull = null;
+    let scaleInterval = null;
 
     const startGame = () => {
       bgMusic.volume = 0.4;
@@ -121,7 +127,52 @@
       }, 400);
     };
 
-    document.body.addEventListener('click', (e) => {
+    const spawnSkull = (x, y) => {
+      const skull = document.createElement('div');
+      skull.className = 'skull';
+      skull.style.left = `${x - 16}px`;
+      skull.style.top = `${y - 16}px`;
+      skull.dataset.scale = 1;
+      skullContainer.appendChild(skull);
+      return skull;
+    };
+
+    const explodeSkull = (skull) => {
+      if (!skull) return;
+      skull.classList.add('explode');
+      setTimeout(() => skull.remove(), 500);
+
+      const blood = document.createElement('div');
+      blood.className = 'blood';
+      blood.style.left = `${parseInt(skull.style.left) - 16}px`;
+      blood.style.top = `${parseInt(skull.style.top) - 16}px`;
+      skullContainer.appendChild(blood);
+      setTimeout(() => blood.remove(), 800);
+
+      laughSound.currentTime = 0;
+      laughSound.play();
+      triggerShake();
+      score += 5;
+      scoreEl.textContent = score;
+    };
+
+    const growSkull = () => {
+      if (!activeSkull) return;
+      let scale = parseFloat(activeSkull.dataset.scale);
+      scale += 0.2;
+
+      if (scale >= 10) {
+        explodeSkull(activeSkull);
+        clearInterval(scaleInterval);
+        activeSkull = null;
+        return;
+      }
+
+      activeSkull.dataset.scale = scale;
+      activeSkull.style.transform = `scale(${scale})`;
+    };
+
+    document.body.addEventListener('mousedown', (e) => {
       if (!gameStarted) {
         startGame();
       }
@@ -129,44 +180,39 @@
       dropSound.currentTime = 0;
       dropSound.play();
 
-      const column = Math.floor(e.clientX / columnWidth);
-      const x = column * columnWidth + columnWidth / 4;
-      const y = window.innerHeight - skullSize - heights[column];
+      activeSkull = spawnSkull(e.clientX, e.clientY);
+      scaleInterval = setInterval(growSkull, 100);
+    });
 
-      const skull = document.createElement('div');
-      skull.className = 'skull';
-      skull.style.left = `${x}px`;
-      skull.style.top = `-50px`;
-      skullContainer.appendChild(skull);
+    document.body.addEventListener('mouseup', () => {
+      if (activeSkull) {
+        clearInterval(scaleInterval);
+        score++;
+        scoreEl.textContent = score;
+        activeSkull = null;
+      }
+    });
 
-      setTimeout(() => {
-        skull.style.top = `${y}px`;
+    // Mobile support
+    document.body.addEventListener('touchstart', (e) => {
+      if (!gameStarted) {
+        startGame();
+      }
 
-        skull.style.transition = 'top 0.2s ease-in-out';
-        setTimeout(() => {
-          skull.style.top = `${y - 10}px`;
-          setTimeout(() => {
-            skull.style.top = `${y}px`;
-          }, 100);
-        }, 250);
+      const touch = e.touches[0];
+      dropSound.currentTime = 0;
+      dropSound.play();
 
-        const blood = document.createElement('div');
-        blood.className = 'blood';
-        blood.style.left = `${x + 8}px`;
-        blood.style.top = `${y + 24}px`;
-        skullContainer.appendChild(blood);
+      activeSkull = spawnSkull(touch.clientX, touch.clientY);
+      scaleInterval = setInterval(growSkull, 100);
+    });
 
-        setTimeout(() => blood.remove(), 500);
-      }, 20);
-
-      heights[column] += skullSize;
-      score++;
-      scoreEl.textContent = score;
-
-      if (heights[column] >= window.innerHeight - skullSize) {
-        laughSound.currentTime = 0;
-        laughSound.play();
-        triggerShake();
+    document.body.addEventListener('touchend', () => {
+      if (activeSkull) {
+        clearInterval(scaleInterval);
+        score++;
+        scoreEl.textContent = score;
+        activeSkull = null;
       }
     });
   </script>
