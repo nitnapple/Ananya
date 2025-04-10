@@ -13,19 +13,14 @@
             y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "qsnefk1464");
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    body {
-      touch-action: none;
-    }
-  </style>
+
 
 </head>
 <body class="bg-gray-100 text-gray-900">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
    
 <!-- Header Section -->
-<header class="bg-purple-700 text-white py-6 text-center shadow-lg">
+<header class="text-5xl font-extrabold text-center text-rose-700 mb-12 drop-shadow-md flex justify-center items-center gap-3">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-center relative">
             <!-- Main title -->
@@ -392,50 +387,6 @@
             ✅ Thank you for your suggestion!
         </div>
     </section>
-    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
-
-  <script>
-    const canvas = document.getElementById('confetti-canvas');
-    const confetti = window.confetti.create(canvas, {
-      resize: true,
-      useWorker: true,
-    });
-
-    const emojis = ['✨', '💥', '🎉', '💫', '🪄'];
-
-    function burstAt(x, y) {
-      confetti({
-        particleCount: 5,
-        angle: Math.random() * 360,
-        spread: 40,
-        startVelocity: 10,
-        gravity: 0.3,
-        ticks: 200,
-        origin: {
-          x: x / window.innerWidth,
-          y: y / window.innerHeight,
-        },
-        scalar: 1.2,
-        shapes: ['text'],
-        text: emojis[Math.floor(Math.random() * emojis.length)],
-      });
-    }
-
-    // Mouse movement
-    let mouseDown = false;
-    document.addEventListener('mousedown', () => mouseDown = true);
-    document.addEventListener('mouseup', () => mouseDown = false);
-    document.addEventListener('mousemove', (e) => {
-      if (mouseDown) burstAt(e.clientX, e.clientY);
-    });
-
-    // Touch movement
-    document.addEventListener('touchmove', (e) => {
-      for (let t of e.touches) {
-        burstAt(t.clientX, t.clientY);
-      }
-    });
-  </script>
 
     <!-- JavaScript -->
     <script>
