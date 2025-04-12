@@ -20,56 +20,90 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
    
 <!-- Header Section -->
-<header class="bg-purple-700 text-white py-6 text-center shadow-lg">
-    <div class="container mx-auto px-4">
-        <div class="flex items-center justify-center relative">
-            <!-- Main title with dynamic greeting -->
-            <div>
-                <h1 class="text-3xl font-bold fade-in">
-                    <span id="greeting">Welcome</span>, Ananya 👑
-                </h1>
-                <p class="text-lg">Here are all your assignments and presentations.</p>
-            </div>
+<header class="text-white py-6 text-center shadow-lg transition-colors duration-500" id="header">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-center relative">
+      <!-- Title and Time -->
+      <div>
+        <h1 class="text-3xl font-bold" id="greeting">Welcome, Ananya 👑</h1>
+        <p class="text-lg" id="date"></p>
+        <p class="text-sm mt-1" id="time">Loading time...</p>
+      </div>
 
-            <!-- Mobile menu button aligned to the right with animation -->
-            <div class="absolute right-0 md:hidden">
-                <button id="menu-btn" class="text-white focus:outline-none transition-transform transform hover:scale-110">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:block mt-4">
-            <ul class="flex justify-center space-x-6">
-                <li><a href="#whats_new" class="hover:text-gray-300 transition">✨ What's New</a></li>
-                <li><a href="#assignments" class="hover:text-gray-300 transition">Assignments</a></li>
-                <li><a href="#presentations" class="hover:text-gray-300 transition">Presentations</a></li>
-                <li><a href="#messages" class="hover:text-gray-300 transition">Messages</a></li>
-            </ul>
-        </nav>
-
-        <!-- Mobile Navigation -->
-        <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-purple-800 text-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
-            <button id="close-menu" class="absolute top-4 right-4 text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-            <ul class="flex flex-col space-y-3 mt-16 p-4">
-                <li><a href="#whats_new" class="block py-2 hover:bg-red-600 rounded px-2">✨ What's New</a></li>
-                <li><a href="#assignments" class="block py-2 hover:bg-purple-600 rounded px-2">📚 Assignments</a></li>
-                <li><a href="#presentations" class="block py-2 hover:bg-purple-600 rounded px-2">🎤 Presentations</a></li>
-                <li><a href="#messages" class="block py-2 hover:bg-purple-600 rounded px-2">📋 Messages</a></li>
-                <li><a href="#exam-datesheet" class="block py-2 hover:bg-purple-600 rounded px-2">📆 Tentative DateSheet</a></li>
-                <li><a href="#sol-notes" class="block py-2 hover:bg-purple-600 rounded px-2">📖 SOL Notes</a></li>
-                <li><a href="#suggestion-box" class="block py-2 hover:bg-purple-600 rounded px-2"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
-            </ul>
-        </div>
+      <!-- Mobile menu button -->
+      <div class="absolute right-0 md:hidden">
+        <button id="menu-btn" class="text-white focus:outline-none transition-transform transform hover:scale-110">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
     </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:block mt-4">
+      <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6">
+        <li><a href="#whats_new" class="hover:text-gray-300 transition">✨ What's New</a></li>
+        <li><a href="#assignments" class="hover:text-gray-300 transition">📚 Assignments</a></li>
+        <li><a href="#presentations" class="hover:text-gray-300 transition">🎤 Presentations</a></li>
+        <li><a href="#messages" class="hover:text-gray-300 transition">📋 Messages</a></li>
+        <li><a href="#exam-datesheet" class="hover:text-gray-300 transition">📆 Tentative DateSheet</a></li>
+        <li><a href="#sol-notes" class="hover:text-gray-300 transition">📖 SOL Notes</a></li>
+        <li><a href="#suggestion-box" class="hover:text-gray-300 transition"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
+
+<!-- Header Script -->
+<script>
+  function updateGreetingAndBG() {
+    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    const hours = nowIST.getHours();
+    const header = document.getElementById("header");
+    const greeting = document.getElementById("greeting");
+
+    let bgColor = "bg-purple-700";
+    let greetText = "Welcome, Ananya 👑";
+
+    if (hours >= 5 && hours < 12) {
+      bgColor = "bg-yellow-500";
+      greetText = "Good Morning, Ananya 👑";
+    } else if (hours >= 12 && hours < 17) {
+      bgColor = "bg-blue-500";
+      greetText = "Good Afternoon, Ananya 👑";
+    } else if (hours >= 17 && hours < 20) {
+      bgColor = "bg-pink-600";
+      greetText = "Good Evening, Ananya 👑";
+    } else {
+      bgColor = "bg-gray-900";
+      greetText = "Good Night, Ananya 👑";
+    }
+
+    header.classList.add(bgColor);
+    greeting.textContent = greetText;
+
+    document.getElementById("date").textContent = nowIST.toDateString();
+  }
+
+  function updateTime() {
+    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12 || 12;
+    const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm}`;
+    document.getElementById("time").textContent = "IST Time: " + timeStr;
+  }
+
+  updateGreetingAndBG();
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>
+
 
 <!-- Tailwind CSS custom animation -->
 <style>
