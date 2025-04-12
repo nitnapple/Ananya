@@ -90,6 +90,7 @@
     if (hours >= 5 && hours < 12) {
       bgColor = "bg-yellow-500";
       greetText = "Good Morning, Ananya 👑";
+        
     } else if (hours >= 12 && hours < 17) {
       bgColor = "bg-blue-500";
       greetText = "Good Afternoon, Ananya 👑";
@@ -153,40 +154,6 @@
     }
 </style>
 
-<!-- JavaScript for IST greeting -->
-<script>
-    function updateGreeting() {
-        const greetingElement = document.getElementById('greeting');
-        const now = new Date();
-
-        // Convert to IST (UTC + 5:30)
-        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-        const ist = new Date(utc + (5.5 * 3600000));
-        const hour = ist.getHours();
-
-        let greetingText = "Welcome";
-        let emoji = "🌟";
-
-        if (hour >= 5 && hour < 12) {
-            greetingText = "Good Morning";
-            emoji = "☀️";
-        } else if (hour >= 12 && hour < 17) {
-            greetingText = "Good Afternoon";
-            emoji = "🌞";
-        } else if (hour >= 17 && hour < 21) {
-            greetingText = "Good Evening";
-            emoji = "🌇";
-        } else {
-            greetingText = "Good Night";
-            emoji = "🌙";
-        }
-
-        greetingElement.textContent = `${greetingText} ${emoji}`;
-    }
-
-    updateGreeting();
-</script>
-
 
 <!-- JavaScript for Smooth Animation & Auto Close -->
 <script>
@@ -217,6 +184,11 @@
     <section id="what's_new" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2"><span class="inline-block animate-bounce">✨</span> What's New</h2>        
         <ol class="list-decimal mt-4 space-y-3 pl-5">
+
+            <li class="text-gray-700">
+                <strong>Holiday due to Ambedkar Jayanti.</strong> – <span class="text-green-600 font-bold">🥳 14th April 2025</span>
+                <em class="block text-gray-500">[Monday, 14th April 2025]</em>
+            </li>
             
             <li class="text-gray-700">
                 <strong>Sanskrit Literature: Katha Kavya – Assignment.</strong> – <span class="text-green-600 font-bold">✅ Completed</span>
