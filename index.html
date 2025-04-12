@@ -53,11 +53,31 @@
         <li><a href="#suggestion-box" class="hover:text-gray-300 transition"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
       </ul>
     </nav>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-purple-800 text-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out md:hidden z-50">
+      <button id="close-menu" class="absolute top-4 right-4 text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <ul class="flex flex-col space-y-3 mt-16 p-4">
+        <li><a href="#whats_new" class="block py-2 hover:bg-red-600 rounded px-2">✨ What's New</a></li>
+        <li><a href="#assignments" class="block py-2 hover:bg-purple-600 rounded px-2">📚 Assignments</a></li>
+        <li><a href="#presentations" class="block py-2 hover:bg-purple-600 rounded px-2">🎤 Presentations</a></li>
+        <li><a href="#messages" class="block py-2 hover:bg-purple-600 rounded px-2">📋 Messages</a></li>
+        <li><a href="#exam-datesheet" class="block py-2 hover:bg-purple-600 rounded px-2">📆 Tentative DateSheet</a></li>
+        <li><a href="#sol-notes" class="block py-2 hover:bg-purple-600 rounded px-2">📖 SOL Notes</a></li>
+        <li><a href="#suggestion-box" class="block py-2 hover:bg-purple-600 rounded px-2"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
+      </ul>
+    </div>
   </div>
 </header>
 
-<!-- Header Script -->
+<!-- Script -->
 <script>
+  // Color and greeting
   function updateGreetingAndBG() {
     const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
     const hours = nowIST.getHours();
@@ -83,10 +103,10 @@
 
     header.classList.add(bgColor);
     greeting.textContent = greetText;
-
     document.getElementById("date").textContent = nowIST.toDateString();
   }
 
+  // Live 12-hour clock
   function updateTime() {
     const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
     let hours = now.getHours();
@@ -99,10 +119,26 @@
     document.getElementById("time").textContent = "IST Time: " + timeStr;
   }
 
-  updateGreetingAndBG();
-  updateTime();
-  setInterval(updateTime, 1000);
+  // Mobile Menu
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeMenu = document.getElementById("close-menu");
+
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.remove("translate-x-full");
+    });
+
+    closeMenu.addEventListener("click", () => {
+      mobileMenu.classList.add("translate-x-full");
+    });
+
+    updateGreetingAndBG();
+    updateTime();
+    setInterval(updateTime, 1000);
+  });
 </script>
+
 
 
 <!-- Tailwind CSS custom animation -->
