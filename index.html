@@ -268,36 +268,86 @@
             <p class="mt-4 text-gray-500 italic">Updated on Wednesday, 9th April 2025, 08:20 PM</p>
         </section>
 
-     <!-- Examination Datesheet Section -->
-    <section id="exam-datesheet" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📆 Final Examination Datesheet – May/June 2025</h2>
+    <!-- Examination Datesheet Section -->
+<section id="exam-datesheet" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+  <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📆 Final Examination Datesheet – May/June 2025</h2>
 
-        <ol class="list-decimal mt-4 space-y-3 pl-5">
-            <li class="text-gray-700">
-                <strong>GE: Legal Philosophy</strong>
-                <em class="block text-gray-500">[Date: Wednesday, 14th May 2025, Time: 09:00 AM TO 12:00 NOON]</em>
-            </li> 
-            <li class="text-gray-700">
-                <strong>Perspectives on Public Administration</strong>
-                <em class="block text-gray-500">[Date: Monday, 19th May 2025, Time: 02:30 PM TO 05:30 PM]</em>
-            </li>
-            <li class="text-gray-700">
-                <strong>Sanskrit literature: Katha Kavya</strong>
-                <em class="block text-gray-500">[Date: Wednesday, 21st May 2025, Time: 02:30 PM TO 05:30 PM]</em>
-            </li>
-            <li class="text-gray-700">
-                <strong>Comparative Political Systems</strong>
-                <em class="block text-gray-500">[Date: Tuesday, 27th May 2025, Time: 02:30 PM TO 05:30 PM]</em>
-            </li>
-            <li class="text-gray-700">
-                <strong>DSE: Sanskrit, Art of Balanced Living</strong>
-                <em class="block text-gray-500">[Date: Monday, 02nd June 2025, Time: 02:30 PM TO 05:30 PM]</em>
-            </li>
-      
-        </ol>
+  <ol class="list-decimal mt-4 space-y-3 pl-5" id="exam-list">
+    <li class="text-gray-700">
+      <strong>GE: Legal Philosophy</strong>
+      <em class="block text-gray-500">
+        [Date: Wednesday, 14th May 2025, Time: 09:00 AM TO 12:00 NOON]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-1"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>Perspectives on Public Administration</strong>
+      <em class="block text-gray-500">
+        [Date: Monday, 19th May 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-2"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>Sanskrit literature: Katha Kavya</strong>
+      <em class="block text-gray-500">
+        [Date: Wednesday, 21st May 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-3"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>Comparative Political Systems</strong>
+      <em class="block text-gray-500">
+        [Date: Tuesday, 27th May 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-4"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>DSE: Sanskrit, Art of Balanced Living</strong>
+      <em class="block text-gray-500">
+        [Date: Monday, 02nd June 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-5"></span>
+    </li>
+  </ol>
 
-        <p class="mt-4 text-gray-500 italic">*Updated on Monday, 14th April 2025.</p>
-    </section>
+  <p class="mt-4 text-gray-500 italic">*Updated on Monday, 14th April 2025.</p>
+</section>
+
+<script>
+  const countdowns = [
+    { id: 'countdown-1', date: '2025-05-14T09:00:00' },
+    { id: 'countdown-2', date: '2025-05-19T14:30:00' },
+    { id: 'countdown-3', date: '2025-05-21T14:30:00' },
+    { id: 'countdown-4', date: '2025-05-27T14:30:00' },
+    { id: 'countdown-5', date: '2025-06-02T14:30:00' }
+  ];
+
+  function updateCountdowns() {
+    const now = new Date();
+
+    countdowns.forEach(item => {
+      const examDate = new Date(item.date);
+      const diff = examDate - now;
+
+      const countdownElem = document.getElementById(item.id);
+      if (diff <= 0) {
+        countdownElem.textContent = "📘 Exam time!";
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        countdownElem.textContent = `⏳ Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+    });
+  }
+
+  // Initial call
+  updateCountdowns();
+  // Update every second
+  setInterval(updateCountdowns, 1000);
+</script>
 
     
     <!-- Assignments Section -->
