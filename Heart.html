@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Her Majesty's Enchanted Realm</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Cloud Animation */
+    .cloud {
+      position: fixed;
+      top: 10%;
+      width: 200px;
+      opacity: 0.5;
+      animation: floatClouds 60s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .cloud:nth-child(1) { left: -200px; animation-delay: 0s; top: 5%; }
+    .cloud:nth-child(2) { left: -300px; animation-delay: 10s; top: 20%; }
+    .cloud:nth-child(3) { left: -400px; animation-delay: 20s; top: 30%; }
+
+    @keyframes floatClouds {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(200vw); }
+    }
+
+    /* Background + Stars */
+    body {
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow-x: hidden;
+    }
+
+    .stars {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -2;
+      opacity: 0.3;
+    }
+
+    /* Heart Cursor */
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/0/0b/Red_heart.svg') no-repeat center;
+      background-size: contain;
+      pointer-events: none;
+      animation: floatUp 1.2s linear forwards;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+
+  <!-- 🌟 Stars + Clouds -->
+  <div class="stars"></div>
+  <img src="https://pngimg.com/uploads/cloud/cloud_PNG27.png" class="cloud" />
+  <img src="https://pngimg.com/uploads/cloud/cloud_PNG27.png" class="cloud" />
+  <img src="https://pngimg.com/uploads/cloud/cloud_PNG27.png" class="cloud" />
+
+  <!-- 👑 Content -->
+  <main class="min-h-screen flex items-center justify-center text-center px-6">
+    <div>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome to Her Majesty Ananya's Realm</h1>
+      <p class="text-lg md:text-xl">Where stars twinkle, hearts float, and clouds drift across a royal sky.</p>
+    </div>
+  </main>
+
+  <!-- 🦶 Footer -->
+  <footer class="text-center py-6 bg-black bg-opacity-40">
+    <p class="text-sm text-gray-400">Made with ❤️ and a sprinkle of stardust by Nitin</p>
+    <p class="text-xs text-gray-500">© 2025 Ananya's Magical Universe. All rights reserved.</p>
+  </footer>
+
+  <!-- 💖 Heart Trail Script -->
+  <script>
+    document.addEventListener('mousemove', function (e) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = e.pageX + 'px';
+      heart.style.top = e.pageY + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
+    });
+  </script>
+</body>
+</html>
