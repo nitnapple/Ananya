@@ -18,8 +18,7 @@
 
 </head>
 <body class="bg-gray-100 text-gray-900">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-   
+
 <!-- Header Section -->
 <header class="text-white py-6 text-center shadow-lg transition-colors duration-500" id="header">
   <div class="container mx-auto px-4">
@@ -30,7 +29,6 @@
         <p class="text-lg" id="date"></p>
         <p class="text-sm mt-1" id="time">Loading time...</p>
       </div>
-
       <!-- Mobile menu button -->
       <div class="absolute right-0 md:hidden">
         <button id="menu-btn" class="text-white focus:outline-none transition-transform transform hover:scale-110">
@@ -41,10 +39,9 @@
         </button>
       </div>
     </div>
-
     <!-- Desktop Navigation -->
     <nav class="hidden md:block mt-4">
-      <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6">
+      <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6" id="menu-links">
         <li><a href="#whats_new" class="hover:text-gray-300 transition">✨ What's New</a></li>
         <li><a href="#assignments" class="hover:text-gray-300 transition">📚 Assignments</a></li>
         <li><a href="#presentations" class="hover:text-gray-300 transition">🎤 Presentations</a></li>
@@ -54,7 +51,6 @@
         <li><a href="#suggestion-box" class="hover:text-gray-300 transition"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
       </ul>
     </nav>
-
     <!-- Mobile Navigation -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-purple-800 text-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out md:hidden z-50">
       <button id="close-menu" class="absolute top-4 right-4 text-white">
@@ -76,22 +72,15 @@
   </div>
 </header>
 
-<!-- Script -->
+<!-- Script for Greeting, Time, and Menu -->
 <script>
-  // Color and greeting
-  function updateGreetingAndBG() {
-    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-    const hours = nowIST.getHours();
-    const header = document.getElementById("header");
-    const greeting = document.getElementById("greeting");
-
+  // Helper: Get greeting and background color based on hour
+  function getGreetingAndBG(hours) {
     let bgColor = "bg-purple-700";
     let greetText = "Welcome, Ananya 👑";
-
     if (hours >= 5 && hours < 12) {
       bgColor = "bg-yellow-500";
       greetText = "Good Morning, Ananya 👑";
-        
     } else if (hours >= 12 && hours < 17) {
       bgColor = "bg-blue-500";
       greetText = "Good Afternoon, Ananya 👑";
@@ -102,7 +91,37 @@
       bgColor = "bg-gray-900";
       greetText = "Good Night, Ananya 👑";
     }
+    return { bgColor, greetText };
+  }
 
+  // Show initial welcome, then switch to time-based greeting
+  function showGreeting() {
+    const header = document.getElementById("header");
+    const greeting = document.getElementById("greeting");
+    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    document.getElementById("date").textContent = nowIST.toDateString();
+
+    // Show "Welcome, Ananya 👑" for 3 seconds
+    greeting.textContent = "Welcome, Ananya 👑";
+    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700");
+    header.classList.add("bg-purple-700");
+
+    setTimeout(function() {
+      updateGreetingAndBG();
+      // Update greeting every minute in case time of day changes
+      setInterval(updateGreetingAndBG, 60 * 1000);
+    }, 3000);
+  }
+
+  // Update greeting and background color based on time
+  function updateGreetingAndBG() {
+    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    const hours = nowIST.getHours();
+    const header = document.getElementById("header");
+    const greeting = document.getElementById("greeting");
+    const { bgColor, greetText } = getGreetingAndBG(hours);
+
+    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700");
     header.classList.add(bgColor);
     greeting.textContent = greetText;
     document.getElementById("date").textContent = nowIST.toDateString();
@@ -115,17 +134,17 @@
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     const ampm = hours >= 12 ? "PM" : "AM";
-
     hours = hours % 12 || 12;
     const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm}`;
     document.getElementById("time").textContent = "IST Time: " + timeStr;
   }
 
-  // Mobile Menu
   document.addEventListener("DOMContentLoaded", function () {
+    // Mobile Menu functionality
     const menuBtn = document.getElementById("menu-btn");
     const mobileMenu = document.getElementById("mobile-menu");
     const closeMenu = document.getElementById("close-menu");
+    const menuLinks = document.querySelectorAll("#mobile-menu a");
 
     menuBtn.addEventListener("click", () => {
       mobileMenu.classList.remove("translate-x-full");
@@ -135,50 +154,17 @@
       mobileMenu.classList.add("translate-x-full");
     });
 
-    updateGreetingAndBG();
+    menuLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.add("translate-x-full");
+      });
+    });
+
+    // Greeting and time
+    showGreeting();
     updateTime();
     setInterval(updateTime, 1000);
   });
-</script>
-
-
-
-<!-- Tailwind CSS custom animation -->
-<style>
-    .fade-in {
-        animation: fadeIn 1s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
-
-
-<!-- JavaScript for Smooth Animation & Auto Close -->
-<script>
-    const menuBtn = document.getElementById("menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const closeMenu = document.getElementById("close-menu");
-    const menuLinks = document.querySelectorAll("#menu-links a");
-
-    // Open menu
-    menuBtn.addEventListener("click", () => {
-        mobileMenu.classList.remove("translate-x-full");
-    });
-
-    // Close menu when clicking "X"
-    closeMenu.addEventListener("click", () => {
-        mobileMenu.classList.add("translate-x-full");
-    });
-
-    // Close menu when clicking any link
-    menuLinks.forEach(link => {
-        link.addEventListener("click", () => {
-            mobileMenu.classList.add("translate-x-full");
-        });
-    });
 </script>
     
 <!-- What's New Section -->
