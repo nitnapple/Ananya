@@ -90,10 +90,10 @@
 </head>
 <body class="text-white font-sans">  
   <!-- 🔊 Background Music -->
-  <audio autoplay loop>
-    <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/royal.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <audio id="bg-music" autoplay loop>
+  <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/royal.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
   <!-- 🌟 Stars + Clouds -->
   <div class="stars"></div>
@@ -140,5 +140,23 @@
       rainContainer.appendChild(drop);
     }
   </script>
+
+  <script>
+  window.addEventListener('load', () => {
+    const audio = document.getElementById('bg-music');
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          // Music started successfully 🎶
+        })
+        .catch(error => {
+          console.warn("Autoplay blocked 😢. User interaction may be required.", error);
+        });
+    }
+  });
+</script>
+
 </body>
 </html>
