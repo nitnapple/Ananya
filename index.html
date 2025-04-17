@@ -14,9 +14,27 @@
         })(window, document, "clarity", "script", "qsnefk1464");
     </script>
 
+    <style>
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px rgba(221, 160, 221, 0.6);
+      }
+      50% {
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 25px rgba(147, 112, 219, 0.9);
+      }
+      100% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px rgba(221, 160, 221, 0.6);
+      }
+    }
+
+    .animate-glow {
+      animation: glow 2.5s ease-in-out infinite;
+    }
+  </style>
+
 
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="flex flex-col items-center justify-center h-screen bg-black text-white text-center">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
    
 <!-- Header Section -->
@@ -24,14 +42,68 @@
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-center relative">
       <!-- Title and Time -->
-      <div>
-<h1 id="greeting" class="transition-all duration-1000 ease-in-out opacity-100 transform translate-y-0 text-xl font-bold text-white drop-shadow-lg animate-glow">
-  Welcome, Ananya 👑
-</h1>
-        <p class="text-lg" id="date"></p>
-        <p class="text-sm mt-1" id="time">Loading time...</p>
-      </div>
+  <h1 id="greeting" class="transition-all duration-1000 ease-in-out text-2xl font-bold text-white drop-shadow-lg animate-glow bg-purple-700 px-6 py-3 rounded-2xl mb-4">
+    Welcome, Ananya 👑
+  </h1>
+  <div id="time" class="text-lg mt-2"></div>
+  <div id="date" class="text-sm mt-1"></div>
 
+  <script>
+    function updateGreetingAndBG() {
+      const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+      const hours = nowIST.getHours();
+      const greeting = document.getElementById("greeting");
+
+      let bgColor = "bg-purple-700";
+      let greetText = "Welcome, Ananya 👑";
+
+      if (hours >= 5 && hours < 12) {
+        bgColor = "bg-yellow-500";
+        greetText = "Good Morning, Ananya 👑";
+      } else if (hours >= 12 && hours < 17) {
+        bgColor = "bg-blue-500";
+        greetText = "Good Afternoon, Ananya 👑";
+      } else if (hours >= 17 && hours < 20) {
+        bgColor = "bg-pink-600";
+        greetText = "Good Evening, Ananya 👑";
+      } else {
+        bgColor = "bg-gray-900";
+        greetText = "Good Night, Ananya 👑";
+      }
+
+      // Remove previous background color class
+      greeting.className = greeting.className.replace(/bg-\w+-\d+/g, '').trim();
+      // Add new background class
+      greeting.classList.add(bgColor);
+
+      // Update text
+      greeting.textContent = greetText;
+      document.getElementById("date").textContent = nowIST.toDateString();
+    }
+
+    function updateTime() {
+      const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const ampm = hours >= 12 ? "PM" : "AM";
+
+      hours = hours % 12 || 12;
+      const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm}`;
+      document.getElementById("time").textContent = "IST Time: " + timeStr;
+    }
+
+    // Initialize with default royal greeting
+    document.addEventListener("DOMContentLoaded", () => {
+      updateTime();
+      setInterval(updateTime, 1000);
+
+      // After 5 seconds, update greeting and background according to time
+      setTimeout(() => {
+        updateGreetingAndBG();
+      }, 5000);
+    });
+  </script>
       <!-- Mobile menu button -->
       <div class="absolute right-0 md:hidden">
         <button id="menu-btn" class="text-white focus:outline-none transition-transform transform hover:scale-110">
