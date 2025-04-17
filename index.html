@@ -78,42 +78,56 @@
 
 <!-- Script -->
 <script>
-  // Color and greeting
- function updateGreetingAndBG() {
-  const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  const hours = nowIST.getHours();
-  const header = document.getElementById("header");
-  const footer = document.getElementById("footer");
-  const greeting = document.getElementById("greeting");
-
-  let bgColor = "bg-purple-700";
-  let greetText = "Welcome, Ananya 👑";
-
-  if (hours >= 5 && hours < 12) {
-    bgColor = "bg-yellow-500";
-    greetText = "Good Morning, Ananya 👑";
-  } else if (hours >= 12 && hours < 17) {
-    bgColor = "bg-blue-500";
-    greetText = "Good Afternoon, Ananya 👑";
-  } else if (hours >= 17 && hours < 20) {
-    bgColor = "bg-pink-600";
-    greetText = "Good Evening, Ananya 👑";
-  } else {
-    bgColor = "bg-gray-900";
-    greetText = "Good Night, Ananya 👑";
+  // Set initial greeting
+  function showInitialGreeting() {
+    const greeting = document.getElementById("greeting");
+    greeting.textContent = "Welcome, Ananya 👑";
+    greeting.classList.add("opacity-100");
   }
 
-  // Clear previous background classes
-  header.className = header.className.replace(/bg-\w+-\d+/g, '').trim();
-  footer.className = footer.className.replace(/bg-\w+-\d+/g, '').trim();
+  // Time-based greeting and background update with animation
+  function updateGreetingAndBG() {
+    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    const hours = nowIST.getHours();
+    const header = document.getElementById("header");
+    const footer = document.getElementById("footer");
+    const greeting = document.getElementById("greeting");
 
-  // Add new background class
-  header.classList.add(bgColor);
-  footer.classList.add(bgColor);
-  greeting.textContent = greetText;
+    let bgColor = "bg-purple-700";
+    let greetText = "Welcome, Ananya 👑";
 
-  document.getElementById("date").textContent = nowIST.toDateString();
-}
+    if (hours >= 5 && hours < 12) {
+      bgColor = "bg-yellow-500";
+      greetText = "Good Morning, Ananya 👑";
+    } else if (hours >= 12 && hours < 17) {
+      bgColor = "bg-blue-500";
+      greetText = "Good Afternoon, Ananya 👑";
+    } else if (hours >= 17 && hours < 20) {
+      bgColor = "bg-pink-600";
+      greetText = "Good Evening, Ananya 👑";
+    } else {
+      bgColor = "bg-gray-900";
+      greetText = "Good Night, Ananya 👑";
+    }
+
+    // Fade out greeting
+    greeting.classList.add("opacity-0");
+
+    setTimeout(() => {
+      // Update greeting text and fade in
+      greeting.textContent = greetText;
+      greeting.classList.remove("opacity-0");
+      greeting.classList.add("opacity-100");
+    }, 500); // Wait for fade-out before updating
+
+    // Update background
+    header.className = header.className.replace(/bg-\w+-\d+/g, '').trim();
+    footer.className = footer.className.replace(/bg-\w+-\d+/g, '').trim();
+    header.classList.add(bgColor);
+    footer.classList.add(bgColor);
+
+    document.getElementById("date").textContent = nowIST.toDateString();
+  }
 
   // Live 12-hour clock
   function updateTime() {
@@ -128,7 +142,7 @@
     document.getElementById("time").textContent = "IST Time: " + timeStr;
   }
 
-  // Mobile Menu
+  // Mobile Menu + Initialization
   document.addEventListener("DOMContentLoaded", function () {
     const menuBtn = document.getElementById("menu-btn");
     const mobileMenu = document.getElementById("mobile-menu");
@@ -142,9 +156,13 @@
       mobileMenu.classList.add("translate-x-full");
     });
 
-    updateGreetingAndBG();
+    showInitialGreeting();
     updateTime();
     setInterval(updateTime, 1000);
+
+    setTimeout(() => {
+      updateGreetingAndBG();
+    }, 5000);
   });
 </script>
 
