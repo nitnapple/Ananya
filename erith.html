@@ -29,6 +29,21 @@
     header p {
       font-size: 1.2rem;
       color: #cccccc;
+      overflow: hidden;
+      border-right: 2px solid #00ffff;
+      white-space: nowrap;
+      width: 0;
+      animation: typing 4s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+      margin: 1rem auto 0;
+      max-width: 100%;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #00ffff; }
     }
     section {
       padding: 2rem;
