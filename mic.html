@@ -1,66 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mic Access | Puppertino UI</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/puppertino@1.0.0/css/puppertino.min.css">
-    <style>
-        body {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-        }
-        .container {
-            text-align: center;
-            padding: 20px;
-            border-radius: 8px;
-            background: var(--background-secondary);
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            background: var(--background-secondary);
-            border-radius: 6px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coming Soon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 text-white min-h-screen flex flex-col justify-center items-center relative px-6">
 
-    <nav class="toolbar">
-        <button class="button">Home</button>
-        <button class="button">Settings</button>
-        <button class="button">About</button>
-    </nav>
+  <!-- Home Button -->
+  <div class="absolute top-6 right-6">
+    <a href="https://nitnapple.github.io/Ananya" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition-all duration-300">
+      Home
+    </a>
+  </div>
 
-    <div class="container">
-        <h1>Microphone Access</h1>
-        <p id="status">Click the button to access the microphone.</p>
-        <button class="button primary" id="start">Request Mic Access</button>
+  <!-- Main Content -->
+  <div class="text-center mt-16">
+    <h1 class="text-3xl md:text-5xl font-semibold mb-6 animate-fade-in-down">
+      The content on this website will be available after<br>
+      <span class="text-teal-400">27th May 2025</span>
+    </h1>
+    <div id="countdown" class="text-2xl md:text-4xl font-mono bg-black bg-opacity-30 border border-teal-400 rounded-xl px-6 py-4 shadow-lg inline-block animate-pulse">
+      Loading countdown...
     </div>
+    <p class="mt-6 text-sm text-gray-400">Stay tuned for something awesome.</p>
+  </div>
 
-    <footer>
-        <p>&copy; 2025 Mic Access App | Built with Puppertino UI</p>
-    </footer>
+  <!-- Countdown Script -->
+  <script>
+    const targetDate = new Date("May 27, 2025 00:00:00").getTime();
 
-    <script>
-window.addEventListener("load", function() {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(function(stream) {
-            console.log("Camera and microphone access granted automatically.");
-            
-            // Display the video feed (Optional)
-            let video = document.createElement("video");
-            video.srcObject = stream;
-            video.autoplay = true;
-            document.body.appendChild(video);
-        })
-        .catch(function(err) {
-            console.error("Camera or microphone access denied:", err);
-        });
-});
-</script>
+    const countdownTimer = setInterval(function () {
+      const now = new Date().getTime();
+      const timeLeft = targetDate - now;
 
+      if (timeLeft <= 0) {
+        clearInterval(countdownTimer);
+        document.getElementById("countdown").innerHTML = "🎉 Content is now available!";
+        return;
+      }
+
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+  </script>
+
+  <!-- Custom Animation -->
+  <style>
+    @keyframes fade-in-down {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-down {
+      animation: fade-in-down 1.5s ease-out;
+    }
+  </style>
 </body>
 </html>
