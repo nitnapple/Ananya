@@ -1,4 +1,872 @@
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ananya's Assignments</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/crown.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Started New Ananya Clarity  Script -->
+
+
+
+    <!-- Ended New Ananya Clarity  Script -->
+
+    <!-- Started Clarity  Script -->
+
+
+    <!-- Ended Clarity  Script -->
+
+    
+<!-- Started PostHog Script -->
+
+
+<!-- Ended PostHog Script -->
+
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+<!-- Started custom event with device info -->
+
+
+ <!-- Ended custom event with device info -->
+
+<!-- Header Section -->
+<header class="text-white py-6 text-center shadow-lg transition-colors duration-500" id="header">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-center relative">
+      <!-- Title and Time -->
+      <div>
+        <h1 class="text-3xl font-bold" id="greeting">Welcome, Ananya 👑</h1>
+        <p class="text-lg" id="date"></p>
+        <p class="text-sm mt-1" id="time">Loading time...</p>
+      </div>
+      <!-- Mobile menu button -->
+      <div class="absolute right-0 md:hidden">
+        <button id="menu-btn" class="text-white focus:outline-none transition-transform transform hover:scale-110">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:block mt-4">
+      <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6" id="menu-links">
+        <li><a href="#whats_new" class="hover:text-gray-300 transition">✨ What's New</a></li>
+        <li><a href="#exam-datesheet" class="hover:text-gray-300 transition">📆 Final DateSheet</a></li>
+        <li><a href="#summarized" class="hover:text-gray-300 transition">🚀 Summarized Notes</a></li>
+        <li><a href="#assignments" class="hover:text-gray-300 transition">📚 Assignments</a></li>
+        <li><a href="#presentations" class="hover:text-gray-300 transition">🎤 Presentations</a></li>
+        <li><a href="#messages" class="hover:text-gray-300 transition">📋 Messages</a></li>
+        <li><a href="#sol-notes" class="hover:text-gray-300 transition">📖 SOL Notes</a></li>
+        <li><a href="#suggestion-box" class="hover:text-gray-300 transition"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
+      </ul>
+    </nav>
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-purple-800 text-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out md:hidden z-50">
+      <button id="close-menu" class="absolute top-4 right-4 text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      <ul class="flex flex-col space-y-3 mt-16 p-4">
+        <li><a href="#whats_new" class="block py-2 hover:bg-red-600 rounded px-2">✨ What's New</a></li>
+        <li><a href="#exam-datesheet" class="block py-2 hover:bg-purple-600 rounded px-2">📆 Final DateSheet</a></li>
+        <li><a href="#summarized" class="block py-2 hover:bg-purple-600 rounded px-2">🚀 Summarized Notes</a></li>
+        <li><a href="#assignments" class="block py-2 hover:bg-purple-600 rounded px-2">📚 Assignments</a></li>
+        <li><a href="#presentations" class="block py-2 hover:bg-purple-600 rounded px-2">🎤 Presentations</a></li>
+        <li><a href="#messages" class="block py-2 hover:bg-purple-600 rounded px-2">📋 Messages</a></li>
+        <li><a href="#sol-notes" class="block py-2 hover:bg-purple-600 rounded px-2">📖 SOL Notes</a></li>
+        <li><a href="#suggestion-box" class="block py-2 hover:bg-purple-600 rounded px-2"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- Script for Greeting, Time, and Menu -->
+<script>
+  // Helper: Get greeting and background color based on hour
+  function getGreetingAndBG(hours) {
+    let bgColor = "bg-purple-700";
+    let greetText = "Welcome, Ananya 👑";
+    if (hours >= 5 && hours < 12) {
+      bgColor = "bg-purple-700";
+      greetText = "Good Morning, Ananya 👑";
+    } else if (hours >= 12 && hours < 17) {
+      bgColor = "bg-purple-700";
+      greetText = "Good Afternoon, Ananya 👑";
+    } else if (hours >= 17 && hours < 21) {
+      bgColor = "bg-purple-700";
+      greetText = "Good Evening, Ananya 👑";
+    } else {
+      bgColor = "bg-purple-700";
+      greetText = "Good Night, Ananya 👑";
+    }
+    return { bgColor, greetText };
+  }
+
+  // Show initial welcome, then switch to time-based greeting
+  function showGreeting() {
+    const header = document.getElementById("header");
+    const greeting = document.getElementById("greeting");
+    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    document.getElementById("date").textContent = nowIST.toDateString();
+
+    // Show "Welcome, Ananya 👑" for 3 seconds
+    greeting.textContent = "Welcome, Ananya 👑";
+    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700");
+    header.classList.add("bg-purple-700");
+
+    setTimeout(function() {
+      updateGreetingAndBG();
+      // Update greeting every minute in case time of day changes
+      setInterval(updateGreetingAndBG, 60 * 1000);
+    }, 3000);
+  }
+
+  // Update greeting and background color based on time
+  function updateGreetingAndBG() {
+    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    const hours = nowIST.getHours();
+    const header = document.getElementById("header");
+    const greeting = document.getElementById("greeting");
+    const { bgColor, greetText } = getGreetingAndBG(hours);
+
+    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700");
+    header.classList.add(bgColor);
+    greeting.textContent = greetText;
+    document.getElementById("date").textContent = nowIST.toDateString();
+  }
+
+  // Live 12-hour clock
+  function updateTime() {
+    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm}`;
+    document.getElementById("time").textContent = "IST Time: " + timeStr;
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Mobile Menu functionality
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeMenu = document.getElementById("close-menu");
+    const menuLinks = document.querySelectorAll("#mobile-menu a");
+
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.remove("translate-x-full");
+    });
+
+    closeMenu.addEventListener("click", () => {
+      mobileMenu.classList.add("translate-x-full");
+    });
+
+    menuLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.add("translate-x-full");
+      });
+    });
+
+    // Greeting and time
+    showGreeting();
+    updateTime();
+    setInterval(updateTime, 1000);
+  });
+</script>
+    
+<!-- What's New Section -->
+    <section id="what's_new" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2"><span class="inline-block animate-bounce">✨</span> What's New</h2>        
+        <ol class="list-decimal mt-4 space-y-3 pl-5">
+        
+
+         <li class="text-gray-700">
+                <strong>All the main Sanskrit shlokas in English & Hindi explanation have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 19th May 2025.</span>
+                <em class="block text-gray-500">[Monday, 19th May 2025]</em>
+            </li> 
+
+             <li class="text-gray-700">
+                <strong>Sample paper of Sanskrit Literature Katha Kavya have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 18th May 2025.</span>
+                <em class="block text-gray-500">[Sunday, 18th May 2025]</em>
+            </li>   
+            
+            <li class="text-gray-700">
+                <strong>Click here 👉🏼 <a href="https://nitnapple.github.io/Ananya/CPS" style="text-decoration:none"><span class="text-purple-600 font-bold">🌐 Comparative Political Systems. </span> </a>: </strong>All units of Perspectives on Public Administration in 🔉 audio notes.<strong>:</strong> <span class="text-green-600 font-bold">✅ 17th May 2025.</span>
+                <em class="block text-gray-500">[Saturday, 17th May 2025]</em>
+            </li>
+
+            <li class="text-gray-700">
+                <strong>Summarized notes of  Comparative Political Systems have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 17th May 2025.</span>
+                <em class="block text-gray-500">[Saturday, 17th May 2025]</em>
+            </li>
+
+            <li class="text-gray-700">
+                <strong>Click here 👉🏼 <a href="https://nitnapple.github.io/Ananya/PPA" style="text-decoration:none"><span class="text-purple-600 font-bold">🌐 Perspectives on Public Administration </span> </a>: </strong>All units of Perspectives on Public Administration in 🔉 audio notes.<strong>:</strong> <span class="text-green-600 font-bold">✅ 17th May 2025.</span>
+                <em class="block text-gray-500">[Saturday, 17th May 2025]</em>
+            </li>
+
+            <li class="text-gray-700">
+                <strong>Summarized notes of Perspectives on Public Administration have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 17th May 2025.</span>
+                <em class="block text-gray-500">[Saturday, 17th May 2025]</em>
+            </li>
+            
+            <li class="text-gray-700">
+                <strong>Click here 👉🏼 <a href="https://nitnapple.github.io/Ananya/GE" style="text-decoration:none"><span class="text-purple-600 font-bold">🌐 GE Legal Philosophy </span> </a>: </strong>All units of GE Legal Philosophy are available in 🔉 audio notes.<strong>:</strong> <span class="text-green-600 font-bold">✅ 14th May 2025.</span>
+                <em class="block text-gray-500">[Wednesday, 14th May 2025]</em>
+            </li>
+             <li class="text-gray-700">
+                <strong>Summarized notes of GE Legal Philosophy have been added. Check them out in the 🚀 Summarized Section!</span></strong> <span class="text-green-600 font-bold">✅ 13th May 2025.</span>
+                <em class="block text-gray-500">[Tuesday, 13th May 2025]</em>
+            </li>
+            
+            <li class="text-gray-700">
+                <strong>Click here 👉🏼 to <a href="https://raw.githubusercontent.com/nitnapple/Assignments/d581a0d9f6f071572aa6db957f98b310740324dd/Ananya%20Sem%206%20Marks_protected.pdf" style="text-decoration:none"><span class="text-blue-600 font-bold">Check out 6th Semester marks.</span> </a>:</strong> <span class="text-green-600 font-bold">✅ 11th May 2025.</span>
+                <em class="block text-gray-500">[Sunday, 11th May 2025]</em>
+            </li>
+             <li class="text-gray-700">
+                <strong>Click here <a href="https://nitnapple.github.io/Ananya/skt" style="text-decoration:none"><span class="text-purple-600 font-bold">🌐 Sanskrit Literature Katha Kavya </span> </a>: </strong>All Stories of Sanskrit Literature Katha Kavya in 🔉 Audio Notes.<strong>:</strong> <span class="text-green-600 font-bold">✅ 8th May 2025.</span>
+                <em class="block text-gray-500">[Thursday, 8th May 2025]</em>
+            </li>
+
+            
+            <li class="text-gray-700">
+                <strong>🚀 Summarized Section added: </strong>You’ll get all the summarized notes soon.<strong>:</strong> <span class="text-green-600 font-bold">✅ 4th May 2025.</span>
+                <em class="block text-gray-500">[Sunday, 4th May 2025]</em>
+            </li>            
+
+            <li class="text-gray-700">
+                <strong>Comparative Political Systems: Presentation: </strong>You can download it from the Presentations Section.<strong>:</strong> <span class="text-green-600 font-bold">✅ 26th April.</span>
+                <em class="block text-gray-500">[Saturday, 26th April 2025]</em>
+            </li>
+          
+           <li class="text-gray-700">
+                <strong>PPA AI 2, Assignment: </strong>You can download it from Assignments Section.<strong>:</strong> <span class="text-green-600 font-bold">✅ 24th April.</span>
+                <em class="block text-gray-500">[Thursday, 24th April 2025]</em>
+            </li>
+          
+          <li class="text-gray-700">
+                <strong>PPA AI 2, Assignment: </strong>Check the website at 9 PM<strong>:</strong> <span class="text-green-600 font-bold">✅ 24th April.</span>
+                <em class="block text-gray-500">[Thursday, 24th April 2025]</em>
+            </li>
+          
+           <li class="text-gray-700">
+                <strong>PPA AI 2, Assignment </strong> to be submitted in Online Mode in a Google form, Within the specified time during the evening. <strong> Syllabus:</strong> Unit 3- NPM, NPS, Governance <span class="text-yellow-600 font-bold">⚠️ 24th April.</span>
+                <em class="block text-gray-500">[Thursday, 24th April 2025]</em>
+            </li>
+
+            <li class="text-gray-700">
+                <strong>DSE: Sanskrit (Durgesh Mishra Sir) – Assignment</strong> <span class="text-green-600 font-bold">✅ Submitted</span>
+                <em class="block text-gray-500">[Deadline: Monday, 21st th April 2025]</em>
+            </li>
+            
+            
+            <li class="text-gray-700">
+                <strong>Comparative Political Systemts</strong> – Test <span class="text-red-600 font-bold">☢️ You missed the test.</span>
+                <em class="block text-gray-500">[Thursday, 17th April 2025]</em>
+            </li>
+            
+          <li class="text-gray-700">
+                <strong>Holiday due to Good Friday.</strong> – <span class="text-green-600 font-bold">🥳 18th April 2025</span>
+                <em class="block text-gray-500">[Friday, 18th April 2025]</em>
+            </li>
+
+        <li class="text-gray-700">
+                <strong>Sanskrit Literature: Katha Kavya – Assignment.</strong> – <span class="text-green-600 font-bold">✅ Submitted</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 17th April 2025]</em>
+            </li>
+            
+            <li class="text-gray-700">
+                <strong>📆 The Final Examination Date Sheet – May/June 2025 has been uploaded, Check it out in the Final Date Sheet section below.</strong> – <span class="text-green-600 font-bold">14th April 2025</span>
+                <em class="block text-gray-500">[Monday, 14th April 2025]</em>
+            </li>
+
+            <li class="text-gray-700">
+                <strong>Holiday due to Ambedkar Jayanti.</strong> – <span class="text-green-600 font-bold">🥳 14th April 2025</span>
+                <em class="block text-gray-500">[Monday, 14th April 2025]</em>
+            </li>
+            
+            <li class="text-gray-700">
+                <strong>Sanskrit Literature: Katha Kavya – Assignment.</strong> – <span class="text-green-600 font-bold">✅ Completed</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
+            </li>
+            
+            <li class="text-gray-700">
+                <strong>The last date for filling out the 6th semester exam form has been extended.</strong> – <span class="text-yellow-600 font-bold">🎓 15th April 2025</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 15th April 2025]</em>
+            </li>
+         
+         <li class="text-gray-700">
+             <strong>PPA CA Test II.</strong> – <span class="text-yellow-600 font-bold">⚠️ April 16 2025</span>
+                 <em class="block text-gray-500">[Wednesday, 16th April 2025]</em>      
+            </li>
+            <li class="text-gray-700">
+                <strong>Holiday due to Mahavir Jayanti.</strong> – <span class="text-green-600 font-bold">🥳 10th April 2025</span>
+                <em class="block text-gray-500">[Thursday, 10th April 2025]</em>
+            </li>
+            <li class="text-gray-700">
+             <strong>DSE Sanskrit, Art of Balanced Living Presentation is ready, You can download it from Presentation section.</strong> – <span class="text-green-600 font-bold">✅ 8th April 2025</span>
+                 <em class="block text-gray-500">[Tuesday, 8th April 2025, 11:45 AM]</em>      
+            </li>
+        
+         <li class="text-gray-700">
+             <strong>Comparative Political Systemts Presentation (Russia) will be available soon.</strong> – <span class="text-green-600 font-bold">⚠️ 5th April 2025</span>
+                 <em class="block text-gray-500">[Check the website after 09:00 PM]</em>      
+            </li>
+         
+         <li class="text-gray-700">
+             <strong>Fill out your exam form as soon as possible.</strong> – <span class="text-green-600 font-bold">⚠️ 4th April 2025</span>
+                 <em class="block text-gray-500">[Friday, 4th April 2025, 01:25 AM]</em>      
+            </li>
+            <li class="text-gray-700">
+                <strong>GE Legal Philosophy presentation is ready, You can download it from Presentation section.</strong> – <span class="text-green-600 font-bold">✅ 3rd April 2025</span>
+                 <em class="block text-gray-500">[Thursday, 3rd April 2025, 09:50 PM]</em>      
+            </li>
+            <li class="text-gray-700">
+              <strong>Comparative Political Systemts test focus on either comparing the political systems of different countries or analyzing the political system of a single country in detail.</strong> – <span class="text-green-600 font-bold">⚠️ 17th April 2025</span>
+            <em class="block text-gray-500">[Thursday, 17th April 2025 at 08:50 AM in Room no. 405]</em>
+            </li>
+    
+            <li class="text-gray-700">
+                <strong>Holiday due to Id-Ul-Fitr.</strong> – <span class="text-green-600 font-bold">🥳 31st March 2025</span>
+                <em class="block text-gray-500">[Monday, 31st March 2025]</em>
+            </li>
+        
+            <li class="text-gray-700">
+                <strong>Holiday due to Good Friday.</strong> – <span class="text-green-600 font-bold">🥳 18th April 2025</span>
+                <em class="block text-gray-500">[Friday, 18th April 2025]</em>
+            </li>
+             <li class="text-gray-700">
+                <strong>The last date for filling out the 6th semester exam form has been extended.</strong> – <span class="text-yellow-600 font-bold">🎓 10th April 2025</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
+            </li>
+           <li class="text-gray-700">
+                <strong>DSE: Sanskrit (Durgesh Mishra Sir)</strong> – Assignment <span class="text-yellow-600 font-bold">⚠️ In Progress</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
+            </li>
+             <li class="text-gray-700">
+                <strong>Sanskrit Literature</strong> – Assignment<span class="text-yellow-600 font-bold">⚠️ In Progress</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em> 
+        </ol>
+            <p class="mt-4 text-gray-500 italic">Updated on Thursday, 8th May 2025, 03:15 AM</p>
+        </section>
+
+    <!-- Examination Datesheet Section -->
+<section id="exam-datesheet" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+  <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📆 Final Examination Datesheet – May/June 2025</h2>
+
+  <ol class="list-decimal mt-4 space-y-3 pl-5" id="exam-list">
+    <li class="text-gray-700">
+      <strong>GE: Legal Philosophy</strong>
+      <em class="block text-gray-500">
+        [Date: Wednesday, 14th May 2025, Time: 09:00 AM TO 12:00 NOON]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-1"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>Perspectives on Public Administration</strong>
+      <em class="block text-gray-500">
+        [Date: Monday, 19th May 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-2"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>Sanskrit literature: Katha Kavya</strong>
+      <em class="block text-gray-500">
+        [Date: Wednesday, 21st May 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-3"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>Comparative Political Systems</strong>
+      <em class="block text-gray-500">
+        [Date: Tuesday, 27th May 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-4"></span>
+    </li>
+    <li class="text-gray-700">
+      <strong>DSE: Sanskrit, Art of Balanced Living</strong>
+      <em class="block text-gray-500">
+        [Date: Monday, 02nd June 2025, Time: 02:30 PM TO 05:30 PM]
+      </em>
+      <span class="text-sm text-blue-600 font-medium" id="countdown-5"></span>
+    </li>
+  </ol>
+
+  <p class="mt-4 text-gray-500 italic">*Updated on Monday, 14th April 2025.</p>
+</section>
+
+<script>
+  const countdowns = [
+    { id: 'countdown-1', date: '2025-05-14T09:00:00' },
+    { id: 'countdown-2', date: '2025-05-19T14:30:00' },
+    { id: 'countdown-3', date: '2025-05-21T14:30:00' },
+    { id: 'countdown-4', date: '2025-05-27T14:30:00' },
+    { id: 'countdown-5', date: '2025-06-02T14:30:00' }
+  ];
+
+  function updateCountdowns() {
+    const now = new Date();
+
+    countdowns.forEach(item => {
+      const examDate = new Date(item.date);
+      const diff = examDate - now;
+
+      const countdownElem = document.getElementById(item.id);
+      if (diff <= 0) {
+        countdownElem.textContent = "📘 The exam is over 🥳";
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        countdownElem.textContent = `⏳ Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+    });
+  }
+
+  // Initial call
+  updateCountdowns();
+  // Update every second
+  setInterval(updateCountdowns, 1000);
+</script>
+
+      
+    <!-- Summarized Section Started-->
+    
+    <section id="summarized" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">🚀 Summarized Notes</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                
+                <a href="https://nitnapple.github.io/Ananya/GE" style="text-decoration:none">
+                    <img src="https://images.emojiterra.com/google/noto-emoji/animated-emoji/2696.gif"
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">🌐 GE Legal Philosophy: <span class="text-blue-600 font-bold">Webpage </span></h3>
+                </a>
+            </div>
+
+             <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                
+                <a href="https://nitnapple.github.io/Ananya/skt" style="text-decoration:none">
+                    <img src="https://images.emojiterra.com/microsoft/fluent-emoji/15.1/1024px/1f6d5_color.png"
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">🌐 Sanskrit Literature Katha Kavya: <span class="text-blue-600 font-bold">Webpage </span></h3>
+                </a>
+            </div>
+
+             <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                
+                <a href="https://nitnapple.github.io/Ananya/PPA" style="text-decoration:none">
+                    <img src="https://symbl-cdn.com/i/webp/7e/c42c012fd4d26fae11919aa456f5d7.webp"
+                         alt="Assignment Cover" 
+                        class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">🌐 Perspectives on Public Administration: <span class="text-blue-600 font-bold">Webpage </span></h3>
+                </a>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                
+                <a href="https://nitnapple.github.io/Ananya/CPS" style="text-decoration:none">
+                    <img src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/1024px/1f5fd.png"
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">🌐 Comparative Political Systems: <span class="text-blue-600 font-bold">Webpage </span></h3>
+                </a>
+            </div>
+        
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                
+                <a href="https://nitnapple.github.io/Ananya/DSE" style="text-decoration:none">
+                    <img src="https://images.emojiterra.com/google/noto-emoji/unicode-16.0/color/1024px/1fab7.png"
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">🌐 DSE: Art of Balanced Living: <span class="text-blue-600 font-bold">Webpage </span></h3>
+                </a>
+            </div>
+            
+             <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/58b290c478599549b1486e9adb58efb1f1d35e38/GE%20Legal%20Philosophy.pdf" download>
+                    <img src="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/S_pdf.png" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ GE: Legal Philosophy: <span class="text-green-600 font-bold">Summarised </span></h3>
+                </a>    
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/5dc9ed2ebbd4fe3383c1d50a7426074e282ea5b5/Perspectives%20on%20Public%20Administration%20Summarised%20.pdf" download>
+                    <img src="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/S_pdf.png" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Perspectives on Public Administration: <span class="text-green-600 font-bold">Summarised </span></h3>
+                </a>    
+            </div>
+         <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/2ad6ea89606cec6635084e4ca66631d9f8117dcb/Comparative%20Political%20Systems%20Summarized.pdf" download>
+                    <img src="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/S_pdf.png" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Comparative Political Systems: <span class="text-green-600 font-bold">Summarised </span></h3>
+                </a>    
+            </div>
+
+             <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/582e83b6ba758bc786a70bf964737dacceed0ab4/Sample_Katha_Kavya_Question_Paper.pdf" download>
+                    <img src="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/S_pdf.png" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Sanskrit Katha Kavya: <span class="text-green-600 font-bold">Sample paper</span></h3>
+                </a>    
+            </div>   
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/dd12b2cfc6b944782923f3b6ab8cb2ebf947640c/Sanskrit%20shlokas%20in%20English%20%26%20Hindi%20explanation.pdf" download>
+                    <img src="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/S_pdf.png" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Sanskrit Katha Kavya: <span class="text-green-600 font-bold">Shloka Only</span></h3>
+                </a>    
+            </div>  
+
+            <div class="w-full">
+        <p class="mt-4 text-gray-500 italic"> <p/>
+    </div>
+        </div>
+    </section>
+    
+    <!-- Summarized Section Ended-->
+
+
+    
+    <!-- Assignments Section -->
+    <section id="assignments" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📚 Assignments</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://shorturl.at/WgdVd" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ DSE: Sanskrit, Art of Balanced Living: Assignment</h3>
+                </a>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://shorturl.at/Nzuc0" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Perspectives on Public Administration: Assignment</h3>
+                </a>    
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://shorturl.at/P7PVE" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ GE: Legal Philosophy Assignment</h3>
+                </a>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://shorturl.at/wJuLt" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Comparative Political Systems: Assignment</h3>
+                </a>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/Sanskrit%20Literature%20Katha%20Kavya%3B%20Assignment.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Sanskrit Literature Katha Kavya: Assignment</h3>
+                </a>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/d696037f28a067b57f172fd9c9a81d851c117ea4/DSE%3B%20Sanskrit%20Assignment%20Unit%203%2C4.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ DSE; Sanskrit Assignment Unit 3,4</h3>
+                </a>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/d0a5127929956c44bcfec5a6ad3019ca2802c54f/PPAIA2.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="Assignment Cover" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ PPA; Assignment [Discuss the context, concept and key features of New Public Management] </h3>
+                </a>
+            </div>
+            
+            <div class="w-full">
+        <p class="mt-4 text-gray-500 italic">These are only soft copies, so there is no need to write on paper. <p/>
+    </div>
+        </div>
+    </section>
+
+    <!-- Presentations Section -->
+    <section id="presentations" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">🎤 Presentations</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://shorturl.at/N2wtS"download>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Microsoft_PowerPoint_2013-2019_logo.svg/160px-Microsoft_PowerPoint_2013-2019_logo.svg.png" 
+                     alt="PowerPoint Thumbnail" 
+                     class="w-40 h-30 object-cover rounded">
+                 <h3 class="mt-2 font-medium text-center">✅ GE: Legal Philosophy: Presentation</h3>
+                </a>   
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/Israel.pptx"download>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Microsoft_PowerPoint_2013-2019_logo.svg/160px-Microsoft_PowerPoint_2013-2019_logo.svg.png" 
+                     alt="PowerPoint Thumbnail" 
+                     class="w-40 h-30 object-cover rounded">
+                <h3 class="mt-2 font-medium text-center">✅ Comparative Political Systems: Presentation</h3>
+                     </a> 
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+
+                 <a href= "https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/DSE%20Sanskrit%2C%20Art%20of%20Balanced%20Living%20Presentation.pptx"download>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Microsoft_PowerPoint_2013-2019_logo.svg/160px-Microsoft_PowerPoint_2013-2019_logo.svg.png" 
+                     alt="PowerPoint Thumbnail" 
+                     class="w-40 h-30 object-cover rounded">
+                <h3 class="mt-2 font-medium text-center">✅ DSE: Sanskrit, Art of Balanced Living: Presentation</h3>
+                     </a> 
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Section -->
+    <section id="messages" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📋 Academic Schedule & Deadlines – March 2025</h2>
+
+        <ol class="list-decimal mt-4 space-y-3 pl-5">
+            <li class="text-gray-700">
+                <strong>Comparative Political Systems</strong> – Presentation and Assignment <span class="text-green-600 font-bold">✅ Submitted</span>
+                <em class="block text-gray-500">[Submitted on Wednesday, 26th March 2025]</em>
+            </li>
+            <li class="text-gray-700">
+                <strong>DSE Sanskrit</strong> – Assignment <span class="text-green-600 font-bold">✅ Submitted</span>
+                <em class="block text-gray-500">[Submitted on Friday, 28th March 2025]</em>
+            </li>
+            <li class="text-gray-700">
+                <strong>GE Philosophy</strong> – Presentation and Assignment <span class="text-green-600 font-bold">✅ Submitted</span>
+                <em class="block text-gray-500">[Submitted on Friday, 28th March 2025]</em>
+            </li>
+            <li class="text-gray-700">
+                <strong>PPA</strong> – Internal Assessment Assignment <span class="text-green-600 font-bold">✅ Submitted</span>
+                <em class="block text-gray-500">[Submitted on Wednesday, 26th March 2025]</em>
+            </li>
+            <li class="text-gray-700">
+                <strong>Last date for filling out the 6th semester exam form.</strong> – <span class="text-green-600 font-bold">⚠️ 31st March 2025</span>
+                <em class="block text-gray-500">[Deadline: Monday, 31st March 2025]</em>
+            </li>
+              <li class="text-gray-700">
+                <strong>The last date for filling out the 6th semester exam form has been extended.</strong> – <span class="text-green-600 font-bold">⚠️ 10th April 2025</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
+            </li>     
+        </ol>
+        <p class="mt-4 text-gray-500 italic">Updated on Friday, 28th March 2025</p>
+    </section>
+    
+    <!-- Messages Section2 -->
+    <section id="messages2" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📋 Academic Schedule & Deadlines – April 2025</h2>
+        
+
+        <ol class="list-decimal mt-4 space-y-3 pl-5">
+            <li class="text-gray-700">
+                <strong>DSE: Sanskrit (Durgesh Mishra Sir)</strong> – Assignment <span class="text-green-600 font-bold">⚠️ In Progress</span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
+            </li>
+             <li class="text-gray-700">
+                <strong>Sanskrit Literature</strong> – Assignment<span class="text-green-600 font-bold">✅ Completed </span>
+                <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
+             <li class="text-gray-700">
+                <strong>Comparative Political Systemts</strong> – Test <span class="text-yellow-600 font-bold">⚠️ 17th April 2025</span>
+                <em class="block text-gray-500">[Thursday, 17th April 2025]</em>
+            </li>  
+            <li class="text-gray-700">
+                <strong>PPA CA II</strong> – Test on "Write one essay type analytical answer on any one thinker from the following:
+                                            <strong>-Max Weber</strong>- Ideal Type Bureaucracy 
+
+                                            <strong>-Herbert Simon</strong>- Decision Making Theory & Bounded Rationality 
+
+                                            <strong>-Fred Riggs</strong>- ecological approach, theories on transitional societies" <span class="text-yellow-600 font-bold">⚠️ 16th April 2025</span>
+                <em class="block text-gray-500">[Wednesday, 16th April 2025]</em>
+            </li>
+        </ol>
+        <p class="mt-4 text-gray-500 italic">Updated on Friday, 4th April 2025</p>
+    </section>
+    
+    <!-- SOL Notes Section -->
+    <section id="sol-notes" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📖 SOL Notes, BA Programme 6th Semester</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/PERSPECTIVES%20ON%20PUBLIC%20ADMINISTRATION.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="SOL Note 1" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Perspectives on Public Administration</h3>
+                </a>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/COMPARATIVE%20POLITICAL%20SYSTEMS.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="SOL Note 2" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Comparative Political Systems</h3>
+                </a>
+            </div>
+
+
+
+                   <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/GE%20Legal%20Philosophy%20Semester%206th.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="SOL Note 3" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ GE: Legal Philosophy (Not SOL)</h3>
+                </a>
+            </div> 
+
+
+                    <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                        
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="SOL Note 4" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">⚠️ DSE: Sanskrit, Art of Balanced Living (Not SOL)</h3>
+            
+            </div> 
+
+            
+            
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/Sanskrit%20Literature%20Katha%20Kavya.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="SOL Note 5" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ Sanskrit Literature: Katha Kavya</h3>
+                </a>
+            </div>
+            
+           <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/History1857.pdf" download>
+                    <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
+                         alt="SOL Note 5" 
+                         class="w-full h-32 object-cover rounded">
+                    <h3 class="mt-2 font-medium">✅ History of India 1857-1947</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suggestion Box Section -->
+    <section id="suggestion-box" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">
+  <span class="inline-block animate-bounce">💡 Suggestion Box </span></h2>
+        
+        <p class="text-gray-600 mt-2">Share your feedback, suggestions, or requests below:</p>
+
+        <form id="suggestionForm" class="mt-4">
+            <textarea name="suggestion" 
+                      id="suggestionInput" 
+                      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                      rows="4" 
+                      placeholder="Type your suggestion here..." 
+                      required></textarea>
+            <button type="submit" 
+                    class="mt-3 bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-800 transition">
+                Submit
+            </button>
+        </form>
+
+        <div id="confirmationMessage" class="mt-4 text-green-600 hidden">
+            ✅ Thank you for your suggestion!
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function uploadNote() {
+            const noteInput = document.getElementById("noteUpload");
+            const noteList = document.getElementById("noteList");
+            if (noteInput.files.length > 0) {
+                const listItem = document.createElement("li");
+                listItem.className = "bg-gray-200 p-2 rounded mt-2";
+                listItem.textContent = noteInput.files[0].name;
+                noteList.appendChild(listItem);
+            }
+        }
+
+        document.getElementById("suggestionForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const suggestionInput = document.getElementById("suggestionInput").value.trim();
+            const confirmationMessage = document.getElementById("confirmationMessage");
+
+            if (suggestionInput === "") {
+                alert("Please enter a suggestion before submitting.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("suggestion", suggestionInput);
+
+            fetch("https://formspree.io/f/xyzewypp", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Accept": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    confirmationMessage.classList.remove("hidden");
+                    document.getElementById("suggestionInput").value = "";
+                } else {
+                    alert("Error submitting suggestion. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong. Please try again later.");
+            });
+        });
+    </script>
+
+  <style>
   /* Initial state: no filter */
   body {
     transition: filter 2s ease; /* smooth transition over 2 seconds */
@@ -17,3 +885,53 @@
     }, 3000); // wait 3 seconds before starting transition
   });
 </script>
+
+ <footer class="text-white py-6 text-center shadow-lg transition-colors duration-500 bg-purple-700" id="footer">
+  <div class="container mx-auto px-4">
+    <p class="text-lg font-semibold">Feel free to ask anything.</p>
+    <p class="text-lg font-light">Please check the website everyday for updates.</p>
+    <p class="text-lg font-light"><p>Designed and Developed by,</p>
+
+    <div class="flex justify-center space-x-6 mt-4">
+      <a href="#" class="hover:text-blue-400 transform hover:scale-110 transition duration-300">
+        <i class="fab fa-facebook fa-2x"></i>
+      </a>
+      <a href="#" class="hover:text-blue-300 transform hover:scale-110 transition duration-300">
+        <i class="fab fa-twitter fa-2x"></i>
+      </a>
+      <a href="https://www.instagram.com/nitin_apple?igsh=emIzcGtxdHZ3bnhv&utm_source=qr" class="hover:text-pink-400 transform hover:scale-110 transition duration-300">
+        <i class="fab fa-instagram fa-2x"></i>
+      </a>
+      <a href="#" class="hover:text-red-400 transform hover:scale-110 transition duration-300">
+        <i class="fab fa-youtube fa-2x"></i>
+      </a>
+    </div>
+  </div>
+
+     <style>
+  .no-underline {
+    text-decoration: none;
+    color: white; /* Optional: set your preferred color */
+    text-align: center;
+    padding: 1.2rem 1rem;
+    border-radius: 18px 18px 32px 32px;
+    box-shadow: 0 2px 16px rgba(180, 150, 255, 0.08);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+</style>
+    <a href="https://nitnapple.github.io/Ananya/erith" class="no-underline">© E.R.I.T.H. 😎</a>
+     <a href="https://nitnapple.github.io/Ananya/sitemap" class="no-underline">Sitemap</a>
+     
+</footer>
+
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+</body>
+</html>
+
+
+
