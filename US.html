@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Centered GIF and Text</title>
+  <title>Top-Aligned GIF and Text</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes blink {
-      50% { border-color: transparent }
+      50% { border-color: transparent; }
     }
 
     .typewriter {
@@ -23,6 +23,14 @@
         font-size: 1rem;
       }
     }
+
+    body {
+      transition: filter 2s linear;
+    }
+
+    .bw-effect {
+      filter: grayscale(80%) contrast(300%) brightness(70%);
+    }
   </style>
 </head>
 <body class="m-0 p-0">
@@ -33,8 +41,8 @@
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
-    <!-- Centered Text -->
-    <div class="absolute inset-0 flex items-center justify-center z-20 px-4 text-center">
+    <!-- Top-Aligned Text -->
+    <div class="absolute inset-0 flex items-start justify-center z-20 px-4 pt-10 text-center">
       <div class="max-w-sm sm:max-w-xl">
         <h2 class="text-white text-lg sm:text-xl md:text-2xl font-semibold drop-shadow-lg leading-relaxed">
           <span id="typewriter" class="typewriter"></span>
@@ -52,46 +60,31 @@
     </footer>
   </div>
 
-  <!-- JavaScript Typewriter Effect -->
+  <!-- JavaScript Fix -->
   <script>
-    const text = "If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.";
-    const el = document.getElementById("typewriter");
-    let index = 0;
+    document.addEventListener("DOMContentLoaded", function () {
+      const text = "If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.";
+      const el = document.getElementById("typewriter");
+      let index = 0;
 
-    function type() {
-      if (index < text.length) {
-        el.textContent += text.charAt(index);
-        index++;
-        setTimeout(type, 40); // typing speed in ms
-      } else {
-        el.style.borderRight = "none"; // remove cursor after done
+      function type() {
+        if (index < text.length) {
+          el.textContent += text.charAt(index);
+          index++;
+          setTimeout(type, 40);
+        } else {
+          el.style.borderRight = "none";
+        }
       }
-    }
 
-    type();
+      type();
+    });
+
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.body.classList.add('bw-effect');
+      }, 3000);
+    });
   </script>
-
- <style>
-  body {
-    /* Prepare for filter change with smooth transition of 2 seconds */
-    transition: filter 2s linear;
-  }
-
-  .bw-effect {
-    filter: grayscale(80%) contrast(300%) brightness(70%);
-  }
-</style>
-
-<script>
-  window.addEventListener('load', function () {
-    // Wait 3 seconds, then add class to start 2-second transition to B&W
-    setTimeout(function () {
-      document.body.classList.add('bw-effect');
-    }, 3000);
-  });
-</script>
-
-
-
 </body>
 </html>
