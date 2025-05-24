@@ -16,18 +16,17 @@
     }
 
     .typewriter-text {
+      display: inline-block;
       overflow: hidden;
       white-space: nowrap;
       border-right: 2px solid white;
-      animation: typewriter 6s steps(70, end), blink 0.75s step-end infinite;
+      width: 0;
+      animation: typewriter 5s steps(70, end) forwards, blink 0.8s step-end infinite;
     }
 
     @media (max-width: 640px) {
       .typewriter-text {
-        font-size: 1rem; /* Tailwind text-base equivalent */
-        white-space: normal; /* Wrap text on small screens */
-        border-right: none;
-        animation: none;
+        font-size: 1rem; /* text-base */
       }
     }
   </style>
@@ -37,14 +36,16 @@
     <!-- Background GIF -->
     <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.gif" alt="Background GIF" class="absolute top-0 left-0 w-full h-full object-cover z-0" />
 
-    <!-- Overlay for readability -->
+    <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
     <!-- Centered Text -->
     <div class="absolute inset-0 flex items-center justify-center z-20 px-6 text-center">
-      <div class="max-w-md sm:max-w-xl">
-        <h2 class="text-white text-base sm:text-xl md:text-2xl font-semibold drop-shadow-lg typewriter-text leading-relaxed">
-          If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.
+      <div class="max-w-xl">
+        <h2 class="text-white text-base sm:text-xl md:text-2xl font-semibold drop-shadow-lg leading-relaxed">
+          <span class="typewriter-text">
+            If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.
+          </span>
         </h2>
       </div>
     </div>
