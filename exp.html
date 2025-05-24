@@ -1,0 +1,19 @@
+<style>
+  /* Initial state: no filter */
+  body {
+    transition: filter 2s ease; /* smooth transition over 2 seconds */
+  }
+
+  /* Black and white high-contrast effect */
+  .bw-effect {
+    filter: grayscale(100%) contrast(300%) brightness(70%);
+  }
+</style>
+
+<script>
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      document.body.classList.add('bw-effect');
+    }, 3000); // wait 3 seconds before starting transition
+  });
+</script>
