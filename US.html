@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Top-Aligned GIF and Text</title>
+  <title>Until We Meet Again</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes blink {
@@ -41,30 +41,30 @@
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
-    <!-- Top-Aligned Text -->
-    <div class="absolute inset-0 flex items-start justify-center z-20 px-4 pt-10 text-center">
+    <!-- Top-Aligned Text and Centered Button -->
+    <div class="absolute inset-0 flex flex-col items-center justify-start z-20 px-4 pt-10 text-center space-y-6">
+      <!-- Typewriter Text -->
       <div class="max-w-sm sm:max-w-xl">
         <h2 class="text-white text-lg sm:text-xl md:text-2xl font-semibold drop-shadow-lg leading-relaxed">
           <span id="typewriter" class="typewriter"></span>
         </h2>
       </div>
-    </div>
 
-    <!-- Footer with Archive Button -->
-    <footer class="absolute bottom-4 w-full flex justify-center z-30 px-4">
-      <a href="https://nitnapple.github.io/Ananya/exp" rel="noopener noreferrer">
+      <!-- Centered Archive Button - Initially Hidden -->
+      <a href="https://nitnapple.github.io/Ananya/exp" rel="noopener noreferrer" id="archive-link" class="hidden">
         <button class="bg-white bg-opacity-80 hover:bg-opacity-100 text-black font-semibold py-2 px-6 rounded-full shadow-md transition duration-300">
           Archive
         </button>
       </a>
-    </footer>
+    </div>
   </div>
 
-  <!-- JavaScript Fix -->
+  <!-- JavaScript for Typewriter Effect -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const text = "If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.";
       const el = document.getElementById("typewriter");
+      const archiveLink = document.getElementById("archive-link");
       let index = 0;
 
       function type() {
@@ -74,12 +74,15 @@
           setTimeout(type, 40);
         } else {
           el.style.borderRight = "none";
+          // Show archive button when typing is done
+          archiveLink.classList.remove("hidden");
         }
       }
 
       type();
     });
 
+    // Black and White Effect After Delay
     window.addEventListener('load', function () {
       setTimeout(function () {
         document.body.classList.add('bw-effect');
