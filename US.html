@@ -15,19 +15,26 @@
       50% { border-color: transparent }
     }
 
-    .typewriter-text {
+    .typewriter-wrapper {
       display: inline-block;
       overflow: hidden;
       white-space: nowrap;
       border-right: 2px solid white;
-      width: 0;
       animation: typewriter 5s steps(70, end) forwards, blink 0.8s step-end infinite;
+      max-width: 100%;
     }
 
     @media (max-width: 640px) {
-      .typewriter-text {
-        font-size: 1rem; /* text-base */
+      .typewriter-wrapper {
+        font-size: 1rem;
       }
+    }
+
+    /* Allow wrapping after animation */
+    .done-typing {
+      white-space: normal !important;
+      border-right: none !important;
+      animation: none !important;
     }
   </style>
 </head>
@@ -40,10 +47,10 @@
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
     <!-- Centered Text -->
-    <div class="absolute inset-0 flex items-center justify-center z-20 px-6 text-center">
-      <div class="max-w-xl">
+    <div class="absolute inset-0 flex items-center justify-center z-20 px-4 text-center">
+      <div class="max-w-sm sm:max-w-xl">
         <h2 class="text-white text-base sm:text-xl md:text-2xl font-semibold drop-shadow-lg leading-relaxed">
-          <span class="typewriter-text">
+          <span id="typewriter" class="typewriter-wrapper">
             If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.
           </span>
         </h2>
@@ -59,5 +66,13 @@
       </a>
     </footer>
   </div>
+
+  <!-- Script to remove nowrap after typing -->
+  <script>
+    const typewriter = document.getElementById('typewriter');
+    setTimeout(() => {
+      typewriter.classList.add('done-typing');
+    }, 5000); // matches animation duration
+  </script>
 </body>
 </html>
