@@ -21,6 +21,15 @@
       border-right: 2px solid white;
       animation: typewriter 6s steps(70, end), blink 0.75s step-end infinite;
     }
+
+    @media (max-width: 640px) {
+      .typewriter-text {
+        font-size: 1rem; /* Tailwind text-base equivalent */
+        white-space: normal; /* Wrap text on small screens */
+        border-right: none;
+        animation: none;
+      }
+    }
   </style>
 </head>
 <body class="m-0 p-0">
@@ -28,13 +37,13 @@
     <!-- Background GIF -->
     <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.gif" alt="Background GIF" class="absolute top-0 left-0 w-full h-full object-cover z-0" />
 
-    <!-- Optional overlay for contrast -->
+    <!-- Overlay for readability -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
     <!-- Centered Text -->
-    <div class="absolute inset-0 flex items-center justify-center z-20 px-4 text-center">
-      <div class="max-w-xl">
-        <h2 class="text-white text-lg sm:text-xl md:text-2xl font-semibold drop-shadow-lg typewriter-text">
+    <div class="absolute inset-0 flex items-center justify-center z-20 px-6 text-center">
+      <div class="max-w-md sm:max-w-xl">
+        <h2 class="text-white text-base sm:text-xl md:text-2xl font-semibold drop-shadow-lg typewriter-text leading-relaxed">
           If fate allows our paths to cross again, may we recognize in each other not strangers, but as souls who once knew each other well.
         </h2>
       </div>
@@ -42,8 +51,8 @@
 
     <!-- Footer with Archive Button -->
     <footer class="absolute bottom-4 w-full flex justify-center z-30 px-4">
-      <a href="https://nitnapple.github.io/Archive" target="_blank" rel="noopener noreferrer">
-        <button class="bg-white bg-opacity-80 hover:bg-opacity-100 text-black font-semibold py-2 px-6 rounded-full shadow-md transition duration-300 w-full sm:w-auto">
+      <a href="https://nitnapple.github.io/Archive" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto">
+        <button class="w-full sm:w-auto bg-white bg-opacity-80 hover:bg-opacity-100 text-black font-semibold py-2 px-6 rounded-full shadow-md transition duration-300">
           Archive
         </button>
       </a>
