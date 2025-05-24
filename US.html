@@ -71,13 +71,12 @@
     type();
   </script>
 
-  <style>
-  /* Initial state: no filter */
+ <style>
   body {
-    transition: filter 2s ease; /* smooth transition over 2 seconds */
+    /* Prepare for filter change with smooth transition of 2 seconds */
+    transition: filter 2s linear;
   }
 
-  /* Black and white high-contrast effect */
   .bw-effect {
     filter: grayscale(100%) contrast(300%) brightness(70%);
   }
@@ -85,11 +84,13 @@
 
 <script>
   window.addEventListener('load', function () {
+    // Wait 3 seconds, then add class to start 2-second transition to B&W
     setTimeout(function () {
       document.body.classList.add('bw-effect');
-    }, 5000); // wait 5 seconds before starting transition
+    }, 3000);
   });
 </script>
+
 
 
 </body>
