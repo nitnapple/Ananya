@@ -181,12 +181,60 @@
     setInterval(updateTime, 1000);
   });
 </script>
+
+
     
 <!-- What's New Section -->
     <section id="what's_new" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2"><span class="inline-block animate-bounce">✨</span> What's New</h2>        
         <ol class="list-decimal mt-4 space-y-3 pl-5">
         
+         <li class="text-gray-700" id="reverse-countdown-item">
+  <strong id="closure-message">
+    This website will close on <span class="text-red-600 font-bold">3 June 2025</span>.
+  </strong>
+  <span class="text-blue-700 font-semibold" id="reverseCountdown"></span>
+  <em class="block text-gray-500">[Tuesday, 3rd June 2025]</em>
+</li>
+
+<script>
+function updateReverseCountdown() {
+  // Closure date: 3 June 2025, 00:00 IST
+  const closureDate = new Date("2025-06-03T00:00:00+05:30");
+  const now = new Date();
+
+  const closureMessage = document.getElementById("closure-message");
+  const countdownElem = document.getElementById("reverseCountdown");
+
+  if (now < closureDate) {
+    // Future: Show countdown and present/future tense message
+    closureMessage.innerHTML = 'This website will close on <span class="text-red-600 font-bold">3 June 2025</span>.';
+    const diff = closureDate - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    countdownElem.textContent =
+      `⏳ Time left until closure: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  } else {
+    // Past: Show reverse timer and past tense message
+    closureMessage.innerHTML = 'This website was closed on <span class="text-red-600 font-bold">3 June 2025</span>.';
+    const diff = now - closureDate;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    countdownElem.textContent =
+      `⏪ Time since closure: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+}
+
+updateReverseCountdown();
+setInterval(updateReverseCountdown, 1000);
+</script>
+
+
+
 
          <li class="text-gray-700">
                 <strong>All the main Sanskrit shlokas in English & Hindi explanation have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 19th May 2025.</span>
@@ -938,6 +986,3 @@
     
 </body>
 </html>
-
-
-
