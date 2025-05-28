@@ -208,7 +208,7 @@ function updateReverseCountdown() {
 
   if (now < closureDate) {
     // Future: Show countdown and present/future tense message
-    closureMessage.innerHTML = 'This website will close on <span class="text-red-600 font-bold">3 June 2025</span>.';
+    closureMessage.innerHTML = 'This webpage will close on <span class="text-red-600 font-bold">3 June 2025</span>.';
     const diff = closureDate - now;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -218,7 +218,7 @@ function updateReverseCountdown() {
       `⏳ Time left until closure: ${days}d ${hours}h ${minutes}m ${seconds}s`;
   } else {
     // Past: Show reverse timer and past tense message
-    closureMessage.innerHTML = 'This website was closed on <span class="text-red-600 font-bold">3 June 2025</span>.';
+    closureMessage.innerHTML = 'This webpage was closed on <span class="text-red-600 font-bold">3 June 2025</span>.';
     const diff = now - closureDate;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
