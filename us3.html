@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>US</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .typewriter {
+      display: inline-block;
+      border-right: 2px solid white;
+      animation: blink 1s step-end infinite;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 640px) {
+      h2 {
+        font-size: 1rem;
+      }
+    }
+
+    body {
+      transition: filter 2s linear;
+    }
+
+    .bw-effect {
+      filter: grayscale(90%) contrast(325%) brightness(80%);
+    }
+  </style>
+</head>
+<body class="m-0 p-0">
+  <div class="relative w-screen h-screen overflow-hidden">
+    <!-- Background GIF -->
+    <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.gif" alt="Background GIF" class="absolute top-0 left-0 w-full h-full object-cover z-0" />
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
+
+    <!-- Top-Aligned Text & Centered Archive Button -->
+    <div class="absolute inset-0 flex flex-col items-center justify-start z-20 px-4 pt-10 text-center space-y-6">
+      <!-- Typewriter Text -->
+      <div class="max-w-sm sm:max-w-xl">
+        <h2 class="text-white text-lg sm:text-xl md:text-2xl font-semibold drop-shadow-lg leading-relaxed">
+          <span id="typewriter" class="typewriter"></span>
+        </h2>
+      </div>
+
+      <!-- Archive Button (hidden by default) -->
+      <a href="https://nitnapple.github.io/Ananya/exp" rel="noopener noreferrer" id="archive-link" class="hidden">
+        <button class="bg-white bg-opacity-80 hover:bg-opacity-100 text-black font-semibold py-2 px-6 rounded-full shadow-md transition duration-300">
+          Archive
+        </button>
+      </a>
+    </div>
+
+    <!-- Footnote -->
+    <div class="absolute bottom-2 w-full text-center z-30">
+    </div>
+  </div>
+
+  <!-- JavaScript: Typewriter + Show Button -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const text = "Thank you for being a part of this beautiful journey";
+      const el = document.getElementById("typewriter");
+      const archiveLink = document.getElementById("archive-link");
+      let index = 0;
+
+      function type() {
+        if (index < text.length) {
+          el.textContent += text.charAt(index);
+          index++;
+          setTimeout(type, 40);
+        } else {
+          el.style.borderRight = "none";
+          archiveLink.classList.remove("hidden");
+        }
+      }
+
+      type();
+    });
+
+    // Grayscale Effect After Delay
+    window.addEventListener('load', function () {
+      setTimeout(() => {
+        document.body.classList.add('bw-effect');
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
