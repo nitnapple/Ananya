@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Stack Jump - Hyper Casual Game</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="score-display">
+                <span class="score-label">Score:</span>
+                <span class="score-value" id="currentScore">0</span>
+            </div>
+            <div class="high-score-display">
+                <span class="high-score-label">Best:</span>
+                <span class="high-score-value" id="highScore">0</span>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="400" height="600"></canvas>
+            
+            <!-- Start screen - visible by default -->
+            <div class="game-overlay" id="startScreen">
+                <div class="overlay-content">
+                    <h1 class="game-title">Stack Jump</h1>
+                    <p class="game-instructions">Tap anywhere to jump on moving platforms!</p>
+                    <p class="game-instructions">Stack as high as you can!</p>
+                    <button class="btn btn--primary btn--lg" id="startButton">TAP TO START</button>
+                </div>
+            </div>
+            
+            <!-- Game over screen - hidden by default -->
+            <div class="game-overlay hidden" id="gameOverScreen">
+                <div class="overlay-content">
+                    <h2 class="game-over-title">Game Over!</h2>
+                    <div class="final-score">
+                        <span class="final-score-label">Your Score:</span>
+                        <span class="final-score-value" id="finalScore">0</span>
+                    </div>
+                    <div class="new-best hidden" id="newBest">
+                        <span class="status status--success">New Best Score!</span>
+                    </div>
+                    <button class="btn btn--primary btn--lg" id="restartButton">PLAY AGAIN</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-footer">
+            <p class="game-hint">Tap anywhere on the screen to make your character jump!</p>
+        </div>
+    </div>
+    
+    <script src="app1.js"></script>
+</body>
+</html>
