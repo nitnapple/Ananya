@@ -203,26 +203,77 @@
   });
 </script>
 
-        <!-- E.R.I.T.H Academic AI Bot Widget with Clickable Links -->
-<div id="erith-chatbot" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;">
-  <div id="erith-bubble" style="background:#7c3aed;color:white;padding:12px 24px;border-radius:24px 24px 0 24px;cursor:pointer;box-shadow:0 4px 24px rgba(124,58,237,0.2);font-weight:600;">
-    💬 Ask E.R.I.T.H
-  </div>
-  <div id="erith-window" style="display:none;width:360px;max-width:95vw;height:520px;background:white;border-radius:18px;box-shadow:0 6px 32px rgba(124,58,237,0.25);margin-top:8px;flex-direction:column;overflow:hidden;">
-    <div style="background:#7c3aed;color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-weight:700;">E.R.I.T.H Academic AI Bot</span>
-      <button id="erith-close" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">×</button>
+        <!-- Beautiful E.R.I.T.H AI Bot Widget -->
+<div id="erith-chatbot"
+     class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+  <!-- Chat Bubble Button -->
+  <button id="erith-bubble"
+          class="flex items-center gap-2 px-5 py-3 rounded-full shadow-xl bg-gradient-to-br from-purple-600 to-pink-500 text-white text-lg font-semibold hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-purple-300 animate-bounce">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="E.R.I.T.H" class="w-7 h-7 rounded-full border-2 border-white shadow">
+    Chat with E.R.I.T.H
+  </button>
+  <!-- Chat Window -->
+  <div id="erith-window"
+       class="hidden w-[350px] max-w-[95vw] h-[520px] flex flex-col bg-white/90 backdrop-blur-lg shadow-2xl rounded-3xl border border-purple-200 overflow-hidden animate-fadeInUp">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-purple-700 to-pink-600 text-white">
+      <div class="flex items-center gap-2">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="E.R.I.T.H" class="w-8 h-8 rounded-full border-2 border-white shadow">
+        <span class="text-lg font-bold tracking-wide">E.R.I.T.H</span>
+        <span class="ml-2 animate-pulse text-xs bg-white/30 px-2 py-1 rounded-full">AI Academic Bot</span>
+      </div>
+      <button id="erith-close" class="text-white text-2xl font-bold hover:text-pink-200 focus:outline-none">&times;</button>
     </div>
-    <div style="padding:8px 12px;">
-      <p class="text-sm text-gray-600">Ask about any section or item. Try: <em>“Show me all assignments”</em> or <em>“What’s in the Summarized Notes section?”</em></p>
+    <!-- Welcome & Quick Replies -->
+    <div class="px-5 py-2 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-purple-100">
+      <div class="text-sm text-gray-700 mb-2">Ask about any section or item. Try:</div>
+      <div class="flex flex-wrap gap-2">
+        <button class="erith-quick bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full px-3 py-1 text-xs font-medium transition">Show all sections</button>
+        <button class="erith-quick bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full px-3 py-1 text-xs font-medium transition">Assignments</button>
+        <button class="erith-quick bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full px-3 py-1 text-xs font-medium transition">Summarized Notes</button>
+        <button class="erith-quick bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full px-3 py-1 text-xs font-medium transition">Presentations</button>
+      </div>
     </div>
-    <div id="erith-messages" style="flex:1 1 0;overflow-y:auto;padding:12px;font-size:15px;height:340px;max-height:340px;background:#f8fafc;"></div>
-    <form id="erith-form" style="display:flex;gap:4px;padding:10px;">
-      <input id="erith-input" type="text" placeholder="Type your question..." autocomplete="off" style="flex:1 1 0;padding:8px;border-radius:8px;border:1px solid #ddd;">
-      <button type="submit" style="background:#7c3aed;color:white;padding:0 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Send</button>
+    <!-- Chat Messages -->
+    <div id="erith-messages"
+         class="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-gradient-to-br from-white via-purple-50 to-pink-50">
+      <!-- Messages will appear here -->
+    </div>
+    <!-- Typing Indicator -->
+    <div id="erith-typing" class="hidden px-5 py-2">
+      <div class="flex items-center gap-2">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="E.R.I.T.H" class="w-6 h-6 rounded-full border-2 border-white shadow">
+        <span class="flex gap-1">
+          <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></span>
+          <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></span>
+          <span class="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-200"></span>
+        </span>
+        <span class="text-xs text-gray-500">E.R.I.T.H is typing...</span>
+      </div>
+    </div>
+    <!-- Input -->
+    <form id="erith-form" class="flex items-center gap-2 px-4 py-3 border-t border-purple-100 bg-white/70">
+      <input id="erith-input"
+             type="text"
+             placeholder="Type your question..."
+             autocomplete="off"
+             class="flex-1 px-4 py-2 rounded-xl border border-purple-200 focus:ring-2 focus:ring-pink-300 focus:outline-none bg-white text-gray-900 text-sm shadow-sm transition">
+      <button type="submit"
+              class="bg-gradient-to-br from-purple-600 to-pink-500 text-white px-4 py-2 rounded-xl font-semibold shadow hover:scale-105 transition-all duration-200 focus:ring-2 focus:ring-pink-300">
+        <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+      </button>
     </form>
   </div>
 </div>
+<!-- Animation CSS -->
+<style>
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(40px);}
+  to { opacity:1; transform:translateY(0);}
+}
+.animate-fadeInUp { animation: fadeInUp 0.6s cubic-bezier(.4,0,.2,1);}
+</style>
+<!-- Chatbot Script -->
 <script>
 const ERITH_SECTIONS = [
   {
@@ -315,13 +366,12 @@ const ERITH_SECTIONS = [
 ];
 
 function erithSectionListHTML() {
-  let html = "<b>Here are all the main sections and items you can explore:</b><br><br>";
+  let html = "<b class='text-purple-700'>Here are all the main sections and items you can explore:</b><br><br>";
   ERITH_SECTIONS.forEach(section => {
-    html += `<b>${section.title}</b><br>`;
+    html += `<b class='text-pink-700'>${section.title}</b><br>`;
     section.items.forEach(item => {
-      // If link is an anchor, open in same tab. If external, open in new tab.
       const isExternal = item.link.startsWith("http");
-      html += `&nbsp;&nbsp;• <a href="${item.link}"${isExternal ? ' target="_blank"' : ''} style="color:#7c3aed;text-decoration:underline;">${item.text}</a><br>`;
+      html += `&nbsp;&nbsp;• <a href="${item.link}"${isExternal ? ' target="_blank" rel="noopener"' : ''} class="text-purple-600 underline hover:text-pink-500 transition">${item.text}</a><br>`;
     });
     html += "<br>";
   });
@@ -332,69 +382,97 @@ function isGreeting(msg) {
   return /^(hi|hello|hey)\b/i.test(msg.trim());
 }
 
-document.getElementById('erith-bubble').onclick = () => {
-  document.getElementById('erith-window').style.display = 'flex';
-  document.getElementById('erith-bubble').style.display = 'none';
-};
-document.getElementById('erith-close').onclick = () => {
-  document.getElementById('erith-window').style.display = 'none';
-  document.getElementById('erith-bubble').style.display = 'block';
-};
-
+// UI logic
+const erithBubble = document.getElementById('erith-bubble');
+const erithWindow = document.getElementById('erith-window');
+const erithClose = document.getElementById('erith-close');
 const erithMessages = document.getElementById('erith-messages');
+const erithTyping = document.getElementById('erith-typing');
+const erithForm = document.getElementById('erith-form');
+const erithInput = document.getElementById('erith-input');
+
+erithBubble.onclick = () => {
+  erithWindow.classList.remove('hidden');
+  erithBubble.classList.add('hidden');
+  setTimeout(() => erithInput.focus(), 300);
+};
+erithClose.onclick = () => {
+  erithWindow.classList.add('hidden');
+  erithBubble.classList.remove('hidden');
+};
 
 function addUserMessage(msg) {
-  erithMessages.innerHTML += `<div style="margin:8px 0;text-align:right;"><span style="background:#ede9fe;color:#7c3aed;padding:6px 12px;border-radius:12px 12px 0 12px;display:inline-block;">${msg}</span></div>`;
+  erithMessages.innerHTML += `
+    <div class="flex justify-end">
+      <div class="bg-pink-100 text-pink-800 rounded-xl px-4 py-2 mb-1 max-w-[80%] shadow font-medium">${msg}</div>
+    </div>
+  `;
   erithMessages.scrollTop = erithMessages.scrollHeight;
 }
 function addErithMessage(msg) {
-  erithMessages.innerHTML += `<div style="margin:8px 0;text-align:left;"><span style="background:#fff;color:#222;padding:6px 12px;border-radius:12px 12px 12px 0;display:inline-block;white-space:pre-line;">${msg}</span></div>`;
+  erithMessages.innerHTML += `
+    <div class="flex items-start gap-2">
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="E.R.I.T.H" class="w-7 h-7 rounded-full border-2 border-purple-200 shadow">
+      <div class="bg-purple-100 text-purple-900 rounded-xl px-4 py-2 mb-1 max-w-[80%] shadow font-medium" style="white-space:pre-line;">${msg}</div>
+    </div>
+  `;
   erithMessages.scrollTop = erithMessages.scrollHeight;
 }
 
 // Initial greeting
-addErithMessage("👋 Hi! I’m E.R.I.T.H, your academic assistant. Ask me about any section or item on this site.");
+addErithMessage("👋 Hi! I’m <b class='text-purple-700'>E.R.I.T.H</b>, your academic assistant. Ask me about any section or item on this site.");
 
-document.getElementById('erith-form').onsubmit = async function(e) {
+function showTyping(show = true) {
+  erithTyping.classList.toggle('hidden', !show);
+}
+
+erithForm.onsubmit = async function(e) {
   e.preventDefault();
-  const input = document.getElementById('erith-input');
-  const userMsg = input.value.trim();
+  const userMsg = erithInput.value.trim();
   if (!userMsg) return;
   addUserMessage(userMsg);
-  input.value = '';
-  addErithMessage("⏳ Thinking...");
+  erithInput.value = '';
+  showTyping(true);
 
-  // If greeting, always show section list with links
-  if (isGreeting(userMsg)) {
-    erithMessages.lastChild.remove();
-    addErithMessage(erithSectionListHTML());
-    return;
-  }
-
-  // Otherwise, keyword-based matching for demo (no API needed for section/item Qs)
-  const lowerMsg = userMsg.toLowerCase();
-  let found = false;
-  for (const section of ERITH_SECTIONS) {
-    if (lowerMsg.includes(section.title.replace(/[^a-zA-Z ]/g, '').toLowerCase().split(' ')[0])) {
-      erithMessages.lastChild.remove();
-      let html = `<b>Here are the items in ${section.title}:</b><br>`;
-      section.items.forEach(item => {
-        const isExternal = item.link.startsWith("http");
-        html += `&nbsp;&nbsp;• <a href="${item.link}"${isExternal ? ' target="_blank"' : ''} style="color:#7c3aed;text-decoration:underline;">${item.text}</a><br>`;
-      });
-      addErithMessage(html);
-      found = true;
-      break;
+  setTimeout(() => {
+    showTyping(false);
+    // Greeting triggers all sections
+    if (isGreeting(userMsg) || userMsg.toLowerCase() === "show all sections") {
+      addErithMessage(erithSectionListHTML());
+      return;
     }
-  }
-  if (found) return;
-
-  // Fallback: prompt user to ask about a section/item
-  erithMessages.lastChild.remove();
-  addErithMessage("Sorry, I can only answer questions about the sections and items listed above. Please ask about a section or item from this website.");
+    // Section keyword matching
+    const lowerMsg = userMsg.toLowerCase();
+    let found = false;
+    for (const section of ERITH_SECTIONS) {
+      if (lowerMsg.includes(section.title.replace(/[^a-zA-Z ]/g, '').toLowerCase().split(' ')[0])) {
+        let html = `<b class='text-pink-700'>Here are the items in ${section.title}:</b><br>`;
+        section.items.forEach(item => {
+          const isExternal = item.link.startsWith("http");
+          html += `&nbsp;&nbsp;• <a href="${item.link}"${isExternal ? ' target="_blank" rel="noopener"' : ''} class="text-purple-600 underline hover:text-pink-500 transition">${item.text}</a><br>`;
+        });
+        addErithMessage(html);
+        found = true;
+        break;
+      }
+    }
+    if (found) return;
+    // Fallback
+    addErithMessage("Sorry, I can only answer questions about the sections and items listed above. Please ask about a section or item from this website.");
+  }, 600 + Math.random()*500);
 };
+
+// Quick reply buttons
+document.querySelectorAll('.erith-quick').forEach(btn => {
+  btn.onclick = function() {
+    erithInput.value = btn.textContent;
+    erithForm.dispatchEvent(new Event('submit'));
+    erithInput.focus();
+  };
+});
 </script>
-<!-- END E.R.I.T.H Academic AI Bot Widget with Clickable Links -->
+
+<!-- Ended Erith buttons -->
 
     
     
