@@ -202,6 +202,201 @@
     setInterval(updateTime, 1000);
   });
 </script>
+
+        <!-- E.R.I.T.H Academic AI Bot Widget with Clickable Links -->
+<div id="erith-chatbot" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;">
+  <div id="erith-bubble" style="background:#7c3aed;color:white;padding:12px 24px;border-radius:24px 24px 0 24px;cursor:pointer;box-shadow:0 4px 24px rgba(124,58,237,0.2);font-weight:600;">
+    💬 Ask E.R.I.T.H
+  </div>
+  <div id="erith-window" style="display:none;width:360px;max-width:95vw;height:520px;background:white;border-radius:18px;box-shadow:0 6px 32px rgba(124,58,237,0.25);margin-top:8px;flex-direction:column;overflow:hidden;">
+    <div style="background:#7c3aed;color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-weight:700;">E.R.I.T.H Academic AI Bot</span>
+      <button id="erith-close" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">×</button>
+    </div>
+    <div style="padding:8px 12px;">
+      <p class="text-sm text-gray-600">Ask about any section or item. Try: <em>“Show me all assignments”</em> or <em>“What’s in the Summarized Notes section?”</em></p>
+    </div>
+    <div id="erith-messages" style="flex:1 1 0;overflow-y:auto;padding:12px;font-size:15px;height:340px;max-height:340px;background:#f8fafc;"></div>
+    <form id="erith-form" style="display:flex;gap:4px;padding:10px;">
+      <input id="erith-input" type="text" placeholder="Type your question..." autocomplete="off" style="flex:1 1 0;padding:8px;border-radius:8px;border:1px solid #ddd;">
+      <button type="submit" style="background:#7c3aed;color:white;padding:0 16px;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Send</button>
+    </form>
+  </div>
+</div>
+<script>
+const ERITH_SECTIONS = [
+  {
+    title: "✨ What's New",
+    items: [
+      { text: "All main Sanskrit shlokas in English & Hindi explanation", link: "#summarized" },
+      { text: "Sample paper of Sanskrit Literature Katha Kavya", link: "https://raw.githubusercontent.com/nitnapple/Assignments/582e83b6ba758bc786a70bf964737dacceed0ab4/Sample_Katha_Kavya_Question_Paper.pdf" },
+      { text: "Comparative Political Systems Audio Notes", link: "https://nitnapple.github.io/Ananya/CPS" },
+      { text: "Perspectives on Public Administration Audio Notes", link: "https://nitnapple.github.io/Ananya/PPA" },
+      { text: "GE Legal Philosophy Audio Notes", link: "https://nitnapple.github.io/Ananya/GE" },
+      { text: "6th Semester Marks", link: "https://raw.githubusercontent.com/nitnapple/Assignments/d581a0d9f6f071572aa6db957f98b310740324dd/Ananya%20Sem%206%20Marks_protected.pdf" },
+      { text: "Sanskrit Literature Katha Kavya Audio Notes", link: "https://nitnapple.github.io/Ananya/skt" }
+    ]
+  },
+  {
+    title: "📆 Final Examination Datesheet",
+    items: [
+      { text: "GE: Legal Philosophy – 14th May 2025, 09:00 AM–12:00 NOON", link: "#exam-datesheet" },
+      { text: "Perspectives on Public Administration – 19th May 2025, 02:30–05:30 PM", link: "#exam-datesheet" },
+      { text: "Sanskrit Literature: Katha Kavya – 21st May 2025, 02:30–05:30 PM", link: "#exam-datesheet" },
+      { text: "Comparative Political Systems – 27th May 2025, 02:30–05:30 PM", link: "#exam-datesheet" },
+      { text: "DSE: Sanskrit, Art of Balanced Living – 2nd June 2025, 02:30–05:30 PM", link: "#exam-datesheet" }
+    ]
+  },
+  {
+    title: "🚀 Summarized Notes",
+    items: [
+      { text: "GE Legal Philosophy Webpage", link: "https://nitnapple.github.io/Ananya/GE" },
+      { text: "GE Legal Philosophy Summarised PDF", link: "https://raw.githubusercontent.com/nitnapple/Assignments/58b290c478599549b1486e9adb58efb1f1d35e38/GE%20Legal%20Philosophy.pdf" },
+      { text: "Sanskrit Literature Katha Kavya Webpage", link: "https://nitnapple.github.io/Ananya/skt" },
+      { text: "Sanskrit Katha Kavya Sample Paper", link: "https://raw.githubusercontent.com/nitnapple/Assignments/582e83b6ba758bc786a70bf964737dacceed0ab4/Sample_Katha_Kavya_Question_Paper.pdf" },
+      { text: "Sanskrit Katha Kavya Shloka Only", link: "https://raw.githubusercontent.com/nitnapple/Assignments/dd12b2cfc6b944782923f3b6ab8cb2ebf947640c/Sanskrit%20shlokas%20in%20English%20%26%20Hindi%20explanation.pdf" },
+      { text: "Perspectives on Public Administration Webpage", link: "https://nitnapple.github.io/Ananya/PPA" },
+      { text: "Perspectives on Public Administration Summarised PDF", link: "https://raw.githubusercontent.com/nitnapple/Assignments/5dc9ed2ebbd4fe3383c1d50a7426074e282ea5b5/Perspectives%20on%20Public%20Administration%20Summarised%20.pdf" },
+      { text: "Comparative Political Systems Webpage", link: "https://nitnapple.github.io/Ananya/CPS" },
+      { text: "Comparative Political Systems Summarized PDF", link: "https://raw.githubusercontent.com/nitnapple/Assignments/2ad6ea89606cec6635084e4ca66631d9f8117dcb/Comparative%20Political%20Systems%20Summarized.pdf" },
+      { text: "DSE: Art of Balanced Living Webpage", link: "https://nitnapple.github.io/Ananya/DSE" }
+    ]
+  },
+  {
+    title: "📚 Assignments",
+    items: [
+      { text: "DSE: Sanskrit, Art of Balanced Living: Assignment", link: "https://shorturl.at/WgdVd" },
+      { text: "Perspectives on Public Administration: Assignment", link: "https://shorturl.at/Nzuc0" },
+      { text: "GE: Legal Philosophy Assignment", link: "https://shorturl.at/P7PVE" },
+      { text: "Comparative Political Systems: Assignment", link: "https://shorturl.at/wJuLt" },
+      { text: "Sanskrit Literature Katha Kavya: Assignment", link: "https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/Sanskrit%20Literature%20Katha%20Kavya%3B%20Assignment.pdf" },
+      { text: "DSE; Sanskrit Assignment Unit 3,4", link: "https://raw.githubusercontent.com/nitnapple/Assignments/d696037f28a067b57f172fd9c9a81d851c117ea4/DSE%3B%20Sanskrit%20Assignment%20Unit%203%2C4.pdf" },
+      { text: "PPA; Assignment (New Public Management)", link: "https://raw.githubusercontent.com/nitnapple/Assignments/d0a5127929956c44bcfec5a6ad3019ca2802c54f/PPAIA2.pdf" }
+    ]
+  },
+  {
+    title: "🎤 Presentations",
+    items: [
+      { text: "GE: Legal Philosophy: Presentation", link: "https://shorturl.at/N2wtS" },
+      { text: "Comparative Political Systems: Presentation", link: "https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/Israel.pptx" },
+      { text: "DSE: Sanskrit, Art of Balanced Living: Presentation", link: "https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/DSE%20Sanskrit%2C%20Art%20of%20Balanced%20Living%20Presentation.pptx" }
+    ]
+  },
+  {
+    title: "📋 Academic Schedule & Deadlines",
+    items: [
+      { text: "Comparative Political Systems – Presentation and Assignment (Submitted)", link: "#messages" },
+      { text: "DSE Sanskrit – Assignment (Submitted)", link: "#messages" },
+      { text: "GE Philosophy – Presentation and Assignment (Submitted)", link: "#messages" },
+      { text: "PPA – Internal Assessment Assignment (Submitted)", link: "#messages" },
+      { text: "Last date for filling out the 6th semester exam form: 31st March 2025 (extended to 10th April 2025)", link: "#messages" },
+      { text: "DSE: Sanskrit (Durgesh Mishra Sir) – Assignment (In Progress)", link: "#messages2" },
+      { text: "Sanskrit Literature – Assignment (Completed)", link: "#messages2" },
+      { text: "Comparative Political Systems – Test: 17th April 2025", link: "#messages2" },
+      { text: "PPA CA II – Test: 16th April 2025", link: "#messages2" }
+    ]
+  },
+  {
+    title: "📖 SOL Notes",
+    items: [
+      { text: "Perspectives on Public Administration (PDF)", link: "https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/PERSPECTIVES%20ON%20PUBLIC%20ADMINISTRATION.pdf" },
+      { text: "Comparative Political Systems (PDF)", link: "https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/COMPARATIVE%20POLITICAL%20SYSTEMS.pdf" },
+      { text: "GE: Legal Philosophy (Not SOL, PDF)", link: "https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/GE%20Legal%20Philosophy%20Semester%206th.pdf" },
+      { text: "Sanskrit Literature: Katha Kavya (PDF)", link: "https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/Sanskrit%20Literature%20Katha%20Kavya.pdf" },
+      { text: "History of India 1857-1947 (PDF)", link: "https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/History1857.pdf" }
+    ]
+  },
+  {
+    title: "💡 Suggestion Box",
+    items: [
+      { text: "Share your feedback, suggestions, or requests", link: "#suggestion-box" }
+    ]
+  }
+];
+
+function erithSectionListHTML() {
+  let html = "<b>Here are all the main sections and items you can explore:</b><br><br>";
+  ERITH_SECTIONS.forEach(section => {
+    html += `<b>${section.title}</b><br>`;
+    section.items.forEach(item => {
+      // If link is an anchor, open in same tab. If external, open in new tab.
+      const isExternal = item.link.startsWith("http");
+      html += `&nbsp;&nbsp;• <a href="${item.link}"${isExternal ? ' target="_blank"' : ''} style="color:#7c3aed;text-decoration:underline;">${item.text}</a><br>`;
+    });
+    html += "<br>";
+  });
+  return html;
+}
+
+function isGreeting(msg) {
+  return /^(hi|hello|hey)\b/i.test(msg.trim());
+}
+
+document.getElementById('erith-bubble').onclick = () => {
+  document.getElementById('erith-window').style.display = 'flex';
+  document.getElementById('erith-bubble').style.display = 'none';
+};
+document.getElementById('erith-close').onclick = () => {
+  document.getElementById('erith-window').style.display = 'none';
+  document.getElementById('erith-bubble').style.display = 'block';
+};
+
+const erithMessages = document.getElementById('erith-messages');
+
+function addUserMessage(msg) {
+  erithMessages.innerHTML += `<div style="margin:8px 0;text-align:right;"><span style="background:#ede9fe;color:#7c3aed;padding:6px 12px;border-radius:12px 12px 0 12px;display:inline-block;">${msg}</span></div>`;
+  erithMessages.scrollTop = erithMessages.scrollHeight;
+}
+function addErithMessage(msg) {
+  erithMessages.innerHTML += `<div style="margin:8px 0;text-align:left;"><span style="background:#fff;color:#222;padding:6px 12px;border-radius:12px 12px 12px 0;display:inline-block;white-space:pre-line;">${msg}</span></div>`;
+  erithMessages.scrollTop = erithMessages.scrollHeight;
+}
+
+// Initial greeting
+addErithMessage("👋 Hi! I’m E.R.I.T.H, your academic assistant. Ask me about any section or item on this site.");
+
+document.getElementById('erith-form').onsubmit = async function(e) {
+  e.preventDefault();
+  const input = document.getElementById('erith-input');
+  const userMsg = input.value.trim();
+  if (!userMsg) return;
+  addUserMessage(userMsg);
+  input.value = '';
+  addErithMessage("⏳ Thinking...");
+
+  // If greeting, always show section list with links
+  if (isGreeting(userMsg)) {
+    erithMessages.lastChild.remove();
+    addErithMessage(erithSectionListHTML());
+    return;
+  }
+
+  // Otherwise, keyword-based matching for demo (no API needed for section/item Qs)
+  const lowerMsg = userMsg.toLowerCase();
+  let found = false;
+  for (const section of ERITH_SECTIONS) {
+    if (lowerMsg.includes(section.title.replace(/[^a-zA-Z ]/g, '').toLowerCase().split(' ')[0])) {
+      erithMessages.lastChild.remove();
+      let html = `<b>Here are the items in ${section.title}:</b><br>`;
+      section.items.forEach(item => {
+        const isExternal = item.link.startsWith("http");
+        html += `&nbsp;&nbsp;• <a href="${item.link}"${isExternal ? ' target="_blank"' : ''} style="color:#7c3aed;text-decoration:underline;">${item.text}</a><br>`;
+      });
+      addErithMessage(html);
+      found = true;
+      break;
+    }
+  }
+  if (found) return;
+
+  // Fallback: prompt user to ask about a section/item
+  erithMessages.lastChild.remove();
+  addErithMessage("Sorry, I can only answer questions about the sections and items listed above. Please ask about a section or item from this website.");
+};
+</script>
+<!-- END E.R.I.T.H Academic AI Bot Widget with Clickable Links -->
+
+    
     
 <!-- What's New Section -->
     <section id="what's_new" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
