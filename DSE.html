@@ -2,71 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DSE: Page Unavailable</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 text-white min-h-screen flex flex-col justify-center items-center relative px-6">
-
-  <!-- Home Button -->
-  <div class="absolute top-6 right-6">
-    <a href="https://nitnapple.github.io/Ananya" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-5 py-2 rounded-full shadow-md transition-all duration-300">
-      Home
-    </a>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-10 rounded-2xl shadow-lg text-center">
+    <h1 class="text-2xl font-semibold text-gray-800">This page is unavailable</h1>
   </div>
-
-  <!-- Main Content -->
-  <div class="text-center mt-16">
-    <h1 class="text-3xl md:text-5xl font-semibold mb-6 animate-fade-in-down">
-      The content on this website will be available after<br>
-      <span class="text-teal-400">27th May 2025</span>
-    </h1>
-    <div id="countdown" class="text-2xl md:text-4xl font-mono bg-black bg-opacity-30 border border-teal-400 rounded-xl px-6 py-4 shadow-lg inline-block animate-pulse">
-      Loading countdown...
-    </div>
-    <p class="mt-6 text-sm text-gray-400">Stay tuned for something awesome.</p>
-  </div>
-
-  <!-- Countdown Script -->
-  <script>
-    const targetDate = new Date("May 27, 2025 00:00:00").getTime();
-
-    const countdownTimer = setInterval(function () {
-      const now = new Date().getTime();
-      const timeLeft = targetDate - now;
-
-      if (timeLeft <= 0) {
-        clearInterval(countdownTimer);
-        document.getElementById("countdown").innerHTML = "🎉 Content is now available!";
-        return;
-      }
-
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-      document.getElementById("countdown").innerHTML =
-        `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }, 1000);
-  </script>
-
-  <!-- Custom Animation -->
-  <style>
-    @keyframes fade-in-down {
-      0% {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate-fade-in-down {
-      animation: fade-in-down 1.5s ease-out;
-    }
-  </style>
 </body>
 </html>
