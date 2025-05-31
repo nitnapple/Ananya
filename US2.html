@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Top-Aligned GIF and Text</title>
+  <title>Top-Aligned Video and Text</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes blink {
@@ -35,8 +35,11 @@
 </head>
 <body class="m-0 p-0">
   <div class="relative w-screen h-screen overflow-hidden">
-    <!-- Background GIF -->
-    <img src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.gif" alt="Background GIF" class="absolute top-0 left-0 w-full h-full object-cover z-0" />
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+      <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
 
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
