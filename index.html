@@ -917,6 +917,30 @@
             });
         });
     </script>
+    
+      <style>
+  body {
+    /* Prepare for filter change with smooth transition of 2 seconds */
+    transition: filter 2s linear;
+  }
+
+  .bw-effect {
+    filter: grayscale(99%) contrast(150%) brightness(80%);
+  }
+</style>
+
+<script>
+  window.addEventListener('load', function () {
+    // Wait 3 seconds, then add class to start 2-second transition to B&W
+    setTimeout(function () {
+      document.body.classList.add('bw-effect');
+    }, 3000);
+  });
+</script>
+
+
+    
+    
 
  <footer class="text-white py-6 text-center shadow-lg transition-colors duration-500 bg-purple-700" id="footer">
   <div class="container mx-auto px-4">
