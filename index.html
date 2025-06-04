@@ -32,49 +32,70 @@
     .bw-effect {
       filter: grayscale(80%) contrast(300%) brightness(70%);
     }
+
+    /* Glow effect styles */
+    .glow {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(0, 255, 255, 0.5) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: glow-animation 0.6s ease-out forwards;
+      z-index: 50;
+    }
+
+    @keyframes glow-animation {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.5);
+      }
+    }
   </style>
-  
-  <!-- Started New Ananya Clarity  Script -->
 
-    <script type="text/javascript">
+  <!-- Clarity Scripts -->
+  <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "ramb97rh07");
-</script>
-
-    <!-- Ended New Ananya Clarity  Script -->
-
-    <!-- Started Clarity  Script -->
-
-    <script type="text/javascript">
+  </script>
+  <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "qsnefk1464");
-</script>
+  </script>
 
-    <!-- Ended Clarity  Script -->
-
-    
-<!-- Started PostHog Script -->
-
-    <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  <!-- PostHog Script -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){
+      function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),
+      t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}
+      (p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,
+      p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",
+      (r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);
+      var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],
+      u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),
+      t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},
+      o="init capture ...".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},
+      e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_8MyDkWfyorddFNpfx8Jy9m8Y9TF3Wpeo8kiqkFPvKed', {
-        api_host: 'https://eu.i.posthog.com',
-        person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+      api_host: 'https://eu.i.posthog.com',
+      person_profiles: 'identified_only',
     })
-</script>
-
-
-<!-- Ended PostHog Script -->
-  
+  </script>
 </head>
+
 <body class="m-0 p-0">
-  <div class="relative w-screen h-screen overflow-hidden">
+  <div class="relative w-screen h-screen overflow-hidden" id="click-target">
     <!-- Background Video -->
     <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
       <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.mp4" type="video/mp4" />
@@ -84,16 +105,13 @@
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
-    <!-- Top-Aligned Text & Archive Button -->
+    <!-- Content -->
     <div class="absolute inset-0 flex flex-col items-center justify-start z-20 px-4 pt-10 text-center space-y-6">
-      <!-- Typewriter Text -->
       <div class="max-w-sm sm:max-w-xl">
         <h2 class="text-white text-lg sm:text-xl md:text-2xl font-semibold drop-shadow-lg leading-relaxed">
           <span id="typewriter" class="typewriter"></span>
         </h2>
       </div>
-
-      <!-- Archive Button (hidden by default) -->
       <a href="https://nitnapple.github.io/Ananya/Archive" rel="noopener noreferrer" id="archive-link" class="hidden">
         <button class="bg-white bg-opacity-80 hover:bg-opacity-100 text-black font-semibold py-2 px-6 rounded-full shadow-md transition duration-300">
           Archive
@@ -101,12 +119,12 @@
       </a>
     </div>
 
-    <!-- Footer with Instagram Icon and Copyright -->
+    <!-- Footer -->
     <div class="absolute bottom-10 w-full z-30">
       <div class="bg-transparent py-3 px-4 text-center">
         <a href="https://instagram.com/nitin_apple" target="_blank" rel="noopener noreferrer" class="inline-block">
           <svg class="w-6 h-6 text-white mx-auto hover:text-pink-400 transition duration-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.3 2.4.6.5.3.9.7 1.3 1.3.3.5.5 1.2.6 2.4.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 1.9-.6 2.4-.3.5-.7.9-1.3 1.3-.5.3-1.2.5-2.4.6-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.3-2.4-.6-.5-.3-.9-.7-1.3-1.3-.3-.5-.5-1.2-.6-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.3-1.9.6-2.4.3-.5.7-.9 1.3-1.3.5-.3 1.2-.5 2.4-.6C8.4 2.2 8.8 2.2 12 2.2zm0-2.2C8.7 0 8.3 0 7.1.1 5.8.2 4.8.4 4 .9 3.1 1.3 2.3 2.1 1.9 3 .4 3.8.2 4.8.1 6.1 0 7.3 0 7.7 0 12s0 4.7.1 5.9c.1 1.3.3 2.3.8 3.1.4.9 1.2 1.7 2.1 2.1.8.4 1.8.7 3.1.8 1.2.1 1.6.1 5.9.1s4.7 0 5.9-.1c1.3-.1 2.3-.3 3.1-.8.9-.4 1.7-1.2 2.1-2.1.4-.8.7-1.8.8-3.1.1-1.2.1-1.6.1-5.9s0-4.7-.1-5.9c-.1-1.3-.3-2.3-.8-3.1-.4-.9-1.2-1.7-2.1-2.1-.8-.4-1.8-.7-3.1-.8C15.7 0 15.3 0 12 0zM12 5.8c-3.4 0-6.2 2.8-6.2 6.2S8.6 18.2 12 18.2 18.2 15.4 18.2 12 15.4 5.8 12 5.8zm0 10.2c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm5.8-10.7c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5 1.5-.6 1.5-1.5-.7-1.5-1.5-1.5z"/>
+            <path d="M12 2.2c3.2 0 3.6 0 4.8.1..."/>
           </svg>
         </a>
         <p class="text-white text-sm mt-1">© 2025</p>
@@ -114,7 +132,7 @@
     </div>
   </div>
 
-  <!-- JavaScript: Typewriter + Show Button -->
+  <!-- Typewriter + Glow JS -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const text = "Thank you for being a part of this beautiful journey—may we meet again someday, with even warmer smiles and happier hearts.";
@@ -136,7 +154,20 @@
       type();
     });
 
-    // Grayscale Effect After Delay
+    // Glow effect on click
+    document.getElementById("click-target").addEventListener("click", function (e) {
+      const glow = document.createElement('div');
+      glow.className = 'glow';
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
+      document.body.appendChild(glow);
+
+      setTimeout(() => {
+        glow.remove();
+      }, 600);
+    });
+
+    // Grayscale after delay
     window.addEventListener('load', function () {
       setTimeout(() => {
         document.body.classList.add('bw-effect');
