@@ -152,8 +152,8 @@
         // Glow effect
         const glow = document.createElement('div');
         glow.className = 'glow';
-        glow.style.left = ${e.clientX}px;
-        glow.style.top = ${e.clientY}px;
+        glow.style.left = `${e.clientX}px`;
+        glow.style.top = `${e.clientY}px`;
         document.body.appendChild(glow);
         setTimeout(() => glow.remove(), 600);
       });
