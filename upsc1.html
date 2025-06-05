@@ -99,7 +99,7 @@
   <!-- Header -->
   <header class="ios-glass mx-auto mt-4 max-w-3xl py-7 px-5 sm:px-8 text-center animate-fadeInUp">
     <h1 class="text-3xl font-semibold tracking-tight mb-2 text-gray-900" style="letter-spacing: -0.01em;">UPSC CSE 2026 Preparation Portal</h1>
-    <p class="text-base sm:text-lg text-gray-600">Minimal, distraction-free booklists & resources for Prelims, Mains, and PSIR Optional</p>
+    <p class="text-base sm:text-lg text-gray-600">Apple-inspired, distraction-free booklists & resources for Prelims, Mains, and PSIR Optional</p>
   </header>
 
   <!-- Countdown Timers -->
@@ -107,12 +107,24 @@
     <!-- Prelims Countdown -->
     <div class="ios-glass w-full max-w-xl py-7 px-5 sm:px-8 flex flex-col items-center animate-fadeInUp animate-fadeInUp-delay-1">
       <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-900" style="letter-spacing:-0.01em;">Countdown to UPSC CSE <span class="text-blue-600">Prelims</span> 2026</h2>
-      <div id="timer-prelims" class="flex gap-3 sm:gap-6 justify-center items-center w-full">
-        <div class="flex flex-col items-center">
+      <div id="timer-prelims" class="flex gap-4 sm:gap-8 justify-center items-center w-full flex-wrap">
+        <div class="flex flex-col items-center mb-2">
+          <button id="months-prelims-btn" class="focus:outline-none">
+            <div id="months-prelims" class="text-gray-900 text-3xl sm:text-5xl font-bold px-6 py-2 rounded-2xl bg-blue-50/80 animate-pulseTimer-blue transition-transform"></div>
+          </button>
+          <span class="text-xs mt-1 text-gray-500">Months</span>
+        </div>
+        <div class="flex flex-col items-center mb-2">
           <button id="days-prelims-btn" class="focus:outline-none">
-            <div id="days-prelims" class="text-gray-900 text-4xl font-bold px-8 py-3 rounded-2xl bg-blue-50/80 animate-pulseTimer-blue transition-transform"></div>
+            <div id="days-prelims" class="text-gray-900 text-3xl sm:text-5xl font-bold px-6 py-2 rounded-2xl bg-blue-50/80 animate-pulseTimer-blue transition-transform"></div>
           </button>
           <span class="text-xs mt-1 text-gray-500">Days</span>
+        </div>
+        <div class="flex flex-col items-center mb-2">
+          <button id="totaldays-prelims-btn" class="focus:outline-none">
+            <div id="totaldays-prelims" class="text-gray-900 text-3xl sm:text-5xl font-bold px-6 py-2 rounded-2xl bg-blue-50/80 animate-pulseTimer-blue transition-transform"></div>
+          </button>
+          <span class="text-xs mt-1 text-gray-500">Total Days</span>
         </div>
       </div>
       <p class="text-gray-400 text-xs mt-3 text-center">*Prelims expected: May 31, 2026 (Tentative)</p>
@@ -120,12 +132,24 @@
     <!-- Mains Countdown -->
     <div class="ios-glass w-full max-w-xl py-7 px-5 sm:px-8 flex flex-col items-center animate-fadeInUp animate-fadeInUp-delay-2">
       <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-900" style="letter-spacing:-0.01em;">Countdown to UPSC CSE <span class="text-green-600">Mains</span> 2026</h2>
-      <div id="timer-mains" class="flex gap-3 sm:gap-6 justify-center items-center w-full">
-        <div class="flex flex-col items-center">
+      <div id="timer-mains" class="flex gap-4 sm:gap-8 justify-center items-center w-full flex-wrap">
+        <div class="flex flex-col items-center mb-2">
+          <button id="months-mains-btn" class="focus:outline-none">
+            <div id="months-mains" class="text-gray-900 text-3xl sm:text-5xl font-bold px-6 py-2 rounded-2xl bg-green-50/80 animate-pulseTimer-green transition-transform"></div>
+          </button>
+          <span class="text-xs mt-1 text-gray-500">Months</span>
+        </div>
+        <div class="flex flex-col items-center mb-2">
           <button id="days-mains-btn" class="focus:outline-none">
-            <div id="days-mains" class="text-gray-900 text-4xl font-bold px-8 py-3 rounded-2xl bg-green-50/80 animate-pulseTimer-green transition-transform"></div>
+            <div id="days-mains" class="text-gray-900 text-3xl sm:text-5xl font-bold px-6 py-2 rounded-2xl bg-green-50/80 animate-pulseTimer-green transition-transform"></div>
           </button>
           <span class="text-xs mt-1 text-gray-500">Days</span>
+        </div>
+        <div class="flex flex-col items-center mb-2">
+          <button id="totaldays-mains-btn" class="focus:outline-none">
+            <div id="totaldays-mains" class="text-gray-900 text-3xl sm:text-5xl font-bold px-6 py-2 rounded-2xl bg-green-50/80 animate-pulseTimer-green transition-transform"></div>
+          </button>
+          <span class="text-xs mt-1 text-gray-500">Total Days</span>
         </div>
       </div>
       <p class="text-gray-400 text-xs mt-3 text-center">*Mains expected: September 18, 2026 (Tentative)</p>
@@ -299,14 +323,36 @@
     // Mains: September 18, 2026 09:30 AM IST
     var mainsDate = new Date("September 18, 2026 09:30:00").getTime();
 
+    function getMonthsAndDays(distance) {
+      var now = new Date();
+      var target = new Date(now.getTime() + distance);
+
+      var months = (target.getFullYear() - now.getFullYear()) * 12 + (target.getMonth() - now.getMonth());
+      var monthStart = new Date(now.getFullYear(), now.getMonth() + months, now.getDate());
+      if (monthStart > target) {
+        months -= 1;
+        monthStart = new Date(now.getFullYear(), now.getMonth() + months, now.getDate());
+      }
+      var days = Math.round((target - monthStart) / (1000 * 60 * 60 * 24));
+      if (days < 0) days = 0;
+      if (months < 0) months = 0;
+      return {months, days};
+    }
+
     function updateCountdown(targetDate, prefix) {
       var now = new Date().getTime();
       var distance = targetDate - now;
-      var days = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-      document.getElementById("days-" + prefix).textContent = days < 10 ? "0" + days : days;
+
       if (distance < 0) {
         document.getElementById("timer-" + prefix).innerHTML = "<span class='text-red-600 text-2xl font-bold'>EXAM DAY!</span>";
+        return;
       }
+      var md = getMonthsAndDays(distance);
+      var totalDays = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+
+      document.getElementById("months-" + prefix).textContent = md.months < 10 ? "0" + md.months : md.months;
+      document.getElementById("days-" + prefix).textContent = md.days < 10 ? "0" + md.days : md.days;
+      document.getElementById("totaldays-" + prefix).textContent = totalDays < 10 ? "0" + totalDays : totalDays;
     }
 
     setInterval(function () {
@@ -325,19 +371,43 @@
       void el.offsetWidth; // reflow for restart
       el.classList.add('tap-animate');
     }
-
+    // Prelims
+    document.getElementById('months-prelims-btn').addEventListener('click', function() {
+      tapAnimate('months-prelims');
+    });
+    document.getElementById('months-prelims-btn').addEventListener('touchstart', function() {
+      tapAnimate('months-prelims');
+    });
     document.getElementById('days-prelims-btn').addEventListener('click', function() {
       tapAnimate('days-prelims');
     });
     document.getElementById('days-prelims-btn').addEventListener('touchstart', function() {
       tapAnimate('days-prelims');
     });
-
+    document.getElementById('totaldays-prelims-btn').addEventListener('click', function() {
+      tapAnimate('totaldays-prelims');
+    });
+    document.getElementById('totaldays-prelims-btn').addEventListener('touchstart', function() {
+      tapAnimate('totaldays-prelims');
+    });
+    // Mains
+    document.getElementById('months-mains-btn').addEventListener('click', function() {
+      tapAnimate('months-mains');
+    });
+    document.getElementById('months-mains-btn').addEventListener('touchstart', function() {
+      tapAnimate('months-mains');
+    });
     document.getElementById('days-mains-btn').addEventListener('click', function() {
       tapAnimate('days-mains');
     });
     document.getElementById('days-mains-btn').addEventListener('touchstart', function() {
       tapAnimate('days-mains');
+    });
+    document.getElementById('totaldays-mains-btn').addEventListener('click', function() {
+      tapAnimate('totaldays-mains');
+    });
+    document.getElementById('totaldays-mains-btn').addEventListener('touchstart', function() {
+      tapAnimate('totaldays-mains');
     });
   </script>
 </body>
