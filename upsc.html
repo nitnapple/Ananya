@@ -10,58 +10,68 @@
       background: #f8f8f6;
       font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
     }
-    .remarkable-shadow {
-      box-shadow: 0 2px 8px 0 rgba(60,60,60,0.06);
+    .blur-white {
+      /* For Tailwind CLI: @apply bg-white/70 backdrop-blur-md rounded-xl shadow-md border border-gray-300; */
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 8px 0 rgba(60,60,60,0.08);
+      border: 1px solid #d1d5db;
     }
-    .remarkable-border {
-      border: 1px solid #e6e6e6;
+    .blur-grey {
+      /* For Tailwind CLI: @apply bg-gray-100/70 backdrop-blur-md rounded-xl shadow-md border border-gray-400; */
+      background: rgba(243,244,246,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 8px 0 rgba(60,60,60,0.08);
+      border: 1px solid #9ca3af;
     }
   </style>
 </head>
 <body class="min-h-screen text-gray-800">
 
   <!-- Header -->
-  <header class="bg-white remarkable-shadow remarkable-border rounded-xl mx-auto mt-8 max-w-3xl py-6 px-8 text-center">
+  <header class="blur-white mx-auto mt-4 max-w-3xl py-6 px-4 sm:px-6 text-center">
     <h1 class="text-3xl font-bold tracking-tight mb-2 text-gray-900">UPSC CSE 2026 Preparation Portal</h1>
-    <p class="text-lg text-gray-600">Minimal, distraction-free booklists & resources for Prelims, Mains, and PSIR Optional</p>
+    <p class="text-lg text-gray-700">Minimal, distraction-free booklists & resources for Prelims, Mains, and PSIR Optional</p>
   </header>
 
   <!-- Countdown Timer -->
-  <section class="container mx-auto px-4 mt-10 flex flex-col items-center">
-    <div class="bg-white remarkable-shadow remarkable-border rounded-xl w-full max-w-xl mb-6 py-6 px-8 flex flex-col items-center">
+  <section class="container mx-auto px-2 sm:px-4 mt-8 flex flex-col items-center">
+    <div class="blur-grey w-full max-w-xl mb-6 py-6 px-4 sm:px-6 flex flex-col items-center">
       <h2 class="text-2xl font-semibold mb-4 text-gray-800">Countdown to UPSC CSE Prelims 2026</h2>
-      <div id="timer" class="flex gap-4 justify-center items-center w-full">
+      <div id="timer" class="flex gap-2 sm:gap-4 justify-center items-center w-full">
         <div class="flex flex-col items-center">
-          <div id="days" class="text-gray-900 text-4xl font-bold px-5 py-2 rounded-t-lg"></div>
+          <div id="days" class="text-gray-900 text-2xl sm:text-4xl font-bold px-3 sm:px-5 py-1 sm:py-2 rounded-t-lg"></div>
           <span class="text-xs mt-1 text-gray-500">Days</span>
         </div>
-        <span class="text-3xl font-bold text-gray-400">:</span>
+        <span class="text-2xl sm:text-3xl font-bold text-gray-400">:</span>
         <div class="flex flex-col items-center">
-          <div id="hours" class="text-gray-900 text-4xl font-bold px-5 py-2"></div>
+          <div id="hours" class="text-gray-900 text-2xl sm:text-4xl font-bold px-3 sm:px-5 py-1 sm:py-2"></div>
           <span class="text-xs mt-1 text-gray-500">Hours</span>
         </div>
-        <span class="text-3xl font-bold text-gray-400">:</span>
+        <span class="text-2xl sm:text-3xl font-bold text-gray-400">:</span>
         <div class="flex flex-col items-center">
-          <div id="minutes" class="text-gray-900 text-4xl font-bold px-5 py-2"></div>
+          <div id="minutes" class="text-gray-900 text-2xl sm:text-4xl font-bold px-3 sm:px-5 py-1 sm:py-2"></div>
           <span class="text-xs mt-1 text-gray-500">Minutes</span>
         </div>
-        <span class="text-3xl font-bold text-gray-400">:</span>
+        <span class="text-2xl sm:text-3xl font-bold text-gray-400">:</span>
         <div class="flex flex-col items-center">
-          <div id="seconds" class="text-gray-900 text-4xl font-bold px-5 py-2 rounded-b-lg"></div>
+          <div id="seconds" class="text-gray-900 text-2xl sm:text-4xl font-bold px-3 sm:px-5 py-1 sm:py-2 rounded-b-lg"></div>
           <span class="text-xs mt-1 text-gray-500">Seconds</span>
         </div>
       </div>
-      <p class="text-gray-400 text-xs mt-2">*Prelims expected: May/June 2026 | Mains: September 2026 (Tentative)</p>
+      <p class="text-gray-500 text-xs mt-2 text-center">*Prelims expected: May/June 2026 | Mains: September 2026 (Tentative)</p>
     </div>
   </section>
 
   <!-- Booklists Section -->
-  <main class="container mx-auto px-4 mt-10 mb-16">
+  <main class="container mx-auto px-2 sm:px-4 mt-10 mb-16">
     <!-- NCERT Booklist -->
     <section class="mb-10">
-      <div class="bg-white remarkable-shadow remarkable-border rounded-xl p-6">
+      <div class="blur-white p-4 sm:p-6">
         <h2 class="text-xl font-bold text-gray-900 mb-4">NCERT Booklist (Class 6–12)</h2>
-        <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <h3 class="font-semibold mb-2 text-gray-800">History</h3>
             <ul class="list-disc list-inside text-gray-700 text-sm">
@@ -112,68 +122,68 @@
 
     <!-- Standard Booklist -->
     <section class="mb-10">
-      <div class="bg-white remarkable-shadow remarkable-border rounded-xl p-6">
+      <div class="blur-grey p-4 sm:p-6">
         <h2 class="text-xl font-bold text-gray-900 mb-4">Standard Books for Prelims & Mains</h2>
         <div class="overflow-x-auto">
-          <table class="min-w-full bg-white rounded-lg text-left border border-gray-200 text-sm">
-            <thead class="bg-gray-50">
+          <table class="min-w-full bg-white/70 backdrop-blur-md rounded-lg shadow-md border border-gray-300 text-left text-xs sm:text-sm">
+            <thead class="bg-gray-100/70">
               <tr>
-                <th class="py-2 px-4 font-semibold text-gray-700">Subject</th>
-                <th class="py-2 px-4 font-semibold text-gray-700">Book Name & Author</th>
+                <th class="py-2 px-2 sm:px-4">Subject</th>
+                <th class="py-2 px-2 sm:px-4">Book Name & Author</th>
               </tr>
             </thead>
             <tbody class="text-gray-700">
               <tr>
-                <td class="py-2 px-4">Polity</td>
-                <td class="py-2 px-4">Indian Polity – M. Laxmikanth</td>
+                <td class="py-2 px-2 sm:px-4">Polity</td>
+                <td class="py-2 px-2 sm:px-4">Indian Polity – M. Laxmikanth</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Economy</td>
-                <td class="py-2 px-4">Indian Economy – Ramesh Singh</td>
+                <td class="py-2 px-2 sm:px-4">Economy</td>
+                <td class="py-2 px-2 sm:px-4">Indian Economy – Ramesh Singh</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Modern History</td>
-                <td class="py-2 px-4">Spectrum (Rajiv Ahir)</td>
+                <td class="py-2 px-2 sm:px-4">Modern History</td>
+                <td class="py-2 px-2 sm:px-4">Spectrum (Rajiv Ahir)</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Ancient History</td>
-                <td class="py-2 px-4">Ancient India – R.S. Sharma</td>
+                <td class="py-2 px-2 sm:px-4">Ancient History</td>
+                <td class="py-2 px-2 sm:px-4">Ancient India – R.S. Sharma</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Medieval History</td>
-                <td class="py-2 px-4">Medieval India – Satish Chandra</td>
+                <td class="py-2 px-2 sm:px-4">Medieval History</td>
+                <td class="py-2 px-2 sm:px-4">Medieval India – Satish Chandra</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Geography</td>
-                <td class="py-2 px-4">GC Leong, Majid Hussain</td>
+                <td class="py-2 px-2 sm:px-4">Geography</td>
+                <td class="py-2 px-2 sm:px-4">GC Leong, Majid Hussain</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Art & Culture</td>
-                <td class="py-2 px-4">Indian Art and Culture – Nitin Singhania</td>
+                <td class="py-2 px-2 sm:px-4">Art & Culture</td>
+                <td class="py-2 px-2 sm:px-4">Indian Art and Culture – Nitin Singhania</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Environment</td>
-                <td class="py-2 px-4">Environment – Shankar IAS</td>
+                <td class="py-2 px-2 sm:px-4">Environment</td>
+                <td class="py-2 px-2 sm:px-4">Environment – Shankar IAS</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Science & Tech</td>
-                <td class="py-2 px-4">Science & Technology – Ravi P. Agrahari</td>
+                <td class="py-2 px-2 sm:px-4">Science & Tech</td>
+                <td class="py-2 px-2 sm:px-4">Science & Technology – Ravi P. Agrahari</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Ethics (GS IV)</td>
-                <td class="py-2 px-4">Lexicon for Ethics, Integrity & Aptitude</td>
+                <td class="py-2 px-2 sm:px-4">Ethics (GS IV)</td>
+                <td class="py-2 px-2 sm:px-4">Lexicon for Ethics, Integrity & Aptitude</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Current Affairs</td>
-                <td class="py-2 px-4">The Hindu, Indian Express, Yojana, Kurukshetra</td>
+                <td class="py-2 px-2 sm:px-4">Current Affairs</td>
+                <td class="py-2 px-2 sm:px-4">The Hindu, Indian Express, Yojana, Kurukshetra</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">Atlas</td>
-                <td class="py-2 px-4">Oxford Student Atlas for India</td>
+                <td class="py-2 px-2 sm:px-4">Atlas</td>
+                <td class="py-2 px-2 sm:px-4">Oxford Student Atlas for India</td>
               </tr>
               <tr>
-                <td class="py-2 px-4">CSAT</td>
-                <td class="py-2 px-4">TMH CSAT Manual, RS Aggarwal</td>
+                <td class="py-2 px-2 sm:px-4">CSAT</td>
+                <td class="py-2 px-2 sm:px-4">TMH CSAT Manual, RS Aggarwal</td>
               </tr>
             </tbody>
           </table>
@@ -183,9 +193,9 @@
 
     <!-- PSIR Optional Booklist -->
     <section class="mb-10">
-      <div class="bg-white remarkable-shadow remarkable-border rounded-xl p-6">
+      <div class="blur-white p-4 sm:p-6">
         <h2 class="text-xl font-bold text-gray-900 mb-4">PSIR Optional Booklist</h2>
-        <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <h3 class="font-semibold mb-2 text-gray-800">Paper 1</h3>
             <ul class="list-disc list-inside text-gray-700 text-sm">
@@ -205,13 +215,13 @@
             </ul>
           </div>
         </div>
-        <p class="mt-4 text-gray-500 text-xs">For detailed syllabus and strategy, refer to UPSC notification and toppers' blogs.</p>
+        <p class="mt-4 text-gray-700 text-sm">For detailed syllabus and strategy, refer to UPSC notification and toppers' blogs.</p>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white remarkable-shadow remarkable-border mx-auto max-w-3xl text-center py-4 mb-6 rounded-xl text-gray-400 text-sm">
+  <footer class="blur-grey mx-auto max-w-3xl text-center py-4 mb-6 text-xs text-gray-600">
     &copy; 2025 UPSC CSE Prep Portal. All rights reserved.
   </footer>
 
