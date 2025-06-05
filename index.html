@@ -173,5 +173,56 @@
       }, 3000);
     });
   </script>
+
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const text = "Thank you for being a part of this beautiful journey—may we meet again someday, with even warmer smiles and happier hearts.";
+    const el = document.getElementById("typewriter");
+    const archiveLink = document.getElementById("archive-link");
+    let index = 0;
+
+    function type() {
+      if (index < text.length) {
+        el.textContent += text.charAt(index);
+        index++;
+        setTimeout(type, 40);
+      } else {
+        el.style.borderRight = "none";
+        archiveLink.classList.remove("hidden");
+      }
+    }
+
+    type();
+  });
+
+  // Prepare sound effect
+  const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
+
+  // Glow effect + play sound on click
+  document.getElementById("click-target").addEventListener("click", function (e) {
+    // Play sound effect
+    clickSound.currentTime = 0;  // rewind in case already playing
+    clickSound.play();
+
+    // Glow effect
+    const glow = document.createElement('div');
+    glow.className = 'glow';
+    glow.style.left = `${e.clientX}px`;
+    glow.style.top = `${e.clientY}px`;
+    document.body.appendChild(glow);
+
+    setTimeout(() => {
+      glow.remove();
+    }, 600);
+  });
+
+  // Grayscale after delay
+  window.addEventListener('load', function () {
+    setTimeout(() => {
+      document.body.classList.add('bw-effect');
+    }, 3000);
+  });
+</script>
+
 </body>
 </html>
