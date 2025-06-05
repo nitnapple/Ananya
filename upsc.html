@@ -2,70 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UPSC 2025 Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCERT Reading List for UPSC CSE</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-neutral-100 text-gray-900 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="max-w-4xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold text-center mb-8">📚 NCERT Reading List for UPSC CSE</h1>
 
-  <div class="w-full max-w-5xl">
-    <h1 class="text-3xl sm:text-4xl font-semibold text-center mb-8">🕰️ UPSC 2025 Countdown</h1>
+    <!-- Section Template -->
+    <div class="space-y-6">
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Prelims -->
-      <div class="bg-white p-6 rounded-2xl shadow-md transition hover:shadow-xl">
-        <h2 class="text-lg sm:text-xl font-medium mb-1">Prelims</h2>
-        <p class="text-sm text-gray-500 mb-4">Scheduled: 25 May 2025</p>
-        <div id="prelims" class="text-xl sm:text-2xl font-mono text-blue-600"></div>
-      </div>
+      <!-- History -->
+      <section>
+        <h2 class="text-xl font-semibold text-blue-800 mb-2">🏛️ History</h2>
+        <ul class="space-y-1 list-inside">
+          <li><input type="checkbox"> Class 6 – Our Pasts I</li>
+          <li><input type="checkbox"> Class 7 – Our Pasts II</li>
+          <li><input type="checkbox"> Class 8 – Our Pasts III (Part I & II)</li>
+          <li><input type="checkbox"> Class 11 – Themes in World History (optional)</li>
+          <li><input type="checkbox"> Class 11 – Ancient India by R.S. Sharma (Old NCERT)</li>
+          <li><input type="checkbox"> Class 11 – Medieval India by Satish Chandra (Old NCERT)</li>
+          <li><input type="checkbox"> Class 12 – Themes in Indian History Part III</li>
+          <li><input type="checkbox"> Old NCERT – Modern India by Bipan Chandra</li>
+        </ul>
+      </section>
 
-      <!-- Mains -->
-      <div class="bg-white p-6 rounded-2xl shadow-md transition hover:shadow-xl">
-        <h2 class="text-lg sm:text-xl font-medium mb-1">Mains</h2>
-        <p class="text-sm text-gray-500 mb-4">Scheduled: 22 August 2025</p>
-        <div id="mains" class="text-xl sm:text-2xl font-mono text-green-600"></div>
-      </div>
+      <!-- Geography -->
+      <section>
+        <h2 class="text-xl font-semibold text-green-800 mb-2">🌍 Geography</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 6 to 10 – Social Science Geography Textbooks</li>
+          <li><input type="checkbox"> Class 11 – Fundamentals of Physical Geography</li>
+          <li><input type="checkbox"> Class 11 – India: Physical Environment</li>
+          <li><input type="checkbox"> Class 12 – Fundamentals of Human Geography</li>
+          <li><input type="checkbox"> Class 12 – India: People and Economy</li>
+        </ul>
+      </section>
 
-      <!-- Interview -->
-      <div class="bg-white p-6 rounded-2xl shadow-md transition hover:shadow-xl">
-        <h2 class="text-lg sm:text-xl font-medium mb-1">Interview</h2>
-        <p class="text-sm text-gray-500 mb-4">Expected: 10 January 2026</p>
-        <div id="interview" class="text-xl sm:text-2xl font-mono text-purple-600"></div>
-      </div>
+      <!-- Polity -->
+      <section>
+        <h2 class="text-xl font-semibold text-purple-800 mb-2">📜 Polity</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 6 to 10 – Social and Political Life series</li>
+          <li><input type="checkbox"> Class 11 – Indian Constitution at Work</li>
+          <li><input type="checkbox"> Class 12 – Politics in India Since Independence</li>
+        </ul>
+      </section>
+
+      <!-- Economics -->
+      <section>
+        <h2 class="text-xl font-semibold text-yellow-700 mb-2">📈 Economics</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 9 – The Story of Village Palampur, People as Resource</li>
+          <li><input type="checkbox"> Class 10 – Understanding Economic Development</li>
+          <li><input type="checkbox"> Class 11 – Indian Economic Development</li>
+          <li><input type="checkbox"> Class 12 – Introductory Macroeconomics</li>
+          <li><input type="checkbox"> Class 12 – Introductory Microeconomics (optional)</li>
+        </ul>
+      </section>
+
+      <!-- Science & Tech -->
+      <section>
+        <h2 class="text-xl font-semibold text-pink-700 mb-2">🔬 Science & Technology</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 6 to 10 – Science textbooks</li>
+          <li><input type="checkbox"> Class 12 – Biology (Ecology, Biotech chapters)</li>
+        </ul>
+      </section>
+
+      <!-- Environment -->
+      <section>
+        <h2 class="text-xl font-semibold text-green-700 mb-2">🌿 Environment & Ecology</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 12 Biology – Biodiversity, Ecosystem chapters</li>
+          <li><input type="checkbox"> Shankar IAS Environment Book (supplementary)</li>
+        </ul>
+      </section>
+
+      <!-- Art & Culture -->
+      <section>
+        <h2 class="text-xl font-semibold text-red-700 mb-2">🎨 Art & Culture</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 11 – An Introduction to Indian Art</li>
+          <li><input type="checkbox"> Class 12 – Living Craft Traditions of India (optional)</li>
+          <li><input type="checkbox"> Nitin Singhania’s Indian Art & Culture (supplementary)</li>
+        </ul>
+      </section>
+
+      <!-- Indian Society -->
+      <section>
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">🌐 Indian Society (Mains Focused)</h2>
+        <ul class="space-y-1">
+          <li><input type="checkbox"> Class 11 – Sociology: Understanding Society</li>
+          <li><input type="checkbox"> Class 12 – Indian Society and Social Change</li>
+        </ul>
+      </section>
+
     </div>
   </div>
 
+  <!-- Countdown Footer -->
+  <footer class="bg-white py-6 mt-12 border-t border-gray-300">
+    <div class="max-w-4xl mx-auto px-4 text-center space-y-2">
+      <p class="text-lg font-semibold">🕰️ UPSC CSE 2026 Countdown</p>
+      <div class="flex flex-col md:flex-row justify-center gap-6 text-gray-700">
+        <div>
+          <p class="font-medium">Prelims:</p>
+          <p id="prelims-countdown" class="text-blue-700 font-bold"></p>
+        </div>
+        <div>
+          <p class="font-medium">Mains:</p>
+          <p id="mains-countdown" class="text-red-700 font-bold"></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Countdown Script -->
   <script>
-    const countdowns = [
-      { id: 'prelims', date: 'May 26, 2025 09:00:00' },
-      { id: 'mains', date: 'August 22, 2025 09:00:00' },
-      { id: 'interview', date: 'January 10, 2026 10:00:00' }
-    ];
+    function updateCountdown(targetDate, elementId) {
+      const now = new Date();
+      const distance = targetDate - now;
 
-    function updateCountdowns() {
-      const now = new Date().getTime();
+      if (distance < 0) {
+        document.getElementById(elementId).textContent = "✅ Completed";
+        return;
+      }
 
-      countdowns.forEach(item => {
-        const target = new Date(item.date).getTime();
-        const gap = target - now;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / 1000 / 60) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
 
-        if (gap <= 0) {
-          document.getElementById(item.id).textContent = "Started 🎯";
-          return;
-        }
-
-        const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((gap % (1000 * 60)) / 1000);
-
-        document.getElementById(item.id).textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      });
+      document.getElementById(elementId).textContent =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
-    updateCountdowns();
-    setInterval(updateCountdowns, 1000);
-  </script>
+    const prelimsDate = new Date("2026-05-24T09:00:00");
+    const mainsDate = new Date("2026-09-18T09:00:00");
 
+    function startCountdowns() {
+      updateCountdown(prelimsDate, "prelims-countdown");
+      updateCountdown(mainsDate, "mains-countdown");
+    }
+
+    setInterval(startCountdowns, 1000);
+  </script>
 </body>
 </html>
