@@ -3,126 +3,242 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UPSC CSE Integrated Resource Guide</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>UPSC CSE 2026 Preparation Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <style>
-    .countdown-box { font-variant-numeric: tabular-nums; }
+    body {
+      background: #f8f8f6;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    }
+    .remarkable-shadow {
+      box-shadow: 0 2px 8px 0 rgba(60,60,60,0.06);
+    }
+    .remarkable-border {
+      border: 1px solid #e6e6e6;
+    }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-  <div class="max-w-5xl mx-auto py-10 px-4">
-    <h1 class="text-4xl font-bold text-center mb-8">🧭 UPSC CSE Resource Guide (NCERT + Mains + PSIR)</h1>
+<body class="min-h-screen text-gray-800">
 
-    <!-- COUNTDOWN SECTION -->
-    <div class="bg-white rounded-xl shadow p-6 mb-10">
-      <h2 class="text-2xl font-semibold text-center mb-4">🕒 Countdown to UPSC CSE 2026</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
-        <div class="bg-blue-50 p-4 rounded-xl countdown-box">
-          <h3 class="text-lg font-semibold mb-2">Prelims – 24 May 2026</h3>
-          <p id="prelims-timer" class="text-xl font-mono text-blue-800"></p>
-          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=UPSC+CSE+Prelims+2026&dates=20260524T090000Z/20260524T120000Z" target="_blank" class="text-sm text-blue-500 underline">📅 Add to Google Calendar</a>
+  <!-- Header -->
+  <header class="bg-white remarkable-shadow remarkable-border rounded-xl mx-auto mt-8 max-w-3xl py-6 px-8 text-center">
+    <h1 class="text-3xl font-bold tracking-tight mb-2 text-gray-900">UPSC CSE 2026 Preparation Portal</h1>
+    <p class="text-lg text-gray-600">Minimal, distraction-free booklists & resources for Prelims, Mains, and PSIR Optional</p>
+  </header>
+
+  <!-- Countdown Timer -->
+  <section class="container mx-auto px-4 mt-10 flex flex-col items-center">
+    <div class="bg-white remarkable-shadow remarkable-border rounded-xl w-full max-w-xl mb-6 py-6 px-8 flex flex-col items-center">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Countdown to UPSC CSE Prelims 2026</h2>
+      <div id="timer" class="flex gap-4 justify-center items-center w-full">
+        <div class="flex flex-col items-center">
+          <div id="days" class="text-gray-900 text-4xl font-bold px-5 py-2 rounded-t-lg"></div>
+          <span class="text-xs mt-1 text-gray-500">Days</span>
         </div>
-        <div class="bg-green-50 p-4 rounded-xl countdown-box">
-          <h3 class="text-lg font-semibold mb-2">Mains – 18 September 2026</h3>
-          <p id="mains-timer" class="text-xl font-mono text-green-800"></p>
-          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=UPSC+CSE+Mains+2026&dates=20260918T090000Z/20260922T170000Z" target="_blank" class="text-sm text-green-600 underline">📅 Add to Google Calendar</a>
+        <span class="text-3xl font-bold text-gray-400">:</span>
+        <div class="flex flex-col items-center">
+          <div id="hours" class="text-gray-900 text-4xl font-bold px-5 py-2"></div>
+          <span class="text-xs mt-1 text-gray-500">Hours</span>
+        </div>
+        <span class="text-3xl font-bold text-gray-400">:</span>
+        <div class="flex flex-col items-center">
+          <div id="minutes" class="text-gray-900 text-4xl font-bold px-5 py-2"></div>
+          <span class="text-xs mt-1 text-gray-500">Minutes</span>
+        </div>
+        <span class="text-3xl font-bold text-gray-400">:</span>
+        <div class="flex flex-col items-center">
+          <div id="seconds" class="text-gray-900 text-4xl font-bold px-5 py-2 rounded-b-lg"></div>
+          <span class="text-xs mt-1 text-gray-500">Seconds</span>
         </div>
       </div>
+      <p class="text-gray-400 text-xs mt-2">*Prelims expected: May/June 2026 | Mains: September 2026 (Tentative)</p>
     </div>
+  </section>
 
-    <!-- NCERT READING LIST (YOUR ORIGINAL SECTION) -->
-    <section>
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">📚 NCERT Reading List</h2>
-      <div class="grid gap-6">
-        <div><h3 class="font-semibold text-blue-800">🏛️ History</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>Class 6–8 Our Pasts Series</li>
-            <li>Class 11 Ancient India – R.S. Sharma</li>
-            <li>Class 11 Medieval India – Satish Chandra</li>
-            <li>Class 12 Themes in Indian History</li>
-            <li>Modern India – Bipan Chandra (Old NCERT)</li>
-          </ul>
-        </div>
-        <div><h3 class="font-semibold text-green-800">🌍 Geography</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>NCERT Class 6–12 Geography Books</li>
-            <li>India: Physical Environment & People</li>
-          </ul>
-        </div>
-        <div><h3 class="font-semibold text-purple-800">📜 Polity</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>NCERT 6–10 Social & Political Life</li>
-            <li>Class 11 Indian Constitution at Work</li>
-          </ul>
-        </div>
-        <div><h3 class="font-semibold text-yellow-800">📈 Economics</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>Class 9–12 Economics NCERTs</li>
-            <li>Class 12 Macroeconomics</li>
-          </ul>
-        </div>
-        <div><h3 class="font-semibold text-pink-700">🔬 Science & Technology</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>Class 6–10 Science Textbooks</li>
-            <li>Biology Class 12 – Ecology chapters</li>
-          </ul>
-        </div>
-        <div><h3 class="font-semibold text-green-700">🌿 Environment & Ecology</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>Class 12 Biology – Biodiversity</li>
-            <li>Shankar IAS Environment Book</li>
-          </ul>
-        </div>
-        <div><h3 class="font-semibold text-red-700">🎨 Art & Culture</h3>
-          <ul class="list-disc ml-6 text-sm">
-            <li>Class 11 Indian Art</li>
-            <li>Nitin Singhania – Indian Art & Culture</li>
-          </ul>
+  <!-- Booklists Section -->
+  <main class="container mx-auto px-4 mt-10 mb-16">
+    <!-- NCERT Booklist -->
+    <section class="mb-10">
+      <div class="bg-white remarkable-shadow remarkable-border rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">NCERT Booklist (Class 6–12)</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">History</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Our Past I, II, III (VI–VIII)</li>
+              <li>India and the Contemporary World I, II (IX–X)</li>
+              <li>Themes in World History (XI)</li>
+              <li>Themes in Indian History I, II, III (XII)</li>
+              <li>Ancient India – R.S. Sharma (Old NCERT)</li>
+              <li>Medieval India – Satish Chandra (Old NCERT)</li>
+              <li>Modern India – Bipan Chandra (Old NCERT)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Geography</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>The Earth Our Habitat (VI)</li>
+              <li>Our Environment (VII)</li>
+              <li>Resource and Development (VIII)</li>
+              <li>Contemporary India I, II (IX–X)</li>
+              <li>Fundamentals of Physical Geography, India – Physical Environment (XI)</li>
+              <li>Fundamentals of Human Geography, India – People and Economy (XII)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Polity & Economics</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Democratic Politics I, II (IX–X)</li>
+              <li>Indian Constitution at Work, Political Theory (XI)</li>
+              <li>Contemporary World Politics, Politics in India Since Independence (XII)</li>
+              <li>Economics (IX), Understanding Economic Development (X)</li>
+              <li>Indian Economic Development (XI)</li>
+              <li>Introductory Microeconomics, Macroeconomics (XII)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Science, Environment, Art & Society</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Science (VI–X)</li>
+              <li>Relevant chapters from XI–XII Chemistry & Biology</li>
+              <li>Introduction to Indian Art (XI), Living Craft Traditions (XI)</li>
+              <li>Indian Society, Social Change (XII)</li>
+              <li>Biology (XII, last 4 chapters for Environment)</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- MAINS BOOKLIST -->
-    <section class="mt-12">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">📘 UPSC Mains Booklist (GS I–IV + Essay)</h2>
-      <div class="grid gap-4 text-sm">
-        <div><strong>GS I:</strong> Nitin Singhania, Spectrum, Bipan Chandra, Norman Lowe, GC Leong</div>
-        <div><strong>GS II:</strong> Laxmikanth, DD Basu, ARC Reports, Yojana, MEA briefs</div>
-        <div><strong>GS III:</strong> Ramesh Singh/Sanjiv Verma, Shankar IAS, Economic Survey, Science Reporter</div>
-        <div><strong>GS IV:</strong> Lexicon, Subbarao, ARC Ethics Report, Case Study compilations</div>
-        <div><strong>Essay:</strong> Yojana, Thinkers quotes, practice with editorial-style writing</div>
+    <!-- Standard Booklist -->
+    <section class="mb-10">
+      <div class="bg-white remarkable-shadow remarkable-border rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Standard Books for Prelims & Mains</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white rounded-lg text-left border border-gray-200 text-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="py-2 px-4 font-semibold text-gray-700">Subject</th>
+                <th class="py-2 px-4 font-semibold text-gray-700">Book Name & Author</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <tr>
+                <td class="py-2 px-4">Polity</td>
+                <td class="py-2 px-4">Indian Polity – M. Laxmikanth</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Economy</td>
+                <td class="py-2 px-4">Indian Economy – Ramesh Singh</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Modern History</td>
+                <td class="py-2 px-4">Spectrum (Rajiv Ahir)</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Ancient History</td>
+                <td class="py-2 px-4">Ancient India – R.S. Sharma</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Medieval History</td>
+                <td class="py-2 px-4">Medieval India – Satish Chandra</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Geography</td>
+                <td class="py-2 px-4">GC Leong, Majid Hussain</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Art & Culture</td>
+                <td class="py-2 px-4">Indian Art and Culture – Nitin Singhania</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Environment</td>
+                <td class="py-2 px-4">Environment – Shankar IAS</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Science & Tech</td>
+                <td class="py-2 px-4">Science & Technology – Ravi P. Agrahari</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Ethics (GS IV)</td>
+                <td class="py-2 px-4">Lexicon for Ethics, Integrity & Aptitude</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Current Affairs</td>
+                <td class="py-2 px-4">The Hindu, Indian Express, Yojana, Kurukshetra</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">Atlas</td>
+                <td class="py-2 px-4">Oxford Student Atlas for India</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-4">CSAT</td>
+                <td class="py-2 px-4">TMH CSAT Manual, RS Aggarwal</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- OPTIONAL: PSIR BOOKLIST -->
-    <section class="mt-12">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">📖 Optional: PSIR Booklist</h2>
-      <div class="grid gap-4 text-sm">
-        <div><strong>Paper I – Political Theory:</strong> Andrew Heywood, OP Gauba, Bhargava & Acharya</div>
-        <div><strong>Paper I – Indian Politics:</strong> Laxmikanth, Rajni Kothari, Granville Austin, B.L. Fadia</div>
-        <div><strong>Paper II – IR & Comparative:</strong> Andrew Heywood (Global Politics), Baylis & Smith, OP Gauba</div>
-        <div><strong>India & the World:</strong> Pavneet Singh, V.P. Dutt, MEA site, ORF/IDSA reports</div>
+    <!-- PSIR Optional Booklist -->
+    <section class="mb-10">
+      <div class="bg-white remarkable-shadow remarkable-border rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">PSIR Optional Booklist</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Paper 1</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Political Theory: Rajeev Bhargava & Ashok Acharya, O.P. Gauba, Sushila Ramaswamy</li>
+              <li>Western Political Thought: O.P. Gauba, Mukherjee & Ramaswamy, Brian R. Nelson</li>
+              <li>Indian Political Thought: V.R. Mehta, Chakrabarty & Pandey</li>
+              <li>Indian Govt. & Politics: B.L. Fadia, D.D. Basu, M. Laxmikanth</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Paper 2</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Comparative Politics: J.C. Johari, Mukherjee & Ramaswamy</li>
+              <li>International Relations: Baylis & Smith, Malone et al., Aneek Chatterjee, Harsh V. Pant</li>
+              <li>India and the World: Malone et al., Harsh V. Pant</li>
+              <li>Supplement: NCERT XI–XII, IGNOU, Vision IAS, Vajiram & Ravi Notes</li>
+            </ul>
+          </div>
+        </div>
+        <p class="mt-4 text-gray-500 text-xs">For detailed syllabus and strategy, refer to UPSC notification and toppers' blogs.</p>
       </div>
     </section>
-  </div>
+  </main>
 
-  <!-- COUNTDOWN SCRIPT -->
+  <!-- Footer -->
+  <footer class="bg-white remarkable-shadow remarkable-border mx-auto max-w-3xl text-center py-4 mb-6 rounded-xl text-gray-400 text-sm">
+    &copy; 2025 UPSC CSE Prep Portal. All rights reserved.
+  </footer>
+
+  <!-- Countdown Timer Script -->
   <script>
-    function updateCountdown(targetDate, elementId) {
-      const now = new Date().getTime();
-      const distance = new Date(targetDate).getTime() - now;
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const el = document.getElementById(elementId);
-      if (el) el.innerHTML = days > 0 ? `${days} days remaining` : "Exam Day!";
-    }
+    // Set the date for UPSC Prelims 2026 (e.g., May 31, 2026, 9:30 AM IST)
+    var countDownDate = new Date("May 31, 2026 09:30:00").getTime();
 
-    updateCountdown('2026-05-24', 'prelims-timer');
-    updateCountdown('2026-09-18', 'mains-timer');
+    var x = setInterval(function () {
+      var now = new Date().getTime();
+      var distance = countDownDate - now;
 
-    setInterval(() => {
-      updateCountdown('2026-05-24', 'prelims-timer');
-      updateCountdown('2026-09-18', 'mains-timer');
-    }, 1000 * 60 * 60);
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+      document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+      document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+      document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("timer").innerHTML = "<span class='text-red-600 text-2xl font-bold'>EXAM DAY!</span>";
+      }
+    }, 1000);
   </script>
 </body>
 </html>
