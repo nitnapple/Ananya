@@ -2,138 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NCERT Reading List for UPSC CSE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UPSC CSE Integrated Resource Guide</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    }
-  </script>
+  <style>
+    .countdown-box { font-variant-numeric: tabular-nums; }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans transition duration-300">
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-center w-full">📚 NCERT Reading List for UPSC CSE</h1>
-      <button onclick="toggleDarkMode()" class="absolute right-4 top-4 bg-gray-300 dark:bg-gray-700 text-sm px-3 py-1 rounded">
-        🌗 Toggle Mode
-      </button>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="max-w-5xl mx-auto py-10 px-4">
+    <h1 class="text-4xl font-bold text-center mb-8">🧭 UPSC CSE Resource Guide (NCERT + Mains + PSIR)</h1>
+
+    <!-- COUNTDOWN SECTION -->
+    <div class="bg-white rounded-xl shadow p-6 mb-10">
+      <h2 class="text-2xl font-semibold text-center mb-4">🕒 Countdown to UPSC CSE 2026</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+        <div class="bg-blue-50 p-4 rounded-xl countdown-box">
+          <h3 class="text-lg font-semibold mb-2">Prelims – 24 May 2026</h3>
+          <p id="prelims-timer" class="text-xl font-mono text-blue-800"></p>
+          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=UPSC+CSE+Prelims+2026&dates=20260524T090000Z/20260524T120000Z" target="_blank" class="text-sm text-blue-500 underline">📅 Add to Google Calendar</a>
+        </div>
+        <div class="bg-green-50 p-4 rounded-xl countdown-box">
+          <h3 class="text-lg font-semibold mb-2">Mains – 18 September 2026</h3>
+          <p id="mains-timer" class="text-xl font-mono text-green-800"></p>
+          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=UPSC+CSE+Mains+2026&dates=20260918T090000Z/20260922T170000Z" target="_blank" class="text-sm text-green-600 underline">📅 Add to Google Calendar</a>
+        </div>
+      </div>
     </div>
 
-    <div class="space-y-6">
-      <!-- Sections -->
-      <section>
-        <h2 class="text-xl font-semibold text-blue-800 dark:text-blue-400 mb-2">🏭️ History</h2>
-        <ul class="space-y-1 list-inside">
-          <li><input type="checkbox"> Class 6 – Our Pasts I</li>
-          <li><input type="checkbox"> Class 7 – Our Pasts II</li>
-          <li><input type="checkbox"> Class 8 – Our Pasts III (Part I & II)</li>
-          <li><input type="checkbox"> Class 11 – Themes in World History (optional)</li>
-          <li><input type="checkbox"> Class 11 – Ancient India by R.S. Sharma (Old NCERT)</li>
-          <li><input type="checkbox"> Class 11 – Medieval India by Satish Chandra (Old NCERT)</li>
-          <li><input type="checkbox"> Class 12 – Themes in Indian History Part III</li>
-          <li><input type="checkbox"> Old NCERT – Modern India by Bipan Chandra</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-green-800 dark:text-green-400 mb-2">🌍 Geography</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 6 to 10 – Social Science Geography Textbooks</li>
-          <li><input type="checkbox"> Class 11 – Fundamentals of Physical Geography</li>
-          <li><input type="checkbox"> Class 11 – India: Physical Environment</li>
-          <li><input type="checkbox"> Class 12 – Fundamentals of Human Geography</li>
-          <li><input type="checkbox"> Class 12 – India: People and Economy</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-purple-800 dark:text-purple-400 mb-2">📜 Polity</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 6 to 10 – Social and Political Life series</li>
-          <li><input type="checkbox"> Class 11 – Indian Constitution at Work</li>
-          <li><input type="checkbox"> Class 12 – Politics in India Since Independence</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-yellow-700 dark:text-yellow-300 mb-2">📈 Economics</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 9 – The Story of Village Palampur, People as Resource</li>
-          <li><input type="checkbox"> Class 10 – Understanding Economic Development</li>
-          <li><input type="checkbox"> Class 11 – Indian Economic Development</li>
-          <li><input type="checkbox"> Class 12 – Introductory Macroeconomics</li>
-          <li><input type="checkbox"> Class 12 – Introductory Microeconomics (optional)</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-pink-700 dark:text-pink-400 mb-2">🔬 Science & Technology</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 6 to 10 – Science textbooks</li>
-          <li><input type="checkbox"> Class 12 – Biology (Ecology, Biotech chapters)</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-green-700 dark:text-green-300 mb-2">🌿 Environment & Ecology</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 12 Biology – Biodiversity, Ecosystem chapters</li>
-          <li><input type="checkbox"> Shankar IAS Environment Book (supplementary)</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-red-700 dark:text-red-400 mb-2">🎨 Art & Culture</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 11 – An Introduction to Indian Art</li>
-          <li><input type="checkbox"> Class 12 – Living Craft Traditions of India (optional)</li>
-          <li><input type="checkbox"> Nitin Singhania’s Indian Art & Culture (supplementary)</li>
-        </ul>
-      </section>
-      <section>
-        <h2 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-2">🌐 Indian Society (Mains Focused)</h2>
-        <ul class="space-y-1">
-          <li><input type="checkbox"> Class 11 – Sociology: Understanding Society</li>
-          <li><input type="checkbox"> Class 12 – Indian Society and Social Change</li>
-        </ul>
-      </section>
-    </div>
+    <!-- NCERT READING LIST (YOUR ORIGINAL SECTION) -->
+    <section>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">📚 NCERT Reading List</h2>
+      <div class="grid gap-6">
+        <div><h3 class="font-semibold text-blue-800">🏛️ History</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>Class 6–8 Our Pasts Series</li>
+            <li>Class 11 Ancient India – R.S. Sharma</li>
+            <li>Class 11 Medieval India – Satish Chandra</li>
+            <li>Class 12 Themes in Indian History</li>
+            <li>Modern India – Bipan Chandra (Old NCERT)</li>
+          </ul>
+        </div>
+        <div><h3 class="font-semibold text-green-800">🌍 Geography</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>NCERT Class 6–12 Geography Books</li>
+            <li>India: Physical Environment & People</li>
+          </ul>
+        </div>
+        <div><h3 class="font-semibold text-purple-800">📜 Polity</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>NCERT 6–10 Social & Political Life</li>
+            <li>Class 11 Indian Constitution at Work</li>
+          </ul>
+        </div>
+        <div><h3 class="font-semibold text-yellow-800">📈 Economics</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>Class 9–12 Economics NCERTs</li>
+            <li>Class 12 Macroeconomics</li>
+          </ul>
+        </div>
+        <div><h3 class="font-semibold text-pink-700">🔬 Science & Technology</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>Class 6–10 Science Textbooks</li>
+            <li>Biology Class 12 – Ecology chapters</li>
+          </ul>
+        </div>
+        <div><h3 class="font-semibold text-green-700">🌿 Environment & Ecology</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>Class 12 Biology – Biodiversity</li>
+            <li>Shankar IAS Environment Book</li>
+          </ul>
+        </div>
+        <div><h3 class="font-semibold text-red-700">🎨 Art & Culture</h3>
+          <ul class="list-disc ml-6 text-sm">
+            <li>Class 11 Indian Art</li>
+            <li>Nitin Singhania – Indian Art & Culture</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAINS BOOKLIST -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">📘 UPSC Mains Booklist (GS I–IV + Essay)</h2>
+      <div class="grid gap-4 text-sm">
+        <div><strong>GS I:</strong> Nitin Singhania, Spectrum, Bipan Chandra, Norman Lowe, GC Leong</div>
+        <div><strong>GS II:</strong> Laxmikanth, DD Basu, ARC Reports, Yojana, MEA briefs</div>
+        <div><strong>GS III:</strong> Ramesh Singh/Sanjiv Verma, Shankar IAS, Economic Survey, Science Reporter</div>
+        <div><strong>GS IV:</strong> Lexicon, Subbarao, ARC Ethics Report, Case Study compilations</div>
+        <div><strong>Essay:</strong> Yojana, Thinkers quotes, practice with editorial-style writing</div>
+      </div>
+    </section>
+
+    <!-- OPTIONAL: PSIR BOOKLIST -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">📖 Optional: PSIR Booklist</h2>
+      <div class="grid gap-4 text-sm">
+        <div><strong>Paper I – Political Theory:</strong> Andrew Heywood, OP Gauba, Bhargava & Acharya</div>
+        <div><strong>Paper I – Indian Politics:</strong> Laxmikanth, Rajni Kothari, Granville Austin, B.L. Fadia</div>
+        <div><strong>Paper II – IR & Comparative:</strong> Andrew Heywood (Global Politics), Baylis & Smith, OP Gauba</div>
+        <div><strong>India & the World:</strong> Pavneet Singh, V.P. Dutt, MEA site, ORF/IDSA reports</div>
+      </div>
+    </section>
   </div>
 
-  <!-- Footer and Countdown -->
-  <footer class="text-center text-sm text-gray-600 dark:text-gray-400 mt-10 py-6 border-t">
-    <p id="countdown"></p>
-    <a href="http://localhost:5000" class="mt-2 inline-block text-blue-600 hover:underline">
-      📅 Add UPSC 2026 Events to Google Calendar
-    </a>
-  </footer>
-
+  <!-- COUNTDOWN SCRIPT -->
   <script>
-    // Countdown Logic
-    const prelimsDate = new Date("2026-05-24T09:00:00+05:30").getTime();
-    const mainsDate = new Date("2026-09-18T09:00:00+05:30").getTime();
-
-    function updateCountdown() {
+    function updateCountdown(targetDate, elementId) {
       const now = new Date().getTime();
-      let target, label;
-      if (now < prelimsDate) {
-        target = prelimsDate;
-        label = "UPSC Prelims 2026";
-      } else if (now < mainsDate) {
-        target = mainsDate;
-        label = "UPSC Mains 2026";
-      } else {
-        document.getElementById("countdown").innerText = "✅ UPSC 2026 cycle completed.";
-        return;
-      }
-      const diff = target - now;
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / 1000 / 60) % 60);
-      document.getElementById("countdown").innerText = `${label} in ${days} days, ${hours} hours, ${minutes} minutes`;
+      const distance = new Date(targetDate).getTime() - now;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const el = document.getElementById(elementId);
+      if (el) el.innerHTML = days > 0 ? `${days} days remaining` : "Exam Day!";
     }
 
-    setInterval(updateCountdown, 60000);
-    updateCountdown();
+    updateCountdown('2026-05-24', 'prelims-timer');
+    updateCountdown('2026-09-18', 'mains-timer');
 
-    function toggleDarkMode() {
-      document.documentElement.classList.toggle("dark");
-    }
+    setInterval(() => {
+      updateCountdown('2026-05-24', 'prelims-timer');
+      updateCountdown('2026-09-18', 'mains-timer');
+    }, 1000 * 60 * 60);
   </script>
 </body>
 </html>
