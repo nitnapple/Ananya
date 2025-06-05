@@ -5,17 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NCERT Reading List for UPSC CSE</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans transition duration-300">
   <div class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold text-center mb-8">📚 NCERT Reading List for UPSC CSE</h1>
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-center w-full">📚 NCERT Reading List for UPSC CSE</h1>
+      <button onclick="toggleDarkMode()" class="absolute right-4 top-4 bg-gray-300 dark:bg-gray-700 text-sm px-3 py-1 rounded">
+        🌗 Toggle Mode
+      </button>
+    </div>
 
-    <!-- Section Template -->
     <div class="space-y-6">
-
-      <!-- History -->
+      <!-- Sections -->
       <section>
-        <h2 class="text-xl font-semibold text-blue-800 mb-2">🏛️ History</h2>
+        <h2 class="text-xl font-semibold text-blue-800 dark:text-blue-400 mb-2">🏭️ History</h2>
         <ul class="space-y-1 list-inside">
           <li><input type="checkbox"> Class 6 – Our Pasts I</li>
           <li><input type="checkbox"> Class 7 – Our Pasts II</li>
@@ -27,10 +35,8 @@
           <li><input type="checkbox"> Old NCERT – Modern India by Bipan Chandra</li>
         </ul>
       </section>
-
-      <!-- Geography -->
       <section>
-        <h2 class="text-xl font-semibold text-green-800 mb-2">🌍 Geography</h2>
+        <h2 class="text-xl font-semibold text-green-800 dark:text-green-400 mb-2">🌍 Geography</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 6 to 10 – Social Science Geography Textbooks</li>
           <li><input type="checkbox"> Class 11 – Fundamentals of Physical Geography</li>
@@ -39,20 +45,16 @@
           <li><input type="checkbox"> Class 12 – India: People and Economy</li>
         </ul>
       </section>
-
-      <!-- Polity -->
       <section>
-        <h2 class="text-xl font-semibold text-purple-800 mb-2">📜 Polity</h2>
+        <h2 class="text-xl font-semibold text-purple-800 dark:text-purple-400 mb-2">📜 Polity</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 6 to 10 – Social and Political Life series</li>
           <li><input type="checkbox"> Class 11 – Indian Constitution at Work</li>
           <li><input type="checkbox"> Class 12 – Politics in India Since Independence</li>
         </ul>
       </section>
-
-      <!-- Economics -->
       <section>
-        <h2 class="text-xl font-semibold text-yellow-700 mb-2">📈 Economics</h2>
+        <h2 class="text-xl font-semibold text-yellow-700 dark:text-yellow-300 mb-2">📈 Economics</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 9 – The Story of Village Palampur, People as Resource</li>
           <li><input type="checkbox"> Class 10 – Understanding Economic Development</li>
@@ -61,93 +63,77 @@
           <li><input type="checkbox"> Class 12 – Introductory Microeconomics (optional)</li>
         </ul>
       </section>
-
-      <!-- Science & Tech -->
       <section>
-        <h2 class="text-xl font-semibold text-pink-700 mb-2">🔬 Science & Technology</h2>
+        <h2 class="text-xl font-semibold text-pink-700 dark:text-pink-400 mb-2">🔬 Science & Technology</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 6 to 10 – Science textbooks</li>
           <li><input type="checkbox"> Class 12 – Biology (Ecology, Biotech chapters)</li>
         </ul>
       </section>
-
-      <!-- Environment -->
       <section>
-        <h2 class="text-xl font-semibold text-green-700 mb-2">🌿 Environment & Ecology</h2>
+        <h2 class="text-xl font-semibold text-green-700 dark:text-green-300 mb-2">🌿 Environment & Ecology</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 12 Biology – Biodiversity, Ecosystem chapters</li>
           <li><input type="checkbox"> Shankar IAS Environment Book (supplementary)</li>
         </ul>
       </section>
-
-      <!-- Art & Culture -->
       <section>
-        <h2 class="text-xl font-semibold text-red-700 mb-2">🎨 Art & Culture</h2>
+        <h2 class="text-xl font-semibold text-red-700 dark:text-red-400 mb-2">🎨 Art & Culture</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 11 – An Introduction to Indian Art</li>
           <li><input type="checkbox"> Class 12 – Living Craft Traditions of India (optional)</li>
           <li><input type="checkbox"> Nitin Singhania’s Indian Art & Culture (supplementary)</li>
         </ul>
       </section>
-
-      <!-- Indian Society -->
       <section>
-        <h2 class="text-xl font-semibold text-indigo-700 mb-2">🌐 Indian Society (Mains Focused)</h2>
+        <h2 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-2">🌐 Indian Society (Mains Focused)</h2>
         <ul class="space-y-1">
           <li><input type="checkbox"> Class 11 – Sociology: Understanding Society</li>
           <li><input type="checkbox"> Class 12 – Indian Society and Social Change</li>
         </ul>
       </section>
-
     </div>
   </div>
 
-  <!-- Countdown Footer -->
-  <footer class="bg-white py-6 mt-12 border-t border-gray-300">
-    <div class="max-w-4xl mx-auto px-4 text-center space-y-2">
-      <p class="text-lg font-semibold">🕰️ UPSC CSE 2026 Countdown</p>
-      <div class="flex flex-col md:flex-row justify-center gap-6 text-gray-700">
-        <div>
-          <p class="font-medium">Prelims:</p>
-          <p id="prelims-countdown" class="text-blue-700 font-bold"></p>
-        </div>
-        <div>
-          <p class="font-medium">Mains:</p>
-          <p id="mains-countdown" class="text-red-700 font-bold"></p>
-        </div>
-      </div>
-    </div>
+  <!-- Footer and Countdown -->
+  <footer class="text-center text-sm text-gray-600 dark:text-gray-400 mt-10 py-6 border-t">
+    <p id="countdown"></p>
+    <a href="http://localhost:5000" class="mt-2 inline-block text-blue-600 hover:underline">
+      📅 Add UPSC 2026 Events to Google Calendar
+    </a>
   </footer>
 
-  <!-- Countdown Script -->
   <script>
-    function updateCountdown(targetDate, elementId) {
-      const now = new Date();
-      const distance = targetDate - now;
+    // Countdown Logic
+    const prelimsDate = new Date("2026-05-24T09:00:00+05:30").getTime();
+    const mainsDate = new Date("2026-09-18T09:00:00+05:30").getTime();
 
-      if (distance < 0) {
-        document.getElementById(elementId).textContent = "✅ Completed";
+    function updateCountdown() {
+      const now = new Date().getTime();
+      let target, label;
+      if (now < prelimsDate) {
+        target = prelimsDate;
+        label = "UPSC Prelims 2026";
+      } else if (now < mainsDate) {
+        target = mainsDate;
+        label = "UPSC Mains 2026";
+      } else {
+        document.getElementById("countdown").innerText = "✅ UPSC 2026 cycle completed.";
         return;
       }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((distance / 1000 / 60) % 60);
-      const seconds = Math.floor((distance / 1000) % 60);
-
-      document.getElementById(elementId).textContent =
-        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      const diff = target - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      document.getElementById("countdown").innerText = `${label} in ${days} days, ${hours} hours, ${minutes} minutes`;
     }
 
-    const prelimsDate = new Date("2026-05-24T09:00:00");
-    const mainsDate = new Date("2026-09-18T09:00:00");
+    setInterval(updateCountdown, 60000);
+    updateCountdown();
 
-    function startCountdowns() {
-      updateCountdown(prelimsDate, "prelims-countdown");
-      updateCountdown(mainsDate, "mains-countdown");
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle("dark");
     }
-
-    setInterval(startCountdowns, 1000);
   </script>
 </body>
 </html>
