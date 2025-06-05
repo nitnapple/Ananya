@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UPSC CSE 2026 Preparation Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f4f6fa 0%, #e9ebee 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, Arial, sans-serif;
+      color: #222;
+    }
+    .ios-glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 32px 0 rgba(60,60,60,0.08);
+      border: 1px solid rgba(200,200,200,0.25);
+    }
+    .ios-glass-gray {
+      background: rgba(245, 245, 247, 0.7);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 32px 0 rgba(60,60,60,0.08);
+      border: 1px solid rgba(220,220,220,0.22);
+    }
+    .ios-table th, .ios-table td {
+      padding: 0.75rem 0.5rem;
+    }
+    .ios-table th {
+      background: rgba(240,240,245,0.7);
+      font-weight: 600;
+      color: #444;
+    }
+    .ios-table tr {
+      border-bottom: 1px solid #f1f1f3;
+    }
+    .ios-table {
+      width: 100%;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      font-size: 0.97rem;
+    }
+    @media (max-width: 640px) {
+      .ios-table th, .ios-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.92rem;
+      }
+    }
+    /* Animations */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(32px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 1s cubic-bezier(.23,1.07,.32,1) both;
+    }
+    .animate-fadeInUp-delay-1 {
+      animation-delay: .25s;
+    }
+    .animate-fadeInUp-delay-2 {
+      animation-delay: .5s;
+    }
+    .animate-fadeInUp-delay-3 {
+      animation-delay: .75s;
+    }
+    .animate-fadeInUp-delay-4 {
+      animation-delay: 1s;
+    }
+    @keyframes pulseTimer {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(96,165,250,0.4);}
+      50% { box-shadow: 0 0 0 6px rgba(96,165,250,0.15);}
+    }
+    .animate-pulseTimer-blue {
+      animation: pulseTimer 1.8s infinite;
+    }
+    @keyframes pulseTimerGreen {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.25);}
+      50% { box-shadow: 0 0 0 6px rgba(34,197,94,0.13);}
+    }
+    .animate-pulseTimer-green {
+      animation: pulseTimerGreen 1.8s infinite;
+    }
+    /* Tap/Click Animation */
+    @keyframes bounceTap {
+      0% { transform: scale(1);}
+      30% { transform: scale(1.12);}
+      60% { transform: scale(0.96);}
+      100% { transform: scale(1);}
+    }
+    .tap-animate {
+      animation: bounceTap 0.45s cubic-bezier(.23,1.07,.32,1);
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="ios-glass mx-auto mt-4 max-w-3xl py-7 px-5 sm:px-8 text-center animate-fadeInUp">
+    <h1 class="text-3xl font-semibold tracking-tight mb-2 text-gray-900" style="letter-spacing: -0.01em;">UPSC CSE 2026 Preparation Portal</h1>
+    <p class="text-base sm:text-lg text-gray-600">Apple-inspired, distraction-free booklists & resources for Prelims, Mains, and PSIR Optional</p>
+  </header>
+
+  <!-- Countdown Timers -->
+  <section class="container mx-auto px-2 sm:px-4 mt-8 flex flex-col items-center gap-6">
+    <!-- Prelims Countdown -->
+    <div class="ios-glass w-full max-w-xl py-7 px-5 sm:px-8 flex flex-col items-center animate-fadeInUp animate-fadeInUp-delay-1">
+      <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-900" style="letter-spacing:-0.01em;">Countdown to UPSC CSE <span class="text-blue-600">Prelims</span> 2026</h2>
+      <div id="timer-prelims" class="flex gap-3 sm:gap-6 justify-center items-center w-full">
+        <div class="flex flex-col items-center">
+          <button id="days-prelims-btn" class="focus:outline-none">
+            <div id="days-prelims" class="text-gray-900 text-4xl font-bold px-8 py-3 rounded-2xl bg-blue-50/80 animate-pulseTimer-blue transition-transform"></div>
+          </button>
+          <span class="text-xs mt-1 text-gray-500">Days</span>
+        </div>
+      </div>
+      <p class="text-gray-400 text-xs mt-3 text-center">*Prelims expected: May 31, 2026 (Tentative)</p>
+    </div>
+    <!-- Mains Countdown -->
+    <div class="ios-glass w-full max-w-xl py-7 px-5 sm:px-8 flex flex-col items-center animate-fadeInUp animate-fadeInUp-delay-2">
+      <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-900" style="letter-spacing:-0.01em;">Countdown to UPSC CSE <span class="text-green-600">Mains</span> 2026</h2>
+      <div id="timer-mains" class="flex gap-3 sm:gap-6 justify-center items-center w-full">
+        <div class="flex flex-col items-center">
+          <button id="days-mains-btn" class="focus:outline-none">
+            <div id="days-mains" class="text-gray-900 text-4xl font-bold px-8 py-3 rounded-2xl bg-green-50/80 animate-pulseTimer-green transition-transform"></div>
+          </button>
+          <span class="text-xs mt-1 text-gray-500">Days</span>
+        </div>
+      </div>
+      <p class="text-gray-400 text-xs mt-3 text-center">*Mains expected: September 18, 2026 (Tentative)</p>
+    </div>
+  </section>
+
+  <!-- Booklists Section -->
+  <main class="container mx-auto px-2 sm:px-4 mt-8 mb-16">
+    <!-- NCERT Booklist -->
+    <section class="mb-10">
+      <div class="ios-glass p-5 sm:p-8 animate-fadeInUp animate-fadeInUp-delay-2">
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4">NCERT Booklist (Class 6–12)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">History</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Our Past I, II, III (VI–VIII)</li>
+              <li>India and the Contemporary World I, II (IX–X)</li>
+              <li>Themes in World History (XI)</li>
+              <li>Themes in Indian History I, II, III (XII)</li>
+              <li>Ancient India – R.S. Sharma (Old NCERT)</li>
+              <li>Medieval India – Satish Chandra (Old NCERT)</li>
+              <li>Modern India – Bipan Chandra (Old NCERT)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Geography</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>The Earth Our Habitat (VI)</li>
+              <li>Our Environment (VII)</li>
+              <li>Resource and Development (VIII)</li>
+              <li>Contemporary India I, II (IX–X)</li>
+              <li>Fundamentals of Physical Geography, India – Physical Environment (XI)</li>
+              <li>Fundamentals of Human Geography, India – People and Economy (XII)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Polity & Economics</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Democratic Politics I, II (IX–X)</li>
+              <li>Indian Constitution at Work, Political Theory (XI)</li>
+              <li>Contemporary World Politics, Politics in India Since Independence (XII)</li>
+              <li>Economics (IX), Understanding Economic Development (X)</li>
+              <li>Indian Economic Development (XI)</li>
+              <li>Introductory Microeconomics, Macroeconomics (XII)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Science, Environment, Art & Society</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Science (VI–X)</li>
+              <li>Relevant chapters from XI–XII Chemistry & Biology</li>
+              <li>Introduction to Indian Art (XI), Living Craft Traditions (XI)</li>
+              <li>Indian Society, Social Change (XII)</li>
+              <li>Biology (XII, last 4 chapters for Environment)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standard Booklist -->
+    <section class="mb-10">
+      <div class="ios-glass-gray p-5 sm:p-8 animate-fadeInUp animate-fadeInUp-delay-3">
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Standard Books for Prelims & Mains</h2>
+        <div class="overflow-x-auto">
+          <table class="ios-table bg-white/60 backdrop-blur-md text-left">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Book Name & Author</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <tr>
+                <td>Polity</td>
+                <td>Indian Polity – M. Laxmikanth</td>
+              </tr>
+              <tr>
+                <td>Economy</td>
+                <td>Indian Economy – Ramesh Singh</td>
+              </tr>
+              <tr>
+                <td>Modern History</td>
+                <td>Spectrum (Rajiv Ahir)</td>
+              </tr>
+              <tr>
+                <td>Ancient History</td>
+                <td>Ancient India – R.S. Sharma</td>
+              </tr>
+              <tr>
+                <td>Medieval History</td>
+                <td>Medieval India – Satish Chandra</td>
+              </tr>
+              <tr>
+                <td>Geography</td>
+                <td>GC Leong, Majid Hussain</td>
+              </tr>
+              <tr>
+                <td>Art & Culture</td>
+                <td>Indian Art and Culture – Nitin Singhania</td>
+              </tr>
+              <tr>
+                <td>Environment</td>
+                <td>Environment – Shankar IAS</td>
+              </tr>
+              <tr>
+                <td>Science & Tech</td>
+                <td>Science & Technology – Ravi P. Agrahari</td>
+              </tr>
+              <tr>
+                <td>Ethics (GS IV)</td>
+                <td>Lexicon for Ethics, Integrity & Aptitude</td>
+              </tr>
+              <tr>
+                <td>Current Affairs</td>
+                <td>The Hindu, Indian Express, Yojana, Kurukshetra</td>
+              </tr>
+              <tr>
+                <td>Atlas</td>
+                <td>Oxford Student Atlas for India</td>
+              </tr>
+              <tr>
+                <td>CSAT</td>
+                <td>TMH CSAT Manual, RS Aggarwal</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PSIR Optional Booklist -->
+    <section class="mb-10">
+      <div class="ios-glass p-5 sm:p-8 animate-fadeInUp animate-fadeInUp-delay-4">
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-4">PSIR Optional Booklist</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Paper 1</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Political Theory: Rajeev Bhargava & Ashok Acharya, O.P. Gauba, Sushila Ramaswamy</li>
+              <li>Western Political Thought: O.P. Gauba, Mukherjee & Ramaswamy, Brian R. Nelson</li>
+              <li>Indian Political Thought: V.R. Mehta, Chakrabarty & Pandey</li>
+              <li>Indian Govt. & Politics: B.L. Fadia, D.D. Basu, M. Laxmikanth</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2 text-gray-800">Paper 2</h3>
+            <ul class="list-disc list-inside text-gray-700 text-sm">
+              <li>Comparative Politics: J.C. Johari, Mukherjee & Ramaswamy</li>
+              <li>International Relations: Baylis & Smith, Malone et al., Aneek Chatterjee, Harsh V. Pant</li>
+              <li>India and the World: Malone et al., Harsh V. Pant</li>
+              <li>Supplement: NCERT XI–XII, IGNOU, Vision IAS, Vajiram & Ravi Notes</li>
+            </ul>
+          </div>
+        </div>
+        <p class="mt-4 text-gray-700 text-sm">For detailed syllabus and strategy, refer to UPSC notification and toppers' blogs.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="ios-glass-gray mx-auto max-w-3xl text-center py-4 mb-6 text-xs text-gray-600 animate-fadeInUp animate-fadeInUp-delay-4">
+    &copy; 2025 UPSC CSE Prep Portal. All rights reserved.
+  </footer>
+
+  <!-- Countdown Timer Script -->
+  <script>
+    // Prelims: May 31, 2026 09:30 AM IST
+    var prelimsDate = new Date("May 31, 2026 09:30:00").getTime();
+    // Mains: September 18, 2026 09:30 AM IST
+    var mainsDate = new Date("September 18, 2026 09:30:00").getTime();
+
+    function updateCountdown(targetDate, prefix) {
+      var now = new Date().getTime();
+      var distance = targetDate - now;
+      var days = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+      document.getElementById("days-" + prefix).textContent = days < 10 ? "0" + days : days;
+      if (distance < 0) {
+        document.getElementById("timer-" + prefix).innerHTML = "<span class='text-red-600 text-2xl font-bold'>EXAM DAY!</span>";
+      }
+    }
+
+    setInterval(function () {
+      updateCountdown(prelimsDate, "prelims");
+      updateCountdown(mainsDate, "mains");
+    }, 1000);
+
+    // Initial call to avoid delay
+    updateCountdown(prelimsDate, "prelims");
+    updateCountdown(mainsDate, "mains");
+
+    // Tap/Click Animation
+    function tapAnimate(id) {
+      var el = document.getElementById(id);
+      el.classList.remove('tap-animate'); // reset if already animating
+      void el.offsetWidth; // reflow for restart
+      el.classList.add('tap-animate');
+    }
+
+    document.getElementById('days-prelims-btn').addEventListener('click', function() {
+      tapAnimate('days-prelims');
+    });
+    document.getElementById('days-prelims-btn').addEventListener('touchstart', function() {
+      tapAnimate('days-prelims');
+    });
+
+    document.getElementById('days-mains-btn').addEventListener('click', function() {
+      tapAnimate('days-mains');
+    });
+    document.getElementById('days-mains-btn').addEventListener('touchstart', function() {
+      tapAnimate('days-mains');
+    });
+  </script>
+</body>
+</html>
