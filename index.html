@@ -64,8 +64,8 @@
     }
     @keyframes magical-glow {
       0% { opacity: 0; filter: blur(4px);}
-      20% { opacity: 1; filter: blur(0);}
-      80% { opacity: 1;}
+      15% { opacity: 1; filter: blur(0);}
+      85% { opacity: 1;}
       100% { opacity: 0; filter: blur(4px);}
     }
   </style>
@@ -131,11 +131,11 @@
       </a>
     </div>
 
-    <!-- Magical Text (initially hidden) -->
+    <!-- Magical Text Container (for both messages) -->
     <div id="magical-container"
       class="fixed inset-0 flex items-center justify-center z-40 pointer-events-none"
       style="display:none;">
-      <span id="magical-text" class="magical-text">Tap to see the magic</span>
+      <span id="magical-text" class="magical-text"></span>
     </div>
 
     <!-- Footer -->
@@ -168,19 +168,34 @@
           el.style.borderRight = "none";
           archiveLink.classList.remove("hidden");
 
-          // Show magical text after typewriter finishes
-          showMagicalText();
+          // Show magical text sequence after typewriter finishes
+          showMagicalTextSequence();
         }
       }
       type();
 
       // Magical text logic
-      function showMagicalText() {
+      function showMagicalTextSequence() {
         const magicalContainer = document.getElementById("magical-container");
+        const magicalText = document.getElementById("magical-text");
+
+        // First message: Tap to see the magic (4s)
+        magicalText.textContent = "Tap to see the magic";
         magicalContainer.style.display = "flex";
+        magicalText.style.animation = "magical-glow 4s ease-in-out";
+
         setTimeout(() => {
           magicalContainer.style.display = "none";
-        }, 2000);
+          // After 1s gap, show next message
+          setTimeout(() => {
+            magicalText.textContent = "Tap rapidly anywhere.";
+            magicalContainer.style.display = "flex";
+            magicalText.style.animation = "magical-glow 4s ease-in-out";
+            setTimeout(() => {
+              magicalContainer.style.display = "none";
+            }, 4000);
+          }, 1000);
+        }, 4000);
       }
 
       // Glow and sound logic
