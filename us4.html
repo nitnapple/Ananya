@@ -21,13 +21,11 @@
       h2 { font-size: 1rem; }
     }
     body { transition: filter 2s linear; }
-    .bw-effect { filter: grayscale(80%) contrast(300%) brightness(70%); }
     .glow {
       position: absolute;
       pointer-events: none;
       border-radius: 50%;
       z-index: 51;
-      /* Glow visual */
       background: radial-gradient(circle, rgba(255, 244, 229, 0.5) 0%, transparent 70%);
       animation: glow-animation 0.6s ease-out forwards;
     }
@@ -55,41 +53,21 @@
         transform: translate(-50%, -50%) scale(3.5);
       }
     }
-    /* Color reveal mask */
-    .color-reveal {
-      position: absolute;
-      border-radius: 50%;
+    /* Grayscale overlay */
+    #grayscale-overlay {
+      position: fixed;
+      inset: 0;
       pointer-events: none;
       z-index: 50;
-      /* Remove grayscale only in this area */
-      mix-blend-mode: normal;
-      /* This will create a "window" to the colored page below */
-      animation: reveal-animation 0.6s ease-out forwards;
-      will-change: clip-path, opacity, transform;
-      /* For Safari/iOS, fallback to opacity fade */
+      filter: grayscale(80%) contrast(300%) brightness(70%);
+      transition: clip-path 0.3s, opacity 0.3s;
+      /* Default: no hole */
+      clip-path: none;
+      opacity: 1;
     }
-    .color-reveal.strong {
-      animation: reveal-animation-strong 1.2s ease-out forwards;
-    }
-    @keyframes reveal-animation {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(2.5);
-      }
-    }
-    @keyframes reveal-animation-strong {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(3.5);
-      }
+    #grayscale-overlay.hide {
+      opacity: 0;
+      transition: opacity 1s;
     }
   </style>
 </head>
@@ -129,7 +107,8 @@
       </div>
     </div>
   </div>
-
+  <!-- Grayscale overlay (initially hidden) -->
+  <div id="grayscale-overlay" style="display:none;"></div>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Typewriter effect
@@ -164,6 +143,24 @@
       window.addEventListener('touchstart', unlockSound, { once: true });
       window.addEventListener('mousedown', unlockSound, { once: true });
 
+      // Grayscale overlay logic
+      const overlay = document.getElementById('grayscale-overlay');
+      let grayscaleActive = false;
+      let overlayTimeout = null;
+
+      function showGrayscaleOverlay() {
+        overlay.style.display = '';
+        overlay.style.pointerEvents = 'none';
+        overlay.classList.remove('hide');
+        overlay.style.clipPath = 'none';
+        // Copy the page's HTML into the overlay for perfect alignment
+        // (not needed since overlay is transparent, just covers the page)
+      }
+      function hideGrayscaleOverlay() {
+        overlay.classList.add('hide');
+        setTimeout(() => { overlay.style.display = 'none'; }, 1000);
+      }
+
       // Glow + color reveal helper
       function showGlow(x, y, options = {}) {
         // Glow visual
@@ -175,34 +172,38 @@
         glow.style.height = options.strong ? "260px" : "100px";
         document.body.appendChild(glow);
 
-        // Color reveal mask
-        const reveal = document.createElement('div');
-        reveal.className = 'color-reveal' + (options.strong ? ' strong' : '');
-        reveal.style.left = `${x}px`;
-        reveal.style.top = `${y}px`;
-        reveal.style.width = glow.style.width;
-        reveal.style.height = glow.style.height;
-        reveal.style.background = 'transparent';
-        // Remove grayscale filter in this area only
-        reveal.style.boxShadow = `0 0 0 9999px rgba(0,0,0,0)`;
-        reveal.style.webkitMaskImage = reveal.style.maskImage = `radial-gradient(circle at 50% 50%, white 70%, transparent 100%)`;
-        reveal.style.webkitMaskRepeat = reveal.style.maskRepeat = 'no-repeat';
+        // Color reveal: animate a circular hole in the grayscale overlay
+        if (grayscaleActive) {
+          const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+          const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-        // Remove grayscale filter for this area
-        reveal.style.pointerEvents = 'none';
-        reveal.style.zIndex = 50;
-        reveal.style.mixBlendMode = 'normal';
+          // Calculate percent for clip-path
+          const cx = (x / vw) * 100;
+          const cy = (y / vh) * 100;
+          const startRadius = options.strong ? 130 : 50; // px, matches glow
+          const endRadius = options.strong ? 455 : 250; // px, matches animation scale
 
-        // Remove the grayscale filter just for this circle
-        reveal.style.filter = 'none';
+          // Animate the hole
+          let start = null;
+          function animateHole(ts) {
+            if (!start) start = ts;
+            let progress = Math.min((ts - start) / (options.strong ? 1200 : 600), 1);
+            // Ease out
+            progress = 1 - Math.pow(1 - progress, 2);
+            const radius = startRadius + (endRadius - startRadius) * progress;
+            overlay.style.clipPath = `circle(${radius}px at ${cx}% ${cy}%)`;
+            if (progress < 1) {
+              requestAnimationFrame(animateHole);
+            } else {
+              overlay.style.clipPath = 'none';
+            }
+          }
+          overlay.style.clipPath = `circle(${startRadius}px at ${cx}% ${cy}%)`;
+          requestAnimationFrame(animateHole);
+        }
 
-        // Place the reveal div above the grayscale page
-        document.body.appendChild(reveal);
-
-        // Remove both after animation
         setTimeout(() => {
           glow.remove();
-          reveal.remove();
         }, options.strong ? 1200 : 600);
       }
 
@@ -285,10 +286,19 @@
         }
       }, true);
 
-      // Grayscale after delay
+      // Grayscale overlay after delay
       setTimeout(() => {
-        document.body.classList.add('bw-effect');
+        grayscaleActive = true;
+        showGrayscaleOverlay();
       }, 3000);
+
+      // Ensure overlay always covers viewport
+      function resizeOverlay() {
+        overlay.style.width = window.innerWidth + "px";
+        overlay.style.height = window.innerHeight + "px";
+      }
+      window.addEventListener('resize', resizeOverlay);
+      resizeOverlay();
     });
   </script>
 </body>
