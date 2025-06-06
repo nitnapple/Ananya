@@ -147,7 +147,6 @@
         if (window.navigator && window.navigator.vibrate) {
           window.navigator.vibrate(duration);
         }
-        // Only play if unlocked
         if (soundUnlocked) {
           clickSound.currentTime = 0;
           clickSound.play();
@@ -172,7 +171,7 @@
 
       // Mouse events
       target.addEventListener("mousedown", function(e) {
-        if (e.button !== 0) return; // Only left click
+        if (e.button !== 0) return;
         longPressFired = false;
         pressTimer = setTimeout(() => {
           longPressFired = true;
@@ -187,18 +186,18 @@
         clearTimeout(pressTimer);
       });
 
-      // Touch events (fixed for iPhone)
+      // Touch events (fixed for iPhone, allows scrolling)
       target.addEventListener("touchstart", function(e) {
         if (!e.touches || e.touches.length === 0) return;
         const touch = e.touches[0];
         longPressFired = false;
         pressTimer = setTimeout(() => {
           longPressFired = true;
+          // Only preventDefault if long-press actually fires
+          if (e.cancelable) e.preventDefault();
           triggerLongPress(touch.pageX, touch.pageY);
         }, 400);
-        // Prevent scrolling on long-press
-        e.preventDefault();
-      }, { passive: false });
+      }, { passive: true });
 
       target.addEventListener("touchend", function(e) {
         clearTimeout(pressTimer);
@@ -208,11 +207,11 @@
           triggerTap(touch.pageX, touch.pageY);
         }
         lastTouchTime = Date.now();
-      }, { passive: false });
+      }, { passive: true });
 
       target.addEventListener("touchmove", function() {
         clearTimeout(pressTimer);
-      }, { passive: false });
+      }, { passive: true });
 
       // Prevent click after touch (iOS sends both)
       target.addEventListener("click", function(e) {
