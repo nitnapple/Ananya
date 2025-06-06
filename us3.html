@@ -43,7 +43,6 @@
         transform: translate(-50%, -50%) scale(2.5);
       }
     }
-    /* Large glow for long-press */
     @keyframes glow-animation-strong {
       0% {
         opacity: 1;
@@ -55,43 +54,7 @@
       }
     }
   </style>
-
-  <!-- Clarity Scripts -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ramb97rh07");
-  </script>
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "qsnefk1464");
-  </script>
-
-  <!-- PostHog Script -->
-  <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){
-      function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),
-      t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}
-      (p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,
-      p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",
-      (r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);
-      var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],
-      u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),
-      t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},
-      o="init capture ...".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},
-      e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_8MyDkWfyorddFNpfx8Jy9m8Y9TF3Wpeo8kiqkFPvKed', {
-      api_host: 'https://eu.i.posthog.com',
-      person_profiles: 'identified_only',
-    })
-  </script>
 </head>
-
 <body class="m-0 p-0">
   <div class="relative w-screen h-screen overflow-hidden" id="click-target">
     <!-- Background Video -->
@@ -129,7 +92,6 @@
     </div>
   </div>
 
-  <!-- Typewriter, Glow, Sound, Vibrate, Grayscale JS -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Typewriter effect
@@ -150,6 +112,19 @@
 
       // Prepare sound effect
       const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
+      let soundUnlocked = false;
+
+      // Unlock sound on first user gesture (for iOS)
+      function unlockSound() {
+        if (!soundUnlocked) {
+          clickSound.play().catch(()=>{});
+          clickSound.pause();
+          clickSound.currentTime = 0;
+          soundUnlocked = true;
+        }
+      }
+      window.addEventListener('touchstart', unlockSound, { once: true });
+      window.addEventListener('mousedown', unlockSound, { once: true });
 
       // Glow effect helper
       function showGlow(x, y, options = {}) {
@@ -172,60 +147,81 @@
         if (window.navigator && window.navigator.vibrate) {
           window.navigator.vibrate(duration);
         }
-        clickSound.currentTime = 0;
-        clickSound.play();
+        // Only play if unlocked
+        if (soundUnlocked) {
+          clickSound.currentTime = 0;
+          clickSound.play();
+        }
       }
 
       // Tap and Tap-and-hold logic
       const target = document.getElementById("click-target");
       let pressTimer = null;
       let longPressFired = false;
+      let lastTouchTime = 0;
 
-      function triggerTap(e) {
+      function triggerTap(x, y) {
         vibrateAndSound(50);
-        showGlow(e.clientX, e.clientY);
+        showGlow(x, y);
       }
 
-      function triggerLongPress(e) {
+      function triggerLongPress(x, y) {
         vibrateAndSound(120);
-        showGlow(e.clientX, e.clientY, { strong: true });
+        showGlow(x, y, { strong: true });
       }
 
       // Mouse events
       target.addEventListener("mousedown", function(e) {
+        if (e.button !== 0) return; // Only left click
         longPressFired = false;
         pressTimer = setTimeout(() => {
           longPressFired = true;
-          triggerLongPress(e);
+          triggerLongPress(e.clientX, e.clientY);
         }, 400);
       });
       target.addEventListener("mouseup", function(e) {
         clearTimeout(pressTimer);
-        if (!longPressFired) triggerTap(e);
+        if (!longPressFired) triggerTap(e.clientX, e.clientY);
       });
       target.addEventListener("mouseleave", function() {
         clearTimeout(pressTimer);
       });
 
-      // Touch events
+      // Touch events (fixed for iPhone)
       target.addEventListener("touchstart", function(e) {
+        if (!e.touches || e.touches.length === 0) return;
         const touch = e.touches[0];
         longPressFired = false;
         pressTimer = setTimeout(() => {
           longPressFired = true;
-          triggerLongPress(touch);
+          triggerLongPress(touch.pageX, touch.pageY);
         }, 400);
-      });
+        // Prevent scrolling on long-press
+        e.preventDefault();
+      }, { passive: false });
+
       target.addEventListener("touchend", function(e) {
         clearTimeout(pressTimer);
         if (!longPressFired) {
+          if (!e.changedTouches || e.changedTouches.length === 0) return;
           const touch = e.changedTouches[0];
-          triggerTap(touch);
+          triggerTap(touch.pageX, touch.pageY);
         }
-      });
+        lastTouchTime = Date.now();
+      }, { passive: false });
+
       target.addEventListener("touchmove", function() {
         clearTimeout(pressTimer);
-      });
+      }, { passive: false });
+
+      // Prevent click after touch (iOS sends both)
+      target.addEventListener("click", function(e) {
+        if (Date.now() - lastTouchTime < 500) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      }, true);
 
       // Grayscale after delay
       setTimeout(() => {
