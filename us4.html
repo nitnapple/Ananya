@@ -25,7 +25,7 @@
       position: absolute;
       pointer-events: none;
       border-radius: 50%;
-      z-index: 51;
+      z-index: 1002;
       background: radial-gradient(circle, rgba(255, 244, 229, 0.5) 0%, transparent 70%);
       animation: glow-animation 0.6s ease-out forwards;
     }
@@ -53,21 +53,18 @@
         transform: translate(-50%, -50%) scale(3.5);
       }
     }
-    /* Grayscale overlay */
-    #grayscale-overlay {
+    /* SVG grayscale overlay */
+    #svg-gray-overlay {
       position: fixed;
-      inset: 0;
+      top: 0; left: 0; width: 100vw; height: 100vh;
       pointer-events: none;
-      z-index: 50;
-      filter: grayscale(80%) contrast(300%) brightness(70%);
-      transition: clip-path 0.3s, opacity 0.3s;
-      /* Default: no hole */
-      clip-path: none;
+      z-index: 1001;
       opacity: 1;
+      transition: opacity 0.5s;
+      display: none;
     }
-    #grayscale-overlay.hide {
-      opacity: 0;
-      transition: opacity 1s;
+    #svg-gray-overlay.active {
+      display: block;
     }
   </style>
 </head>
@@ -78,10 +75,8 @@
       <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
-
     <!-- Content -->
     <div class="absolute inset-0 flex flex-col items-center justify-start z-20 px-4 pt-10 text-center space-y-6">
       <div class="max-w-sm sm:max-w-xl">
@@ -107,8 +102,29 @@
       </div>
     </div>
   </div>
-  <!-- Grayscale overlay (initially hidden) -->
-  <div id="grayscale-overlay" style="display:none;"></div>
+  <!-- SVG grayscale overlay -->
+  <svg id="svg-gray-overlay" class="" width="100vw" height="100vh" style="width:100vw;height:100vh;">
+    <defs>
+      <filter id="gray-filter">
+        <feColorMatrix type="matrix" values="0.212 0.715 0.072 0 0
+                                             0.212 0.715 0.072 0 0
+                                             0.212 0.715 0.072 0 0
+                                             0      0      0      1 0"/>
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="0.7"/>
+          <feFuncG type="linear" slope="0.7"/>
+          <feFuncB type="linear" slope="0.7"/>
+        </feComponentTransfer>
+      </filter>
+      <mask id="hole-mask">
+        <rect width="100%" height="100%" fill="white"/>
+        <circle id="mask-circle" cx="0" cy="0" r="0" fill="black"/>
+      </mask>
+    </defs>
+    <rect width="100%" height="100%" fill="white"
+          filter="url(#gray-filter)"
+          mask="url(#hole-mask)" />
+  </svg>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Typewriter effect
@@ -130,8 +146,6 @@
       // Prepare sound effect
       const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
       let soundUnlocked = false;
-
-      // Unlock sound on first user gesture (for iOS)
       function unlockSound() {
         if (!soundUnlocked) {
           clickSound.play().catch(()=>{});
@@ -144,22 +158,16 @@
       window.addEventListener('mousedown', unlockSound, { once: true });
 
       // Grayscale overlay logic
-      const overlay = document.getElementById('grayscale-overlay');
+      const svgOverlay = document.getElementById('svg-gray-overlay');
+      const maskCircle = document.getElementById('mask-circle');
       let grayscaleActive = false;
       let overlayTimeout = null;
 
-      function showGrayscaleOverlay() {
-        overlay.style.display = '';
-        overlay.style.pointerEvents = 'none';
-        overlay.classList.remove('hide');
-        overlay.style.clipPath = 'none';
-        // Copy the page's HTML into the overlay for perfect alignment
-        // (not needed since overlay is transparent, just covers the page)
-      }
-      function hideGrayscaleOverlay() {
-        overlay.classList.add('hide');
-        setTimeout(() => { overlay.style.display = 'none'; }, 1000);
-      }
+      // Show grayscale overlay after delay
+      setTimeout(() => {
+        svgOverlay.classList.add('active');
+        grayscaleActive = true;
+      }, 3000);
 
       // Glow + color reveal helper
       function showGlow(x, y, options = {}) {
@@ -172,33 +180,34 @@
         glow.style.height = options.strong ? "260px" : "100px";
         document.body.appendChild(glow);
 
-        // Color reveal: animate a circular hole in the grayscale overlay
+        // Color reveal: animate a circular hole in the SVG mask
         if (grayscaleActive) {
-          const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-          const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          // SVG coordinates
+          const cx = x;
+          const cy = y;
+          const startRadius = options.strong ? 130 : 50;
+          const endRadius = options.strong ? 455 : 250;
 
-          // Calculate percent for clip-path
-          const cx = (x / vw) * 100;
-          const cy = (y / vh) * 100;
-          const startRadius = options.strong ? 130 : 50; // px, matches glow
-          const endRadius = options.strong ? 455 : 250; // px, matches animation scale
-
-          // Animate the hole
           let start = null;
           function animateHole(ts) {
             if (!start) start = ts;
             let progress = Math.min((ts - start) / (options.strong ? 1200 : 600), 1);
-            // Ease out
             progress = 1 - Math.pow(1 - progress, 2);
             const radius = startRadius + (endRadius - startRadius) * progress;
-            overlay.style.clipPath = `circle(${radius}px at ${cx}% ${cy}%)`;
+            maskCircle.setAttribute('cx', cx);
+            maskCircle.setAttribute('cy', cy);
+            maskCircle.setAttribute('r', radius);
             if (progress < 1) {
               requestAnimationFrame(animateHole);
             } else {
-              overlay.style.clipPath = 'none';
+              maskCircle.setAttribute('r', 0);
             }
           }
-          overlay.style.clipPath = `circle(${startRadius}px at ${cx}% ${cy}%)`;
+          maskCircle.setAttribute('cx', cx);
+          maskCircle.setAttribute('cy', cy);
+          maskCircle.setAttribute('r', startRadius);
           requestAnimationFrame(animateHole);
         }
 
@@ -259,7 +268,7 @@
         pressTimer = setTimeout(() => {
           longPressFired = true;
           if (e.cancelable) e.preventDefault();
-          triggerLongPress(touch.pageX, touch.pageY);
+          triggerLongPress(touch.clientX, touch.clientY);
         }, 400);
       }, { passive: true });
 
@@ -268,7 +277,7 @@
         if (!longPressFired) {
           if (!e.changedTouches || e.changedTouches.length === 0) return;
           const touch = e.changedTouches[0];
-          triggerTap(touch.pageX, touch.pageY);
+          triggerTap(touch.clientX, touch.clientY);
         }
         lastTouchTime = Date.now();
       }, { passive: true });
@@ -286,16 +295,13 @@
         }
       }, true);
 
-      // Grayscale overlay after delay
-      setTimeout(() => {
-        grayscaleActive = true;
-        showGrayscaleOverlay();
-      }, 3000);
-
-      // Ensure overlay always covers viewport
+      // Responsive overlay
       function resizeOverlay() {
-        overlay.style.width = window.innerWidth + "px";
-        overlay.style.height = window.innerHeight + "px";
+        const svg = document.getElementById('svg-gray-overlay');
+        svg.setAttribute('width', window.innerWidth);
+        svg.setAttribute('height', window.innerHeight);
+        svg.style.width = window.innerWidth + "px";
+        svg.style.height = window.innerHeight + "px";
       }
       window.addEventListener('resize', resizeOverlay);
       resizeOverlay();
