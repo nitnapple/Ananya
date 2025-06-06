@@ -24,14 +24,16 @@
     .bw-effect { filter: grayscale(80%) contrast(300%) brightness(70%); }
     .glow {
       position: absolute;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(255, 244, 229, 0.5) 0%, transparent 70%);
-      border-radius: 50%;
       pointer-events: none;
-      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: 51;
+      /* Glow visual */
+      background: radial-gradient(circle, rgba(255, 244, 229, 0.5) 0%, transparent 70%);
       animation: glow-animation 0.6s ease-out forwards;
-      z-index: 50;
+    }
+    .glow.strong {
+      background: radial-gradient(circle, rgba(255,244,229,0.8) 0%, transparent 80%);
+      animation: glow-animation-strong 1.2s ease-out forwards;
     }
     @keyframes glow-animation {
       0% {
@@ -44,6 +46,42 @@
       }
     }
     @keyframes glow-animation-strong {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(3.5);
+      }
+    }
+    /* Color reveal mask */
+    .color-reveal {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 50;
+      /* Remove grayscale only in this area */
+      mix-blend-mode: normal;
+      /* This will create a "window" to the colored page below */
+      animation: reveal-animation 0.6s ease-out forwards;
+      will-change: clip-path, opacity, transform;
+      /* For Safari/iOS, fallback to opacity fade */
+    }
+    .color-reveal.strong {
+      animation: reveal-animation-strong 1.2s ease-out forwards;
+    }
+    @keyframes reveal-animation {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.5);
+      }
+    }
+    @keyframes reveal-animation-strong {
       0% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
@@ -126,20 +164,46 @@
       window.addEventListener('touchstart', unlockSound, { once: true });
       window.addEventListener('mousedown', unlockSound, { once: true });
 
-      // Glow effect helper
+      // Glow + color reveal helper
       function showGlow(x, y, options = {}) {
+        // Glow visual
         const glow = document.createElement('div');
-        glow.className = 'glow';
+        glow.className = 'glow' + (options.strong ? ' strong' : '');
         glow.style.left = `${x}px`;
         glow.style.top = `${y}px`;
-        if (options.strong) {
-          glow.style.width = "260px";
-          glow.style.height = "260px";
-          glow.style.background = "radial-gradient(circle, rgba(255,244,229,0.8) 0%, transparent 80%)";
-          glow.style.animation = "glow-animation-strong 1.2s ease-out forwards";
-        }
+        glow.style.width = options.strong ? "260px" : "100px";
+        glow.style.height = options.strong ? "260px" : "100px";
         document.body.appendChild(glow);
-        setTimeout(() => glow.remove(), options.strong ? 1200 : 600);
+
+        // Color reveal mask
+        const reveal = document.createElement('div');
+        reveal.className = 'color-reveal' + (options.strong ? ' strong' : '');
+        reveal.style.left = `${x}px`;
+        reveal.style.top = `${y}px`;
+        reveal.style.width = glow.style.width;
+        reveal.style.height = glow.style.height;
+        reveal.style.background = 'transparent';
+        // Remove grayscale filter in this area only
+        reveal.style.boxShadow = `0 0 0 9999px rgba(0,0,0,0)`;
+        reveal.style.webkitMaskImage = reveal.style.maskImage = `radial-gradient(circle at 50% 50%, white 70%, transparent 100%)`;
+        reveal.style.webkitMaskRepeat = reveal.style.maskRepeat = 'no-repeat';
+
+        // Remove grayscale filter for this area
+        reveal.style.pointerEvents = 'none';
+        reveal.style.zIndex = 50;
+        reveal.style.mixBlendMode = 'normal';
+
+        // Remove the grayscale filter just for this circle
+        reveal.style.filter = 'none';
+
+        // Place the reveal div above the grayscale page
+        document.body.appendChild(reveal);
+
+        // Remove both after animation
+        setTimeout(() => {
+          glow.remove();
+          reveal.remove();
+        }, options.strong ? 1200 : 600);
       }
 
       // Vibrate and sound
@@ -162,13 +226,11 @@
       function triggerTap(x, y) {
         vibrateAndSound(50);
         showGlow(x, y);
-        document.body.classList.remove('bw-effect'); // Restore color!
       }
 
       function triggerLongPress(x, y) {
         vibrateAndSound(120);
         showGlow(x, y, { strong: true });
-        document.body.classList.remove('bw-effect'); // Restore color!
       }
 
       // Mouse events
