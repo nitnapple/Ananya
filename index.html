@@ -22,6 +22,7 @@
     }
     body { transition: filter 2s linear; }
     .bw-effect { filter: grayscale(80%) contrast(300%) brightness(70%); }
+
     .glow {
       position: absolute;
       width: 100px;
@@ -30,7 +31,7 @@
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      animation: glow-animation 2.2s ease-out forwards;
+      animation: glow-animation 3s ease-out forwards;
       z-index: 50;
     }
     @keyframes glow-animation {
@@ -40,7 +41,7 @@
       }
       100% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(2.5);
+        transform: translate(-50%, -50%) scale(4);
       }
     }
   </style>
@@ -77,7 +78,7 @@
     posthog.init('phc_8MyDkWfyorddFNpfx8Jy9m8Y9TF3Wpeo8kiqkFPvKed', {
       api_host: 'https://eu.i.posthog.com',
       person_profiles: 'identified_only',
-    })
+    });
   </script>
 </head>
 
@@ -105,6 +106,7 @@
         </button>
       </a>
     </div>
+
     <!-- Footer -->
     <div class="absolute bottom-5 left-0 right-0 z-30 flex justify-center">
       <div class="text-center">
@@ -121,11 +123,11 @@
   <!-- Typewriter, Glow, Sound, Vibrate, Grayscale JS -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Typewriter effect
       const text = "Thank you for being a part of this beautiful journey—may we meet again someday, with even warmer smiles and happier hearts.";
       const el = document.getElementById("typewriter");
       const archiveLink = document.getElementById("archive-link");
       let index = 0;
+
       function type() {
         if (index < text.length) {
           el.textContent += text.charAt(index++);
@@ -137,28 +139,24 @@
       }
       type();
 
-      // Prepare sound effect
       const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
 
-      // Glow, Sound, Vibrate on click/tap
       document.getElementById("click-target").addEventListener("click", function (e) {
-        // Vibrate if supported
         if (window.navigator && window.navigator.vibrate) {
           window.navigator.vibrate(50);
         }
-        // Play sound effect
         clickSound.currentTime = 0;
         clickSound.play();
-        // Glow effect
+
         const glow = document.createElement('div');
         glow.className = 'glow';
         glow.style.left = `${e.clientX}px`;
         glow.style.top = `${e.clientY}px`;
         document.body.appendChild(glow);
-        setTimeout(() => glow.remove(), 600);
+
+        setTimeout(() => glow.remove(), 3000);
       });
 
-      // Grayscale after delay
       setTimeout(() => {
         document.body.classList.add('bw-effect');
       }, 3000);
