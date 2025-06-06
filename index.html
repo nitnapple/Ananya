@@ -6,6 +6,8 @@
   <title>End of the journey</title>
   <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/bw_crown_1.ico">
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Magical Font (Google Fonts: 'Pacifico' for a fantasy/cursive look) -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
     @keyframes blink {
       50% { border-color: transparent; }
@@ -43,6 +45,28 @@
         opacity: 0;
         transform: translate(-50%, -50%) scale(4);
       }
+    }
+
+    /* Magical Font Effect */
+    .magical-text {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.2rem;
+      color: #fffbe6;
+      text-shadow: 0 0 12px #fbbf24, 0 0 24px #f59e42, 0 0 40px #fffbe6;
+      animation: magical-glow 2s ease-in-out;
+      transition: opacity 0.5s;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 40;
+    }
+    @media (max-width: 640px) {
+      .magical-text { font-size: 1.3rem; }
+    }
+    @keyframes magical-glow {
+      0% { opacity: 0; filter: blur(4px);}
+      20% { opacity: 1; filter: blur(0);}
+      80% { opacity: 1;}
+      100% { opacity: 0; filter: blur(4px);}
     }
   </style>
 
@@ -107,6 +131,13 @@
       </a>
     </div>
 
+    <!-- Magical Text (initially hidden) -->
+    <div id="magical-container"
+      class="fixed inset-0 flex items-center justify-center z-40 pointer-events-none"
+      style="display:none;">
+      <span id="magical-text" class="magical-text">Tap to see the magic</span>
+    </div>
+
     <!-- Footer -->
     <div class="absolute bottom-5 left-0 right-0 z-30 flex justify-center">
       <div class="text-center">
@@ -115,8 +146,7 @@
             <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.3 2.4.6.5.3.9.7 1.3 1.3.3.5.5 1.2.6 2.4.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 1.9-.6 2.4-.3.5-.7.9-1.3 1.3-.5.3-1.2.5-2.4.6-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.3-2.4-.6-.5-.3-.9-.7-1.3-1.3-.3-.5-.5-1.2-.6-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.3-1.9.6-2.4.3-.5.7-.9 1.3-1.3.5-.3 1.2-.5 2.4-.6C8.4 2.2 8.8 2.2 12 2.2zm0-2.2C8.7 0 8.3 0 7.1.1 5.8.2 4.8.4 4 .9 3.1 1.3 2.3 2.1 1.9 3 .4 3.8.2 4.8.1 6.1 0 7.3 0 7.7 0 12s0 4.7.1 5.9c.1 1.3.3 2.3.8 3.1.4.9 1.2 1.7 2.1 2.1.8.4 1.8.7 3.1.8 1.2.1 1.6.1 5.9.1s4.7 0 5.9-.1c1.3-.1 2.3-.3 3.1-.8.9-.4 1.7-1.2 2.1-2.1.4-.8.7-1.8.8-3.1.1-1.2.1-1.6.1-5.9s0-4.7-.1-5.9c-.1-1.3-.3-2.3-.8-3.1-.4-.9-1.2-1.7-2.1-2.1-.8-.4-1.8-.7-3.1-.8C15.7 0 15.3 0 12 0zM12 5.8c-3.4 0-6.2 2.8-6.2 6.2S8.6 18.2 12 18.2 18.2 15.4 18.2 12 15.4 5.8 12 5.8zm0 10.2c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm5.8-10.7c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5 1.5-.6 1.5-1.5-.7-1.5-1.5-1.5z"/>
           </svg>
         </a>
-        <!-- Added line here -->
-      <p style="color: white; font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.25rem; font-family: 'Playfair Display', serif;">I am merely a text away.</p>
+        <p class="text-white text-xs opacity-80 mb-1">I am merely a text away.</p>
         <p class="text-white text-sm mt-2">© 2025</p>
       </div>
     </div>
@@ -137,10 +167,23 @@
         } else {
           el.style.borderRight = "none";
           archiveLink.classList.remove("hidden");
+
+          // Show magical text after typewriter finishes
+          showMagicalText();
         }
       }
       type();
 
+      // Magical text logic
+      function showMagicalText() {
+        const magicalContainer = document.getElementById("magical-container");
+        magicalContainer.style.display = "flex";
+        setTimeout(() => {
+          magicalContainer.style.display = "none";
+        }, 2000);
+      }
+
+      // Glow and sound logic
       const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
 
       document.getElementById("click-target").addEventListener("click", function (e) {
