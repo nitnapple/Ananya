@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mind Map Sitemap | Ananya's Academic Journey</title>
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/crown.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mindmap-node {
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    .mindmap-node:hover {
+      box-shadow: 0 8px 24px 0 rgba(147, 51, 234, 0.08);
+      background: #f3e8ff;
+    }
+    .toggle-btn {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .toggle-btn.open {
+      transform: rotate(90deg);
+    }
+    .branch-line {
+      position: absolute;
+      left: -1.5rem;
+      top: 1.25rem;
+      width: 1.5rem;
+      height: 2px;
+      background: #a78bfa;
+      border-radius: 1px;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-tr from-purple-50 to-blue-50 min-h-screen">
+
+  <main class="max-w-4xl mx-auto my-10 px-4 md:px-8 py-10 bg-white rounded-3xl shadow-2xl border border-purple-200">
+    <header class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-purple-700 flex items-center justify-center gap-2">
+        <span>🧠</span> Mind Map: <span class="text-purple-800">Ananya's Academic Journey</span>
+      </h1>
+      <p class="text-sm text-gray-500 mt-2">Visual sitemap curated with 💜 by ERITH</p>
+    </header>
+
+    <div class="relative">
+      <ul id="mindmap" class="space-y-6">
+        <li>
+          <div class="mindmap-node bg-purple-50 rounded-xl p-4 shadow flex items-center gap-3 font-bold text-purple-700 text-lg">
+            <span class="text-2xl">🏠</span> Home
+          </div>
+          <ul class="ml-8 mt-2 space-y-2">
+            <li>
+              <a href="https://nitnapple.github.io/Ananya/" class="mindmap-node flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-purple-100 shadow hover:bg-purple-100 text-blue-700 hover:text-purple-700 transition-all">
+                👑 Home: Webpage
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="mindmap-node bg-purple-50 rounded-xl p-4 shadow flex items-center gap-3 font-bold text-purple-700 text-lg">
+            <span class="text-2xl">📚</span> Summarized Notes
+            <span class="toggle-btn ml-2 text-purple-500" onclick="toggleBranch(this)">▶</span>
+          </div>
+          <ul class="ml-8 mt-2 space-y-4 branch hidden">
+            <li>
+              <div class="font-semibold text-purple-600">GE: Legal Philosophy</div>
+              <ul class="ml-6 mt-1 space-y-1">
+                <li><a href="https://nitnapple.github.io/Ananya/GE" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Webpage</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/58b290c478599549b1486e9adb58efb1f1d35e38/GE%20Legal%20Philosophy.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Summarised (PDF)</a></li>
+              </ul>
+            </li>
+            <li>
+              <div class="font-semibold text-purple-600">Sanskrit Literature Katha Kavya</div>
+              <ul class="ml-6 mt-1 space-y-1">
+                <li><a href="https://nitnapple.github.io/Ananya/skt" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Webpage</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/582e83b6ba758bc786a70bf964737dacceed0ab4/Sample_Katha_Kavya_Question_Paper.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Sample Question Paper (PDF)</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/dd12b2cfc6b944782923f3b6ab8cb2ebf947640c/Sanskrit%20shlokas%20in%20English%20%26%20Hindi%20explanation.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Shloka Only (PDF)</a></li>
+              </ul>
+            </li>
+            <li>
+              <div class="font-semibold text-purple-600">Perspectives on Public Administration</div>
+              <ul class="ml-6 mt-1 space-y-1">
+                <li><a href="https://nitnapple.github.io/Ananya/PPA" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Webpage</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/5dc9ed2ebbd4fe3383c1d50a7426074e282ea5b5/Perspectives%20on%20Public%20Administration%20Summarised%20.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Summarised (PDF)</a></li>
+              </ul>
+            </li>
+            <li>
+              <div class="font-semibold text-purple-600">Comparative Political Systems</div>
+              <ul class="ml-6 mt-1 space-y-1">
+                <li><a href="https://nitnapple.github.io/Ananya/CPS" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Webpage</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/2ad6ea89606cec6635084e4ca66631d9f8117dcb/Comparative%20Political%20Systems%20Summarized.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Summarised (PDF)</a></li>
+              </ul>
+            </li>
+            <li>
+              <div class="font-semibold text-purple-600">DSE: Art of Balanced Living</div>
+              <ul class="ml-6 mt-1 space-y-1">
+                <li><a href="https://nitnapple.github.io/Ananya/DSE" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Webpage</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/4a6483ec133b8f55f49e13bb8831874be0abbcdf/DSE%20Sanskrit%2C%20Art%20of%20Balanced%20Living.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Summarised (PDF)</a></li>
+                <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/ef987d9d540bbbdde3f92bf9e64fcdb60ade4207/Sample_Question_Paper_Art_of_Balanced_Life.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Sample Question Paper (PDF)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="mindmap-node bg-purple-50 rounded-xl p-4 shadow flex items-center gap-3 font-bold text-purple-700 text-lg">
+            <span class="text-2xl">📝</span> Assignments
+            <span class="toggle-btn ml-2 text-purple-500" onclick="toggleBranch(this)">▶</span>
+          </div>
+          <ul class="ml-8 mt-2 space-y-2 branch hidden">
+            <li><a href="https://shorturl.at/WgdVd" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">DSE: Sanskrit, Art of Balanced Living (PDF)</a></li>
+            <li><a href="https://shorturl.at/Nzuc0" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Perspectives on Public Administration (PDF)</a></li>
+            <li><a href="https://shorturl.at/P7PVE" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">GE: Legal Philosophy (PDF)</a></li>
+            <li><a href="https://shorturl.at/wJuLt" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Comparative Political Systems (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/Sanskrit%20Literature%20Katha%20Kavya%3B%20Assignment.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Sanskrit Literature: Katha Kavya (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/d696037f28a067b57f172fd9c9a81d851c117ea4/DSE%3B%20Sanskrit%20Assignment%20Unit%203%2C4.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">DSE Sanskrit Assignment Units 3 & 4 (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/d0a5127929956c44bcfec5a6ad3019ca2802c54f/PPAIA2.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">PPA: NPM, NPS, Governance (PDF)</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="mindmap-node bg-purple-50 rounded-xl p-4 shadow flex items-center gap-3 font-bold text-purple-700 text-lg">
+            <span class="text-2xl">📊</span> Presentations
+            <span class="toggle-btn ml-2 text-purple-500" onclick="toggleBranch(this)">▶</span>
+          </div>
+          <ul class="ml-8 mt-2 space-y-2 branch hidden">
+            <li><a href="https://shorturl.at/N2wtS" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">GE: Legal Philosophy (PPTX)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/Israel.pptx" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Comparative Political Systems (PPTX)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/DSE%20Sanskrit%2C%20Art%20of%20Balanced%20Living%20Presentation.pptx" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">DSE: Sanskrit, Art of Balanced Living (PPTX)</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="mindmap-node bg-purple-50 rounded-xl p-4 shadow flex items-center gap-3 font-bold text-purple-700 text-lg">
+            <span class="text-2xl">📘</span> SOL Notes
+            <span class="toggle-btn ml-2 text-purple-500" onclick="toggleBranch(this)">▶</span>
+          </div>
+          <ul class="ml-8 mt-2 space-y-2 branch hidden">
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/PERSPECTIVES%20ON%20PUBLIC%20ADMINISTRATION.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Public Administration (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/COMPARATIVE%20POLITICAL%20SYSTEMS.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Comparative Political Systems (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/GE%20Legal%20Philosophy%20Semester%206th.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">GE: Legal Philosophy (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/6a5f935e78ab32c54cfea4eae8dccf5dd123a898/Sanskrit%20Literature%20Katha%20Kavya.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Sanskrit Katha Kavya (PDF)</a></li>
+            <li><a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/History1857.pdf" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">History of India (1857–1947) (PDF)</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="mindmap-node bg-purple-50 rounded-xl p-4 shadow flex items-center gap-3 font-bold text-purple-700 text-lg">
+            <span class="text-2xl">🌐</span> Footer & Credits
+            <span class="toggle-btn ml-2 text-purple-500" onclick="toggleBranch(this)">▶</span>
+          </div>
+          <ul class="ml-8 mt-2 space-y-2 branch hidden">
+            <li><a href="https://nitnapple.github.io/Ananya/erith" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">© E.R.I.T.H. 😎</a></li>
+            <li><a href="https://www.instagram.com/nitin_apple" class="mindmap-node px-3 py-2 rounded bg-white border border-purple-100 hover:bg-purple-100 text-blue-700 hover:text-purple-700">Instagram</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <footer class="text-center text-gray-400 text-xs md:text-sm mt-12 pt-4 border-t border-gray-200">
+      Last updated: 31 May 2025
+    </footer>
+  </main>
+
+  <script>
+    // Toggle branch open/close
+    function toggleBranch(btn) {
+      const branch = btn.parentElement.nextElementSibling;
+      branch.classList.toggle('hidden');
+      btn.classList.toggle('open');
+      btn.textContent = branch.classList.contains('hidden') ? '▶' : '▼';
+    }
+  </script>
+</body>
+</html>
