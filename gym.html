@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supplement Stack Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function updateCountdown() {
+      const end = new Date("2025-12-31T00:00:00").getTime();
+      const now = new Date().getTime();
+      const distance = end - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML =
+        days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    }
+    setInterval(updateCountdown, 1000);
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="max-w-5xl mx-auto p-4">
+    <h1 class="text-3xl font-bold text-center mb-6">Supplement Stack Planner</h1>
+    <div class="text-center text-xl text-red-600 mb-8">
+      Countdown to Goal: <span id="countdown">Loading...</span>
+    </div>
+
+    <div class="space-y-6">
+      <section class="bg-white p-4 rounded-2xl shadow">
+        <h2 class="text-2xl font-semibold mb-2">Testosterone & Libido Stack</h2>
+        <ul class="list-disc pl-5">
+          <li>Vitamin D3 (3000-5000 IU): Morning, with fat-containing meal</li>
+          <li>Zinc (25-30 mg): With dinner</li>
+          <li>Magnesium Glycinate (300-400 mg): At night</li>
+          <li>Ashwagandha (600 mg): AM or PM</li>
+          <li>Fenugreek Extract (500-600 mg): With meals</li>
+          <li>Omega-3 (2000 mg): With meals</li>
+          <li>Boron (3-6 mg): Optional</li>
+          <li>D-Aspartic Acid (3g): Cycle 2-3 weeks on, 1 off</li>
+          <li>Tongkat Ali (200-400 mg): 5 days on, 2 off</li>
+        </ul>
+      </section>
+
+      <section class="bg-white p-4 rounded-2xl shadow">
+        <h2 class="text-2xl font-semibold mb-2">Muscle Building Stack</h2>
+        <ul class="list-disc pl-5">
+          <li>Whey Protein Isolate (25-30 g): Post-workout</li>
+          <li>Creatine Monohydrate (5 g): Daily</li>
+          <li>Beta-Alanine (3.2 g): Pre-workout</li>
+          <li>Electrolytes: Intra/post workout</li>
+          <li>L-Leucine (3-5 g): With meals</li>
+          <li>Multivitamin</li>
+          <li>Collagen Peptides (10 g)</li>
+        </ul>
+      </section>
+
+      <section class="bg-white p-4 rounded-2xl shadow">
+        <h2 class="text-2xl font-semibold mb-2">Fat Loss Stack</h2>
+        <ul class="list-disc pl-5">
+          <li>Green Tea Extract (400-500 mg): AM & Pre-workout</li>
+          <li>Caffeine (100-200 mg)</li>
+          <li>L-Carnitine (1-2 g): Pre-cardio</li>
+          <li>Apple Cider Vinegar: 1 tbsp before meals</li>
+          <li>Glucomannan (1 g): Before meals</li>
+          <li>CLA (1-2 g): Optional</li>
+          <li>Berberine (500 mg): Optional</li>
+        </ul>
+      </section>
+
+      <section class="bg-white p-4 rounded-2xl shadow">
+        <h2 class="text-2xl font-semibold mb-2">Skin & Eye Health Stack</h2>
+        <ul class="list-disc pl-5">
+          <li>Collagen Peptides (10-15 g)</li>
+          <li>Vitamin C (500-1000 mg)</li>
+          <li>Lutein + Zeaxanthin (10 mg + 2 mg)</li>
+          <li>Astaxanthin (4-8 mg)</li>
+          <li>Biotin or Silica</li>
+          <li>Evening Primrose Oil (1000 mg)</li>
+          <li>Omega-3 (2000 mg)</li>
+        </ul>
+      </section>
+
+      <section class="bg-white p-4 rounded-2xl shadow">
+        <h2 class="text-2xl font-semibold mb-2">Example Stack (Muscle + Libido)</h2>
+        <ul class="list-disc pl-5">
+          <li><strong>Morning:</strong> Vitamin D3, Ashwagandha, Zinc, Whey Protein, Multivitamin</li>
+          <li><strong>Pre-Workout:</strong> Creatine, Beta-Alanine, Green Tea Extract, L-Carnitine</li>
+          <li><strong>Post-Workout:</strong> Whey + Collagen, Magnesium, Omega-3</li>
+          <li><strong>Evening:</strong> Fenugreek, Collagen, Sleep stack (ZMA or Glycine + Magnesium)</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
