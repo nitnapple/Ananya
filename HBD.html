@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday, Ananya!</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
-      /* Sparkling background */
       background: linear-gradient(120deg, #ffe0f7 0%, #fffbe6 50%, #e0e7ff 100%);
       overflow-x: hidden;
     }
@@ -35,7 +34,6 @@
       z-index: 2;
     }
     .balloon::after {
-      /* Balloon string */
       content: '';
       display: block;
       position: absolute;
@@ -66,7 +64,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center relative px-4">
+<body class="min-h-screen flex items-center justify-center relative px-4 pb-24">
 
   <!-- Sparkles -->
   <div class="sparkle" style="top:10%; left:15%; width:18px; height:18px; background:radial-gradient(circle,#fff 60%,#fbbf24 100%);"></div>
@@ -115,7 +113,6 @@
   </audio>
 
   <script>
-    // Confetti Launcher
     function launchConfetti() {
       confetti({
         particleCount: 180,
@@ -124,7 +121,7 @@
       });
       document.getElementById('birthdayMusic').play();
     }
-    // Auto confetti on load
+
     window.onload = function() {
       setTimeout(() => {
         confetti({
@@ -133,7 +130,17 @@
           origin: { y: 0.5 }
         });
       }, 600);
-    }
+    };
   </script>
+
+  <!-- Transparent Footer with Button -->
+  <footer class="w-full text-center py-6 mt-10 text-sm text-gray-700 z-30 absolute bottom-0 left-0 bg-transparent">
+    <a href="https://nitnapple.github.io/Ananya/Archive" target="_blank">
+      <button class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-300">
+        📚 View Archive
+      </button>
+    </a>
+  </footer>
+
 </body>
 </html>
