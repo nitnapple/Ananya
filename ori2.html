@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: Whispers of the Verdant Heart - A Market & Narrative Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- 
+        Narrative & Structure Plan: 
+        This infographic translates the game design document into a market-facing pitch. The narrative flows from high-level market positioning to deep-dive specifics. 
+        1. Hero Section: A bold hook with key project stats (Platform, Genre, Duration) to establish its market position.
+        2. Thematic Analysis: Visualizing the game's emotional core to appeal to its target demographic.
+        3. Competitive Positioning: A radar chart comparing "Whispers" to its inspiration, "Ori," highlighting its unique selling propositions.
+        4. Character & World Deep Dive: Introducing the protagonist and biomes in a visually engaging way.
+        5. Process Flow: A structured HTML timeline of the 3-act narrative, making the plot progression easy to understand.
+        6. Strategic Outlook: A SWOT analysis to frankly address risks and opportunities.
+        This structure tells a compelling story to a potential publisher or stakeholder, moving from "what is it?" to "why will it succeed?".
+    -->
+    <!-- 
+        Visualization & Content Choices:
+        - Data: 3-Hour Experience (25/50/25 split). Goal: Inform. Viz: Donut Chart (Chart.js). Justification: Best for showing simple, powerful proportions of a whole. NO SVG.
+        - Data: Protagonist Archetypes (Hero, Caregiver, Innocent). Goal: Compare. Viz: Radar Chart (Chart.js). Justification: Excellent for comparing multiple variables on a single entity, giving a unique "personality profile." NO SVG.
+        - Data: Antagonist Motivation (Tragedy vs. Malice). Goal: Compare. Viz: Bar Chart (Chart.js). Justification: Simple, clear comparison of qualitative concepts. NO SVG.
+        - Data: Narrative Arc. Goal: Organize. Viz: HTML/CSS Timeline. Justification: A linear, visual flow is more engaging for a process than text. NO SVG, NO MERMAID JS.
+        - Data: SWOT Analysis. Goal: Organize. Viz: HTML/CSS Grid. Justification: The standard four-quadrant layout is universally understood and effective. NO SVG, NO MERMAID JS.
+        All visualizations are accompanied by explanatory text to provide context and highlight key insights as per requirements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #050A30;
+            color: #E0E0E0;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+        .font-display {
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .card {
+            background-color: #000C66;
+            border: 1px solid #7EC8E3;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(126, 200, 227, 0.1), 0 4px 6px -2px rgba(126, 200, 227, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .stat-card {
+            background: rgba(0, 20, 102, 0.6);
+            border: 1px solid #7EC8E3;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 0.5rem;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem;
+            padding-bottom: 2rem;
+            border-left: 3px solid #7EC8E3;
+        }
+        .timeline-item:last-child {
+            border-left: 3px solid transparent;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -0.7rem;
+            top: 0;
+            height: 1.25rem;
+            width: 1.25rem;
+            background-color: #5DA9E9;
+            border-radius: 9999px;
+            border: 3px solid #050A30;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="container mx-auto px-4 py-8 md:py-16">
+
+        <!-- Section: Hero -->
+        <section class="text-center mb-16 md:mb-24">
+            <h1 class="font-display text-6xl md:text-8xl text-white font-bold tracking-wider">Whispers of the Verdant Heart</h1>
+            <p class="font-display text-3xl md:text-4xl text-[#5DA9E9]">An Analysis of a Premium Narrative Platformer</p>
+            <div class="mt-8 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+                <div class="stat-card">
+                    <p class="text-lg text-[#7EC8E3]">Platform</p>
+                    <p class="font-display text-5xl text-white">iOS</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-lg text-[#7EC8E3]">Genre</p>
+                    <p class="font-display text-5xl text-white">Platformer</p>
+                </div>
+                <div class="stat-card col-span-2 md:col-span-1">
+                    <p class="text-lg text-[#7EC8E3]">Target Duration</p>
+                    <p class="font-display text-5xl text-white">3 Hours</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Thematic & Narrative Analysis -->
+        <section class="mb-16 md:mb-24">
+            <h2 class="font-display text-5xl text-center mb-2 text-[#5DA9E9]">Narrative Core & Player Engagement</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">
+                The game's market viability hinges on its emotional depth, directly inspired by proven narrative formulas. This section analyzes the core components designed to maximize player empathy and engagement within a concise, premium mobile experience.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="card">
+                    <h3 class="font-display text-3xl text-center text-white mb-4">Narrative Pacing (3-Hour Arc)</h3>
+                    <p class="text-sm text-center mb-4 text-[#E0E0E0]">The story is structured to dedicate the largest segment (50%) to rising action and character development, ensuring a deep emotional investment before the climactic resolution. This pacing prevents rushed storytelling and maximizes impact.</p>
+                    <div class="chart-container h-80 md:h-[350px]">
+                        <canvas id="pacingChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="font-display text-3xl text-center text-white mb-4">Protagonist Archetype Profile</h3>
+                    <p class="text-sm text-center mb-4 text-[#E0E0E0]">Lumo is designed as a complex hero, blending courage, compassion, and optimism. This multifaceted profile, visualized below, fosters a deeper player connection than a single-archetype character would allow.</p>
+                    <div class="chart-container h-80 md:h-[350px]">
+                        <canvas id="archetypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Competitive Positioning -->
+        <section class="mb-16 md:mb-24">
+            <h2 class="font-display text-5xl text-center mb-2 text-[#5DA9E9]">Competitive Positioning & USP</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">
+                While heavily inspired by the "Ori" series, "Whispers of the Verdant Heart" establishes its own unique identity by targeting a mobile-first audience and embracing a more nuanced, bittersweet narrative resolution.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                <div class="lg:col-span-2 card">
+                     <h3 class="font-display text-3xl text-center text-white mb-4">Comparative Analysis: Inspiration vs. Innovation</h3>
+                     <p class="text-sm text-center mb-4 text-[#E0E0E0]">This chart compares key attributes against its primary inspiration. While adopting a similar painterly aesthetic and fluid platforming, the project differentiates itself with a uniquely complex antagonist and a narrative crafted for a finite, emotionally potent experience.</p>
+                    <div class="chart-container h-96 md:h-[400px]">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+                <div class="card flex flex-col justify-center">
+                    <h3 class="font-display text-3xl text-center text-white mb-4">Antagonist Motivation</h3>
+                    <p class="text-sm text-center mb-4 text-[#E0E0E0]">A key differentiator is the antagonist's motivation. Shifting from pure malice towards a foundation of tragedy and despair creates a more complex emotional dynamic, a proven strategy for engaging modern audiences.</p>
+                    <div class="chart-container h-64 md:h-[300px]">
+                        <canvas id="antagonistChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section: Process Flow (Narrative Arc) -->
+        <section class="mb-16 md:mb-24">
+            <h2 class="font-display text-5xl text-center mb-2 text-[#5DA9E9]">Narrative Process Flow</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">
+                The player's journey is mapped across a classic three-act structure. This visual timeline details the key plot points and gameplay shifts that drive the narrative forward, ensuring a balanced and compelling progression from start to finish.
+            </p>
+            <div class="card">
+                <div class="max-w-3xl mx-auto">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="font-display text-3xl text-[#5DA9E9]">Act I: The Fading Glow <span class="text-xl text-white">(~45 Mins)</span></h3>
+                        <p class="font-bold mt-2">Setup & Inciting Incident</p>
+                        <p class="text-sm leading-relaxed mt-1">Introduction to the idyllic world and the protagonist's bond with their companion. The sudden arrival of the blight creates immediate personal stakes and a desperate call to action. Gameplay focuses on basic movement and establishing the emotional core.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="font-display text-3xl text-[#5DA9E9]">Act II: Through the Shadowed Lands <span class="text-xl text-white">(~90 Mins)</span></h3>
+                        <p class="font-bold mt-2">Confrontation & Rising Action</p>
+                        <p class="text-sm leading-relaxed mt-1">The longest act is dedicated to exploration of diverse, corrupted biomes. The player acquires new abilities, uncovers the blight's lore, and faces escalating challenges. The antagonist is encountered, revealing the conflict's complexity. Gameplay introduces advanced platforming and combat.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="font-display text-3xl text-[#5DA9E9]">Act III: The Verdant Heart's Embrace <span class="text-xl text-white">(~45 Mins)</span></h3>
+                        <p class="font-bold mt-2">Climax & Bittersweet Resolution</p>
+                        <p class="text-sm leading-relaxed mt-1">The player reaches the blight's core for the final confrontation. The climax involves a challenging boss battle culminating in a profound sacrifice. The world's restoration begins, but the ending is tinged with the cost of that victory, ensuring lasting emotional resonance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: SWOT Analysis -->
+        <section>
+            <h2 class="font-display text-5xl text-center mb-2 text-[#5DA9E9]">Strategic Market Outlook</h2>
+            <p class="text-center text-lg max-w-3xl mx-auto mb-12">
+                A balanced analysis of the project's internal strengths and weaknesses against external market opportunities and threats provides a clear view of its strategic position.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="card border-green-400">
+                    <h3 class="font-display text-4xl text-green-400">Strengths</h3>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-sm">
+                        <li>Proven emotional themes (love, sacrifice) resonate with a wide audience.</li>
+                        <li>Stunning, painterly art style stands out in the crowded mobile market.</li>
+                        <li>Tight 3-hour scope is ideal for premium mobile and avoids feature creep.</li>
+                        <li>Leverages success of a known, beloved genre (narrative platformer).</li>
+                    </ul>
+                </div>
+                <div class="card border-red-400">
+                    <h3 class="font-display text-4xl text-red-400">Weaknesses</h3>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-sm">
+                        <li>Achieving high-quality visuals on diverse iOS hardware is technically challenging.</li>
+                        <li>Perfecting fluid touch controls for precision platforming is difficult and crucial.</li>
+                        <li>Wordless storytelling requires exceptional animation and music to succeed.</li>
+                        <li>Risk of being seen as derivative if unique identity isn't strong enough.</li>
+                    </ul>
+                </div>
+                <div class="card border-blue-400">
+                    <h3 class="font-display text-4xl text-blue-400">Opportunities</h3>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-sm">
+                        <li>Strong market demand for high-quality, emotionally resonant indie games.</li>
+                        <li>Premium (pay-once) model appeals to players tired of IAP/ads.</li>
+                        <li>Potential for featuring on the Apple App Store due to high artistic quality.</li>
+                        <li>Opportunity to build a strong IP for future sequels or content.</li>
+                    </ul>
+                </div>
+                <div class="card border-yellow-400">
+                    <h3 class="font-display text-4xl text-yellow-400">Threats</h3>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-sm">
+                        <li>High player expectations set by genre benchmarks like "Ori".</li>
+                        <li>Marketplace is crowded; discoverability is a constant challenge.</li>
+                        <li>Development delays could lead to budget overruns.</li>
+                        <li>Negative reception to controls could undermine the entire premium experience.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const chartTextColor = '#E0E0E0';
+    const gridColor = 'rgba(126, 200, 227, 0.2)';
+
+    function processLabels(labels) {
+        const maxLen = 16;
+        return labels.map(label => {
+            if (label.length <= maxLen) {
+                return label;
+            }
+            const words = label.split(' ');
+            const newLabels = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).length > maxLen) {
+                    newLabels.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine === '' ? '' : ' ') + word;
+                }
+            }
+            newLabels.push(currentLine);
+            return newLabels;
+        });
+    }
+
+    const tooltipTitleCallback = (tooltipItems) => {
+        const item = tooltipItems[0];
+        let label = item.chart.data.labels[item.dataIndex];
+        return Array.isArray(label) ? label.join(' ') : label;
+    };
+    
+    const sharedTooltipConfig = {
+        plugins: {
+            tooltip: {
+                titleFont: { family: "'Roboto Condensed', sans-serif", size: 16 },
+                bodyFont: { family: "'Roboto Condensed', sans-serif", size: 14 },
+                backgroundColor: '#050A30',
+                titleColor: '#FFFFFF',
+                bodyColor: '#E0E0E0',
+                borderColor: '#7EC8E3',
+                borderWidth: 1,
+                padding: 10,
+                callbacks: { title: tooltipTitleCallback }
+            },
+            legend: {
+                labels: {
+                    color: chartTextColor,
+                    font: {
+                        family: "'Roboto Condensed', sans-serif",
+                        size: 14
+                    }
+                }
+            }
+        }
+    };
+
+    // Pacing Chart (Donut)
+    const pacingCtx = document.getElementById('pacingChart');
+    if (pacingCtx) {
+        new Chart(pacingCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Act I: The Fading Glow', 'Act II: Shadowed Lands', 'Act III: Verdant Embrace'],
+                datasets: [{
+                    label: 'Narrative Pacing',
+                    data: [25, 50, 25],
+                    backgroundColor: ['#0052D4', '#5DA9E9', '#7EC8E3'],
+                    borderColor: '#050A30',
+                    borderWidth: 4,
+                    hoverOffset: 4
+                }]
+            },
+            options: { ...sharedTooltipConfig, responsive: true, maintainAspectRatio: false }
+        });
+    }
+    
+    // Archetype Chart (Radar)
+    const archetypeCtx = document.getElementById('archetypeChart');
+    if(archetypeCtx) {
+        new Chart(archetypeCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Courage (Hero)', 'Empathy (Caregiver)', 'Optimism (Innocent)', 'Vulnerability', 'Determination'],
+                datasets: [{
+                    label: 'Lumo\'s Profile',
+                    data: [8, 9, 7, 6, 9],
+                    fill: true,
+                    backgroundColor: 'rgba(93, 169, 233, 0.4)',
+                    borderColor: '#5DA9E9',
+                    pointBackgroundColor: '#5DA9E9',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#5DA9E9'
+                }]
+            },
+            options: {
+                ...sharedTooltipConfig,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: gridColor },
+                        grid: { color: gridColor },
+                        pointLabels: { 
+                            color: chartTextColor,
+                            font: { size: 12, family: "'Roboto Condensed', sans-serif" }
+                        },
+                        ticks: {
+                            color: chartTextColor,
+                            backdropColor: 'transparent',
+                            stepSize: 2
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Comparison Chart (Radar)
+    const comparisonCtx = document.getElementById('comparisonChart');
+    if (comparisonCtx) {
+        new Chart(comparisonCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Fluid Platforming', 'Painterly Visuals', 'Emotional Story', 'Complex Antagonist', 'Bittersweet Ending', 'Mobile-First Design'],
+                datasets: [
+                    {
+                        label: 'Whispers of the Verdant Heart',
+                        data: [9, 9, 9, 8, 9, 8],
+                        fill: true,
+                        backgroundColor: 'rgba(93, 169, 233, 0.4)',
+                        borderColor: '#5DA9E9',
+                        pointBackgroundColor: '#5DA9E9',
+                    },
+                    {
+                        label: 'Inspiration (Ori)',
+                        data: [10, 10, 9, 6, 7, 3],
+                        fill: true,
+                        backgroundColor: 'rgba(126, 200, 227, 0.4)',
+                        borderColor: '#7EC8E3',
+                        pointBackgroundColor: '#7EC8E3',
+                    }
+                ]
+            },
+            options: {
+                ...sharedTooltipConfig,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: gridColor },
+                        grid: { color: gridColor },
+                        pointLabels: {
+                            color: chartTextColor,
+                            font: { size: 12, family: "'Roboto Condensed', sans-serif" }
+                        },
+                        ticks: {
+                            color: chartTextColor,
+                            backdropColor: 'transparent',
+                            stepSize: 2
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Antagonist Chart (Bar)
+    const antagonistCtx = document.getElementById('antagonistChart');
+    if (antagonistCtx) {
+        new Chart(antagonistCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Tragedy/Despair', 'Pure Malice'],
+                datasets: [{
+                    label: 'Antagonist Foundational Motivation',
+                    data: [90, 10],
+                    backgroundColor: ['#0052D4', '#7EC8E3'],
+                    borderColor: '#050A30',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...sharedTooltipConfig,
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        grid: { color: gridColor },
+                        ticks: { color: chartTextColor, font: { family: "'Roboto Condensed', sans-serif" },
+                            callback: function(value) { return value + '%' }
+                        }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: chartTextColor, font: { family: "'Roboto Condensed', sans-serif", size: 14 } }
+                    }
+                },
+                plugins: {
+                    ...sharedTooltipConfig.plugins,
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
