@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Audio Notes - Jungle Theme</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      /* Painterly jungle gradient background */
+      background: linear-gradient(135deg, #0f2027 0%, #2c7744 40%, #a8e063 100%);
+      min-height: 100vh;
+    }
+    .jungle-card {
+      background: rgba(30, 60, 40, 0.7);
+      border-radius: 1.25rem;
+      border: 1.5px solid rgba(168, 224, 99, 0.4);
+      box-shadow:
+        0 0 24px 4px #a8e06355,
+        0 4px 32px 0 #0f202755,
+        0 0 0 4px #2c7744aa inset;
+      backdrop-filter: blur(6px);
+      transition: box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .jungle-card:hover {
+      box-shadow:
+        0 0 40px 10px #c0ffb3cc,
+        0 4px 32px 0 #0f202799,
+        0 0 0 6px #a8e063cc inset;
+      border-color: #e0ffcc;
+    }
+    /* Painterly leaf accent */
+    .leaf {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      top: -18px;
+      right: -18px;
+      opacity: 0.18;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(1px);
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center py-12">
+
+  <header class="mb-8 text-center">
+    <h1 class="text-4xl font-extrabold text-[#e0ffcc] drop-shadow-lg font-serif tracking-wide">
+      🌱 Whispers of the Verdant Heart 
+    </h1>
+    <p class="text-[#e0ffcc]/80 mt-2 text-lg font-medium italic">
+      Full Story Breakdown.
+    </p>
+  </header>
+
+  <main class="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4">
+    <!-- Audio Note Card 1 -->
+    <div class="jungle-card p-6 flex flex-col items-center relative">
+      <svg class="leaf" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="32" rx="28" ry="16" fill="#a8e063"/>
+        <path d="M32 16 Q36 32 32 48 Q28 32 32 16 Z" fill="#2c7744"/>
+      </svg>
+      <h2 class="text-lg font-semibold text-[#e0ffcc] mb-2 z-10">🌱 Chapter 1: The Verdant Heart (Act I – Setup)</h2>
+      <audio controls class="w-full rounded-lg z-10">
+        <source src="audio/physics-lecture1.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <!-- Audio Note Card 2 -->
+    <div class="jungle-card p-6 flex flex-col items-center relative">
+      <svg class="leaf" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="32" rx="28" ry="16" fill="#a8e063"/>
+        <path d="M32 16 Q36 32 32 48 Q28 32 32 16 Z" fill="#2c7744"/>
+      </svg>
+      <h2 class="text-lg font-semibold text-[#e0ffcc] mb-2 z-10">🕯️ Chapter 2: Whispering Mire (Act II – Biome 1)</h2>
+      <audio controls class="w-full rounded-lg z-10">
+        <source src="audio/math-calculus.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <!-- Audio Note Card 3 -->
+    <div class="jungle-card p-6 flex flex-col items-center relative">
+      <svg class="leaf" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="32" rx="28" ry="16" fill="#a8e063"/>
+        <path d="M32 16 Q36 32 32 48 Q28 32 32 16 Z" fill="#2c7744"/>
+      </svg>
+      <h2 class="text-lg font-semibold text-[#e0ffcc] mb-2 z-10">🧊 Chapter 3: Petrified Peaks (Act II – Biome 2)</h2>
+      <audio controls class="w-full rounded-lg z-10">
+        <source src="audio/chem-organic.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <!-- Add more audio notes as needed -->
+  </main>
+
+  <footer class="mt-12 text-[#e0ffcc]/70 text-sm">
+    &copy; 2025 Nitin Kumar, All rights reserved.
+  </footer>
+</body>
+</html>
