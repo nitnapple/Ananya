@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>End of the Journey</title>
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/bw_crown_1.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+    .typewriter {
+      display: inline-block;
+      border-right: 2px solid white;
+      animation: blink 1s step-end infinite;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'Merriweather', serif; /* Use Merriweather for readability */
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Subtle shadow for text */
+    }
+    @media (max-width: 640px) {
+      h2 { font-size: 1.1rem; } /* Slightly larger base font size for h2 */
+      .typewriter { font-size: 1.1rem; }
+    }
+    @media (min-width: 641px) {
+      h2 { font-size: 1.5rem; } /* Adjusted desktop font size for h2 */
+      .typewriter { font-size: 1.5rem; }
+    }
+    body { transition: filter 2s ease-out; } /* Smoother transition */
+    .bw-effect { filter: grayscale(90%) contrast(250%) brightness(80%); } /* Stronger grayscale, better contrast */
+
+    .glow {
+      position: absolute;
+      width: 120px; /* Slightly larger glow */
+      height: 120px;
+      background: radial-gradient(circle, rgba(255, 244, 229, 0.7) 0%, transparent 70%); /* Brighter, more defined glow */
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: glow-animation 2.5s ease-out forwards; /* Faster, more impactful glow */
+      z-index: 50;
+    }
+    @keyframes glow-animation {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.5); /* Start smaller */
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(3); /* Expand more */
+      }
+    }
+
+    /* Magical Font Effect */
+    .magical-text {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.8rem; /* Larger and more prominent */
+      color: #ffe0b2; /* Softer, magical gold */
+      text-shadow: 0 0 15px #ffcc80, 0 0 30px #ffb366, 0 0 50px #fff; /* Enhanced glow effect */
+      animation: magical-glow 3.5s ease-in-out forwards; /* Smoother, slightly faster */
+      opacity: 0; /* Start invisible */
+      pointer-events: none;
+      z-index: 40;
+    }
+    @media (max-width: 640px) {
+      .magical-text { font-size: 1.8rem; } /* Adjusted for mobile */
+    }
+    @keyframes magical-glow {
+      0% { opacity: 0; filter: blur(5px);} /* Start with blur */
+      20% { opacity: 1; filter: blur(0);}
+      80% { opacity: 1;}
+      100% { opacity: 0; filter: blur(5px);} /* End with blur */
+    }
+
+    /* Background texture */
+    .texture-overlay {
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgOCA4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxmaWx0ZXIgaWQ9ImEiPjxlbiBsZW5ndGg9IjEuMiIvPjwvZmlsdGVyPgogIDxwYXR0ZCBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9Ii4zIiBmaWx0ZXI9InVybCgjYSkiIGQ9Ik0wIDBoOHY4SDB6Ii8+Cjwvc3ZnPg==');
+      background-size: 4px 4px; /* Subtle noise */
+      opacity: 0.1; /* Very subtle */
+    }
+
+    /* Button Styling */
+    .archive-button {
+      background-color: rgba(255, 255, 255, 0.9); /* Whiter, slightly more opaque */
+      color: #333; /* Darker text for contrast */
+      font-weight: 700; /* Bolder */
+      padding: 0.75rem 2rem; /* More padding */
+      border-radius: 9999px; /* Fully rounded */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Stronger shadow */
+      transition: all 0.3s ease-in-out; /* Smooth transitions for all properties */
+      border: 1px solid rgba(0,0,0,0.1); /* Subtle border */
+    }
+    .archive-button:hover {
+      background-color: #fff;
+      transform: translateY(-2px) scale(1.02); /* Lift and slightly enlarge */
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    .archive-button:active {
+      transform: translateY(0) scale(0.98); /* Press down effect */
+    }
+
+    /* Footer Styling */
+    .footer-content {
+        background-color: rgba(0, 0, 0, 0.3); /* Slightly more opaque for better readability */
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        backdrop-filter: blur(5px); /* Add a subtle blur effect */
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+
+</head>
+
+<body class="m-0 p-0 font-merriweather"> <div class="relative w-screen h-screen overflow-hidden" id="click-target">
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+      <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/us.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="absolute inset-0 bg-black bg-opacity-50 z-10 texture-overlay"></div>
+
+    <div class="absolute inset-0 flex flex-col items-center justify-start z-20 px-4 pt-12 sm:pt-20 text-center space-y-8"> <div class="max-w-md sm:max-w-2xl"> <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-semibold drop-shadow-lg leading-relaxed">
+          <span id="typewriter" class="typewriter"></span>
+        </h2>
+      </div>
+      <a href="https://nitnapple.github.io/Ananya/Archive" rel="noopener noreferrer" id="archive-link" class="hidden">
+        <button class="archive-button">
+          Archive
+        </button>
+      </a>
+    </div>
+
+    <div id="magical-container"
+      class="fixed inset-0 flex items-center justify-center z-40 pointer-events-none"
+      style="display:none;">
+      <span id="magical-text" class="magical-text"></span>
+    </div>
+    <div class="absolute bottom-5 left-0 right-0 z-30 flex justify-center">
+      <div class="text-center footer-content">
+        <a href="https://instagram.com/nitin_apple" target="_blank" rel="noopener noreferrer" class="inline-block transition-transform duration-200 hover:scale-110">
+          <svg class="w-8 h-8 text-white hover:text-pink-400 transition duration-300" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.3 2.4.6.5.3.9.7 1.3 1.3.3.5.5 1.2.6 2.4.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 1.9-.6 2.4-.3.5-.7.9-1.3 1.3-.5.3-1.2.5-2.4.6-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.3-2.4-.6-.5-.3-.9-.7-1.3-1.3-.3-.5-.5-1.2-.6-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.3-1.9.6-2.4.3-.5.7-.9 1.3-1.3.5-.3 1.2-.5 2.4-.6C8.4 2.2 8.8 2.2 12 2.2zm0-2.2C8.7 0 8.3 0 7.1.1 5.8.2 4.8.4 4 .9 3.1 1.3 2.3 2.1 1.9 3 .4 3.8.2 4.8.1 6.1 0 7.3 0 7.7 0 12s0 4.7.1 5.9c.1 1.3.3 2.3.8 3.1.4.9 1.2 1.7 2.1 2.1.8.4 1.8.7 3.1.8 1.2.1 1.6.1 5.9.1s4.7 0 5.9-.1c1.3-.1 2.3-.3 3.1-.8.9-.4 1.7-1.2 2.1-2.1.4-.8.7-1.8.8-3.1.1-1.2.1-1.6.1-5.9s0-4.7-.1-5.9c-.1-1.3-.3-2.3-.8-3.1-.4-.9-1.2-1.7-2.1-2.1-.8-.4-1.8-.7-3.1-.8C15.7 0 15.3 0 12 0zM12 5.8c-3.4 0-6.2 2.8-6.2 6.2S8.6 18.2 12 18.2 18.2 15.4 18.2 12 15.4 5.8 12 5.8zm0 10.2c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm5.8-10.7c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5 1.5-.6 1.5-1.5-.7-1.5-1.5-1.5z"/>
+          </svg>
+        </a>
+        <p class="text-white text-sm opacity-90 mt-1">I am merely a text away.</p>
+        <p class="text-gray-300 text-xs mt-1">© 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const text = "Thank you for being a part of this beautiful journey—may we meet again someday, with even warmer smiles and happier hearts.";
+      const el = document.getElementById("typewriter");
+      const archiveLink = document.getElementById("archive-link");
+      let index = 0;
+
+      // Add the magic sound effect
+      const magicSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/magic.mp3");
+      magicSound.volume = 0.6; // Adjust volume for magic sound
+
+      function type() {
+        if (index < text.length) {
+          el.textContent += text.charAt(index++);
+          setTimeout(type, 40);
+        } else {
+          el.style.borderRight = "none";
+          archiveLink.classList.remove("hidden");
+
+          // Show magical text sequence after typewriter finishes
+          showMagicalTextSequence();
+        }
+      }
+      type();
+
+      // Magical text logic
+      function showMagicalTextSequence() {
+        const magicalContainer = document.getElementById("magical-container");
+        const magicalText = document.getElementById("magical-text");
+
+        // First message: Tap to see the magic (4s)
+        magicalText.textContent = "Tap to see the magic";
+        magicalContainer.style.display = "flex";
+        magicalText.style.animation = "magical-glow 4s ease-in-out forwards"; // Use forwards to keep the last state
+
+        // Play magic sound here
+        magicSound.currentTime = 0;
+        magicSound.play();
+
+        setTimeout(() => {
+          magicalContainer.style.display = "none"; // Hide after first message
+          // After 1s gap, show next message
+          setTimeout(() => {
+            magicalText.textContent = "Tap rapidly anywhere.";
+            magicalContainer.style.display = "flex";
+            magicalText.style.animation = "magical-glow 4s ease-in-out forwards"; // Use forwards
+            setTimeout(() => {
+              magicalContainer.style.display = "none"; // Hide after second message
+            }, 4000);
+          }, 1000); // 1-second gap
+        }, 4000); // Duration of first message animation
+      }
+
+      // Glow and sound logic
+      const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
+      clickSound.volume = 0.5; // Adjust volume for click sound
+
+      document.getElementById("click-target").addEventListener("click", function (e) {
+        if (window.navigator && window.navigator.vibrate) {
+          window.navigator.vibrate(70); // Slightly longer vibration
+        }
+        clickSound.currentTime = 0;
+        clickSound.play();
+
+        const glow = document.createElement('div');
+        glow.className = 'glow';
+        glow.style.left = `${e.clientX}px`;
+        glow.style.top = `${e.clientY}px`;
+        document.body.appendChild(glow);
+
+        setTimeout(() => glow.remove(), 2500); // Remove glow after its animation
+      });
+
+      // Grayscale effect after a delay
+      setTimeout(() => {
+        document.body.classList.add('bw-effect');
+      }, 4000); // Adjusted timing to allow magical text to finish
+    });
+  </script>
+</body>
+</html>
