@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whispers of the Verdant Heart - Interactive Pitch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Verdant Harmony -->
+    <!-- Application Structure Plan: The SPA is structured as an interactive "Game Pitch" to transform the report into an engaging user experience. It uses a top-down narrative flow, starting with a hero section to set the mood, followed by a sticky navigation to jump between four key pillars: The Story (themes, characters), The World (interactive biomes), The Spirit (protagonist, abilities), and The Journey (interactive narrative timeline). This thematic structure is more intuitive and explorable than the original report's linear format. It encourages discovery by allowing users to delve into aspects that interest them most, fostering a deeper understanding of the game concept. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Narrative Pacing (25/50/25). Goal: Inform/Compare. Viz: Chart.js Doughnut Chart. Interaction: Hover tooltips. Justification: Visually represents the planned game duration split, making it easy to grasp.
+        - Report Info: Characters. Goal: Organize/Inform. Viz: Interactive HTML cards. Interaction: Click to reveal details. Justification: Encourages engagement and keeps the UI clean.
+        - Report Info: Biomes. Goal: Explore/Organize. Viz: Interactive HTML gallery. Interaction: Click to update a detail view. Justification: Transforms a list into an explorable world map.
+        - Report Info: 3-Act Narrative. Goal: Change/Organize. Viz: Interactive HTML accordion/timeline. Interaction: Click to expand acts. Justification: Makes the dense story structure digestible and sequential.
+        - Library/Method: All visuals use HTML/CSS/Tailwind and Chart.js for the Canvas chart. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #FBF9F1;
+            color: #3A4F41;
+            font-family: 'Nunito Sans', sans-serif;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: auto;
+            max-height: 400px;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFD700;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .active .accordion-content {
+            max-height: 1000px;
+            transition: max-height 1s ease-in, padding 0.5s ease-in;
+        }
+        .active .accordion-icon {
+            transform: rotate(45deg);
+        }
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-flip:hover .card-flip-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-[#FBF9F1]/80 backdrop-blur-sm shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <ul class="flex justify-center items-center space-x-4 sm:space-x-8 text-lg font-semibold">
+                <li><a href="#story" class="nav-link">The Story</a></li>
+                <li><a href="#world" class="nav-link">The World</a></li>
+                <li><a href="#spirit" class="nav-link">The Spirit</a></li>
+                <li><a href="#journey" class="nav-link">The Journey</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="min-h-[80vh] flex items-center justify-center text-center bg-gradient-to-b from-[#FBF9F1] to-[#e8e4d8] py-20">
+            <div class="container mx-auto px-6">
+                <h1 class="text-6xl md:text-8xl font-bold text-[#1A4314] mb-4 font-display">Whispers of the Verdant Heart</h1>
+                <p class="text-xl md:text-2xl text-[#3A4F41] max-w-3xl mx-auto leading-relaxed">
+                    An interactive journey into a world of fading beauty. Explore the story of a small spirit's quest to mend a broken world, a tale of love, sacrifice, and the enduring hope that exists in us all.
+                </p>
+                <a href="#story" class="mt-8 inline-block bg-[#FFD700] text-[#3A4F41] font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-[#f0c800] transition-transform transform hover:scale-105">
+                    Begin the Journey
+                </a>
+            </div>
+        </section>
+
+        <section id="story" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center text-[#1A4314] mb-4 font-display">The Story</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-16">
+                    At its core, "Whispers of the Verdant Heart" is an emotional narrative exploring profound themes. The player's journey is driven by the bonds of love, the struggle between decay and restoration, and the poignant beauty of sacrifice. This section introduces the central characters who embody these themes.
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="card-flip h-96">
+                        <div class="card-flip-inner">
+                            <div class="card-front bg-white p-6 rounded-lg shadow-xl flex flex-col justify-center items-center border-2 border-[#e8e4d8]">
+                                <div class="text-6xl mb-4">✨</div>
+                                <h3 class="text-2xl font-bold text-[#1A4314] font-display">Lumo</h3>
+                                <p class="text-gray-500 font-semibold">(The Protagonist)</p>
+                                <p class="mt-4">A small, agile Glimmerwing spirit, embodying hope and determination.</p>
+                                <div class="mt-6 text-sm font-bold text-[#FFD700]">HOVER TO REVEAL</div>
+                            </div>
+                            <div class="card-back bg-[#3A4F41] text-white p-6 rounded-lg shadow-xl flex flex-col justify-center">
+                                <h3 class="text-xl font-bold font-display text-[#FFD700]">Hero, Caregiver, Innocent</h3>
+                                <p class="mt-2 text-sm leading-relaxed">Radiating a soft, warm light, Lumo is deeply empathetic and curious. Their journey is one of growing resolve, learning to wield their innate light not just for combat, but for healing and restoration in a world succumbing to darkness.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-flip h-96">
+                        <div class="card-flip-inner">
+                            <div class="card-front bg-white p-6 rounded-lg shadow-xl flex flex-col justify-center items-center border-2 border-[#e8e4d8]">
+                                <div class="text-6xl mb-4">🌿</div>
+                                <h3 class="text-2xl font-bold text-[#1A4314] font-display">Pip</h3>
+                                <p class="text-gray-500 font-semibold">(The Companion)</p>
+                                <p class="mt-4">A small, flightless Mossling who represents the life Lumo strives to protect.</p>
+                                <div class="mt-6 text-sm font-bold text-[#FFD700]">HOVER TO REVEAL</div>
+                            </div>
+                            <div class="card-back bg-[#3A4F41] text-white p-6 rounded-lg shadow-xl flex flex-col justify-center">
+                                <h3 class="text-xl font-bold font-display text-[#FFD700]">Innocent, Dependant</h3>
+                                <p class="mt-2 text-sm leading-relaxed">Pip is Lumo's core emotional anchor. Initially playful, Pip's gradual decline due to the blight provides the urgent, personal motivation for Lumo's quest. Pip's vulnerability amplifies the emotional stakes of the story.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-flip h-96">
+                        <div class="card-flip-inner">
+                            <div class="card-front bg-white p-6 rounded-lg shadow-xl flex flex-col justify-center items-center border-2 border-[#e8e4d8]">
+                                <div class="text-6xl mb-4">🥀</div>
+                                <h3 class="text-2xl font-bold text-[#1A4314] font-display">The Withered Sentinel</h3>
+                                <p class="text-gray-500 font-semibold">(The Antagonist)</p>
+                                <p class="mt-4">A tragic figure—once a noble guardian, now consumed by despair.</p>
+                                <div class="mt-6 text-sm font-bold text-[#FFD700]">HOVER TO REVEAL</div>
+                            </div>
+                             <div class="card-back bg-[#3A4F41] text-white p-6 rounded-lg shadow-xl flex flex-col justify-center">
+                                <h3 class="text-xl font-bold font-display text-[#FFD700]">Shadow, Tragic Hero</h3>
+                                <p class="mt-2 text-sm leading-relaxed">The Sentinel is not a source of pure malice, but a manifestation of the world's deepest sorrow. Overwhelmed by loss, they became the vessel for the very blight they once fought, seeking to end all suffering through a desolate stasis.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="world" class="py-20 md:py-32 bg-gradient-to-b from-[#e8e4d8] to-[#FBF9F1]">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center text-[#1A4314] mb-4 font-display">The World</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-16">
+                    The world itself is a character, its health a direct reflection of the narrative. From idyllic havens to corrupted wastelands, each biome tells a story of what was lost and what can be restored. Click on a region below to learn about its role in Lumo's journey.
+                </p>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/3">
+                        <ul id="biome-selector" class="space-y-2">
+                            <li data-biome="verdant" class="biome-item active-biome bg-[#1A4314] text-white p-4 rounded-lg cursor-pointer font-semibold shadow-md">The Verdant Heart</li>
+                            <li data-biome="mire" class="biome-item bg-white p-4 rounded-lg cursor-pointer font-semibold shadow-md">The Whispering Mire</li>
+                            <li data-biome="peaks" class="biome-item bg-white p-4 rounded-lg cursor-pointer font-semibold shadow-md">The Petrified Peaks</li>
+                            <li data-biome="glade" class="biome-item bg-white p-4 rounded-lg cursor-pointer font-semibold shadow-md">The Sunken Glade</li>
+                            <li data-biome="core" class="biome-item bg-white p-4 rounded-lg cursor-pointer font-semibold shadow-md">The Sentinel's Core</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-2/3">
+                        <div id="biome-display" class="bg-white p-8 rounded-lg shadow-xl transition-all duration-500 min-h-[300px] flex flex-col justify-center">
+                            <h3 id="biome-title" class="text-3xl font-bold text-[#1A4314] font-display mb-4"></h3>
+                            <p id="biome-description" class="text-lg leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="spirit" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                 <h2 class="text-4xl md:text-5xl font-bold text-center text-[#1A4314] mb-4 font-display">The Spirit</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-16">
+                    The protagonist, Lumo, is a small beacon of hope in a vast, overwhelming world. Their design emphasizes vulnerability and agility, creating a powerful emotional contrast with the challenges they face. As Lumo's journey progresses, their abilities evolve to not only overcome obstacles but to actively heal the environment.
+                </p>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                         <h3 class="text-3xl font-bold text-[#1A4314] font-display mb-4">A Beacon of Hope</h3>
+                         <p class="mb-4">As a "Glimmerwing," Lumo is visually small, ethereal, and highly agile. Their luminous design and fluid animations convey curiosity, determination, and vulnerability. This inherent fragility makes every triumph feel more significant, fostering a deep connection with the player.</p>
+                         <p>Lumo embodies the courage of a Hero, the compassion of a Caregiver, and the pure optimism of the Innocent. This blend of archetypes creates a rich emotional journey, as players guide this tiny spirit through immense challenges.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-bold text-[#1A4314] font-display mb-6 text-center">Evolving Abilities</h3>
+                        <div class="space-y-4">
+                            <div class="ability-item bg-white p-4 rounded-lg shadow-md cursor-pointer">
+                                <h4 class="font-semibold text-lg">✨ Spirit Arc</h4>
+                                <p class="text-sm ability-desc hidden">A basic projectile of light to fend off corrupted creatures.</p>
+                            </div>
+                            <div class="ability-item bg-white p-4 rounded-lg shadow-md cursor-pointer">
+                                <h4 class="font-semibold text-lg">🌿 Verdant Pulse</h4>
+                                <p class="text-sm ability-desc hidden">An area-of-effect burst of light that cleanses corrupted flora and stuns lesser foes.</p>
+                            </div>
+                            <div class="ability-item bg-white p-4 rounded-lg shadow-md cursor-pointer">
+                                <h4 class="font-semibold text-lg">☀️ Sunbeam Focus</h4>
+                                <p class="text-sm ability-desc hidden">A focused beam of light to melt obstacles and activate ancient light-based mechanisms.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="journey" class="py-20 md:py-32 bg-gradient-to-b from-[#FBF9F1] to-[#e8e4d8]">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center text-[#1A4314] mb-4 font-display">The Journey</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-16">
+                    The narrative is meticulously paced over a 3-hour experience, broken into three acts. This structure ensures a compelling emotional arc, balancing moments of intense action with quiet reflection. Click each act to follow the progression of Lumo's quest from its hopeful beginning to its bittersweet conclusion.
+                </p>
+                <div class="grid lg:grid-cols-3 gap-12 items-center">
+                    <div class="lg:col-span-1">
+                        <h3 class="text-3xl font-bold text-[#1A4314] font-display mb-4 text-center">Narrative Pacing</h3>
+                        <div class="chart-container">
+                            <canvas id="pacingChart"></canvas>
+                        </div>
+                         <p class="text-center mt-4 text-sm text-gray-600">A proposed 3-hour experience, dedicating the longest segment to character growth and rising action.</p>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <div id="accordion-container" class="space-y-4">
+                            <div class="accordion-item bg-white rounded-lg shadow-xl border-l-4 border-yellow-300">
+                                <div class="accordion-header p-6 cursor-pointer flex justify-between items-center">
+                                    <h3 class="text-2xl font-bold text-[#1A4314] font-display">Act I: The Fading Glow</h3>
+                                    <div class="accordion-icon text-3xl text-yellow-400 transition-transform duration-300 transform">+</div>
+                                </div>
+                                <div class="accordion-content px-6 pb-6">
+                                    <p class="font-semibold mb-2">Setup & Inciting Incident (Approx. 45 mins)</p>
+                                    <p class="text-sm leading-relaxed">The story begins in an idyllic home, establishing Lumo's bond with Pip. The sudden arrival of the blight, "The Great Withering," separates them, creating immediate urgency and a desperate motivation for the quest. The emotional arc moves from comfort to shock and determination.</p>
+                                </div>
+                            </div>
+                            <div class="accordion-item bg-white rounded-lg shadow-xl border-l-4 border-orange-400">
+                                <div class="accordion-header p-6 cursor-pointer flex justify-between items-center">
+                                    <h3 class="text-2xl font-bold text-[#1A4314] font-display">Act II: Through the Shadowed Lands</h3>
+                                    <div class="accordion-icon text-3xl text-orange-400 transition-transform duration-300 transform">+</div>
+                                </div>
+                                <div class="accordion-content px-6 pb-6">
+                                    <p class="font-semibold mb-2">Confrontation & Rising Action (Approx. 90 mins)</p>
+                                    <p class="text-sm leading-relaxed">The longest act focuses on exploration and growth. Lumo journeys through corrupted biomes, discovers the blight's true nature, and confronts the Withered Sentinel. New abilities are gained, and the emotional arc covers despair, perseverance, and fleeting moments of hope as the threat escalates.</p>
+                                </div>
+                            </div>
+                            <div class="accordion-item bg-white rounded-lg shadow-xl border-l-4 border-red-500">
+                                <div class="accordion-header p-6 cursor-pointer flex justify-between items-center">
+                                    <h3 class="text-2xl font-bold text-[#1A4314] font-display">Act III: The Verdant Heart's Embrace</h3>
+                                    <div class="accordion-icon text-3xl text-red-500 transition-transform duration-300 transform">+</div>
+                                </div>
+                                <div class="accordion-content px-6 pb-6">
+                                    <p class="font-semibold mb-2">Climax & Resolution (Approx. 45 mins)</p>
+                                    <p class="text-sm leading-relaxed">Lumo reaches the blight's core for a final, climactic confrontation. This act brings peak tension, catharsis, and a profound sacrifice. The resolution is bittersweet: the world's restoration begins, but at a great cost, leaving the player with a sense of ultimate hope tinged with sadness.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#3A4F41] text-white mt-20">
+        <div class="container mx-auto px-6 py-12">
+            <h2 class="text-3xl font-bold text-center text-[#FFD700] mb-8 font-display">Development Recommendations</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Fluid Controls</h3>
+                    <p class="text-sm text-gray-300">Perfecting touch controls for fluid movement and responsive combat is paramount for a premium feel on iOS.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Optimized Performance</h3>
+                    <p class="text-sm text-gray-300">Achieving "great visuals" on mobile requires careful optimization to ensure a consistent frame rate across all devices.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">Iterative Design</h3>
+                    <p class="text-sm text-gray-300">Adopting a "crazy iterative" process is crucial for refining the game's "feel" and maximizing emotional impact.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">High-Quality Audio</h3>
+                    <p class="text-sm text-gray-300">A dynamic, high-quality soundtrack and rich sound design are essential to amplify the narrative's emotional beats.</p>
+                </div>
+            </div>
+             <div class="text-center mt-12 text-gray-400 text-sm">
+                <p>Interactive Experience based on the "Whispers of the Verdant Heart" Game Story Report.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const biomeData = {
+        verdant: {
+            title: "The Verdant Heart",
+            description: "Characterized by lush, bioluminescent flora and soft golden light, this area represents the world's natural harmony. Its initial beauty establishes the high stakes, and its eventual restoration provides tangible proof of Lumo's success."
+        },
+        mire: {
+            title: "The Whispering Mire",
+            description: "Features desaturated greens, murky toxic water, and skeletal trees. This biome visually depicts the blight's slow, suffocating spread, with unsettling whispers hinting at the underlying sorrow that feeds the corruption."
+        },
+        peaks: {
+            title: "The Petrified Peaks",
+            description: "Defined by jagged, dark crystalline formations and the frozen forms of ancient guardians. This area tells a silent story of past resistance, representing the blight's destructive power and hinting at the Sentinel's tragic past."
+        },
+        glade: {
+            title: "The Sunken Glade",
+            description: "Once-vibrant underwater caverns are now choked with black, pulsating tendrils. It illustrates the blight's pervasive reach into all corners of the world, offering a clear visual reward as the player cleanses the water and frees trapped light."
+        },
+        core: {
+            title: "The Sentinel's Core",
+            description: "A desolate, oppressive chamber at the heart of the blight, devoid of natural light. This environment is the literal source of corruption, a place of profound despair that sets the stage for the climactic confrontation."
+        }
+    };
+
+    const biomeSelector = document.getElementById('biome-selector');
+    const biomeTitle = document.getElementById('biome-title');
+    const biomeDescription = document.getElementById('biome-description');
+
+    function updateBiomeDisplay(biomeKey) {
+        const data = biomeData[biomeKey];
+        biomeTitle.textContent = data.title;
+        biomeDescription.textContent = data.description;
+    }
+
+    biomeSelector.addEventListener('click', (e) => {
+        if (e.target.closest('.biome-item')) {
+            const item = e.target.closest('.biome-item');
+            const biomeKey = item.dataset.biome;
+
+            document.querySelectorAll('.biome-item').forEach(el => {
+                el.classList.remove('active-biome', 'bg-[#1A4314]', 'text-white');
+                el.classList.add('bg-white');
+            });
+
+            item.classList.add('active-biome', 'bg-[#1A4314]', 'text-white');
+            item.classList.remove('bg-white');
+            
+            updateBiomeDisplay(biomeKey);
+        }
+    });
+
+    updateBiomeDisplay('verdant');
+    
+    const abilityItems = document.querySelectorAll('.ability-item');
+    abilityItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const desc = item.querySelector('.ability-desc');
+            desc.classList.toggle('hidden');
+        });
+    });
+    
+    const accordionContainer = document.getElementById('accordion-container');
+    accordionContainer.addEventListener('click', (e) => {
+        const header = e.target.closest('.accordion-header');
+        if (header) {
+            const item = header.parentElement;
+            
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+            } else {
+                accordionContainer.querySelectorAll('.accordion-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+            }
+        }
+    });
+
+    const ctx = document.getElementById('pacingChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Act I: The Fading Glow', 'Act II: Through the Shadowed Lands', 'Act III: The Verdant Heart\'s Embrace'],
+            datasets: [{
+                label: 'Narrative Pacing',
+                data: [25, 50, 25],
+                backgroundColor: [
+                    'rgba(255, 215, 0, 0.7)', 
+                    'rgba(255, 165, 0, 0.7)',
+                    'rgba(255, 99, 71, 0.7)'  
+                ],
+                borderColor: [
+                    'rgba(255, 215, 0, 1)',
+                    'rgba(255, 165, 0, 1)',
+                    'rgba(255, 99, 71, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#3A4F41',
+                        font: {
+                            family: "'Nunito Sans', sans-serif",
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += context.parsed + '% of game time';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('main section');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.4
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === entry.target.id) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+});
+</script>
+
+</body>
+</html>
