@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive SPA: Whispers of the Verdant Heart - Valuation & Pitch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Subtle Gold -->
+    <!-- Application Structure Plan: The SPA is structured as a strategic narrative for a publisher pitch. It flows from the high-level value proposition to detailed justifications. 1. Hero Section: Grabs attention with the game title and the core "ask" (advance range). 2. Valuation Dashboard: An interactive section breaking down the "ask" into development costs, market potential, and quality multipliers. This justifies the numbers upfront. 3. Creative Pillars: Delves into the 'why' - the narrative strength and world design, using interactive elements to showcase the game story's value. 4. Deal Structure Simulator: An interactive section explaining publisher deal terms (advance, recoupment, royalties) to demonstrate business acumen. 5. Strategic Summary: Concludes with key negotiation points and a final call to action. This structure logically builds a case, making the complex data from both reports digestible and persuasive. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Recommended Advance Range ($100k-$500k+). Goal: Inform. Viz: Dynamic Stat Card. Interaction: Hover effects. Justification: A bold, clear presentation of the key financial figure. NO SVG.
+        - Report Info: Development Cost Breakdown. Goal: Compare. Viz: Horizontal Bar Chart (Chart.js). Interaction: Tooltips on hover. Justification: Clearly compares cost components, making the budget transparent. NO SVG.
+        - Report Info: Revenue Benchmarks (Monument Valley, GRIS). Goal: Compare. Viz: Bar Chart (Chart.js). Interaction: Tooltips. Justification: Directly compares the game's potential to proven market successes. NO SVG.
+        - Report Info: Narrative Arc. Goal: Organize. Viz: Interactive HTML Timeline. Interaction: Click to expand details. Justification: Breaks down the 3-act story into a digestible, explorable format. NO SVG, NO MERMAID JS.
+        - Report Info: Recoupment Model. Goal: Inform/Organize. Viz: Interactive HTML/JS simulator. Interaction: User input/slider to see how advance affects royalties. Justification: Simplifies a complex financial concept, showing understanding of the publisher's business. NO SVG.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #fdfaf6;
+            color: #3a3a3a;
+            font-family: 'Montserrat', sans-serif;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #d4af37;
+            border-bottom-color: #d4af37;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .tab-button.active {
+            background-color: #d4af37;
+            color: white;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 1000px;
+            transition: max-height 0.7s ease-in, padding 0.5s ease-in;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(135deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <ul class="flex justify-center items-center space-x-6 md:space-x-10 text-lg font-semibold">
+                <li><a href="#valuation" class="nav-link border-b-2 border-transparent pb-1">Valuation</a></li>
+                <li><a href="#creative" class="nav-link border-b-2 border-transparent pb-1">Creative</a></li>
+                <li><a href="#deal" class="nav-link border-b-2 border-transparent pb-1">Deal Structure</a></li>
+                <li><a href="#strategy" class="nav-link border-b-2 border-transparent pb-1">Strategy</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="text-center py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <h1 class="text-6xl md:text-8xl font-black text-[#3a3a3a] mb-4 font-display">Whispers of the Verdant Heart</h1>
+                <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">A Strategic Proposal for a Premium Narrative iOS Game</p>
+                <div class="bg-[#fdfaf6] inline-block p-8 rounded-lg border">
+                    <p class="text-lg text-gray-700 font-semibold mb-2">Proposed One-Time Payout (Advance)</p>
+                    <p class="text-5xl md:text-7xl font-bold text-[#d4af37]">$100K – $500K+</p>
+                    <p class="text-sm mt-2 text-gray-500">Based on development costs, market benchmarks, and premium quality.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Valuation Dashboard Section -->
+        <section id="valuation" class="py-20 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Valuation Dashboard</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    This section provides an interactive breakdown of the game's valuation. The requested advance is not an arbitrary figure but a calculated investment based on project costs, verifiable market potential, and the exceptional quality of the game itself. Explore the tabs to understand each component of our valuation.
+                </p>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="mb-8 flex justify-center border-b border-gray-200">
+                        <button class="tab-button active py-2 px-6 font-semibold text-lg" data-tab="costs">1. Development Costs</button>
+                        <button class="tab-button py-2 px-6 font-semibold text-lg" data-tab="market">2. Market Potential</button>
+                        <button class="tab-button py-2 px-6 font-semibold text-lg" data-tab="quality">3. Quality Multiplier</button>
+                    </div>
+
+                    <div id="tab-content">
+                        <div id="costs-content" class="tab-pane active">
+                            <div class="stat-card p-6 md:p-8 rounded-lg">
+                                <h3 class="font-display text-3xl font-bold text-center mb-4">Cost Foundation: Budget Breakdown</h3>
+                                <p class="text-center text-gray-600 mb-6 text-sm">A realistic budget is the cornerstone of our ask. This chart details the estimated allocation of funds required to deliver a high-quality, polished 3-hour experience. The budget prioritizes talent and asset creation, ensuring the "great visuals" and "great storyline" are fully realized.</p>
+                                <div class="chart-container h-96">
+                                    <canvas id="costsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="market-content" class="tab-pane hidden">
+                             <div class="stat-card p-6 md:p-8 rounded-lg">
+                                <h3 class="font-display text-3xl font-bold text-center mb-4">Revenue Benchmarking</h3>
+                                <p class="text-center text-gray-600 mb-6 text-sm">The premium narrative mobile market is proven and profitable. Our revenue projections are benchmarked against successful, comparable titles on iOS, demonstrating a clear path to recoupment and significant ROI for a publisher partner.</p>
+                                <div class="chart-container h-96">
+                                    <canvas id="revenueChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="quality-content" class="tab-pane hidden">
+                            <div class="stat-card p-6 md:p-8 rounded-lg">
+                                <h3 class="font-display text-3xl font-bold text-center mb-4">The Quality Multiplier: Why This Game Will Succeed</h3>
+                                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto text-sm">Beyond numbers, intrinsic quality drives success. An emotionally resonant narrative, stunning visuals, and polished gameplay create positive word-of-mouth and critical acclaim, directly translating to higher sales and player engagement.</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                                    <div>
+                                        <div class="text-4xl mb-2">❤️</div>
+                                        <h4 class="font-bold text-lg">Emotional Narrative</h4>
+                                        <p class="text-xs text-gray-500">A bittersweet story of love and sacrifice ensures lasting player impact.</p>
+                                    </div>
+                                    <div>
+                                        <div class="text-4xl mb-2">🎨</div>
+                                        <h4 class="font-bold text-lg">Visual Storytelling</h4>
+                                        <p class="text-xs text-gray-500">Exquisite, painterly art style stands out in a crowded market.</p>
+                                    </div>
+                                    <div>
+                                        <div class="text-4xl mb-2">🕹️</div>
+                                        <h4 class="font-bold text-lg">Polished Gameplay</h4>
+                                        <p class="text-xs text-gray-500">Fluid, responsive controls create a premium, satisfying experience.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creative Pillars Section -->
+        <section id="creative" class="py-20 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Creative Pillars</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    A successful game is more than a financial model; it's a world that captivates players. This section showcases the core creative elements of "Whispers of the Verdant Heart," demonstrating its potential to become a critically acclaimed and beloved title.
+                </p>
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-3">
+                        <div class="stat-card p-6 md:p-8 rounded-lg h-full">
+                            <h3 class="font-display text-3xl font-bold mb-6">The 3-Hour Narrative Arc</h3>
+                            <div id="accordion-container" class="space-y-3 text-left">
+                                <div class="accordion-item border rounded-lg overflow-hidden">
+                                    <div class="accordion-header p-4 cursor-pointer flex justify-between items-center bg-gray-50">
+                                        <h4 class="font-semibold text-lg">Act I: The Fading Glow (45 Mins)</h4>
+                                        <div class="accordion-icon text-2xl text-gray-500 transition-transform duration-300">+</div>
+                                    </div>
+                                    <div class="accordion-content p-4 bg-white">
+                                        <p class="text-sm"><strong>Setup & Inciting Incident:</strong> The idyllic bond between Lumo and Pip is established before a catastrophic blight separates them, creating immediate emotional stakes and a desperate call to action. Gameplay focuses on basic movement and establishing the core conflict.</p>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border rounded-lg overflow-hidden">
+                                    <div class="accordion-header p-4 cursor-pointer flex justify-between items-center bg-gray-50">
+                                        <h4 class="font-semibold text-lg">Act II: Through the Shadowed Lands (90 Mins)</h4>
+                                        <div class="accordion-icon text-2xl text-gray-500 transition-transform duration-300">+</div>
+                                    </div>
+                                    <div class="accordion-content p-4 bg-white">
+                                        <p class="text-sm"><strong>Confrontation & Rising Action:</strong> The longest act is dedicated to exploration, skill acquisition, and deepening the mystery of the blight. Lumo confronts the tragic Withered Sentinel, raising the stakes and expanding the world's lore. Gameplay introduces advanced platforming and combat.</p>
+                                    </div>
+                                </div>
+                                <div class="accordion-item border rounded-lg overflow-hidden">
+                                    <div class="accordion-header p-4 cursor-pointer flex justify-between items-center bg-gray-50">
+                                        <h4 class="font-semibold text-lg">Act III: The Verdant Heart's Embrace (45 Mins)</h4>
+                                        <div class="accordion-icon text-2xl text-gray-500 transition-transform duration-300">+</div>
+                                    </div>
+                                    <div class="accordion-content p-4 bg-white">
+                                        <p class="text-sm"><strong>Climax & Resolution:</strong> Lumo faces the final, emotional confrontation with the Sentinel. The climax leads to a profound sacrifice, resulting in a bittersweet resolution where the world is saved, but at great cost, ensuring lasting player resonance.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2">
+                         <div class="stat-card p-6 md:p-8 rounded-lg h-full">
+                            <h3 class="font-display text-3xl font-bold mb-4">Protagonist Profile: Lumo</h3>
+                            <p class="text-sm text-gray-600 mb-4">Lumo's character is a strategic blend of archetypes designed for maximum player empathy.</p>
+                            <div class="chart-container h-64">
+                                <canvas id="archetypeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deal Structure Section -->
+        <section id="deal" class="py-20 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Understanding the Partnership</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    We seek a strategic partnership, not just a financial transaction. This section demonstrates our understanding of the business of publishing, including the critical concepts of recoupment and royalties. Use the simulator to see how different advances impact the financial model.
+                </p>
+                <div class="stat-card max-w-4xl mx-auto p-6 md:p-8 rounded-lg">
+                    <h3 class="font-display text-3xl font-bold text-center mb-2">Recoupment & Royalty Simulator</h3>
+                    <p class="text-center text-gray-600 mb-6 text-sm">An advance is an investment the publisher recoups from game revenue. This simulator illustrates the relationship between the advance size, recoupable costs, and when developer royalties begin.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <div class="mb-4">
+                                <label for="advance-slider" class="font-semibold block mb-2">Advance Amount: <span id="advance-value" class="font-bold text-[#d4af37]">$300,000</span></label>
+                                <input type="range" id="advance-slider" min="50000" max="1000000" step="10000" value="300000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div class="mb-4">
+                                <label for="marketing-slider" class="font-semibold block mb-2">Marketing & Other Costs: <span id="marketing-value" class="font-bold text-[#d4af37]">$150,000</span></label>
+                                <input type="range" id="marketing-slider" min="25000" max="500000" step="5000" value="150000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded text-center">
+                                <p class="text-sm font-semibold">Total to Recoup:</p>
+                                <p id="total-recoup" class="text-2xl font-bold text-gray-800">$450,000</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="chart-container h-64">
+                                <canvas id="recoupChart"></canvas>
+                            </div>
+                            <p id="recoup-text" class="text-xs text-center text-gray-500 mt-2">With $1M in net revenue, the publisher recoups their $450,000 investment, and the developer earns royalties on the remaining $550,000.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Strategy Section -->
+        <section id="strategy" class="py-20 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Negotiation & Partnership</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    A successful partnership is built on transparency and mutual benefit. Our goal is to secure a deal that funds our vision while ensuring a strong ROI for our publisher. We believe in negotiating beyond the advance to create a lasting, successful collaboration.
+                </p>
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="stat-card p-6 rounded-lg">
+                        <h3 class="font-display text-2xl font-bold mb-3">Key Justification Points</h3>
+                        <ul class="text-left space-y-2 text-sm">
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Data-Backed Budget:</strong> A detailed budget justifies the advance as a direct investment in quality.</span></li>
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Proven Market:</strong> Benchmarking against successful premium iOS titles de-risks the investment.</span></li>
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Clear ROI Path:</strong> Sales projections show a clear path to recoupment and profitability.</span></li>
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Polished Demo:</strong> A tangible, high-quality demo provides concrete evidence of the game's potential.</span></li>
+                        </ul>
+                    </div>
+                     <div class="stat-card p-6 rounded-lg">
+                        <h3 class="font-display text-2xl font-bold mb-3">Beyond the Advance</h3>
+                         <ul class="text-left space-y-2 text-sm">
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>IP Ownership:</strong> We aim to retain Intellectual Property to build a lasting brand.</span></li>
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Creative Control:</strong> Maintaining creative vision is key to the game's artistic success.</span></li>
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Marketing Partnership:</strong> A collaborative approach to marketing ensures authentic and effective promotion.</span></li>
+                            <li class="flex items-start"><span class="text-[#d4af37] mr-2">✔</span><span><strong>Favorable Royalty Tiers:</strong> We propose a tiered royalty structure that rewards mutual success.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="font-semibold">Whispers of the Verdant Heart</p>
+            <p class="text-sm text-gray-400">An interactive valuation proposal. Let's create something beautiful together.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Shared Chart Config
+    const chartTextColor = '#3a3a3a';
+    const gridColor = 'rgba(0, 0, 0, 0.05)';
+    const tooltipTitleCallback = (tooltipItems) => {
+        const item = tooltipItems[0];
+        let label = item.chart.data.labels[item.dataIndex];
+        return Array.isArray(label) ? label.join(' ') : label;
+    };
+    const sharedTooltipConfig = {
+        plugins: {
+            tooltip: {
+                backgroundColor: '#ffffff',
+                titleColor: '#3a3a3a',
+                bodyColor: '#6b7280',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                padding: 10,
+                boxPadding: 4,
+                callbacks: { title: tooltipTitleCallback }
+            },
+            legend: {
+                labels: { color: chartTextColor, font: { family: "'Montserrat', sans-serif" } }
+            }
+        }
+    };
+
+    // Costs Chart
+    const costsCtx = document.getElementById('costsChart');
+    if (costsCtx) {
+        new Chart(costsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Salaries & Team', 'Art & Assets', 'Sound & Music', 'Software & Tools', 'Marketing & Legal', 'Contingency (15%)'],
+                datasets: [{
+                    label: 'Estimated Cost Allocation',
+                    data: [120000, 60000, 30000, 10000, 15000, 35000],
+                    backgroundColor: ['#d4af37', '#e0c370', '#ebcf8a', '#f5dba4', '#f9e9c2', '#fdf3e0'],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                ...sharedTooltipConfig,
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        grid: { color: gridColor },
+                        ticks: { color: chartTextColor, callback: value => '$' + (value / 1000) + 'k' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: chartTextColor }
+                    }
+                },
+                plugins: { ...sharedTooltipConfig.plugins, legend: { display: false } }
+            }
+        });
+    }
+
+    // Revenue Chart
+    const revenueCtx = document.getElementById('revenueChart');
+    if (revenueCtx) {
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Monument Valley 2 (1st Year)', 'GRIS (Steam Net)', 'Our Target (Year 1)'],
+                datasets: [{
+                    label: 'Gross Revenue (in millions)',
+                    data: [10, 18.6, 5],
+                    backgroundColor: ['#3a3a3a', '#7a7a7a', '#d4af37'],
+                }]
+            },
+            options: {
+                ...sharedTooltipConfig,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        grid: { color: gridColor },
+                        ticks: { color: chartTextColor, callback: value => '$' + value + 'M' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: chartTextColor }
+                    }
+                },
+                 plugins: { ...sharedTooltipConfig.plugins, legend: { display: false } }
+            }
+        });
+    }
+    
+    // Archetype Chart
+    const archetypeCtx = document.getElementById('archetypeChart');
+    if (archetypeCtx) {
+        new Chart(archetypeCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Hero (Courage)', 'Caregiver (Empathy)', 'Innocent (Optimism)'],
+                datasets: [{
+                    label: 'Lumo\'s Archetype Blend',
+                    data: [8, 9, 7],
+                    backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                    borderColor: '#d4af37',
+                    pointBackgroundColor: '#d4af37',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#d4af37'
+                }]
+            },
+            options: {
+                ...sharedTooltipConfig,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: gridColor },
+                        grid: { color: gridColor },
+                        pointLabels: { font: { size: 12, family: "'Montserrat', sans-serif" }, color: chartTextColor },
+                        ticks: { display: false, stepSize: 2 }
+                    }
+                },
+                plugins: { ...sharedTooltipConfig.plugins, legend: { display: false } }
+            }
+        });
+    }
+
+    // Recoupment Simulator
+    const advanceSlider = document.getElementById('advance-slider');
+    const marketingSlider = document.getElementById('marketing-slider');
+    const advanceValue = document.getElementById('advance-value');
+    const marketingValue = document.getElementById('marketing-value');
+    const totalRecoup = document.getElementById('total-recoup');
+    const recoupText = document.getElementById('recoup-text');
+    let recoupChart;
+
+    function formatCurrency(value) {
+        return '$' + new Intl.NumberFormat('en-US').format(value);
+    }
+
+    function updateRecoupChart() {
+        const advance = parseInt(advanceSlider.value);
+        const marketing = parseInt(marketingSlider.value);
+        const total = advance + marketing;
+        const netRevenue = 1000000; // Assume $1M net revenue for simulation
+        const developerShare = Math.max(0, netRevenue - total);
+
+        advanceValue.textContent = formatCurrency(advance);
+        marketingValue.textContent = formatCurrency(marketing);
+        totalRecoup.textContent = formatCurrency(total);
+        recoupText.textContent = `With ${formatCurrency(netRevenue)} in net revenue, the publisher recoups their ${formatCurrency(total)} investment, and the developer earns royalties on the remaining ${formatCurrency(developerShare)}.`;
+
+        const data = {
+            labels: ['Total Net Revenue ($1M)'],
+            datasets: [{
+                    label: 'Publisher Recoupment',
+                    data: [total],
+                    backgroundColor: '#3a3a3a',
+                },
+                {
+                    label: 'Developer Royalty Base',
+                    data: [developerShare],
+                    backgroundColor: '#d4af37',
+                }
+            ]
+        };
+
+        if (recoupChart) {
+            recoupChart.data = data;
+            recoupChart.update();
+        } else {
+            const recoupCtx = document.getElementById('recoupChart');
+            if(recoupCtx) {
+                recoupChart = new Chart(recoupCtx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        ...sharedTooltipConfig,
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true, grid: { display: false }, ticks: { display: false } },
+                            y: { stacked: true, grid: { display: false }, ticks: { display: false } }
+                        },
+                        plugins: {
+                            ...sharedTooltipConfig.plugins,
+                            legend: { position: 'bottom', labels: { boxWidth: 20 } }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    advanceSlider.addEventListener('input', updateRecoupChart);
+    marketingSlider.addEventListener('input', updateRecoupChart);
+    updateRecoupChart();
+
+    // Tab Functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const tabId = button.dataset.tab;
+            tabPanes.forEach(pane => {
+                if (pane.id === `${tabId}-content`) {
+                    pane.classList.remove('hidden');
+                    pane.classList.add('active');
+                } else {
+                    pane.classList.add('hidden');
+                    pane.classList.remove('active');
+                }
+            });
+        });
+    });
+    
+    // Accordion
+    const accordionContainer = document.getElementById('accordion-container');
+    if (accordionContainer) {
+        accordionContainer.addEventListener('click', (e) => {
+            const header = e.target.closest('.accordion-header');
+            if (header) {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
