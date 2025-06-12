@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ananya Interactive Game Studio - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Subtle Gold -->
+    <!-- Application Structure Plan: This portfolio website is designed to showcase "Ananya Interactive Game Studio" and its flagship game, "Whispers of the Verdant Heart," to potential publishers. The structure is a linear, scrollable single page: Hero (Studio & Game Hook), About Us (Studio Vision), Featured Game (Detailed Showcase including Overview, Features, Story, Gameplay, Media, and a key Publisher's Note on valuation), Team, and Contact. A sticky navigation facilitates quick access to sections. This flow guides a publisher from a high-level introduction to game specifics and business considerations, making it easy to digest comprehensive information. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Studio Name & Tagline. Goal: Inform. Viz: Hero section text. Justification: Immediate branding. NO SVG.
+        - Report Info: Game Overview (Platform, Genre, Duration). Goal: Inform. Viz: List in hero section & dedicated sub-section. Justification: Essential quick facts. NO SVG.
+        - Report Info: Game Key Features. Goal: Inform/Organize. Viz: Accordion list. Interaction: Click to expand/collapse. Justification: Concise presentation of core selling points, allowing detail on demand. NO SVG.
+        - Report Info: Game Story & Characters. Goal: Inform. Viz: Descriptive text & character cards. Justification: Conveys emotional depth and narrative strength. NO SVG.
+        - Report Info: Game Gameplay & Artistry. Goal: Inform. Viz: Descriptive text sections. Justification: Highlights core experience and artistic vision. NO SVG.
+        - Report Info: Game Media Assets. Goal: Inform. Viz: Placeholder divs with explanatory text. Justification: Standard portfolio elements for visual representation. NO SVG.
+        - Report Info: Proposed Advance Range ($100K – $500K+). Goal: Inform (publishers). Viz: Dedicated "Publisher's Note" section with bold text. Justification: Strategically highlights the game's perceived value for its primary audience (publishers) on a portfolio site. NO SVG.
+        - Report Info: Team & Contact. Goal: Inform. Viz: Dedicated sections with text and links. Justification: Essential business information. NO SVG.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #fdfaf6;
+            color: #3a3a3a;
+            font-family: 'Montserrat', sans-serif;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #d4af37;
+            border-bottom-color: #d4af37;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 1000px; /* Large enough to accommodate content */
+            padding-top: 1rem;
+            transition: max-height 0.7s ease-in, padding 0.5s ease-in;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <ul class="flex justify-center items-center space-x-4 md:space-x-8 text-lg font-semibold">
+                <li><a href="#home" class="nav-link border-b-2 border-transparent pb-1">Home</a></li>
+                <li><a href="#about-us" class="nav-link border-b-2 border-transparent pb-1">About Us</a></li>
+                <li><a href="#whispers" class="nav-link border-b-2 border-transparent pb-1">Whispers of the Verdant Heart</a></li>
+                <li><a href="#team" class="nav-link border-b-2 border-transparent pb-1">Team</a></li>
+                <li><a href="#contact" class="nav-link border-b-2 border-transparent pb-1">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="text-center py-20 md:py-32 bg-white border-b border-gray-100">
+            <div class="container mx-auto px-6">
+                <h1 class="text-5xl md:text-7xl font-black text-[#3a3a3a] mb-4 font-display">Ananya Interactive Game Studio</h1>
+                <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">Crafting emotionally resonant journeys for the modern player.</p>
+                <div class="bg-[#fdfaf6] inline-block p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <p class="text-lg text-gray-700 font-semibold mb-2">Featured Project:</p>
+                    <h2 class="text-3xl md:text-5xl font-bold text-[#d4af37] font-display">Whispers of the Verdant Heart</h2>
+                    <p class="text-base text-gray-500 mt-2">A Premium Narrative Platformer for iOS</p>
+                    <a href="#whispers" class="mt-6 inline-block bg-[#d4af37] text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:bg-[#c3a033] transition-transform transform hover:scale-105">
+                        Explore Our Game
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about-us" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">About Ananya Interactive</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    Ananya Interactive Game Studio is dedicated to creating profound and memorable interactive experiences. We believe in the power of storytelling and meticulous craftsmanship to forge deep emotional connections with players. Our focus is on premium titles that offer rich narratives, stunning visuals, and polished gameplay, designed to leave a lasting impact.
+                </p>
+                <div class="card max-w-4xl mx-auto p-6 md:p-8">
+                    <h3 class="font-display text-2xl font-bold mb-4 text-center">Our Vision & Philosophy</h3>
+                    <ul class="list-disc list-inside space-y-3 text-base text-gray-700">
+                        <li><strong>Emotional Resonance:</strong> We prioritize narrative depth and character development to create games that truly move players.</li>
+                        <li><strong>Artistic Excellence:</strong> Every project is a canvas for unique, high-quality visual and audio artistry.</li>
+                        <li><strong>Player-Centric Design:</strong> Intuitive controls and engaging mechanics are paramount, ensuring a satisfying experience.</li>
+                        <li><strong>Concise Impact:</strong> We aim for focused, impactful experiences that respect player time while delivering full narrative arcs.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Whispers of the Verdant Heart Showcase -->
+        <section id="whispers" class="py-16 md:py-24 bg-white border-t border-b border-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Whispers of the Verdant Heart</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    Our flagship project, "Whispers of the Verdant Heart," is a premium iOS narrative platformer inviting players into a world of breathtaking beauty and profound challenges. It's a journey of light, loss, and restoration, carefully crafted to deliver an unforgettable emotional experience.
+                </p>
+
+                <!-- Game Overview -->
+                <div class="card max-w-5xl mx-auto p-6 md:p-8 mb-12">
+                    <h3 class="font-display text-2xl font-bold mb-4 text-center">Game Overview</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                        <div class="flex flex-col items-center justify-center p-3 rounded-lg bg-gray-50">
+                            <span class="text-3xl mb-1">📱</span>
+                            <strong class="text-gray-800">Platform:</strong> <span class="text-gray-600">iOS</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-3 rounded-lg bg-gray-50">
+                            <span class="text-3xl mb-1">🎮</span>
+                            <strong class="text-gray-800">Genre:</strong> <span class="text-gray-600">Narrative Platformer</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-3 rounded-lg bg-gray-50">
+                            <span class="text-3xl mb-1">⏳</span>
+                            <strong class="text-gray-800">Duration:</strong> <span class="text-gray-600">~3 Hours</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-3 rounded-lg bg-gray-50">
+                            <span class="text-3xl mb-1">🏆</span>
+                            <strong class="text-gray-800">Monetization:</strong> <span class="text-gray-600">Premium Paid</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Features -->
+                <div class="card max-w-5xl mx-auto p-6 md:p-8 mb-12">
+                    <div class="accordion-item">
+                        <div class="accordion-header cursor-pointer flex justify-between items-center pb-2 border-b border-gray-200">
+                            <h3 class="font-display text-2xl font-bold">Key Features</h3>
+                            <div class="accordion-icon text-3xl text-gray-500 transition-transform duration-300 transform">+</div>
+                        </div>
+                        <div class="accordion-content">
+                            <ul class="list-disc list-inside space-y-2 text-base text-gray-700 mt-4">
+                                <li><strong>Emotional Storytelling:</strong> A deeply moving narrative centered on themes of love, loss, sacrifice, and the enduring power of hope.</li>
+                                <li><strong>Painterly Visuals:</strong> Hand-drawn art style brought to life with dynamic lighting, bioluminescence, and atmospheric effects, optimized for iOS.</li>
+                                <li><strong>Fluid Platforming:</strong> Responsive and satisfying movement mechanics, enabling graceful traversal through intricate environments.</li>
+                                <li><strong>Healing Combat:</strong> Unique spirit abilities that allow Lumo to both defend against corrupted creatures and actively restore the blighted world.</li>
+                                <li><strong>Concise Premium Experience:</strong> A focused 3-hour journey designed for a complete, impactful narrative without unnecessary padding, ideal for the mobile premium market.</li>
+                                <li><strong>Original Soundtrack:</strong> An emotive orchestral score that evolves with the narrative, enhancing every emotional beat.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story & Characters -->
+                <div class="card max-w-5xl mx-auto p-6 md:p-8 mb-12">
+                    <h3 class="font-display text-2xl font-bold mb-4 text-center">Story & Characters</h3>
+                    <p class="text-base text-gray-700 mb-6">
+                        In the once-vibrant land of Lumina, a mysterious, creeping blight known as "The Great Withering" begins to consume all life. Lumo, a small Glimmerwing spirit, finds their idyllic home and beloved companion, Pip, threatened by this encroaching darkness. Their desperate quest is to unravel the blight's source, heal the land, and make a profound sacrifice for rebirth.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <h4 class="font-display text-xl font-bold mb-2">Lumo</h4>
+                            <div class="text-4xl mb-2">✨</div>
+                            <p class="text-sm text-gray-600">The agile Glimmerwing protagonist, a beacon of hope and determination on a journey of self-discovery.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-display text-xl font-bold mb-2">Pip</h4>
+                            <div class="text-4xl mb-2">🌿</div>
+                            <p class="text-sm text-gray-600">Lumo's vulnerable Mossling companion, whose deteriorating health fuels the emotional urgency of the quest.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-display text-xl font-bold mb-2">The Withered Sentinel</h4>
+                            <div class="text-4xl mb-2">🥀</div>
+                            <p class="text-sm text-gray-600">The tragic antagonist, a once-noble guardian consumed by despair, now a manifestation of the world's suffering.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gameplay & Artistry -->
+                <div class="card max-w-5xl mx-auto p-6 md:p-8 mb-12">
+                    <h3 class="font-display text-2xl font-bold mb-4 text-center">Gameplay & Artistry</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-display text-xl font-bold mb-2">Core Gameplay Loop</h4>
+                            <ul class="list-disc list-inside space-y-2 text-base text-gray-700">
+                                <li><strong>Explore:</strong> Traverse diverse, interconnected biomes.</li>
+                                <li><strong>Overcome:</strong> Utilize Lumo's agile movement and spirit abilities to navigate puzzles and confront foes.</li>
+                                <li><strong>Restore:</strong> Actively cleanse corrupted areas, bringing light and life back to the world.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-display text-xl font-bold mb-2">Art Direction & Audio</h4>
+                            <ul class="list-disc list-inside space-y-2 text-base text-gray-700">
+                                <li><strong>Painterly Aesthetic:</strong> Hand-drawn visuals with dynamic lighting and bioluminescence.</li>
+                                <li><strong>Fluid Animation:</strong> Graceful and responsive character movements.</li>
+                                <li><strong>Orchestral Score:</strong> An emotive, adaptive soundtrack enhancing every narrative beat.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Publisher's Note / Valuation at a Glance -->
+                <div class="card max-w-3xl mx-auto p-6 md:p-8 bg-[#fdfaf6] border-gray-200">
+                    <h3 class="font-display text-2xl font-bold mb-4 text-center text-[#d4af37]">For Publishers: Valuation at a Glance</h3>
+                    <p class="text-base text-gray-700 mb-6 text-center">
+                        "Whispers of the Verdant Heart" is a premium title with a clear path to market success. Based on comparable high-quality narrative platformers and our meticulous development budget, we are seeking a one-time advance to fund its completion.
+                    </p>
+                    <div class="text-center">
+                        <p class="text-lg text-gray-700 font-semibold mb-2">Target Advance Range:</p>
+                        <p class="text-4xl md:text-6xl font-bold text-[#d4af37]">$100K – $500K+</p>
+                        <p class="text-sm text-gray-500 mt-2">Justified by project scope, quality, and market benchmarks.</p>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-6 text-center">
+                        We are confident this investment will yield a significant return through strong sales and critical acclaim. A detailed financial proposal is available upon request.
+                    </p>
+                </div>
+
+                <!-- Media Assets Placeholder -->
+                <div class="card max-w-5xl mx-auto p-6 md:p-8 mt-12">
+                    <h3 class="font-display text-2xl font-bold mb-4 text-center">Visual & Media Assets</h3>
+                    <p class="text-base text-gray-700 mb-6 text-center">
+                        Get a glimpse of our world. Full media assets (screenshots, trailer, concept art) will be available upon request or upon game completion.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-100 h-48 flex items-center justify-center rounded-lg text-gray-500 text-center p-4">
+                            Placeholder for stunning in-game screenshots and concept art.
+                        </div>
+                        <div class="bg-gray-100 h-48 flex items-center justify-center rounded-lg text-gray-500 text-center p-4">
+                            Placeholder for official game trailer.
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <a href="mailto:contact@ananyainteractive.com?subject=Media%20Assets%20Request%20for%20Whispers%20of%20the%20Verdant%20Heart" class="inline-block bg-gray-200 text-gray-800 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-300 transition-colors">
+                            Request Full Asset Pack
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Our Team</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    Ananya Interactive is comprised of passionate and experienced developers dedicated to pushing the boundaries of interactive storytelling and artistry. We combine creative vision with technical expertise to bring our worlds to life.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto text-center">
+                    <div class="card p-6">
+                        <div class="text-5xl mb-3">👤</div>
+                        <h3 class="font-display text-2xl font-bold">Your Name (Lead Designer/Developer)</h3>
+                        <p class="text-sm text-gray-600">Visionary behind "Whispers of the Verdant Heart," expert in narrative and systems design.</p>
+                    </div>
+                    <div class="card p-6">
+                        <div class="text-5xl mb-3">🎨</div>
+                        <h3 class="font-display text-2xl font-bold">Art Lead (Placeholder)</h3>
+                        <p class="text-sm text-gray-600">Master of painterly aesthetics and atmospheric world-building.</p>
+                    </div>
+                    <div class="card p-6">
+                        <div class="text-5xl mb-3">🎵</div>
+                        <h3 class="font-display text-2xl font-bold">Audio Lead (Placeholder)</h3>
+                        <p class="text-sm text-gray-600">Composer and sound designer crafting immersive auditory experiences.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 bg-white border-t border-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 font-display">Connect With Us</h2>
+                <p class="text-lg text-center max-w-3xl mx-auto mb-12">
+                    We're eager to discuss "Whispers of the Verdant Heart" and potential partnerships. Reach out to us directly for a full demo, detailed proposal, or any inquiries.
+                </p>
+
+                <div class="card max-w-2xl mx-auto p-6 md:p-8 text-center">
+                    <h3 class="font-display text-2xl font-bold mb-4">Business & Press Inquiries</h3>
+                    <p class="text-lg mb-4">Email us at:</p>
+                    <a href="mailto:contact@ananyainteractive.com" class="text-xl font-bold text-[#d4af37] hover:underline">contact@ananyainteractive.com</a>
+                    
+                    <h3 class="font-display text-2xl font-bold mt-8 mb-4">Follow Us Online</h3>
+                    <div class="flex justify-center space-x-6 text-2xl">
+                        <a href="https://twitter.com/AnanyaInteractive" target="_blank" class="text-gray-600 hover:text-[#d4af37] transition-colors" title="Twitter">🐦</a>
+                        <a href="https://linkedin.com/company/ananyainteractive" target="_blank" class="text-gray-600 hover:text-[#d4af37] transition-colors" title="LinkedIn">💼</a>
+                        <a href="https://www.instagram.com/AnanyaInteractive" target="_blank" class="text-gray-600 hover:text-[#d4af37] transition-colors" title="Instagram">📸</a>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-6">© 2025 Ananya Interactive Game Studio. All Rights Reserved.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Accordion functionality for Key Features
+    const accordionItem = document.getElementById('whispers').querySelector('.accordion-item');
+    if (accordionItem) {
+        accordionItem.addEventListener('click', (e) => {
+            const header = e.target.closest('.accordion-header');
+            if (header) {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+            }
+        });
+    }
+
+    // Sticky Navigation Active State
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('main section');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-50% 0px -50% 0px', // Adjusted to trigger when section is roughly in the middle of viewport
+        threshold: 0 // Threshold 0 means as soon as even one pixel of the target enters the viewport
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const targetId = link.getAttribute('href').substring(1);
+                    if (targetId === entry.target.id) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+});
+</script>
+</body>
+</html>
