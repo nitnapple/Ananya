@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday, Ananya!</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/x-icon" href="  https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/cake.ico">  
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/cake.ico">  
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
@@ -100,15 +100,16 @@
     </h1>
     <p class="text-base sm:text-lg md:text-xl text-gray-700 mb-6" id="wish-text">
       
-
-
-
-
-      
     </p>
+    <!-- Celebrate Button -->
     <button onclick="launchConfetti()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-8 rounded-full shadow-lg glow transition duration-300 ease-in-out text-lg tracking-wide focus:outline-none focus:ring-4 focus:ring-pink-200 animate-bounce">
       Celebrate 🎈
     </button>
+    <!-- Surprise Button -->
+    <button onclick="showSurprise()" class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-pink-800 font-bold py-2 px-8 rounded-full shadow-lg transition duration-300 ease-in-out text-lg tracking-wide focus:outline-none focus:ring-4 focus:ring-yellow-200">
+      Surprise! 🎁
+    </button>
+    <div id="surprise-message" class="mt-4 text-lg text-purple-600 font-semibold hidden"></div>
   </div>
 
   <!-- Background Music -->
@@ -127,6 +128,129 @@
       document.getElementById('birthdayMusic').play();
     }
 
+    function showSurprise() {
+      const messages = [
+        "🌟 Ananya, your laughter is sunshine made audible.",
+        "🎂 You’re elegance wrapped in confidence and warmth.",
+        "💫 Your grace can silence storms and summon rainbows.",
+        "📷 Like your photographs, you capture beauty in everything.",
+        "🏊‍♀️ The pool may know your strokes, but life knows your strength.",
+        "🎉 Ananya, your smile outshines the morning sun!",
+    "📸 The world is more beautiful when seen through your lens.",
+    "💖 Your chubby cheeks are national treasures, Ananya!",
+    "🏊‍♀️ You don’t swim through water, you glide through stardust.",
+    "🌺 Your grace puts royal gardens to shame.",
+    "🎂 Happy Birthday to the empress of elegance!",
+    "🌊 Waves bow in respect when you dive in.",
+    "💫 Every star wishes it could shine like your eyes.",
+    "👑 Born to rule hearts, Happy Birthday Queen Ananya!",
+    "🧁 You're the cupcake this world needed.",
+    "🎈 May your life be filled with gallery-worthy moments!",
+    "📷 May your photos capture even what words can’t express.",
+    "🦋 You're art, poetry, and peace in human form.",
+    "💃 Your presence makes even silence feel beautiful.",
+    "🌸 With every click, you freeze beauty in time, like your charm.",
+    "🐬 Even dolphins would envy your swimming style!",
+    "💐 You deserve every flower that ever bloomed.",
+    "🌼 You're not just a name, you're a feeling.",
+    "🍫 Sweeter than chocolate, softer than silk—Ananya!",
+    "🕊️ You bring peace to chaos just by being there.",
+    "💎 You’re the rarest gem wrapped in stardust.",
+    "🌙 You don’t just glow; you *enlighten*.",
+    "🎀 Your kindness is your true royal tiara.",
+    "🍰 Today, the cake is jealous—it can’t be as sweet as you.",
+    "📚 Your intellect makes philosophers rethink love.",
+    "🌟 You are a constellation walking among mortals.",
+    "🎨 You add colour to grey days without trying.",
+    "💖 Cuteness, elegance, and brilliance—all in one soul.",
+    "🧚 May your year be as magical as your presence.",
+    "✨ You're the sparkle every frame dreams of.",
+    "🍒 No cherry on top needed—you *are* the cherry.",
+    "💌 Every moment with you feels like a poem whispered by time.",
+    "📸 Click by click, you’re making the universe prettier.",
+    "🎯 Just your gaze can calm storms—majestic!",
+    "🌄 May each dawn bring your smile to more hearts.",
+    "🎆 Every firework tonight secretly celebrates you.",
+    "👗 Elegance has your name embroidered on it.",
+    "🛡️ Strong, soft, and stunning—Queen Ananya reigns!",
+    "🎠 May your joy never need a filter.",
+    "🧁 May your days be frosted with joy.",
+    "🪷 You're not just graceful—you *are* grace.",
+    "🥇 You’re the gold medal in a race of stars.",
+    "🌤️ With you, every cloud is lined with laughter.",
+    "🧠 Brilliance, beauty, balance—Ananya in 3 words.",
+    "🎈 Today’s wind whispers, 'It’s her birthday!'",
+    "📸 If life is a canvas, you’re both the brush and the muse.",
+    "🫧 You float into rooms like a sweet melody.",
+    "💐 You redefine what it means to be unforgettable.",
+    "🌻 May you bloom brighter with every birthday.",
+    "🪄 You're living magic—just more photogenic.",
+    "🥰 Chubby cheeks, royal charm, heart of gold!",
+    "🎵 Even silence sings in your presence.",
+    "🖼️ If beauty had a watermark, it would say ‘Ananya’.",
+    "📷 The world is lucky to be seen through your camera and your soul.",
+    "🌍 Wherever you go, the Earth smiles wider.",
+    "🌸 You aren’t just admired—you’re *adored*.",
+    "💖 May the mirror forever reflect the queen within.",
+    "🍓 Your sweetness makes berries jealous.",
+    "🌺 May your aura keep blooming forever.",
+    "🎤 Even songs pause to hear your giggle.",
+    "🌟 Each photo you take is a mirror of your warmth.",
+    "🌙 Your calmness is lunar—mystic and mighty.",
+    "👑 Crowned by the universe, loved by all.",
+    "💌 A letter from heaven: 'Dear World, I sent you Ananya.'",
+    "🐚 You’re the rare seashell in an ocean of noise.",
+    "🎊 You don’t just celebrate birthdays—you *beautify* them.",
+    "🌻 You radiate without effort—sunflowers take notes.",
+    "🎈 Floating high in hearts like a birthday balloon!",
+    "🧁 The frosting on life’s cupcake—our Ananya!",
+    "📚 Wiser than your years, softer than spring.",
+    "🪞 May every reflection remind you of your power.",
+    "💡 You’re the soft light that fills every shadow.",
+    "🍭 May your sweetness multiply a hundredfold!",
+    "📸 Pictures may fade, but your grace never will.",
+    "🎯 You hit the bullseye of every heart.",
+    "🏵️ Like a lotus, serene and sovereign.",
+    "🎼 You are the soul my soul waits for.",
+    "🌹 Roses whisper secrets to match your charm.",
+    "🧜‍♀️ Mermaid in spirit, monarch in presence.",
+    "🌷 A flower in bloom every day you smile.",
+    "🦢 Poised, poetic, pure-hearted Ananya!",
+    "🌈 Your aura? A rainbow that sings.",
+    "🍬 Life’s sweeter just because you exist.",
+    "🛍️ You’re the most precious gift to unwrap!",
+    "💝 Your love is your legacy—timeless and true.",
+    "🎠 Childhood joy, royal dignity, artistic spirit.",
+    "🪙 If smiles were currency, you'd be a billionaire.",
+    "🍀 You are the rarest kind of lucky charm.",
+    "📖 May your story be legendary and luminous.",
+    "🕯️ You glow like a prayer answered.",
+    "🥳 May every year multiply your magnificence!",
+    "🌼 Even daisies bend when you pass.",
+    "🎡 You make birthdays feel like festivals.",
+    "🧿 Protected by stars, admired by the moon.",
+    "🎇 You turn ordinary into unforgettable.",
+    "🧤 Wrapped in warmth, crowned in wonder.",
+    "🏊‍♀️ When you swim, dreams surface.",
+    "👠 Every step you take is a blessing.",
+    "📸 Even the camera blushes when you smile.",
+    "🫅 The world is your kingdom, and today, your coronation!",
+    "🍯 You are honey in human form—pure, golden, and sweet.",
+    "🎂 Happy Birthday to the monarch of magic—Ananya!"
+        
+        
+      ];
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      const surpriseDiv = document.getElementById('surprise-message');
+      surpriseDiv.textContent = msg;
+      surpriseDiv.classList.remove('hidden');
+      confetti({
+        particleCount: 120,
+        spread: 120,
+        origin: { y: 0.5 }
+      });
+    }
+
     window.onload = function() {
       setTimeout(() => {
         confetti({
@@ -138,7 +262,6 @@
     };
   </script>
 
-  <!-- Transparent Footer with Button -->
   <footer class="w-full text-center py-6 mt-10 text-sm text-gray-700 z-30 absolute bottom-0 left-0 bg-transparent">
     <a href="https://nitnapple.github.io/Ananya/Archive" target="_blank">
       <button class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-300">
