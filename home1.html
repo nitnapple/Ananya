@@ -69,11 +69,6 @@
       100% { opacity: 0; filter: blur(1px);}
     }
   </style>
-
-<!-- Clarity Scripts -->
-<!-- PostHog Script -->
- <!-- Smartlook Script -->
-
 </head>
 
 <body class="m-0 p-0">
@@ -86,7 +81,6 @@
 
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
-
     <!-- Content -->
     <div class="absolute inset-0 flex flex-col items-center justify-start z-20 px-4 pt-10 text-center space-y-6">
       <div class="max-w-sm sm:max-w-xl">
@@ -177,27 +171,64 @@
       // Glow and sound logic
       const clickSound = new Audio("https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/lumos_sound_effect.mp3");
 
-      document.getElementById("click-target").addEventListener("click", function (e) {
+      function createGlow(x, y) {
+        const glow = document.createElement('div');
+        glow.className = 'glow';
+        glow.style.left = `${x}px`;
+        glow.style.top = `${y}px`;
+        document.body.appendChild(glow);
+        setTimeout(() => glow.remove(), 3000);
+      }
+
+      // Tap and hold (long press) glow logic
+      let holdTimer = null;
+      const holdDuration = 1000; // 1 second
+
+      function startHold(e) {
+        e.preventDefault();
+        holdTimer = setTimeout(() => {
+          const x = e.clientX || e.touches[0].clientX;
+          const y = e.clientY || e.touches[0].clientY;
+          createGlow(x, y);
+          if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(50);
+          clickSound.currentTime = 0;
+          clickSound.play();
+        }, holdDuration);
+      }
+
+      function endHold() {
+        if (holdTimer) {
+          clearTimeout(holdTimer);
+          holdTimer = null;
+        }
+      }
+
+      const clickTarget = document.getElementById("click-target");
+
+      // Click glow
+      clickTarget.addEventListener("click", function (e) {
         if (window.navigator && window.navigator.vibrate) {
           window.navigator.vibrate(50);
         }
         clickSound.currentTime = 0;
         clickSound.play();
-
-        const glow = document.createElement('div');
-        glow.className = 'glow';
-        glow.style.left = `${e.clientX}px`;
-        glow.style.top = `${e.clientY}px`;
-        document.body.appendChild(glow);
-
-        setTimeout(() => glow.remove(), 3000);
+        createGlow(e.clientX, e.clientY);
       });
 
+      // Tap and hold glow
+      clickTarget.addEventListener("mousedown", startHold);
+      clickTarget.addEventListener("mouseup", endHold);
+      clickTarget.addEventListener("mouseleave", endHold);
+      clickTarget.addEventListener("touchstart", startHold);
+      clickTarget.addEventListener("touchend", endHold);
+
+      // Grayscale effect after delay
       setTimeout(() => {
         document.body.classList.add('bw-effect');
       }, 3000);
     });
   </script>
+
   <!-- IP Address Script -->
   <script>
     // Fetch IP address from a public API and display in the footer
