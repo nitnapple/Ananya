@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>iOS Call UI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white h-screen flex flex-col justify-between items-center p-6">
+
+  <!-- Contact Info -->
+  <div class="text-center mt-8">
+    <h2 class="text-3xl font-semibold">Ananya</h2>
+    <p class="text-gray-400 mt-1">Calling…</p>
+  </div>
+
+  <!-- Contact Image -->
+  <div class="mt-6">
+    <img src="https://i.imgur.com/4Z7eFlE.png" alt="avatar" class="w-40 h-40 rounded-full border-4 border-white shadow-xl" />
+  </div>
+
+  <!-- Controls -->
+  <div class="grid grid-cols-3 gap-6 mt-10 text-center text-sm">
+    <div class="flex flex-col items-center">
+      <div class="bg-gray-700 p-4 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-4.553A1 1 0 0018.95 4.05L14.4 8.6a1 1 0 00-.293.707V10h1z" />
+        </svg>
+      </div>
+      <p class="mt-2">Mute</p>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <div class="bg-gray-700 p-4 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" />
+        </svg>
+      </div>
+      <p class="mt-2">Keypad</p>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <div class="bg-gray-700 p-4 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.5 4.5L17.5 19.5M6.5 19.5L17.5 4.5" />
+        </svg>
+      </div>
+      <p class="mt-2">Speaker</p>
+    </div>
+
+    <!-- More buttons (optional): Add Call, FaceTime, etc. -->
+  </div>
+
+  <!-- End Call Button -->
+  <div class="mb-6">
+    <button class="bg-red-600 hover:bg-red-700 text-white py-4 px-12 rounded-full text-lg font-bold shadow-lg">
+      End Call
+    </button>
+  </div>
+
+</body>
+</html>
