@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Way to London | King's College Countdown</title>
+  <style>
+    :root {
+      --kcl-red: #c8102e;
+      --text-dark: #000;
+      --text-light: #fff;
+      --bg-light: #f9f9f9;
+      --font-primary: 'Georgia', serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-primary);
+      background: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    header {
+      background-color: var(--kcl-red);
+      padding: 2.5rem 1rem;
+      text-align: center;
+      color: var(--text-light);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    .countdown-container {
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .countdown-container h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .countdown div {
+      background: var(--kcl-red);
+      color: var(--text-light);
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .countdown span {
+      display: block;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .countdown div {
+        font-size: 1rem;
+        padding: 0.8rem;
+      }
+
+      .countdown span {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Way to London</h1>
+    <div class="subtitle">The Countdown to King's College London Begins 🇬🇧</div>
+  </header>
+
+  <section class="countdown-container">
+    <h2>Time Left Until 1 September 2026</h2>
+    <div class="countdown" id="countdown">
+      <div><span id="days">--</span>Days</div>
+      <div><span id="hours">--</span>Hours</div>
+      <div><span id="minutes">--</span>Minutes</div>
+      <div><span id="seconds">--</span>Seconds</div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 IAS Nitin Kumar. All Rights Reserved.
+  </footer>
+
+  <script>
+    const endDate = new Date("September 1, 2026 00:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      if (distance < 0) {
+        document.getElementById("countdown").innerHTML = "<h2>The Journey Has Begun!</h2>";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours;
+      document.getElementById("minutes").textContent = minutes;
+      document.getElementById("seconds").textContent = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
