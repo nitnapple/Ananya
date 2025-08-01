@@ -1,283 +1,161 @@
+<!-- LearnSphere: Educational Platform with Multiple Google Drive Lessons -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearnSphere - Unlock Your Potential</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light gray background */
-            color: #1e293b; /* Dark slate text */
-        }
-        .hero-section {
-            background-color: #f1f5f9;
-        }
-        .course-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .course-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(4px);
-        }
-        .btn-primary {
-            @apply bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg;
-        }
-        .btn-secondary {
-             @apply bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-lg hover:bg-indigo-200 transition-all duration-300;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LearnSphere - Stream Lessons</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body class="w-full">
+<body class="bg-gray-50 text-slate-800">
 
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-40">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2">
-                <i class="fas fa-graduation-cap text-3xl text-indigo-600"></i>
-                <span class="text-2xl font-bold text-slate-800">LearnSphere</span>
-            </a>
-            <div class="hidden md:flex items-center space-x-8 font-semibold text-slate-600">
-                <a href="#" class="hover:text-indigo-600 transition">Courses</a>
-                <a href="#" class="hover:text-indigo-600 transition">For Business</a>
-                <a href="#" class="hover:text-indigo-600 transition">About Us</a>
-                <a href="#" class="hover:text-indigo-600 transition">Blog</a>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="#" class="hidden sm:block font-semibold text-slate-600 hover:text-indigo-600 transition">Log In</a>
-                <a href="#" class="btn-primary text-sm sm:text-base">Get Started</a>
-            </div>
-        </nav>
-    </header>
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-indigo-600">LearnSphere</h1>
+    </div>
+  </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero-section py-20 md:py-32">
-            <div class="container mx-auto px-6 text-center">
-                <div class="max-w-3xl mx-auto">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight">
-                        Learn In-Demand Skills for a New Career
-                    </h1>
-                    <p class="mt-6 text-lg md:text-xl text-slate-600">
-                        Join thousands of learners on LearnSphere to master new skills, advance your career, and explore your passions with our expert-led online courses.
-                    </p>
-                    <div class="mt-10 flex justify-center space-x-4">
-                        <a href="#courses" class="btn-primary px-8">Explore Courses</a>
-                        <a href="#" class="btn-secondary px-8">For Teams</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Featured Courses Section -->
-        <section id="courses" class="py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                     <h2 class="text-3xl md:text-4xl font-bold text-slate-800">Featured Courses</h2>
-                     <p class="text-lg text-slate-500 mt-2">Hand-picked courses to help you get started.</p>
-                </div>
-                <div id="course-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Course cards will be injected by JS -->
-                </div>
-            </div>
-        </section>
-        
-        <!-- Why Choose Us Section -->
-        <section class="py-24 bg-slate-50">
-            <div class="container mx-auto px-6">
-                 <div class="text-center mb-12">
-                     <h2 class="text-3xl md:text-4xl font-bold text-slate-800">Why LearnSphere?</h2>
-                     <p class="text-lg text-slate-500 mt-2">We provide the best learning experience.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-                    <div class="p-6">
-                        <div class="text-4xl text-indigo-500 mb-4"><i class="fas fa-user-tie"></i></div>
-                        <h3 class="text-xl font-bold mb-2">Expert Instructors</h3>
-                        <p class="text-slate-600">Learn from industry experts who are passionate about teaching.</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="text-4xl text-indigo-500 mb-4"><i class="fas fa-clock"></i></div>
-                        <h3 class="text-xl font-bold mb-2">Flexible Learning</h3>
-                        <p class="text-slate-600">Learn at your own pace, anytime, anywhere. Access on all devices.</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="text-4xl text-indigo-500 mb-4"><i class="fas fa-users"></i></div>
-                        <h3 class="text-xl font-bold mb-2">Active Community</h3>
-                        <p class="text-slate-600">Join a vibrant community of learners and mentors.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-    
-    <!-- Footer -->
-    <footer class="bg-slate-800 text-slate-300 py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div>
-                    <h4 class="font-bold text-white mb-4">LearnSphere</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="hover:text-white">About Us</a></li>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Careers</a></li>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Press</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Community</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="hover:text-white">For Teams</a></li>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Learners</a></li>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Partners</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Resources</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Blog</a></li>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Help Center</a></li>
-                        <li class="mb-2"><a href="#" class="hover:text-white">Support</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Follow Us</h4>
-                    <div class="flex space-x-4 text-xl">
-                        <a href="#" class="hover:text-white"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="hover:text-white"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-slate-700 text-center text-sm">
-                <p>&copy; 2024 LearnSphere. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-
-    <!-- Course Details Modal -->
-    <div id="courseModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
-        <div id="courseModalContent" class="bg-white rounded-lg shadow-2xl w-full max-w-4xl transform transition-all duration-300 ease-out scale-95 opacity-0 overflow-hidden">
-            <div class="p-2 relative">
-                 <button id="closeCourseModal" class="absolute top-4 right-4 bg-gray-200 text-gray-800 rounded-full h-8 w-8 flex items-center justify-center text-lg z-10 hover:bg-gray-300">&times;</button>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="aspect-w-16 aspect-h-9">
-                        <video id="courseVideo" class="w-full h-full rounded-lg" controls></video>
-                    </div>
-                    <div class="p-4">
-                        <h3 id="modalCourseTitle" class="text-2xl font-bold text-slate-800"></h3>
-                        <p id="modalCourseInstructor" class="text-md text-slate-500 mt-1"></p>
-                        <p id="modalCourseDescription" class="text-slate-600 mt-4"></p>
-                        <h4 class="font-bold text-slate-700 mt-6 mb-2">What you'll learn:</h4>
-                        <ul id="modalLearningPoints" class="space-y-2 text-slate-600">
-                           <!-- Learning points injected here -->
-                        </ul>
-                        <div class="mt-8">
-                             <a href="#" class="btn-primary w-full text-center block">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-16">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 class="text-3xl font-bold mb-2">Educational Video Lessons</h2>
+      <p class="text-slate-600">Click on a lesson to start learning instantly via Google Drive streaming.</p>
     </div>
 
-    <script>
-        // --- Mock Course Data ---
-        const courseData = [
-            { id: 1, title: 'Modern Web Development Bootcamp', instructor: 'Angela Yu', desc: 'Become a Full-Stack Web Developer with just one course. HTML, CSS, Javascript, Node, React, MongoDB and more!', thumb: 'https://placehold.co/600x400/3b82f6/ffffff?text=Web+Dev', videoSrc: '<iframe src="https://drive.google.com/file/d/1GpV1cNOdTvG21zaJ7YZ4GA7eXSSRBqGD/preview" width="640" height="480" allow="autoplay" allowfullscreen>
-</iframe>', learningPoints: ['Build 16 web development projects for your portfolio.', 'Master the latest technologies, including Javascript ES6, React.js.', 'Learn best practices for professional developer workflows.'] },
-            { id: 2, title: 'The Complete Digital Marketing Course', instructor: 'Rob Percival', desc: 'Master Digital Marketing Strategy, Social Media Marketing, SEO, YouTube, Email, Facebook Marketing, Analytics & More!', thumb: 'https://placehold.co/600x400/ec4899/ffffff?text=Marketing', videoSrc: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', learningPoints: ['Grow a business online from scratch.', 'Make money as a digital marketing affiliate.', 'Land a high-paying job in digital marketing.'] },
-            { id: 3, title: 'UI/UX Design Essentials', instructor: 'Daniel Scott', desc: 'Learn UI/UX design from scratch. Go from a beginner to a pro with this comprehensive course on user experience.', thumb: 'https://placehold.co/600x400/8b5cf6/ffffff?text=UI/UX', videoSrc: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', learningPoints: ['Build a UI/UX project from beginning to end.', 'Learn to use Figma for modern design.', 'Understand user psychology and design principles.'] },
-            { id: 4, title: 'Python for Data Science & Machine Learning', instructor: 'Jose Portilla', desc: 'Learn Python for Data Science and Machine Learning, Data Analysis, Visualization, and powerful machine learning algorithms!', thumb: 'https://placehold.co/600x400/f59e0b/ffffff?text=Data+Science', videoSrc: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', learningPoints: ['Use Python for Data Science and Machine Learning.', 'Implement Machine Learning Algorithms.', 'Learn to use NumPy, Pandas, Matplotlib, and Scikit-Learn.'] },
-            { id: 5, title: 'Graphic Design Masterclass', instructor: 'Lindsay Marsh', desc: 'The ultimate graphic design course which covers Photoshop, Illustrator, InDesign, design theory, branding and logo design.', thumb: 'https://placehold.co/600x400/10b981/ffffff?text=Design', videoSrc: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', learningPoints: ['Create logos and branding packages for clients.', 'Master Adobe Photoshop, Illustrator, and InDesign.', 'Understand color theory and typography.'] },
-            { id: 6, title: 'The Business Strategy Toolkit', instructor: 'Chris Haroun', desc: 'The complete business strategy course. Learn everything you need to know about business strategy and analysis.', thumb: 'https://placehold.co/600x400/6366f1/ffffff?text=Business', videoSrc: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4', learningPoints: ['Create a complete business strategy.', 'Understand market analysis and competitive advantages.', 'Develop financial models and projections.'] },
-        ];
+    <div id="lessonGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Video Cards will be injected here -->
+    </div>
+  </main>
 
-        // --- DOM Elements ---
-        const courseGrid = document.getElementById('course-grid');
-        const courseModal = document.getElementById('courseModal');
-        const courseModalContent = document.getElementById('courseModalContent');
-        const closeCourseModal = document.getElementById('closeCourseModal');
-        const courseVideo = document.getElementById('courseVideo');
-        const modalCourseTitle = document.getElementById('modalCourseTitle');
-        const modalCourseInstructor = document.getElementById('modalCourseInstructor');
-        const modalCourseDescription = document.getElementById('modalCourseDescription');
-        const modalLearningPoints = document.getElementById('modalLearningPoints');
+  <!-- Modal -->
+  <div id="lessonModal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white w-full max-w-4xl rounded-lg overflow-hidden shadow-lg relative">
+      <button onclick="closeModal()" class="absolute top-3 right-4 text-2xl text-gray-500 hover:text-black">&times;</button>
+      <div class="aspect-video">
+        <iframe id="videoFrame" class="w-full h-full" allowfullscreen></iframe>
+      </div>
+      <div class="p-6">
+        <h3 id="lessonTitle" class="text-xl font-bold mb-2"></h3>
+        <p id="lessonInstructor" class="text-sm text-slate-500 mb-4"></p>
+        <p id="lessonDesc" class="text-slate-600 mb-4"></p>
+        <ul id="lessonPoints" class="list-disc list-inside text-slate-700"></ul>
+      </div>
+    </div>
+  </div>
 
-        // --- Functions ---
+  <script>
+    const lessonData = [
+      {
+        id: 1,
+        title: "Introduction to Economics",
+        instructor: "Dr. Anita Sharma",
+        desc: "Basic concepts of micro and macroeconomics.",
+        thumb: "https://placehold.co/600x400?text=Economics",
+        videoSrc: "https://drive.google.com/file/d/1a2b3c4d5e6f7g8h9i/preview",
+        learningPoints: [
+          "Understand demand and supply.",
+          "Learn market structures.",
+          "Introduction to macroeconomic indicators."
+        ]
+      },
+      {
+        id: 2,
+        title: "Indian Polity Lecture 1",
+        instructor: "Prof. Arjun Mehta",
+        desc: "Overview of Indian Constitution and Governance.",
+        thumb: "https://placehold.co/600x400?text=Polity",
+        videoSrc: "https://drive.google.com/file/d/2a2b3c4d5e6f7g8h9i/preview",
+        learningPoints: [
+          "Historical background of Constitution.",
+          "Preamble and Fundamental Rights.",
+          "Important Amendments."
+        ]
+      },
+      {
+        id: 3,
+        title: "Geography of India",
+        instructor: "Ms. Rina Dey",
+        desc: "Physical features, rivers, and climate patterns of India.",
+        thumb: "https://placehold.co/600x400?text=Geography",
+        videoSrc: "https://drive.google.com/file/d/3a2b3c4d5e6f7g8h9i/preview",
+        learningPoints: [
+          "Mountains, plains, and plateaus.",
+          "Major rivers and their basins.",
+          "Climate types and monsoons."
+        ]
+      },
+      {
+        id: 4,
+        title: "Fundamental Rights - Lecture Video",
+        instructor: "IAS Faculty",
+        desc: "Detailed explanation of Fundamental Rights under the Indian Constitution.",
+        thumb: "https://placehold.co/600x400?text=Fundamental+Rights",
+        videoSrc: "https://drive.google.com/file/d/1GpV1cNOdTvG21zaJ7YZ4GA7eXSSRBqGD/preview",
+        learningPoints: [
+          "Right to Equality",
+          "Right to Freedom",
+          "Right against Exploitation"
+        ]
+      }
+    ];
 
-        function createCourseCard(course) {
-            const card = document.createElement('div');
-            card.className = 'course-card bg-white rounded-lg overflow-hidden shadow-md cursor-pointer group';
-            card.innerHTML = `
-                <img src="${course.thumb}" alt="${course.title}" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-slate-800 h-14">${course.title}</h3>
-                    <p class="text-slate-500 mt-2">By ${course.instructor}</p>
-                    <div class="mt-4 flex items-center text-yellow-500">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        <span class="text-slate-500 text-sm ml-2">(12,345)</span>
-                    </div>
-                </div>
-            `;
-            card.addEventListener('click', () => openCourseModal(course));
-            return card;
-        }
+    const lessonGrid = document.getElementById('lessonGrid');
+    const modal = document.getElementById('lessonModal');
+    const videoFrame = document.getElementById('videoFrame');
+    const lessonTitle = document.getElementById('lessonTitle');
+    const lessonInstructor = document.getElementById('lessonInstructor');
+    const lessonDesc = document.getElementById('lessonDesc');
+    const lessonPoints = document.getElementById('lessonPoints');
 
-        function populateCourses() {
-            courseData.forEach(course => {
-                const card = createCourseCard(course);
-                courseGrid.appendChild(card);
-            });
-        }
+    function createLessonCard(lesson) {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg cursor-pointer';
+      card.innerHTML = `
+        <img src="${lesson.thumb}" class="w-full h-48 object-cover" alt="${lesson.title}">
+        <div class="p-4">
+          <h3 class="text-lg font-bold">${lesson.title}</h3>
+          <p class="text-sm text-slate-500 mt-1">By ${lesson.instructor}</p>
+          <p class="text-sm text-slate-600 mt-2">${lesson.desc}</p>
+        </div>
+      `;
+      card.addEventListener('click', () => openModal(lesson));
+      return card;
+    }
 
-        function openCourseModal(course) {
-            courseVideo.src = course.videoSrc;
-            modalCourseTitle.textContent = course.title;
-            modalCourseInstructor.textContent = `An online course by ${course.instructor}`;
-            modalCourseDescription.textContent = course.desc;
-            
-            modalLearningPoints.innerHTML = '';
-            course.learningPoints.forEach(point => {
-                const li = document.createElement('li');
-                li.className = 'flex items-start';
-                li.innerHTML = `<i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i><span>${point}</span>`;
-                modalLearningPoints.appendChild(li);
-            });
+    function populateLessons() {
+      lessonData.forEach(lesson => {
+        const card = createLessonCard(lesson);
+        lessonGrid.appendChild(card);
+      });
+    }
 
-            courseModal.classList.remove('hidden');
-            setTimeout(() => {
-                courseModalContent.classList.remove('opacity-0', 'scale-95');
-                courseModalContent.classList.add('opacity-100', 'scale-100');
-            }, 10);
-        }
+    function openModal(lesson) {
+      videoFrame.src = lesson.videoSrc;
+      lessonTitle.textContent = lesson.title;
+      lessonInstructor.textContent = lesson.instructor;
+      lessonDesc.textContent = lesson.desc;
+      lessonPoints.innerHTML = '';
+      lesson.learningPoints.forEach(point => {
+        const li = document.createElement('li');
+        li.textContent = point;
+        lessonPoints.appendChild(li);
+      });
+      modal.classList.remove('hidden');
+    }
 
-        function closePlayer() {
-            courseModalContent.classList.add('opacity-0', 'scale-95');
-            setTimeout(() => {
-                courseModal.classList.add('hidden');
-                courseVideo.pause();
-                courseVideo.src = '';
-            }, 300);
-        }
+    function closeModal() {
+      videoFrame.src = '';
+      modal.classList.add('hidden');
+    }
 
-        // --- Event Listeners ---
-        closeCourseModal.addEventListener('click', closePlayer);
-        courseModal.addEventListener('click', (e) => {
-            if (e.target === courseModal) {
-                closePlayer();
-            }
-        });
-
-        // --- Initial Execution ---
-        document.addEventListener('DOMContentLoaded', populateCourses);
-    </script>
+    document.addEventListener('DOMContentLoaded', populateLessons);
+  </script>
 </body>
 </html>
