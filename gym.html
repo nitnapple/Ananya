@@ -1,99 +1,606 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Supplement Stack Planner</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IAS Nitin Kumar — Daily Diet & Supplement Plan</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    function updateCountdown() {
-      const end = new Date("2025-12-31T00:00:00").getTime();
-      const now = new Date().getTime();
-      const distance = end - now;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("countdown").innerHTML =
-        days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-    }
-    setInterval(updateCountdown, 1000);
-  </script>
+  <meta name="description" content="Timed diet schedule with per-meal macros, fibre, and key micronutrients; includes supplements and daily totals." />
+  <style>
+    @media print { .no-print { display:none!important } }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
-  <div class="max-w-5xl mx-auto p-4">
-    <h1 class="text-3xl font-bold text-center mb-6">Supplement Stack Planner</h1>
-    <div class="text-center text-xl text-red-600 mb-8">
-      Countdown to Goal: <span id="countdown">Loading...</span>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <!-- Header -->
+  <header class="bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 text-white">
+    <div class="mx-auto max-w-6xl px-6 py-10">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight">IAS Nitin Kumar — January 2027 Plan</h1>
+          <p class="mt-1 text-indigo-100">Full timeline • Macros • Fibre • Key Micronutrients • Supplements</p>
+        </div>
+        <button onclick="window.print()" class="no-print inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/30 hover:bg-white/20">
+          Print / Save as PDF
+        </button>
+      </div>
+      <nav class="mt-5 text-sm text-indigo-100/90">
+        <a href="#timeline" class="hover:underline">Timeline</a>
+        <span class="mx-2 opacity-60">•</span>
+        <a href="#totals" class="hover:underline">Daily Totals</a>
+        <span class="mx-2 opacity-60">•</span>
+        <a href="#assumptions" class="hover:underline">Notes</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="space-y-6">
-      <section class="bg-white p-4 rounded-2xl shadow">
-        <h2 class="text-2xl font-semibold mb-2">Testosterone & Libido Stack</h2>
-        <ul class="list-disc pl-5">
-          <li>Vitamin D3 (3000-5000 IU): Morning, with fat-containing meal</li>
-          <li>Zinc (25-30 mg): With dinner</li>
-          <li>Magnesium Glycinate (300-400 mg): At night</li>
-          <li>Ashwagandha (600 mg): AM or PM</li>
-          <li>Fenugreek Extract (500-600 mg): With meals</li>
-          <li>Omega-3 (2000 mg): With meals</li>
-          <li>Boron (3-6 mg): Optional</li>
-          <li>D-Aspartic Acid (3g): Cycle 2-3 weeks on, 1 off</li>
-          <li>Tongkat Ali (200-400 mg): 5 days on, 2 off</li>
-        </ul>
-      </section>
+  <main id="timeline" class="mx-auto max-w-6xl px-6 py-10 space-y-8">
 
-      <section class="bg-white p-4 rounded-2xl shadow">
-        <h2 class="text-2xl font-semibold mb-2">Muscle Building Stack</h2>
-        <ul class="list-disc pl-5">
-          <li>Whey Protein Isolate (25-30 g): Post-workout</li>
-          <li>Creatine Monohydrate (5 g): Daily</li>
-          <li>Beta-Alanine (3.2 g): Pre-workout</li>
-          <li>Electrolytes: Intra/post workout</li>
-          <li>L-Leucine (3-5 g): With meals</li>
-          <li>Multivitamin</li>
-          <li>Collagen Peptides (10 g)</li>
-        </ul>
-      </section>
+    <!-- Pre-workout -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Pre-Workout • ~5:30 AM</h2>
+          <p class="text-slate-500">Shilajit + Citrulline Malate • 1 Banana</p>
+        </div>
+        <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-200">Priming</span>
+      </div>
 
-      <section class="bg-white p-4 rounded-2xl shadow">
-        <h2 class="text-2xl font-semibold mb-2">Fat Loss Stack</h2>
-        <ul class="list-disc pl-5">
-          <li>Green Tea Extract (400-500 mg): AM & Pre-workout</li>
-          <li>Caffeine (100-200 mg)</li>
-          <li>L-Carnitine (1-2 g): Pre-cardio</li>
-          <li>Apple Cider Vinegar: 1 tbsp before meals</li>
-          <li>Glucomannan (1 g): Before meals</li>
-          <li>CLA (1-2 g): Optional</li>
-          <li>Berberine (500 mg): Optional</li>
-        </ul>
-      </section>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein (g)</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs (g)</th>
+              <th class="px-3 py-2 text-right font-medium">Fat (g)</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre (g)</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Shilajit (~500 mg)</td>
+              <td class="px-3 py-2 text-right">0</td><td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td><td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2">Fulvic acid, trace minerals (Fe, Se)</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Citrulline Malate (~6 g)</td>
+              <td class="px-3 py-2 text-right">0</td><td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td><td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2">NO support, endurance</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Banana (1 medium)</td>
+              <td class="px-3 py-2 text-right">105</td>
+              <td class="px-3 py-2 text-right">1</td>
+              <td class="px-3 py-2 text-right">27</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">3</td>
+              <td class="px-3 py-2">B6, C, K, K⁺, Mn</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Pre-Workout Subtotal</td>
+              <td class="px-3 py-2 text-right">105</td>
+              <td class="px-3 py-2 text-right">1</td>
+              <td class="px-3 py-2 text-right">27</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">3</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
 
-      <section class="bg-white p-4 rounded-2xl shadow">
-        <h2 class="text-2xl font-semibold mb-2">Skin & Eye Health Stack</h2>
-        <ul class="list-disc pl-5">
-          <li>Collagen Peptides (10-15 g)</li>
-          <li>Vitamin C (500-1000 mg)</li>
-          <li>Lutein + Zeaxanthin (10 mg + 2 mg)</li>
-          <li>Astaxanthin (4-8 mg)</li>
-          <li>Biotin or Silica</li>
-          <li>Evening Primrose Oil (1000 mg)</li>
-          <li>Omega-3 (2000 mg)</li>
-        </ul>
-      </section>
+    <!-- Post-workout -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Post-Workout • 7:30 AM</h2>
+          <p class="text-slate-500">1 Scoop Whey Isolate + 5 g Creatine</p>
+        </div>
+        <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-indigo-200">Recovery</span>
+      </div>
 
-      <section class="bg-white p-4 rounded-2xl shadow">
-        <h2 class="text-2xl font-semibold mb-2">Example Stack (Muscle + Libido)</h2>
-        <ul class="list-disc pl-5">
-          <li><strong>Morning:</strong> Vitamin D3, Ashwagandha, Zinc, Whey Protein, Multivitamin</li>
-          <li><strong>Pre-Workout:</strong> Creatine, Beta-Alanine, Green Tea Extract, L-Carnitine</li>
-          <li><strong>Post-Workout:</strong> Whey + Collagen, Magnesium, Omega-3</li>
-          <li><strong>Evening:</strong> Fenugreek, Collagen, Sleep stack (ZMA or Glycine + Magnesium)</li>
-        </ul>
-      </section>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs</th>
+              <th class="px-3 py-2 text-right font-medium">Fat</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Whey Isolate (1 scoop)</td>
+              <td class="px-3 py-2 text-right">110</td>
+              <td class="px-3 py-2 text-right">25 g</td>
+              <td class="px-3 py-2 text-right">2 g</td>
+              <td class="px-3 py-2 text-right">0.5 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">BCAAs; trace Ca/K/Na</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Creatine (5 g)</td>
+              <td class="px-3 py-2 text-right">0</td><td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td><td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2">↑PCr / ATP resynthesis</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Post-Workout Subtotal</td>
+              <td class="px-3 py-2 text-right">110</td>
+              <td class="px-3 py-2 text-right">25</td>
+              <td class="px-3 py-2 text-right">2</td>
+              <td class="px-3 py-2 text-right">0.5</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Breakfast -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Breakfast • ~8:00 AM</h2>
+          <p class="text-slate-500">4 Eggs, 2 Bananas, 1 Apple, 100 g Oats, 250 ml Cow Milk</p>
+        </div>
+        <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200">Refuel</span>
+      </div>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs</th>
+              <th class="px-3 py-2 text-right font-medium">Fat</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Eggs (4 large)</td>
+              <td class="px-3 py-2 text-right">286</td>
+              <td class="px-3 py-2 text-right">25 g</td>
+              <td class="px-3 py-2 text-right">2 g</td>
+              <td class="px-3 py-2 text-right">20 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">A, D, B12, choline, Se, Fe, Zn</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Banana (2)</td>
+              <td class="px-3 py-2 text-right">210</td>
+              <td class="px-3 py-2 text-right">2 g</td>
+              <td class="px-3 py-2 text-right">54 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">6 g</td>
+              <td class="px-3 py-2">B6, C, K⁺, Mn</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Apple (1 medium)</td>
+              <td class="px-3 py-2 text-right">95</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">25 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">4 g</td>
+              <td class="px-3 py-2">C, polyphenols</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Oats (100 g)</td>
+              <td class="px-3 py-2 text-right">389</td>
+              <td class="px-3 py-2 text-right">17 g</td>
+              <td class="px-3 py-2 text-right">67 g</td>
+              <td class="px-3 py-2 text-right">7 g</td>
+              <td class="px-3 py-2 text-right">11 g</td>
+              <td class="px-3 py-2">B1, P, Fe, Zn, Mg, Mn</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Cow Milk (250 ml)</td>
+              <td class="px-3 py-2 text-right">150</td>
+              <td class="px-3 py-2 text-right">8 g</td>
+              <td class="px-3 py-2 text-right">12 g</td>
+              <td class="px-3 py-2 text-right">8 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">Ca, D, B12, B2, K⁺, P</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Breakfast Subtotal</td>
+              <td class="px-3 py-2 text-right">1,130</td>
+              <td class="px-3 py-2 text-right">52</td>
+              <td class="px-3 py-2 text-right">160</td>
+              <td class="px-3 py-2 text-right">35</td>
+              <td class="px-3 py-2 text-right">21</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Lunch -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Lunch • ~1:00 PM</h2>
+          <p class="text-slate-500">100 g Quinoa, 150 g Greek Yogurt, 1 Banana, 1 Scoop Whey, Omega-3</p>
+        </div>
+        <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-medium text-sky-700 ring-1 ring-sky-200">Mid-day</span>
+      </div>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs</th>
+              <th class="px-3 py-2 text-right font-medium">Fat</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Quinoa (100 g cooked)</td>
+              <td class="px-3 py-2 text-right">120</td>
+              <td class="px-3 py-2 text-right">4 g</td>
+              <td class="px-3 py-2 text-right">21 g</td>
+              <td class="px-3 py-2 text-right">2 g</td>
+              <td class="px-3 py-2 text-right">3 g</td>
+              <td class="px-3 py-2">Mg, Mn, P, B2</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Greek Yogurt (150 g)</td>
+              <td class="px-3 py-2 text-right">100</td>
+              <td class="px-3 py-2 text-right">10 g</td>
+              <td class="px-3 py-2 text-right">6 g</td>
+              <td class="px-3 py-2 text-right">4 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">Ca, B12, B2, probiotics</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Banana (1)</td>
+              <td class="px-3 py-2 text-right">105</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2 text-right">27 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">3 g</td>
+              <td class="px-3 py-2">B6, C, K⁺, Mn</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Whey Isolate (1 scoop)</td>
+              <td class="px-3 py-2 text-right">110</td>
+              <td class="px-3 py-2 text-right">25 g</td>
+              <td class="px-3 py-2 text-right">2 g</td>
+              <td class="px-3 py-2 text-right">0.5 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">BCAAs; trace Ca/K/Na</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Omega-3 (≈1 g fish oil)</td>
+              <td class="px-3 py-2 text-right">10</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">EPA + DHA</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Lunch Subtotal</td>
+              <td class="px-3 py-2 text-right">445</td>
+              <td class="px-3 py-2 text-right">40</td>
+              <td class="px-3 py-2 text-right">56</td>
+              <td class="px-3 py-2 text-right">7.5</td>
+              <td class="px-3 py-2 text-right">6</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Snack -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Snack • ~4:00 PM</h2>
+          <p class="text-slate-500">Black Coffee, 1 Apple, 1 Banana</p>
+        </div>
+        <span class="rounded-full bg-yellow-50 px-3 py-1 text-xs font-medium text-yellow-700 ring-1 ring-yellow-200">Light</span>
+      </div>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs</th>
+              <th class="px-3 py-2 text-right font-medium">Fat</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Black Coffee</td>
+              <td class="px-3 py-2 text-right">2</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">Antioxidants, caffeine</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Apple (1)</td>
+              <td class="px-3 py-2 text-right">95</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">25 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">4 g</td>
+              <td class="px-3 py-2">C, polyphenols</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Banana (1)</td>
+              <td class="px-3 py-2 text-right">105</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2 text-right">27 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">3 g</td>
+              <td class="px-3 py-2">B6, C, K⁺, Mn</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Snack Subtotal</td>
+              <td class="px-3 py-2 text-right">202</td>
+              <td class="px-3 py-2 text-right">1</td>
+              <td class="px-3 py-2 text-right">52</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">7</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Dinner -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Dinner • ~8:00 PM</h2>
+          <p class="text-slate-500">250 g Chicken Breast, Cucumber, Tomato, Onion, 2 Multivitamins</p>
+        </div>
+        <span class="rounded-full bg-rose-50 px-3 py-1 text-xs font-medium text-rose-700 ring-1 ring-rose-200">Protein-Focused</span>
+      </div>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs</th>
+              <th class="px-3 py-2 text-right font-medium">Fat</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Chicken Breast (250 g, cooked)</td>
+              <td class="px-3 py-2 text-right">412</td>
+              <td class="px-3 py-2 text-right">75 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">9 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">B3, B6, P, Se, Zn</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Cucumber (~100 g)</td>
+              <td class="px-3 py-2 text-right">16</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2 text-right">4 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2">K, hydration</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Tomato (~100 g)</td>
+              <td class="px-3 py-2 text-right">18</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2 text-right">4 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2">C, lycopene, K</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Onion (~100 g)</td>
+              <td class="px-3 py-2 text-right">40</td>
+              <td class="px-3 py-2 text-right">1 g</td>
+              <td class="px-3 py-2 text-right">9 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2 text-right">2 g</td>
+              <td class="px-3 py-2">C, flavonoids</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">Multivitamins (2)</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2">A, C, D, E, K, B-complex, Zn, Cu, Se, I</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Dinner Subtotal</td>
+              <td class="px-3 py-2 text-right">486</td>
+              <td class="px-3 py-2 text-right">78</td>
+              <td class="px-3 py-2 text-right">17</td>
+              <td class="px-3 py-2 text-right">9</td>
+              <td class="px-3 py-2 text-right">4</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Before bed -->
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-semibold">Before Bed • ~10:00 PM</h2>
+          <p class="text-slate-500">250 ml Cow Milk</p>
+        </div>
+        <span class="rounded-full bg-fuchsia-50 px-3 py-1 text-xs font-medium text-fuchsia-700 ring-1 ring-fuchsia-200">Recovery</span>
+      </div>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-slate-600">
+            <tr>
+              <th class="px-3 py-2 text-left font-medium">Item</th>
+              <th class="px-3 py-2 text-right font-medium">Kcal</th>
+              <th class="px-3 py-2 text-right font-medium">Protein</th>
+              <th class="px-3 py-2 text-right font-medium">Carbs</th>
+              <th class="px-3 py-2 text-right font-medium">Fat</th>
+              <th class="px-3 py-2 text-right font-medium">Fibre</th>
+              <th class="px-3 py-2 text-left font-medium">Key Micros</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="px-3 py-2">Cow Milk (250 ml)</td>
+              <td class="px-3 py-2 text-right">150</td>
+              <td class="px-3 py-2 text-right">8 g</td>
+              <td class="px-3 py-2 text-right">12 g</td>
+              <td class="px-3 py-2 text-right">8 g</td>
+              <td class="px-3 py-2 text-right">0 g</td>
+              <td class="px-3 py-2">Ca, D, B12, B2, tryptophan</td>
+            </tr>
+          </tbody>
+          <tfoot class="bg-slate-50">
+            <tr class="font-semibold">
+              <td class="px-3 py-2">Before-Bed Subtotal</td>
+              <td class="px-3 py-2 text-right">150</td>
+              <td class="px-3 py-2 text-right">8</td>
+              <td class="px-3 py-2 text-right">12</td>
+              <td class="px-3 py-2 text-right">8</td>
+              <td class="px-3 py-2 text-right">0</td>
+              <td class="px-3 py-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Totals -->
+    <section id="totals" class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-semibold text-slate-900">Daily Nutrition Totals</h2>
+
+      <div class="mt-6 grid gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-slate-200">
+          <div class="border-b border-slate-200 bg-slate-50 px-4 py-3">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Macros + Fibre</h3>
+          </div>
+          <div class="p-4">
+            <table class="w-full text-sm">
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="py-2 text-slate-600">Calories</td><td class="py-2 text-right font-semibold">≈ 2,628 kcal</td></tr>
+                <tr><td class="py-2 text-slate-600">Protein</td><td class="py-2 text-right font-semibold">≈ 205 g</td></tr>
+                <tr><td class="py-2 text-slate-600">Carbohydrates</td><td class="py-2 text-right font-semibold">≈ 326 g</td></tr>
+                <tr><td class="py-2 text-slate-600">Fat</td><td class="py-2 text-right font-semibold">≈ 60 g</td></tr>
+                <tr><td class="py-2 text-slate-600">Fibre</td><td class="py-2 text-right font-semibold">≈ 41 g</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-slate-200">
+          <div class="border-b border-slate-200 bg-slate-50 px-4 py-3">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Micronutrient Coverage (highlights)</h3>
+          </div>
+          <div class="p-4 grid gap-5 sm:grid-cols-2">
+            <div>
+              <h4 class="text-sm font-semibold text-emerald-700">Strong</h4>
+              <ul class="mt-2 list-inside list-disc text-sm text-slate-700">
+                <li>B-complex (B1, B2, B3, B5, B6, B12)</li>
+                <li>Vitamin A, C, D (with milk)</li>
+                <li>Calcium, Phosphorus, Magnesium</li>
+                <li>Potassium, Selenium, Zinc, Manganese</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold text-amber-700">Covered by Supplements</h4>
+              <ul class="mt-2 list-inside list-disc text-sm text-slate-700">
+                <li>Vitamin E, K (multivitamin)</li>
+                <li>Omega-3 EPA/DHA (fish oil)</li>
+                <li>Iodine, Copper (multivitamin)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-6 text-xs text-slate-500">
+        Subtotals by section are shown in each table footer. Daily totals sum all sections (rounding may cause ±1–2 variance).
+      </p>
+    </section>
+
+    <!-- Assumptions & notes -->
+    <section id="assumptions" class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-xl font-semibold">Assumptions & Notes</h2>
+      <ul class="mt-3 list-inside list-disc text-sm text-slate-700 space-y-1">
+        <li>Banana 105 kcal (27C, 3g fibre); Apple 95 kcal (25C, 4g fibre).</li>
+        <li>Oats (100 g): 389 kcal (17P/67C/7F), 11 g fibre.</li>
+        <li>Milk (250 ml): 150 kcal (8P/12C/8F); Whole fat assumed.</li>
+        <li>Chicken breast (250 g cooked): 412 kcal (75P/0C/9F).</li>
+        <li>Quinoa (100 g cooked): 120 kcal (4P/21C/2F), 3 g fibre.</li>
+        <li>Greek yogurt (150 g): 100 kcal (10P/6C/4F).</li>
+        <li>Whey isolate (1 scoop): 110 kcal (25P/2C/0.5F); Creatine/Pre-workout ~0 kcal.</li>
+        <li>Vegetables: Cucumber 16 kcal (1 fibre), Tomato 18 kcal (1 fibre), Onion 40 kcal (2 fibre).</li>
+        <li>Micronutrient tags (e.g., Ca, K⁺, Se) are highlights, not exhaustive; vary by brand/origin.</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-10 border-t border-slate-200 bg-white/60">
+    <div class="mx-auto max-w-6xl px-6 py-6 text-xs text-slate-500 flex items-center justify-between">
+      <p>© January 2027 • Prepared for IAS Nitin Kumar</p>
+      <a href="#timeline" class="no-print hover:underline">Back to top ↑</a>
     </div>
-  </div>
+  </footer>
 </body>
 </html>
