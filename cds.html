@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDS Exam Preparation - Indian Armed Forces</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .header-bg {
+            background: linear-gradient(to right, #FF9933, #FFFFFF, #138808);
+        }
+        .emblem {
+            width: 50px;
+            height: auto;
+        }
+        .nav-link {
+            @apply px-4 py-2 text-gray-700 font-semibold hover:bg-blue-100 rounded-md transition-colors duration-300;
+        }
+        .main-content h2 {
+            @apply text-2xl font-bold text-blue-800 border-b-2 border-blue-200 pb-2 mb-4;
+        }
+        .main-content h3 {
+            @apply text-xl font-semibold text-gray-800 mt-6 mb-3;
+        }
+        .card {
+            @apply bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300;
+        }
+        .footer {
+            @apply bg-gray-800 text-white p-8 mt-12;
+        }
+        .blinking {
+            animation: blinker 1.5s linear infinite;
+        }
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="header-bg h-2"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center space-x-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/1200px-Emblem_of_India.svg.png" alt="Emblem of India" class="emblem">
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Combined Defence Services Examination</h1>
+                        <p class="text-sm text-gray-600">Ministry of Defence, Government of India</p>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                     <span class="text-sm font-semibold text-gray-500">संघ लोक सेवा आयोग</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white border-b sticky top-0 z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center md:justify-start">
+                <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4">
+                    <a href="#" class="nav-link bg-blue-100">Home</a>
+                    <a href="#about" class="nav-link">About CDS</a>
+                    <a href="#eligibility" class="nav-link">Eligibility</a>
+                    <a href="#syllabus" class="nav-link">Syllabus</a>
+                    <a href="#pattern" class="nav-link">Exam Pattern</a>
+                    <a href="#resources" class="nav-link">Resources</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 main-content">
+        
+        <!-- Hero Section -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center">
+            <div class="md:w-3/4">
+                <h2 class="text-3xl font-bold text-blue-900">Prepare for the Combined Defence Services (CDS) Examination</h2>
+                <p class="mt-4 text-gray-700">An opportunity to serve the nation as a commissioned officer in the Indian Army, Navy, or Air Force. This portal provides all the necessary information and resources for your preparation.</p>
+            </div>
+            <div class="md:w-1/4 mt-6 md:mt-0 flex justify-center">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Indian_Armed_Forces_Tri-service_Flag.svg/220px-Indian_Armed_Forces_Tri-service_Flag.svg.png" alt="Tri-service Flag" class="w-32 h-auto">
+            </div>
+        </div>
+
+        <!-- Notifications Section -->
+        <div class="mb-8">
+             <div class="card">
+                <h3 class="text-xl font-semibold text-red-700 -mt-2 mb-3">Announcements</h3>
+                <ul class="space-y-2 list-disc list-inside">
+                    <li>
+                        <a href="#" class="text-blue-600 hover:underline">CDS Examination (II), 2025 notification has been released.</a>
+                        <span class="text-red-500 font-semibold blinking ml-2">New</span>
+                    </li>
+                    <li><a href="#" class="text-blue-600 hover:underline">Download Admit Card for CDS Examination (I), 2025.</a></li>
+                    <li><a href="#" class="text-blue-600 hover:underline">View final results for CDS Examination (II), 2024.</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- About CDS Section -->
+        <section id="about" class="mb-12">
+            <h2>About the CDS Examination</h2>
+            <p class="text-gray-700 leading-relaxed">
+                The Combined Defence Services (CDS) Examination is conducted twice a year by the Union Public Service Commission (UPSC) for recruitment into the Indian Military Academy (IMA), Officers Training Academy (OTA), Indian Naval Academy (INA), and Indian Air Force Academy (AFA). The examination comprises a written test followed by an interview for intelligence and personality test (SSB).
+            </p>
+        </section>
+
+        <!-- Key Information Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Eligibility -->
+            <section id="eligibility" class="card">
+                <h3>Eligibility Criteria</h3>
+                <p class="text-gray-700">Candidates must be unmarried and must be a citizen of India. Age limits, educational qualifications, and physical standards vary based on the academy.
+                </p>
+                <ul class="mt-4 space-y-2 list-disc list-inside text-sm">
+                    <li><strong>IMA & OTA:</strong> Degree from a recognised university.</li>
+                    <li><strong>INA:</strong> Degree in Engineering.</li>
+                    <li><strong>AFA:</strong> Degree of a recognised University (with Physics and Mathematics at 10+2 level) or Bachelor of Engineering.</li>
+                </ul>
+            </section>
+
+            <!-- Exam Pattern -->
+            <section id="pattern" class="card">
+                <h3>Exam Pattern</h3>
+                <p class="text-gray-700">The exam pattern differs for admission to IMA, INA, AFA and OTA. It consists of objective type questions.</p>
+                 <ul class="mt-4 space-y-2 list-disc list-inside text-sm">
+                    <li><strong>For IMA/INA/AFA:</strong> English, General Knowledge, Elementary Mathematics (2 hours each, 100 marks each).</li>
+                    <li><strong>For OTA:</strong> English, General Knowledge (2 hours each, 100 marks each).</li>
+                </ul>
+            </section>
+
+            <!-- Syllabus -->
+            <section id="syllabus" class="card">
+                <h3>Syllabus Overview</h3>
+                <p class="text-gray-700">The syllabus covers a wide range of topics to test the candidate's aptitude and knowledge base.</p>
+                 <ul class="mt-4 space-y-2 list-disc list-inside text-sm">
+                    <li><strong>English:</strong> Vocabulary, grammar, comprehension.</li>
+                    <li><strong>GK:</strong> Current affairs, history, geography, science.</li>
+                    <li><strong>Mathematics:</strong> Arithmetic, algebra, trigonometry, geometry.</li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Resources Section -->
+        <section id="resources" class="mb-12">
+            <h2>Preparation Resources</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg border">
+                    <h3 class="mt-0">Previous Year Papers</h3>
+                    <p class="text-gray-700">Access question papers from previous years to understand the exam pattern and question types.</p>
+                    <a href="#" class="inline-block mt-3 text-blue-600 font-semibold hover:underline">Download Papers &rarr;</a>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg border">
+                    <h3 class="mt-0">Mock Tests</h3>
+                    <p class="text-gray-700">Take online mock tests to evaluate your preparation level and improve time management.</p>
+                    <a href="#" class="inline-block mt-3 text-blue-600 font-semibold hover:underline">Attempt Mock Test &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-8">
+            <div>
+                <h4 class="font-bold text-lg mb-3">Contact Us</h4>
+                <p class="text-gray-400 text-sm">Union Public Service Commission<br>Dholpur House, Shahjahan Road,<br>New Delhi - 110069</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-3">Important Links</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://www.upsc.gov.in/" target="_blank" class="text-gray-300 hover:text-white">UPSC Official Website</a></li>
+                    <li><a href="https://joinindianarmy.nic.in/" target="_blank" class="text-gray-300 hover:text-white">Join Indian Army</a></li>
+                    <li><a href="https://www.joinindiannavy.gov.in/" target="_blank" class="text-gray-300 hover:text-white">Join Indian Navy</a></li>
+                    <li><a href="https://afcat.cdac.in/" target="_blank" class="text-gray-300 hover:text-white">Indian Air Force Career</a></li>
+                </ul>
+            </div>
+            <div>
+                 <h4 class="font-bold text-lg mb-3">Disclaimer</h4>
+                <p class="text-gray-400 text-sm">This is a conceptual portal for information purposes. Please refer to the official UPSC website for authentic and updated information.</p>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-4 text-center text-sm text-gray-500">
+            <p>&copy; 2025, Ministry of Defence, Government of India. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
