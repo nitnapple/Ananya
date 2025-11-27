@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers | Nanhu Interactive</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #111111;
+            --accent-color: #008080; /* Teal for Nanhu identity */
+            --gray-light: #f4f4f4;
+            --gray-text: #666666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            margin-left: 30px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a.active {
+            color: var(--accent-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray-text);
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--text-color);
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background-color: var(--accent-color);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            padding: 60px 0;
+            border-top: 1px solid var(--gray-light);
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 60px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 3.5rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: var(--gray-text);
+            font-weight: 500;
+        }
+
+        /* Job List */
+        .jobs-container {
+            max-width: 900px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            margin-top: 60px;
+            font-weight: 700;
+        }
+
+        .job-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: padding-left 0.2s;
+        }
+
+        .job-card:hover {
+            padding-left: 10px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .job-location {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #fafafa;
+            padding: 60px 40px;
+            text-align: center;
+            color: var(--gray-text);
+            font-size: 0.8rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">NANHU INTERACTIVE</div>
+        <div class="nav-links">
+            <a href="#">Games</a>
+            <a href="#">Publishing</a>
+            <a href="#" class="active">Jobs</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Think Bigger.<br>Create Faster.</h1>
+        <p>
+            We are a data-driven studio with zero bureaucracy. 
+            Our games are played by millions, but our team remains small, agile, and fiercely creative.
+        </p>
+        <a href="#open-positions" class="cta-button">Join the Team</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <span class="stat-number">150+</span>
+            <span class="stat-label">Hit Games</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">3B+</span>
+            <span class="stat-label">Downloads</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Creative Control</span>
+        </div>
+    </div>
+
+    <div class="jobs-container" id="open-positions">
+        <div class="category-title">🎨 Art & Design</div>
+        <div class="job-card">
+            <span class="job-title">Senior UI/UX Designer</span>
+            <span class="job-location">Remote / Hybrid</span>
+        </div>
+        <div class="job-card">
+            <span class="job-title">3D Motion Artist</span>
+            <span class="job-location">HQ - Shanghai</span>
+        </div>
+        <div class="job-card">
+            <span class="job-title">Marketing Creative Lead</span>
+            <span class="job-location">Remote</span>
+        </div>
+
+        <div class="category-title">💻 Engineering</div>
+        <div class="job-card">
+            <span class="job-title">Unity Developer (Casual)</span>
+            <span class="job-location">Remote</span>
+        </div>
+        <div class="job-card">
+            <span class="job-title">Full Stack Engineer</span>
+            <span class="job-location">HQ - Jiaxing</span>
+        </div>
+        <div class="job-card">
+            <span class="job-title">Playable Ads Developer</span>
+            <span class="job-location">Remote</span>
+        </div>
+
+        <div class="category-title">📈 Product & Data</div>
+        <div class="job-card">
+            <span class="job-title">Level Designer</span>
+            <span class="job-location">Remote</span>
+        </div>
+        <div class="job-card">
+            <span class="job-title">Game Data Analyst</span>
+            <span class="job-location">Remote</span>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Nanhu Interactive. All rights reserved.<br>
+        Built for creators, by creators.
+    </footer>
+
+</body>
+</html>
