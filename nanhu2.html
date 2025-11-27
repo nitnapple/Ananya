@@ -32,6 +32,7 @@
             padding: 0;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
         }
 
         a {
@@ -140,12 +141,12 @@
             letter-spacing: -2px;
             line-height: 1.05;
             margin: 0 0 24px 0;
-            color: white; /* Changed to white */
+            color: white;
         }
 
         .hero p {
             font-size: 1.35rem;
-            color: rgba(255, 255, 255, 0.9); /* Changed to off-white */
+            color: rgba(255, 255, 255, 0.9);
             max-width: 680px;
             margin: 0 auto 40px auto;
             font-weight: 400;
@@ -153,21 +154,21 @@
 
         .cta-button {
             display: inline-block;
-            background-color: white; /* Changed to white */
-            color: var(--text-color); /* Changed to dark text */
+            background-color: white;
+            color: var(--text-color);
             padding: 18px 40px;
             border-radius: 50px;
             font-weight: 600;
             font-size: 1.1rem;
             transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
-            border: 2px solid white; /* Changed border */
+            border: 2px solid white;
         }
 
         .cta-button:hover {
             transform: scale(1.05);
             background-color: var(--accent-color);
             border-color: var(--accent-color);
-            color: white; /* White text on hover */
+            color: white;
         }
 
         .cta-button:active {
@@ -245,7 +246,7 @@
 
         .job-card {
             display: flex;
-            align-items: center; /* Center vertically */
+            align-items: center;
             padding: 25px 0;
             border-bottom: 1px solid var(--gray-border);
             cursor: pointer;
@@ -257,7 +258,6 @@
             border-bottom-color: var(--accent-color);
         }
         
-        /* New image style for job cards */
         .job-image {
             width: 50px;
             height: 50px;
@@ -267,7 +267,6 @@
             background-color: var(--gray-light);
         }
 
-        /* Wrapper for details and arrow to handle layout */
         .job-details-wrapper {
             flex-grow: 1;
             display: flex;
@@ -322,11 +321,24 @@
             transform: translateX(0);
         }
 
+        /* --- SCROLL ANIMATION CLASSES --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* --- FOOTER --- */
         footer {
             background-color: #111;
             color: white;
-            padding: 40px 20px; /* Reduce padding */
+            padding: 40px 20px;
             text-align: center;
         }
 
@@ -337,22 +349,22 @@
 
         .footer-logo {
             font-weight: 900;
-            font-size: 1.2rem; /* Smaller font size */
-            margin-bottom: 15px; /* Smaller margin */
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             display: inline-block;
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 15px; /* Smaller gap */
-            margin-bottom: 25px; /* Smaller margin */
+            gap: 15px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
         .footer-links a {
             color: #888;
-            font-size: 0.85rem; /* Smaller font size */
+            font-size: 0.85rem;
         }
 
         .footer-links a:hover {
@@ -361,7 +373,7 @@
 
         .copyright {
             color: #555;
-            font-size: 0.75rem; /* Smaller font size */
+            font-size: 0.75rem;
         }
 
         /* --- MEDIA QUERIES (RESPONSIVENESS) --- */
@@ -441,7 +453,7 @@
 
             /* Job Card Mobile */
             .job-card {
-                flex-direction: row; /* Keep image next to details */
+                flex-direction: row;
                 align-items: flex-start;
                 padding: 20px 0;
             }
@@ -457,11 +469,11 @@
             }
 
             .job-card:hover .job-details-wrapper {
-                padding-left: 0; /* Remove shift on touch devices */
+                padding-left: 0;
             }
 
             .apply-arrow {
-                display: none; /* Hide arrow on mobile */
+                display: none;
             }
         }
     </style>
@@ -520,7 +532,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=1" alt="UI/UX Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -535,7 +546,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=2" alt="3D Art Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -550,7 +560,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=3" alt="Marketing Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -570,7 +579,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=4" alt="Engineering Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -585,7 +593,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=5" alt="Full Stack Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -600,7 +607,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=6" alt="Ads Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -620,7 +626,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=7" alt="Game Design Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -635,7 +640,6 @@
         </div>
 
         <div class="job-card" onclick="alert('Redirecting to application portal...')">
-            <!-- Added image to job card -->
             <img src="https://picsum.photos/50?random=8" alt="Data Team" class="job-image">
             <div class="job-details-wrapper">
                 <div class="job-info">
@@ -706,6 +710,30 @@
                     });
                 }
             });
+        });
+
+        // Scroll Reveal Animation (Intersection Observer)
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // trigger when 10% visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, observerOptions);
+
+        // Select elements to animate
+        const elementsToAnimate = document.querySelectorAll('.hero, .stat-item, .category-header, .job-card');
+        
+        elementsToAnimate.forEach(el => {
+            el.classList.add('reveal'); // Set initial state (opacity 0)
+            observer.observe(el);
         });
     </script>
 </body>
