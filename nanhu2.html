@@ -122,17 +122,43 @@
             transition: all 0.3s ease-in-out;
         }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION (UPDATED FOR VIDEO) --- */
         .hero {
+            position: relative; /* Essential for absolute video positioning */
             width: 100%;
             margin: 0 auto;
             padding: 160px 20px 100px 20px;
             text-align: center;
-            /* Adding background image with a dark overlay */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
             color: white;
+            overflow: hidden; /* Prevents video from spilling out */
+        }
+
+        /* Video Styles */
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Acts like background-size: cover */
+            z-index: 0;
+        }
+
+        /* Dark Overlay Styles */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark tint */
+            z-index: 1;
+        }
+
+        /* Content Wrapper to sit on top */
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
 
         .hero h1 {
@@ -499,14 +525,21 @@
     </header>
 
     <section class="hero">
-        <h1>Think Bigger.<br>Create Faster.</h1>
-        <p>
-            We are a data-driven studio with zero bureaucracy. 
-            Our games are played by millions, but our team remains small, agile, and fiercely creative.
-        </p>
-        <a href="#open-positions" class="cta-button">View Open Roles</a>
-    </section>
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="https://raw.githubusercontent.com/nitnapple/Ananya/refs/heads/main/223522.mp4" type="video/mp4">
+        </video>
 
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1>Think Bigger.<br>Create Faster.</h1>
+            <p>
+                We are a data-driven studio with zero bureaucracy. 
+                Our games are played by millions, but our team remains small, agile, and fiercely creative.
+            </p>
+            <a href="#open-positions" class="cta-button">View Open Roles</a>
+        </div>
+    </section>
     <div class="stats-wrapper">
         <div class="stats">
             <div class="stat-item">
