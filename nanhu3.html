@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nanhu Interactive | Careers</title>
+    <meta name="description" content="Join Nanhu Interactive. Big Data. Bigger Dreams. Zero Bureaucracy.">
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #111111;
+            --accent-color: #008080; /* Teal for Nanhu identity */
+            --accent-hover: #006666;
+            --gray-light: #f4f4f4;
+            --gray-border: #e0e0e0;
+            --gray-text: #666666;
+            --container-width: 1200px;
+            --header-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s ease;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 1.3rem;
+            letter-spacing: -1px;
+            z-index: 1002;
+            text-transform: uppercase;
+        }
+
+        /* Desktop Nav */
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .nav-links a.active {
+            color: var(--accent-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-color);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* --- HERO SECTION (UPDATED FOR VIDEO) --- */
+        .hero {
+            position: relative; /* Essential for absolute video positioning */
+            width: 100%;
+            margin: 0 auto;
+            padding: 160px 20px 100px 20px;
+            text-align: center;
+            color: white;
+            overflow: hidden; /* Prevents video from spilling out */
+        }
+
+        /* Video Styles */
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Acts like background-size: cover */
+            z-index: 0;
+        }
+
+        /* Dark Overlay Styles */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark tint */
+            z-index: 1;
+        }
+
+        /* Content Wrapper to sit on top */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            margin: 0 0 24px 0;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 680px;
+            margin: 0 auto 40px auto;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--text-color);
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+            border: 2px solid white;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        /* --- STATS SECTION --- */
+        .stats-wrapper {
+            border-top: 1px solid var(--gray-border);
+            border-bottom: 1px solid var(--gray-border);
+            background-color: #fafafa;
+            /* Adding a subtle background pattern */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23008080' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .stats {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            padding: 60px 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--text-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--gray-text);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        /* --- JOBS SECTION --- */
+        .jobs-container {
+            max-width: 900px;
+            margin: 0 auto 100px auto;
+            padding: 0 20px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-top: 80px;
+            margin-bottom: 30px;
+        }
+
+        .category-icon {
+            font-size: 1.8rem;
+            margin-right: 15px;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .job-card {
+            display: flex;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--gray-border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .job-card:hover {
+            border-bottom-color: var(--accent-color);
+        }
+        
+        .job-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 20px;
+            background-color: var(--gray-light);
+        }
+
+        .job-details-wrapper {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: padding-left 0.2s ease;
+        }
+
+        .job-card:hover .job-details-wrapper {
+            padding-left: 15px;
+        }
+
+        .job-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .job-meta {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tag {
+            background-color: var(--gray-light);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .apply-arrow {
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.2s ease;
+            color: var(--accent-color);
+            margin-left: 20px;
+        }
+
+        .job-card:hover .apply-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- SCROLL ANIMATION CLASSES --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #111;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            color: #555;
+            font-size: 0.75rem;
+        }
+
+        /* --- MEDIA QUERIES (RESPONSIVENESS) --- */
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Mobile Nav */
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            /* Hamburger Animation */
+            .hamburger.toggle .line1 {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            .hamburger.toggle .line2 {
+                opacity: 0;
+            }
+            .hamburger.toggle .line3 {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            /* Hero Mobile */
+            .hero {
+                padding-top: 120px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .stat-number {
+                font-size: 2.8rem;
+            }
+
+            .stat-item {
+                padding: 30px 10px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .stat-item:last-child {
+                border-bottom: none;
+            }
+
+            /* Job Card Mobile */
+            .job-card {
+                flex-direction: row;
+                align-items: flex-start;
+                padding: 20px 0;
+            }
+            
+            .job-image {
+                margin-bottom: 0;
+            }
+
+            .job-details-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .job-card:hover .job-details-wrapper {
+                padding-left: 0;
+            }
+
+            .apply-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Nanhu Interactive</div>
+        <nav>
+            <div class="nav-links" id="navLinks">
+                <a href="#">Games</a>
+                <a href="#">Publishing</a>
+                <a href="#" class="active">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span class="line1"></span>
+                <span class="line2"></span>
+                <span class="line3"></span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="https://raw.githubusercontent.com/nitnapple/Ananya/refs/heads/main/223522.mp4" type="video/mp4">
+        </video>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1>Think Bigger.<br>Create Faster.</h1>
+            <p>
+                We are a data-driven studio with zero bureaucracy. 
+                Our games are played by millions, but our team remains small, agile, and fiercely creative.
+            </p>
+            <a href="#open-positions" class="cta-button">View Open Roles</a>
+        </div>
+    </section>
+    <div class="stats-wrapper">
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number">150+</span>
+                <span class="stat-label">Hit Games</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">3B+</span>
+                <span class="stat-label">Global Downloads</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Creative Control</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="jobs-container" id="open-positions">
+        
+        <div class="category-header">
+            <span class="category-icon">🎨</span>
+            <div class="category-title">Art & Design</div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=1" alt="UI/UX Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Senior UI/UX Designer</span>
+                    <div class="job-meta">
+                        <span class="tag">Remote</span>
+                        <span class="tag">Full-time</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=2" alt="3D Art Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">3D Motion Artist</span>
+                    <div class="job-meta">
+                        <span class="tag">HQ - Shanghai</span>
+                        <span class="tag">Hybrid</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=3" alt="Marketing Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Marketing Creative Lead</span>
+                    <div class="job-meta">
+                        <span class="tag">Remote</span>
+                        <span class="tag">Contract</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="category-header">
+            <span class="category-icon">💻</span>
+            <div class="category-title">Engineering</div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=4" alt="Engineering Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Unity Developer (Casual)</span>
+                    <div class="job-meta">
+                        <span class="tag">Remote</span>
+                        <span class="tag">Senior</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=5" alt="Full Stack Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Full Stack Engineer</span>
+                    <div class="job-meta">
+                        <span class="tag">HQ - Jiaxing</span>
+                        <span class="tag">Mid-Level</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=6" alt="Ads Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Playable Ads Developer</span>
+                    <div class="job-meta">
+                        <span class="tag">Remote</span>
+                        <span class="tag">Freelance</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="category-header">
+            <span class="category-icon">📈</span>
+            <div class="category-title">Product & Data</div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=7" alt="Game Design Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Level Designer</span>
+                    <div class="job-meta">
+                        <span class="tag">Remote</span>
+                        <span class="tag">Puzzle Focus</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+        <div class="job-card" onclick="alert('Redirecting to application portal...')">
+            <img src="https://picsum.photos/50?random=8" alt="Data Team" class="job-image">
+            <div class="job-details-wrapper">
+                <div class="job-info">
+                    <span class="job-title">Game Data Analyst</span>
+                    <div class="job-meta">
+                        <span class="tag">Remote</span>
+                        <span class="tag">Python/SQL</span>
+                    </div>
+                </div>
+                <span class="apply-arrow">→</span>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">NANHU INTERACTIVE</div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Games</a>
+                <a href="#">Publishing</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 Nanhu Interactive. Built for creators.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        const links = document.querySelectorAll('.nav-links a');
+
+        hamburger.addEventListener('click', () => {
+            // Toggle Nav
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('toggle');
+        });
+
+        // Close menu when a link is clicked
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('toggle');
+            });
+        });
+
+        // Smooth Scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // Scroll Reveal Animation (Intersection Observer)
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // trigger when 10% visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, observerOptions);
+
+        // Select elements to animate
+        const elementsToAnimate = document.querySelectorAll('.hero, .stat-item, .category-header, .job-card');
+        
+        elementsToAnimate.forEach(el => {
+            el.classList.add('reveal'); // Set initial state (opacity 0)
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
