@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Breathing Circle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f0f9ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            touch-action: none; /* Critical for mobile games/apps */
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic Viewport Height for mobile browsers */
+            user-select: none; /* Prevent text selection on tap */
+            -webkit-user-select: none;
+        }
+        
+        /* Custom slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            padding: 10px 0; /* Increase touch area */
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px; /* Larger for touch */
+            width: 24px;
+            border-radius: 50%;
+            background: #60a5fa;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            /* Handle iPhone notch/home bar safe areas */
+            padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        }
+
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(240, 249, 255, 0.98);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-between items-center text-slate-700 py-6 md:py-10">
+
+    <!-- Start Overlay -->
+    <div id="startOverlay">
+        <div class="flex flex-col items-center px-6 text-center">
+            <h1 class="text-4xl font-light text-blue-900 mb-2">Breathing Box</h1>
+            <p class="text-slate-500 text-sm mb-8">Headphones recommended</p>
+            
+            <button id="startBtn" class="bg-blue-400 active:bg-blue-600 text-white text-lg font-bold py-4 px-10 rounded-full shadow-lg transition-transform transform active:scale-95 touch-manipulation">
+                Tap to Start
+            </button>
+            
+            <div class="mt-8 flex gap-4 text-xs text-slate-400">
+                <span class="flex items-center gap-1">🔊 Sound</span>
+                <span class="flex items-center gap-1">📳 Vibration</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas Layer -->
+    <canvas id="breathCanvas" class="absolute top-0 left-0 z-0"></canvas>
+
+    <!-- Top Section: Text Display -->
+    <div class="z-10 flex flex-col items-center mt-8 md:mt-12 pointer-events-none w-full px-4">
+        <h1 id="breathText" class="text-5xl md:text-6xl font-light tracking-widest text-blue-900 transition-all duration-300 h-16 md:h-20 flex items-center justify-center drop-shadow-sm text-center">
+            Ready?
+        </h1>
+        <p id="instructionSubtext" class="text-slate-500 text-base md:text-lg font-normal tracking-wide opacity-80 h-8 text-center mt-2">
+            Find a comfortable position
+        </p>
+    </div>
+
+    <!-- Bottom Section: Controls -->
+    <!-- Added safe-area padding handling in CSS class .glass-panel -->
+    <div class="z-20 w-[95%] max-w-md glass-panel rounded-3xl p-6 shadow-xl mb-4 md:mb-8 transition-transform active:scale-[0.99] touch-manipulation">
+        <div class="flex flex-col gap-5">
+            
+            <!-- Speed Control -->
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-between items-center text-sm font-semibold text-slate-600">
+                    <span>Phase Duration</span>
+                    <span id="speedDisplay" class="font-mono text-blue-600">4.0s</span>
+                </div>
+                
+                <div class="relative h-8 flex items-center">
+                    <input 
+                        type="range" 
+                        id="speedSlider" 
+                        min="2" 
+                        max="8" 
+                        step="0.5" 
+                        value="4"
+                        class="w-full z-10"
+                        aria-label="Breathing Phase Duration"
+                    >
+                </div>
+                
+                <div class="flex justify-between text-[10px] uppercase tracking-wider text-slate-400 font-bold px-1">
+                    <span>Fast (2s)</span>
+                    <span>Deep (8s)</span>
+                </div>
+            </div>
+            
+            <!-- Mute Button -->
+             <div class="flex justify-center pt-1">
+                <button id="muteBtn" class="w-full py-3 text-xs font-bold text-blue-500 uppercase tracking-widest border border-blue-200 rounded-xl hover:bg-blue-50 active:bg-blue-100 transition-colors touch-manipulation">
+                    Sound On
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('breathCanvas');
+        const ctx = canvas.getContext('2d');
+        const textElement = document.getElementById('breathText');
+        const subtextElement = document.getElementById('instructionSubtext');
+        const slider = document.getElementById('speedSlider');
+        const speedDisplay = document.getElementById('speedDisplay');
+        const startOverlay = document.getElementById('startOverlay');
+        const startBtn = document.getElementById('startBtn');
+        const muteBtn = document.getElementById('muteBtn');
+
+        // State variables
+        let phaseDuration = 4;
+        let isRunning = false;
+        let audioContext = null;
+        let noiseNode = null;
+        let gainNode = null;
+        let filterNode = null;
+        let isMuted = false;
+        let wakeLock = null;
+        
+        // Configuration
+        const baseColor = { r: 135, g: 206, b: 235 };
+        
+        // Resize handling
+        let centerX, centerY;
+        let maxRadius;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            centerX = canvas.width / 2;
+            centerY = canvas.height / 2;
+            // Slightly smaller radius on mobile to account for vertically stacked UI
+            const scaleFactor = window.innerWidth < 600 ? 0.35 : 0.25;
+            maxRadius = Math.min(canvas.width, canvas.height) * scaleFactor;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- Wake Lock API (Keep screen on) ---
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                } catch (err) {
+                    console.log(`${err.name}, ${err.message}`);
+                }
+            }
+        }
+
+        // --- Audio System (Procedural Pink Noise) ---
+        function initAudio() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContext = new AudioContext();
+
+            const bufferSize = audioContext.sampleRate * 2;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Pink noise algorithm
+            let b0, b1, b2, b3, b4, b5, b6;
+            b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                data[i] *= 0.11; 
+                b6 = white * 0.115926;
+            }
+
+            noiseNode = audioContext.createBufferSource();
+            noiseNode.buffer = buffer;
+            noiseNode.loop = true;
+
+            filterNode = audioContext.createBiquadFilter();
+            filterNode.type = 'lowpass';
+            filterNode.frequency.value = 400;
+
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 0;
+
+            noiseNode.connect(filterNode);
+            filterNode.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            noiseNode.start();
+        }
+
+        function updateAudio(intensity, isHolding) {
+            if (!audioContext || isMuted) return;
+
+            const targetFreq = 200 + (intensity * 1000);
+            let targetVol = intensity * 0.5;
+            
+            if (isHolding) {
+                targetVol = targetVol * 0.3;
+            }
+
+            const now = audioContext.currentTime;
+            filterNode.frequency.setTargetAtTime(targetFreq, now, 0.1);
+            gainNode.gain.setTargetAtTime(targetVol, now, 0.1);
+        }
+
+        // --- Haptics System ---
+        let lastHapticPhase = -1;
+
+        function triggerHaptic(phaseIndex) {
+            if (phaseIndex === lastHapticPhase) return;
+            lastHapticPhase = phaseIndex;
+
+            if (!navigator.vibrate) return;
+
+            // Simple patterns for mobile compatibility
+            if (phaseIndex === 0) {
+                navigator.vibrate([50]); // Short blip for start
+            } else if (phaseIndex === 2) {
+                navigator.vibrate([50]); // Short blip for start
+            }
+        }
+        
+        let hapticTimer = 0;
+        function updateContinuousHaptic(isMoving, intensity) {
+            if (!navigator.vibrate || !isMoving) return;
+            
+            // Reduced frequency for mobile battery optimization
+            if (Date.now() - hapticTimer > 400) {
+                 const ms = 5 + (intensity * 20); 
+                 navigator.vibrate(ms); 
+                 hapticTimer = Date.now();
+            }
+        }
+
+        // --- Interaction Handlers ---
+        startBtn.addEventListener('click', () => {
+            initAudio();
+            requestWakeLock(); // Request screen stay on
+            
+            startOverlay.style.opacity = '0';
+            setTimeout(() => {
+                startOverlay.style.display = 'none';
+                isRunning = true;
+                requestAnimationFrame(gameLoop);
+            }, 400);
+        });
+
+        // Re-acquire wake lock if visibility changes
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
+
+        muteBtn.addEventListener('click', (e) => {
+            // Prevent focus stickiness on mobile
+            e.target.blur(); 
+            isMuted = !isMuted;
+            muteBtn.textContent = isMuted ? "Sound Off" : "Sound On";
+            if(isMuted) {
+                muteBtn.classList.add('text-slate-400', 'border-slate-200');
+                muteBtn.classList.remove('text-blue-500', 'border-blue-200');
+                if(gainNode) gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.1);
+            } else {
+                muteBtn.classList.remove('text-slate-400', 'border-slate-200');
+                muteBtn.classList.add('text-blue-500', 'border-blue-200');
+            }
+        });
+
+        slider.addEventListener('input', (e) => {
+            phaseDuration = parseFloat(e.target.value);
+            speedDisplay.textContent = `${phaseDuration.toFixed(1)}s`;
+        });
+
+        // --- Core Logic ---
+        function easeInOutSine(x) {
+            return -(Math.cos(Math.PI * x) - 1) / 2;
+        }
+
+        let lastTime = 0;
+        let timer = 0;
+
+        function gameLoop(timestamp) {
+            if (!isRunning) return;
+            if (!lastTime) lastTime = timestamp;
+            const deltaTime = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            const totalCycleTime = phaseDuration * 4;
+            timer += deltaTime;
+            if (timer >= totalCycleTime) timer %= totalCycleTime;
+
+            const currentPhaseIndex = Math.floor(timer / phaseDuration);
+            const phaseProgress = (timer % phaseDuration) / phaseDuration;
+
+            let currentRadiusFactor = 0;
+            let text = "";
+            let subtext = "";
+            let isMoving = false;
+            let audioIntensity = 0;
+
+            switch (currentPhaseIndex) {
+                case 0: // Inhale
+                    currentRadiusFactor = easeInOutSine(phaseProgress);
+                    text = "Breathe In";
+                    subtext = "Deeply fill your lungs";
+                    isMoving = true;
+                    audioIntensity = currentRadiusFactor;
+                    break;
+                case 1: // Hold (Full)
+                    currentRadiusFactor = 1;
+                    text = "Hold";
+                    subtext = "Enjoy the fullness";
+                    isMoving = false;
+                    audioIntensity = 1.0;
+                    break;
+                case 2: // Exhale
+                    currentRadiusFactor = 1 - easeInOutSine(phaseProgress);
+                    text = "Breathe Out";
+                    subtext = "Release everything";
+                    isMoving = true;
+                    audioIntensity = currentRadiusFactor;
+                    break;
+                case 3: // Hold (Empty)
+                    currentRadiusFactor = 0;
+                    text = "Hold";
+                    subtext = "Stay empty for a moment";
+                    isMoving = false;
+                    audioIntensity = 0.0;
+                    break;
+            }
+
+            // Sync UI
+            if (textElement.textContent !== text) {
+                textElement.textContent = text;
+                triggerHaptic(currentPhaseIndex);
+            }
+            if (subtextElement.textContent !== subtext) {
+                subtextElement.textContent = subtext;
+            }
+
+            // Sync Audio/Haptics
+            updateAudio(audioIntensity, !isMoving);
+            updateContinuousHaptic(isMoving, audioIntensity);
+
+            // Draw
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const minRadius = maxRadius * 0.4;
+            const radius = minRadius + (currentRadiusFactor * (maxRadius - minRadius));
+
+            const glowStrength = 20 + (currentRadiusFactor * 30);
+            ctx.shadowBlur = glowStrength;
+            ctx.shadowColor = `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, 0.6)`;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${baseColor.r}, ${baseColor.g}, ${baseColor.b}, ${0.3 + (currentRadiusFactor * 0.2)})`;
+            ctx.fill();
+
+            ctx.strokeStyle = `rgba(255, 255, 255, 0.9)`;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, 0.8)`;
+            ctx.fill();
+
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>
