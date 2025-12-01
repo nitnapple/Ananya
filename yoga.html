@@ -88,6 +88,7 @@
                 <span class="flex items-center gap-1">🔊 Sound</span>
                 <span class="flex items-center gap-1">📳 Vibration</span>
             </div>
+            <p class="mt-2 text-[10px] text-slate-300">(Vibration requires Android)</p>
         </div>
     </div>
 
@@ -256,6 +257,7 @@
 
         // --- Haptics System ---
         let lastHapticPhase = -1;
+        let hapticBlockedUntil = 0; // Prevent overlap
 
         function triggerHaptic(phaseIndex) {
             if (phaseIndex === lastHapticPhase) return;
@@ -263,11 +265,22 @@
 
             if (!navigator.vibrate) return;
 
-            // Simple patterns for mobile compatibility
-            if (phaseIndex === 0) {
-                navigator.vibrate([50]); // Short blip for start
-            } else if (phaseIndex === 2) {
-                navigator.vibrate([50]); // Short blip for start
+            // Block continuous haptics briefly to let this pattern play fully
+            hapticBlockedUntil = Date.now() + 200;
+
+            try {
+                // Stronger, integer values
+                if (phaseIndex === 0) {
+                    navigator.vibrate(60); // Distinct Start
+                } else if (phaseIndex === 1) {
+                    navigator.vibrate(20); // Subtle tick for Hold
+                } else if (phaseIndex === 2) {
+                    navigator.vibrate(60); // Distinct Start
+                } else if (phaseIndex === 3) {
+                    navigator.vibrate(20); // Subtle tick for Hold
+                }
+            } catch (e) {
+                console.warn("Vibration failed", e);
             }
         }
         
@@ -275,10 +288,16 @@
         function updateContinuousHaptic(isMoving, intensity) {
             if (!navigator.vibrate || !isMoving) return;
             
-            // Reduced frequency for mobile battery optimization
-            if (Date.now() - hapticTimer > 400) {
-                 const ms = 5 + (intensity * 20); 
-                 navigator.vibrate(ms); 
+            // Don't interrupt phase transition vibrations
+            if (Date.now() < hapticBlockedUntil) return;
+            
+            // Reduced frequency, but stronger, integer pulses
+            if (Date.now() - hapticTimer > 350) {
+                 // Ensure integer (Math.floor). Minimum 15ms for perceptibility.
+                 const ms = Math.floor(15 + (intensity * 30)); 
+                 try {
+                     navigator.vibrate(ms); 
+                 } catch(e) {}
                  hapticTimer = Date.now();
             }
         }
@@ -287,6 +306,11 @@
         startBtn.addEventListener('click', () => {
             initAudio();
             requestWakeLock(); // Request screen stay on
+            
+            // Immediate user-gesture vibration to "unlock" feature on some browsers
+            if (navigator.vibrate) {
+                try { navigator.vibrate(200); } catch(e) {}
+            }
             
             startOverlay.style.opacity = '0';
             setTimeout(() => {
