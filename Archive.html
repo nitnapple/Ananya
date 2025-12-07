@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ananya's Academic Journey</title>
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/crown.ico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- SEO Meta Tags -->
     <meta name="description" content="Summarized notes, assignments, presentations, and important academic updates for Ananya's BA Programme 6th Semester.">
     <meta property="og:title" content="Ananya's Academic Journey | BA Programme 6th Semester">
     <meta property="og:description" content="Summarized notes, assignments, presentations, and important academic updates for Ananya's BA Programme 6th Semester.">
@@ -20,8 +24,111 @@
     <link rel="canonical" href="https://nitnapple.github.io/Ananya/Archive">
     <link rel="manifest" href="/manifest.json">
 
+    <style>
+        /* Base transition for smooth theme switching */
+        body, header, footer, div, h1, h2, h3, p, a {
+            transition: all 0.5s ease;
+        }
 
-    <!-- Started New Ananya Clarity  Script -->
+        /* SOPHISTICATED THEME CLASSES (Active by default via Body class) */
+        body.sophisticated-mode {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+            font-family: 'Cormorant Garamond', serif !important;
+            font-size: 1.1rem;
+        }
+
+        body.sophisticated-mode h1, 
+        body.sophisticated-mode h2, 
+        body.sophisticated-mode h3, 
+        body.sophisticated-mode .font-bold {
+            font-family: 'Great Vibes', cursive !important;
+            font-weight: normal !important;
+            letter-spacing: 1px;
+        }
+
+        /* Override Header Colors */
+        body.sophisticated-mode header {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-bottom: 1px solid #000000;
+            box-shadow: none !important;
+        }
+
+        /* Override Footer Colors */
+        body.sophisticated-mode footer {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        /* Override Tailwind Purples and Greens */
+        body.sophisticated-mode .text-purple-700, 
+        body.sophisticated-mode .text-green-600, 
+        body.sophisticated-mode .text-blue-600, 
+        body.sophisticated-mode .text-yellow-600,
+        body.sophisticated-mode .text-red-600 {
+            color: #000000 !important;
+        }
+
+        body.sophisticated-mode .bg-purple-700, 
+        body.sophisticated-mode .bg-purple-800,
+        body.sophisticated-mode .bg-yellow-500, 
+        body.sophisticated-mode .bg-blue-500, 
+        body.sophisticated-mode .bg-pink-600, 
+        body.sophisticated-mode .bg-gray-900 {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        /* Borders instead of shadows */
+        body.sophisticated-mode section {
+            box-shadow: none !important;
+            border: 1px solid #e5e5e5;
+        }
+
+        /* Grayscale Images */
+        body.sophisticated-mode img, 
+        body.sophisticated-mode svg {
+            filter: grayscale(100%) contrast(110%);
+        }
+        
+        body.sophisticated-mode img:hover {
+            filter: grayscale(0%);
+        }
+
+        /* Restore Button Styling */
+        #theme-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        #theme-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Styles for button in Sophisticated Mode */
+        body.sophisticated-mode #theme-btn {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Styles for button in Old Look Mode */
+        body:not(.sophisticated-mode) #theme-btn {
+            background-color: #6b21a8; /* Purple */
+            color: #fff;
+            border: 2px solid #fff;
+            font-family: sans-serif;
+        }
+    </style>
 
     <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -29,66 +136,43 @@
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "ramb97rh07");
-</script>
-
-    <!-- Ended New Ananya Clarity  Script -->
-
-    <!-- Started Clarity  Script -->
-
+    </script>
     <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "qsnefk1464");
-</script>
-
-    <!-- Ended Clarity  Script -->
-
-    
-<!-- Started PostHog Script -->
-
+    </script>
     <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_8MyDkWfyorddFNpfx8Jy9m8Y9TF3Wpeo8kiqkFPvKed', {
         api_host: 'https://eu.i.posthog.com',
-        person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+        person_profiles: 'identified_only', 
     })
-</script>
-
-
-<!-- Ended PostHog Script -->
-
-<!-- Smartlook Script -->
-
+    </script>
     <script type='text/javascript'>
-  window.smartlook||(function(d) {
+    window.smartlook||(function(d) {
     var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
     var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
     c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
     })(document);
     smartlook('init', '57105488529284db8da5c3da75c04faf28af654a', { region: 'eu' });
-</script>
-    
+    </script>
 </head>
-<body class="bg-gray-100 text-gray-900">
 
-<!-- Started custom event with device info -->
+<body class="bg-gray-100 text-gray-900 sophisticated-mode" id="body">
 
+<button id="theme-btn" onclick="toggleTheme()">↺ Restore Old Look</button>
 
- <!-- Ended custom event with device info -->
-
-<!-- Header Section -->
-<header class="text-white py-6 text-center shadow-lg transition-colors duration-500" id="header">
+<header class="text-white py-6 text-center shadow-lg transition-colors duration-500 bg-purple-700" id="header">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-center relative">
-      <!-- Title and Time -->
       <div>
         <h1 class="text-3xl font-bold" id="greeting">Welcome, Ananya 👑</h1>
         <p class="text-lg" id="date"></p>
         <p class="text-sm mt-1" id="time">Loading time...</p>
       </div>
-      <!-- Mobile menu button -->
       <div class="absolute right-0 md:hidden">
         <button id="menu-btn" class="text-white focus:outline-none transition-transform transform hover:scale-110">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +182,6 @@
         </button>
       </div>
     </div>
-    <!-- Desktop Navigation -->
     <nav class="hidden md:block mt-4">
       <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6" id="menu-links">
         <li><a href="#whats_new" class="hover:text-gray-300 transition">✨ What's New</a></li>
@@ -111,7 +194,6 @@
         <li><a href="#suggestion-box" class="hover:text-gray-300 transition"><span class="inline-block animate-bounce">💡</span> Suggestion</a></li>
       </ul>
     </nav>
-    <!-- Mobile Navigation -->
     <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-purple-800 text-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out md:hidden z-50">
       <button id="close-menu" class="absolute top-4 right-4 text-white">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,23 +215,45 @@
   </div>
 </header>
 
-<!-- Script for Greeting, Time, and Menu -->
 <script>
+  let isSophisticated = true; // Default state
+
+  function toggleTheme() {
+      const body = document.getElementById('body');
+      const btn = document.getElementById('theme-btn');
+      
+      if (isSophisticated) {
+          // Switch to Old Look
+          body.classList.remove('sophisticated-mode');
+          btn.textContent = "✨ Switch to Elegant Mode";
+          isSophisticated = false;
+          // Trigger update to restore dynamic background colors immediately
+          updateGreetingAndBG();
+      } else {
+          // Switch to Sophisticated Look
+          body.classList.add('sophisticated-mode');
+          btn.textContent = "↺ Restore Old Look";
+          isSophisticated = true;
+          // Trigger update to force white background
+          updateGreetingAndBG();
+      }
+  }
+
   // Helper: Get greeting and background color based on hour
   function getGreetingAndBG(hours) {
     let bgColor = "bg-purple-700";
     let greetText = "Welcome, Ananya 👑";
     if (hours >= 5 && hours < 12) {
-      bgColor = "bg-purple-700";
+      bgColor = "bg-purple-700"; // Morning
       greetText = "Good Morning, Ananya 👑";
     } else if (hours >= 12 && hours < 17) {
-      bgColor = "bg-purple-700";
+      bgColor = "bg-blue-500"; // Afternoon
       greetText = "Good Afternoon, Ananya 👑";
     } else if (hours >= 17 && hours < 21) {
-      bgColor = "bg-purple-700";
+      bgColor = "bg-purple-700"; // Evening
       greetText = "Good Evening, Ananya 👑";
     } else {
-      bgColor = "bg-purple-700";
+      bgColor = "bg-gray-900"; // Night
       greetText = "Good Night, Ananya 👑";
     }
     return { bgColor, greetText };
@@ -159,17 +263,18 @@
   function showGreeting() {
     const header = document.getElementById("header");
     const greeting = document.getElementById("greeting");
-    const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-    document.getElementById("date").textContent = nowIST.toDateString();
-
-    // Show "Welcome, Ananya 👑" for 3 seconds
+    
+    // Initial State
     greeting.textContent = "Welcome, Ananya 👑";
-    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700");
-    header.classList.add("bg-purple-700");
+    
+    // If not sophisticated, apply purple default immediately
+    if (!isSophisticated) {
+        header.classList.add("bg-purple-700");
+    }
 
     setTimeout(function() {
       updateGreetingAndBG();
-      // Update greeting every minute in case time of day changes
+      // Update greeting every minute
       setInterval(updateGreetingAndBG, 60 * 1000);
     }, 3000);
   }
@@ -182,10 +287,21 @@
     const greeting = document.getElementById("greeting");
     const { bgColor, greetText } = getGreetingAndBG(hours);
 
-    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700");
-    header.classList.add(bgColor);
+    // Always update text
     greeting.textContent = greetText;
     document.getElementById("date").textContent = nowIST.toDateString();
+
+    // Logic for Colors
+    if (isSophisticated) {
+        // In sophisticated mode, we force white background via CSS !important, 
+        // so we don't need to add tailwind color classes, but we should clean them up 
+        // to ensure clean switching.
+        // Actually, CSS !important handles it, but let's be safe.
+    } else {
+        // "Old Look" - Dynamic Colors
+        header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700", "bg-white");
+        header.classList.add(bgColor);
+    }
   }
 
   // Live 12-hour clock
@@ -228,8 +344,7 @@
   });
 </script>
     
-<!-- What's New Section -->
-    <section id="what's_new" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+<section id="whats_new" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2"><span class="inline-block animate-bounce">✨</span> What's New</h2>        
         <ol class="list-decimal mt-4 space-y-3 pl-5">
 
@@ -414,8 +529,7 @@
             <p class="mt-4 text-gray-500 italic">Updated on Saturday, 31st May 2025</p>
         </section>
 
-    <!-- Examination Datesheet Section -->
-<section id="exam-datesheet" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <section id="exam-datesheet" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
   <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📆 Final Examination Datesheet – May/June 2025</h2>
 
   <ol class="list-decimal mt-4 space-y-3 pl-5" id="exam-list">
@@ -496,8 +610,6 @@
 </script>
 
       
-    <!-- Summarized Section Started-->
-    
     <section id="summarized" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">🚀 Summarized Notes</h2>
         
@@ -621,11 +733,6 @@
         </div>
     </section>
     
-    <!-- Summarized Section Ended-->
-
-
-    
-    <!-- Assignments Section -->
     <section id="assignments" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📚 Assignments</h2>
         
@@ -696,7 +803,6 @@
         </div>
     </section>
 
-    <!-- Presentations Section -->
     <section id="presentations" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">🎤 Presentations</h2>
 
@@ -731,7 +837,6 @@
         </div>
     </section>
 
-    <!-- Messages Section -->
     <section id="messages" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📋 Academic Schedule & Deadlines – March 2025</h2>
 
@@ -764,7 +869,6 @@
         <p class="mt-4 text-gray-500 italic">Updated on Friday, 28th March 2025</p>
     </section>
     
-    <!-- Messages Section2 -->
     <section id="messages2" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📋 Academic Schedule & Deadlines – April 2025</h2>
         
@@ -783,18 +887,17 @@
             </li>  
             <li class="text-gray-700">
                 <strong>PPA CA II</strong> – Test on "Write one essay type analytical answer on any one thinker from the following:
-                                            <strong>-Max Weber</strong>- Ideal Type Bureaucracy 
+                                                    <strong>-Max Weber</strong>- Ideal Type Bureaucracy 
 
-                                            <strong>-Herbert Simon</strong>- Decision Making Theory & Bounded Rationality 
+                                                    <strong>-Herbert Simon</strong>- Decision Making Theory & Bounded Rationality 
 
-                                            <strong>-Fred Riggs</strong>- ecological approach, theories on transitional societies" <span class="text-yellow-600 font-bold">⚠️ 16th April 2025</span>
+                                                    <strong>-Fred Riggs</strong>- ecological approach, theories on transitional societies" <span class="text-yellow-600 font-bold">⚠️ 16th April 2025</span>
                 <em class="block text-gray-500">[Wednesday, 16th April 2025]</em>
             </li>
         </ol>
         <p class="mt-4 text-gray-500 italic">Updated on Friday, 4th April 2025</p>
     </section>
     
-    <!-- SOL Notes Section -->
     <section id="sol-notes" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">📖 SOL Notes, BA Programme 6th Semester</h2>
 
@@ -818,7 +921,7 @@
 
 
 
-                   <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                    <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
                 <a href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/GE%20Legal%20Philosophy%20Semester%206th.pdf" download>
                     <img src="https://www.pcworld.com/wp-content/uploads/2025/01/pdf-icon-1.jpg" 
                          alt="SOL Note 3" 
@@ -828,7 +931,7 @@
             </div> 
 
 
-                    <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                     <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
 
             <a href="https://raw.githubusercontent.com/nitnapple/Assignments/4a6483ec133b8f55f49e13bb8831874be0abbcdf/DSE%20Sanskrit%2C%20Art%20of%20Balanced%20Living.pdf"download>
                         
@@ -861,7 +964,6 @@
         </div>
     </section>
 
-    <!-- Suggestion Box Section -->
     <section id="suggestion-box" class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold text-purple-700 border-b pb-2">
   <span class="inline-block animate-bounce">💡 Suggestion Box </span></h2>
@@ -886,7 +988,6 @@
         </div>
     </section>
 
-    <!-- JavaScript -->
     <script>
         // Mobile menu toggle
         const menuBtn = document.getElementById('menu-btn');
@@ -943,28 +1044,6 @@
         });
     </script>
     
-      <style>
-  body {
-    /* Prepare for filter change with smooth transition of 2 seconds */
-    transition: filter 2s linear;
-  }
-
-  .bw-effect {
-    filter: grayscale(99%) contrast(150%) brightness(80%);
-  }
-</style>
-
-<script>
-  window.addEventListener('load', function () {
-    // Wait 3 seconds, then add class to start 2-second transition to B&W
-    setTimeout(function () {
-      document.body.classList.add('bw-effect');
-    }, 3000);
-  });
-</script>
-
-
-    
     
 
  <footer class="text-white py-6 text-center shadow-lg transition-colors duration-500 bg-purple-700" id="footer">
@@ -989,7 +1068,7 @@
     </div>
   </div>
 
-     <style>
+      <style>
   .no-underline {
     text-decoration: none;
     color: white; /* Optional: set your preferred color */
@@ -1004,8 +1083,8 @@
 
 </style>
     <a href="https://nitnapple.github.io/Ananya/erith" class="no-underline">© E.R.I.T.H. 😎</a>
-     <a href="https://nitnapple.github.io/Ananya/sitemap" class="no-underline">Sitemap</a>
-     
+      <a href="https://nitnapple.github.io/Ananya/sitemap" class="no-underline">Sitemap</a>
+      
 </footer>
 
 
