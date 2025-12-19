@@ -366,9 +366,9 @@
     <div class="pattern"></div>
     <div id="particles"></div>
     
-    <!-- Audio Element: Handel's Entrance of the Queen of Sheba (MP3 Format) -->
-    <audio id="bgm" loop preload="auto">
-        <source src="https://ia801309.us.archive.org/25/items/HandelEntranceOfTheQueenOfSheba/Handel%20-%20Entrance%20of%20the%20Queen%20of%20Sheba.mp3" type="audio/mpeg">
+    <!-- Audio Element: Angelic Echo Heavenly Choir -->
+    <audio id="bgm" loop preload="auto" autoplay>
+        <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/angelic-echo-heavenly-choir-ambience-spiritual-background-music-426613.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -635,6 +635,8 @@
         window.onload = function() {
             createSparkles();
             initScratchCard();
+            // Attempt autoplay on load
+            playAudio();
         };
         
         window.onresize = function() {
