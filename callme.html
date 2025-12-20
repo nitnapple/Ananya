@@ -39,7 +39,8 @@
             align-items: center;
             text-align: center;
             position: relative;
-            cursor: pointer; /* Suggest interactivity */
+            cursor: pointer;
+            user-select: none; /* Prevent text selection highlight on tapping */
         }
 
         /* Gold Frame around the screen - Responsive */
@@ -222,6 +223,8 @@
             border-radius: 8px;
             border: 1px dashed rgba(212, 175, 55, 0.4);
             background: rgba(0,0,0,0.2);
+            /* Ensure touches on this trigger events properly */
+            touch-action: none; 
         }
 
         /* Sheen Effect */
@@ -321,7 +324,7 @@
             cursor: grabbing;
         }
 
-        /* Ambient Sparkles */
+        /* Sparkle animation */
         .sparkle {
             position: absolute;
             background: white;
@@ -421,15 +424,25 @@
 
     </style>
 </head>
-<body onclick="ensureMusicPlays()">
+<body onclick="tryUnlockAudio()">
 
     <div class="pattern"></div>
     <div id="particles"></div>
     
     <!-- Audio Element: Angelic Echo Heavenly Choir -->
-    <audio id="bgm" loop preload="auto" autoplay>
+    <audio id="bgm" loop preload="auto">
         <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/angelic-echo-heavenly-choir-ambience-spiritual-background-music-426613.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
+    </audio>
+
+    <!-- Audio Element: Magic Chime on Tap -->
+    <audio id="clickSound" preload="auto">
+        <source src="https://assets.codepen.io/127738/magic_chime.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Audio Element: Scratch Sound -->
+    <audio id="scratchSound" loop preload="auto">
+        <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/morris-head-scratch-103330.mp3" type="audio/mpeg">
     </audio>
 
     <button class="audio-control" onclick="toggleMusic(event)" aria-label="Toggle Music" title="Toggle Music">
@@ -473,27 +486,74 @@
 
     <script>
         const bgm = document.getElementById('bgm');
+        const scratchSound = document.getElementById('scratchSound');
         const iconOn = document.getElementById('icon-sound-on');
         const iconOff = document.getElementById('icon-sound-off');
         const musicHint = document.getElementById('musicHint');
-        let isPlaying = false;
-        let hasInteracted = false;
+        
+        // --- Sound Pool Setup ---
+        const CLICK_SOUND_URL = "https://assets.codepen.io/127738/magic_chime.mp3";
+        const POOL_SIZE = 5;
+        const audioPool = [];
+        let poolIndex = 0;
 
-        // --- Click Burst Sparkles ---
+        for (let i = 0; i < POOL_SIZE; i++) {
+            const audio = new Audio(CLICK_SOUND_URL);
+            audio.volume = 0.4;
+            audioPool.push(audio);
+        }
+
+        function playChime() {
+            const sound = audioPool[poolIndex];
+            sound.currentTime = 0;
+            sound.play().catch(e => { /* Ignore auto-play blocks */ });
+            poolIndex = (poolIndex + 1) % POOL_SIZE;
+        }
+
+        // --- Scratch Sound Control ---
+        function playScratchFx() {
+            scratchSound.volume = 0.6;
+            // Only play if not already playing to avoid stuttering
+            if (scratchSound.paused) {
+                scratchSound.play().catch(e => console.log('Scratch sound blocked', e));
+            }
+        }
+
+        function stopScratchFx() {
+            scratchSound.pause();
+            scratchSound.currentTime = 0;
+        }
+
+        let isPlaying = false;
+        let hasUnlockedAudio = false;
+
+        // --- Global Touch/Click Handler ---
         document.addEventListener('pointerdown', (e) => {
-            // Generate burst particles
+            // Don't play chime if we are on the canvas (handled by scratch logic separately if desired, 
+            // but user asked for chime on click. If scratching, chime + scratch sound might be too much, 
+            // but keeping it simple: chime plays on down, scratch plays on move/drag)
+            
+            // Check if target is canvas, if so, maybe skip chime? 
+            // Actually, a chime on initial touch is nice feedback.
+            playChime();
+
+            // 2. Visual Sparkle
+            createClickSparkle(e.pageX, e.pageY);
+
+            // 3. Unlock Background Audio (One-time)
+            tryUnlockAudio();
+        });
+
+        function createClickSparkle(x, y) {
             const count = 10;
             for(let i=0; i<count; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.classList.add('click-sparkle');
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
                 
-                // Position at click/touch
-                sparkle.style.left = e.pageX + 'px';
-                sparkle.style.top = e.pageY + 'px';
-                
-                // Random direction & distance
                 const angle = Math.random() * Math.PI * 2;
-                const velocity = 30 + Math.random() * 60; // Spread radius
+                const velocity = 30 + Math.random() * 60;
                 const tx = Math.cos(angle) * velocity + 'px';
                 const ty = Math.sin(angle) * velocity + 'px';
                 
@@ -501,25 +561,20 @@
                 sparkle.style.setProperty('--ty', ty);
                 
                 document.body.appendChild(sparkle);
-                
-                // Remove after animation
                 setTimeout(() => sparkle.remove(), 800);
             }
-            
-            // Trigger music if needed
-            ensureMusicPlays();
-        });
+        }
 
         // --- Music Logic ---
-        function ensureMusicPlays() {
-            if (!hasInteracted && !isPlaying) {
+        function tryUnlockAudio() {
+            if (!hasUnlockedAudio && !isPlaying) {
                 playAudio();
-                hasInteracted = true;
+                hasUnlockedAudio = true;
             }
         }
 
         function playAudio() {
-            bgm.volume = 0.6;
+            bgm.volume = 0.5; // Slightly lower BGM so chimes are heard
             const playPromise = bgm.play();
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
@@ -527,7 +582,7 @@
                     updateIconState();
                     document.querySelector('.audio-control').style.animation = 'none';
                 }).catch(error => {
-                    console.log("Auto-play prevented.");
+                    console.log("Auto-play prevented. Waiting for explicit click.");
                     isPlaying = false;
                     updateIconState();
                 });
@@ -563,7 +618,6 @@
             const container = document.querySelector('.scratch-container');
             let isRevealed = false;
             
-            // Set canvas size to match container
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
 
@@ -606,11 +660,12 @@
                 if (percent > 40) {
                     isRevealed = true;
                     container.classList.add('revealed');
+                    // Stop any ongoing scratch sound if revealed
+                    stopScratchFx();
                 }
             }
 
             function scratch(x, y) {
-                // Note: we don't call ensureMusicPlays here to avoid conflict with pointerdown global listener
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.beginPath();
                 ctx.arc(x, y, 20, 0, Math.PI * 2, false);
@@ -630,6 +685,7 @@
                 if(isRevealed) return;
                 isDrawing = true;
                 const pos = getMousePos(e);
+                playScratchFx();
                 scratch(pos.x, pos.y);
             });
             canvas.addEventListener('mousemove', (e) => {
@@ -642,10 +698,10 @@
             const stopDrawing = () => {
                 if(isDrawing) {
                     isDrawing = false;
+                    stopScratchFx();
                     checkScratchPercent();
                 }
             };
-
             canvas.addEventListener('mouseup', stopDrawing);
             canvas.addEventListener('mouseleave', stopDrawing);
 
@@ -655,6 +711,7 @@
                 isDrawing = true;
                 e.preventDefault(); 
                 const pos = getMousePos(e);
+                playScratchFx();
                 scratch(pos.x, pos.y);
             }, {passive: false});
             canvas.addEventListener('touchmove', (e) => {
@@ -721,7 +778,7 @@
         window.onload = function() {
             createSparkles();
             initScratchCard();
-            // Attempt autoplay on load
+            // Attempt autoplay
             playAudio();
         };
         
