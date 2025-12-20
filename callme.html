@@ -39,6 +39,7 @@
             align-items: center;
             text-align: center;
             position: relative;
+            cursor: pointer; /* Suggest interactivity */
         }
 
         /* Gold Frame around the screen - Responsive */
@@ -147,6 +148,20 @@
             50% { transform: translateY(-15px); }
         }
 
+        /* Sheen animation for scratch card */
+        @keyframes sheen {
+            0% { left: -100%; opacity: 0; }
+            50% { left: 100%; opacity: 0.6; }
+            100% { left: 200%; opacity: 0; }
+        }
+
+        /* Border Glow Pulse */
+        @keyframes borderPulse {
+            0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); border-color: rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), 0 0 5px rgba(243, 229, 171, 0.4); border-color: rgba(212, 175, 55, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); border-color: rgba(212, 175, 55, 0.4); }
+        }
+
         .crown-icon {
             font-size: 4rem;
             margin-bottom: 1.5rem;
@@ -186,22 +201,10 @@
             height: 3px;
             width: 0;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 0 auto 2rem auto;
+            margin: 0 auto 2.5rem auto;
             border-radius: 2px;
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
             animation: growLine 1.5s ease-out 1s forwards;
-        }
-
-        .subtitle {
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            color: var(--bright-gold);
-            font-style: italic;
-            margin-bottom: 2.5rem;
-            letter-spacing: 0.05em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            opacity: 0;
-            animation: fadeInUp 1.2s ease-out 1.2s forwards;
-            padding: 0 10px;
         }
 
         /* Scratch Card Area */
@@ -211,16 +214,47 @@
             height: 100px;
             margin-top: 1rem;
             opacity: 0;
-            animation: fadeInUp 1.2s ease-out 1.5s forwards;
+            animation: fadeInUp 1.2s ease-out 1.5s forwards, borderPulse 2.5s infinite ease-in-out 2s;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            border-radius: 4px;
-            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            border: 1px dashed rgba(212, 175, 55, 0.4);
+            background: rgba(0,0,0,0.2);
         }
 
-        /* Reveal Animation for container */
+        /* Sheen Effect */
+        .scratch-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transform: skewX(-20deg);
+            animation: sheen 3.5s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .scratch-container.revealed {
+            animation: none;
+            opacity: 1 !important;
+            border-color: transparent;
+            box-shadow: none;
+        }
+        
+        .scratch-container.revealed::after {
+            display: none;
+        }
+
         .scratch-container.revealed #scratchCanvas {
             opacity: 0;
             pointer-events: none;
@@ -230,8 +264,10 @@
         .hidden-message {
             position: absolute;
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: var(--bright-gold);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffecb3;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
             font-style: italic;
             text-align: center;
             width: 100%;
@@ -247,12 +283,12 @@
 
         .phone-link {
             text-decoration: none;
-            font-size: 2rem;
+            font-size: 2.2rem;
             display: inline-block;
             cursor: pointer;
             animation: phone-ring 2s infinite ease-in-out;
             color: inherit;
-            filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5));
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.8));
             transition: transform 0.2s;
         }
 
@@ -285,13 +321,37 @@
             cursor: grabbing;
         }
 
-        /* Sparkle animation */
+        /* Ambient Sparkles */
         .sparkle {
             position: absolute;
             background: white;
             border-radius: 50%;
             opacity: 0;
             pointer-events: none;
+        }
+        
+        /* Click Sparkle Effect Styles */
+        .click-sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #fff 20%, #d4af37 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: sparkle-burst 0.8s ease-out forwards;
+            box-shadow: 0 0 6px #d4af37;
+        }
+
+        @keyframes sparkle-burst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
         }
         
         /* Audio Control */
@@ -401,8 +461,6 @@
         
         <div class="divider"></div>
         
-        <p class="subtitle">The Royal Court Awaits Your Presence</p>
-
         <!-- Scratch Card Interaction -->
         <div class="scratch-container">
             <div class="hidden-message">
@@ -420,6 +478,37 @@
         const musicHint = document.getElementById('musicHint');
         let isPlaying = false;
         let hasInteracted = false;
+
+        // --- Click Burst Sparkles ---
+        document.addEventListener('pointerdown', (e) => {
+            // Generate burst particles
+            const count = 10;
+            for(let i=0; i<count; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('click-sparkle');
+                
+                // Position at click/touch
+                sparkle.style.left = e.pageX + 'px';
+                sparkle.style.top = e.pageY + 'px';
+                
+                // Random direction & distance
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 30 + Math.random() * 60; // Spread radius
+                const tx = Math.cos(angle) * velocity + 'px';
+                const ty = Math.sin(angle) * velocity + 'px';
+                
+                sparkle.style.setProperty('--tx', tx);
+                sparkle.style.setProperty('--ty', ty);
+                
+                document.body.appendChild(sparkle);
+                
+                // Remove after animation
+                setTimeout(() => sparkle.remove(), 800);
+            }
+            
+            // Trigger music if needed
+            ensureMusicPlays();
+        });
 
         // --- Music Logic ---
         function ensureMusicPlays() {
@@ -500,13 +589,10 @@
             function checkScratchPercent() {
                 if (isRevealed) return;
                 
-                // Get image data to check transparency
-                // We only check a sample of pixels to save performance
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const pixels = imageData.data;
                 let transparentPixels = 0;
                 
-                // Check every 4th pixel (step by 16 because 4 channels per pixel * 4 step)
                 const step = 16; 
                 for (let i = 3; i < pixels.length; i += step) {
                     if (pixels[i] < 128) {
@@ -517,14 +603,14 @@
                 const totalSampled = pixels.length / step;
                 const percent = (transparentPixels / totalSampled) * 100;
 
-                if (percent > 40) { // If > 40% scratched, reveal all
+                if (percent > 40) {
                     isRevealed = true;
                     container.classList.add('revealed');
                 }
             }
 
             function scratch(x, y) {
-                ensureMusicPlays();
+                // Note: we don't call ensureMusicPlays here to avoid conflict with pointerdown global listener
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.beginPath();
                 ctx.arc(x, y, 20, 0, Math.PI * 2, false);
