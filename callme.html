@@ -40,7 +40,7 @@
             text-align: center;
             position: relative;
             cursor: pointer;
-            user-select: none; /* Prevent text selection highlight on tapping */
+            user-select: none;
         }
 
         /* Gold Frame around the screen - Responsive */
@@ -147,6 +147,20 @@
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
+        }
+
+        /* Wobble Animation */
+        @keyframes wobble {
+            0% { transform: scale(1) rotate(0deg); }
+            20% { transform: scale(1.02) rotate(-2deg); }
+            40% { transform: scale(1.02) rotate(2deg); }
+            60% { transform: scale(1.02) rotate(-1deg); }
+            80% { transform: scale(1.02) rotate(1deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .wobble-effect {
+            animation: wobble 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         /* Sheen animation for scratch card */
@@ -535,7 +549,18 @@
             // 2. Visual Sparkle
             createClickSparkle(e.pageX, e.pageY);
 
-            // 3. Unlock Background Audio (One-time)
+            // 3. Vibration
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+
+            // 4. Wobble Animation
+            const container = document.querySelector('.container');
+            container.classList.remove('wobble-effect');
+            void container.offsetWidth; // Trigger reflow
+            container.classList.add('wobble-effect');
+
+            // 5. Unlock Background Audio (One-time)
             tryUnlockAudio();
         });
 
@@ -661,11 +686,6 @@
             }
 
             function scratch(x, y) {
-                // Add haptic feedback
-                if (navigator.vibrate) {
-                    navigator.vibrate(15); 
-                }
-
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.beginPath();
                 ctx.arc(x, y, 20, 0, Math.PI * 2, false);
