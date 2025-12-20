@@ -677,7 +677,7 @@
                 const totalSampled = pixels.length / step;
                 const percent = (transparentPixels / totalSampled) * 100;
 
-                if (percent > 80) {
+                if (percent > 90) {
                     isRevealed = true;
                     container.classList.add('revealed');
                     // Stop any ongoing scratch sound if revealed
