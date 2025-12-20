@@ -437,7 +437,7 @@
 
     <!-- Audio Element: Magic Chime on Tap -->
     <audio id="clickSound" preload="auto">
-        <source src="https://assets.codepen.io/127738/magic_chime.mp3" type="audio/mpeg">
+        <source src="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/chime-2-356833.mp3" type="audio/mpeg">
     </audio>
     
     <!-- Audio Element: Scratch Sound -->
@@ -492,7 +492,7 @@
         const musicHint = document.getElementById('musicHint');
         
         // --- Sound Pool Setup ---
-        const CLICK_SOUND_URL = "https://assets.codepen.io/127738/magic_chime.mp3";
+        const CLICK_SOUND_URL = "https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/chime-2-356833.mp3";
         const POOL_SIZE = 5;
         const audioPool = [];
         let poolIndex = 0;
@@ -529,12 +529,7 @@
 
         // --- Global Touch/Click Handler ---
         document.addEventListener('pointerdown', (e) => {
-            // Don't play chime if we are on the canvas (handled by scratch logic separately if desired, 
-            // but user asked for chime on click. If scratching, chime + scratch sound might be too much, 
-            // but keeping it simple: chime plays on down, scratch plays on move/drag)
-            
-            // Check if target is canvas, if so, maybe skip chime? 
-            // Actually, a chime on initial touch is nice feedback.
+            // Play Chime
             playChime();
 
             // 2. Visual Sparkle
@@ -680,7 +675,9 @@
                 };
             }
 
-            // Mouse Events
+            // Canvas specific handlers (Sound handled by global pointerdown)
+            
+            // Mouse
             canvas.addEventListener('mousedown', (e) => {
                 if(isRevealed) return;
                 isDrawing = true;
@@ -705,7 +702,7 @@
             canvas.addEventListener('mouseup', stopDrawing);
             canvas.addEventListener('mouseleave', stopDrawing);
 
-            // Touch Events
+            // Touch
             canvas.addEventListener('touchstart', (e) => {
                 if(isRevealed) return;
                 isDrawing = true;
