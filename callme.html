@@ -661,6 +661,11 @@
             }
 
             function scratch(x, y) {
+                // Add haptic feedback
+                if (navigator.vibrate) {
+                    navigator.vibrate(15); 
+                }
+
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.beginPath();
                 ctx.arc(x, y, 20, 0, Math.PI * 2, false);
