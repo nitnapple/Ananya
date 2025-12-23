@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Ananya!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Rounded, friendly fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/cake.ico">
+    
+    <style>
+        /* --- Design System --- */
+        :root {
+            --primary: #f472b6; /* Pink 400 */
+            --accent: #fbbf24;  /* Amber 400 */
+            --text-main: #4b5563;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --shadow-soft: 0 10px 40px -10px rgba(244, 114, 182, 0.3);
+        }
+
+        body {
+            background: linear-gradient(180deg, #fff1f2 0%, #fff7ed 60%, #f5f3ff 100%);
+            color: var(--text-main);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            user-select: none; /* Prevent text selection during swipes */
+        }
+
+        /* --- Background Floating Elements --- */
+        .bg-layer {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .floater {
+            position: absolute;
+            opacity: 0.4;
+            animation: floatUp 20s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* --- Music Toggle (Top Right) --- */
+        .music-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #ec4899;
+            border: 2px solid white;
+        }
+        .music-btn:active { transform: scale(0.9); }
+        .music-btn.playing {
+            background: #fce7f3;
+            animation: pulse-border 2s infinite;
+        }
+
+        /* --- Typography --- */
+        .header-section {
+            padding-top: 5vh;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        .title-handwritten {
+            font-family: 'Pacifico', cursive;
+            background: linear-gradient(to right, #ec4899, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 0px rgba(255,255,255,0.8));
+        }
+
+        /* --- 3D Coverflow Stage --- */
+        .stage {
+            flex: 1;
+            perspective: 1000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            margin: 20px 0;
+        }
+
+        .cover {
+            position: absolute;
+            width: 240px;
+            height: 320px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 24px;
+            /* Claymorphism style shadow */
+            box-shadow: 
+                inset 0 0 0 2px rgba(255,255,255,1),
+                10px 10px 30px rgba(174, 174, 192, 0.2), 
+                -10px -10px 30px rgba(255, 255, 255, 0.8);
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            -webkit-box-reflect: below 10px linear-gradient(transparent 70%, rgba(0,0,0,0.1));
+            backface-visibility: hidden;
+        }
+
+        /* Active Card Pulse Animation */
+        .cover.active-card {
+            animation: breathe 3s infinite ease-in-out;
+            border: 2px solid #f9a8d4; /* Soft Pink Border */
+        }
+        @keyframes breathe {
+            0%, 100% { transform: translateX(0) translateZ(150px) rotateY(0deg) scale(1); }
+            50% { transform: translateX(0) translateZ(150px) rotateY(0deg) scale(1.03); }
+        }
+
+        .cover-icon {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            /* Gradient Icon */
+            background: linear-gradient(135deg, #f472b6, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s;
+        }
+        
+        /* Hint on active card */
+        .click-hint {
+            opacity: 0;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 10px;
+            transform: translateY(10px);
+            transition: all 0.3s;
+        }
+        .cover.active-card .click-hint {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Glass Dock (Bottom UI) --- */
+        .glass-dock {
+            width: 90%;
+            max-width: 500px;
+            margin: 0 auto 20px auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 15px 20px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 20;
+            align-items: center;
+            /* Float effect */
+            transform: translateY(0);
+            transition: transform 0.3s;
+        }
+
+        /* Controls Row */
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .btn-round {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid #f3f4f6;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .btn-round:active { transform: scale(0.9); background-color: #fdf2f8; color: var(--primary); }
+
+        .btn-pill {
+            flex: 1;
+            background: linear-gradient(90deg, #f472b6, #fbbf24);
+            color: white;
+            font-weight: 600;
+            border: none;
+            height: 48px;
+            border-radius: 24px;
+            font-size: 1.05rem;
+            box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-pill:active { transform: scale(0.96); }
+
+        /* Links Row */
+        .links-row {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 10px;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: background 0.2s;
+        }
+        .link-item:hover { background: rgba(255,255,255,0.8); color: var(--primary); }
+        .link-item i { font-size: 1rem; }
+
+        /* --- Surprise Note Modal --- */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 241, 242, 0.7); /* Very light pink tint */
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+        .note-card {
+            background: #fff;
+            width: 85%;
+            max-width: 360px;
+            padding: 2.5rem 2rem;
+            border-radius: 2px; /* Paper-like corners */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transform: translateY(20px) rotate(-2deg);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            background-image: linear-gradient(#f1f5f9 1px, transparent 1px);
+            background-size: 100% 1.5rem; /* Lined paper effect */
+            text-align: center;
+        }
+        .modal-backdrop.open .note-card { transform: translateY(0) rotate(-2deg); }
+
+        /* Tape effect on note */
+        .tape {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            border-left: 1px dotted rgba(0,0,0,0.1);
+            border-right: 1px dotted rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            opacity: 0.8;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .cover { width: 180px; height: 260px; }
+            .glass-dock { width: 95%; padding: 12px 15px; bottom: 10px; }
+            .title-handwritten { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Player -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2025/03/20/audio_1488679301.mp3?filename=happy-birthday-to-you-background-music-for-the-holiday-jazz-version-316322.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Toggle Button -->
+    <button class="music-btn" id="musicToggle" aria-label="Toggle Music">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- Background Elements -->
+    <div class="bg-layer" id="bgLayer"></div>
+
+    <!-- Header -->
+    <div class="header-section">
+        <p class="text-pink-400 font-semibold tracking-wide text-sm mb-1 uppercase">It's a special day</p>
+        <h1 class="text-4xl md:text-5xl title-handwritten">Happy Birthday Ananya!</h1>
+        <p class="text-gray-400 text-xs mt-3 animate-pulse" id="hint">
+            <i class="fas fa-hand-pointer mr-1"></i> Swipe to explore cards
+        </p>
+    </div>
+
+    <!-- 3D Stage -->
+    <div class="stage" id="stage">
+        <!-- Cards generated by JS -->
+    </div>
+
+    <!-- Bottom "Glass Dock" UI -->
+    <div class="glass-dock">
+        <!-- Primary Controls -->
+        <div class="controls-row">
+            <button class="btn-round" onclick="navLeft()" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <button class="btn-pill" onclick="openSurprise()">
+                <span>Open Wish</span> <i class="fas fa-envelope-open-text"></i>
+            </button>
+            
+            <button class="btn-round" onclick="navRight()" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="links-row">
+            <a href="https://nitnapple.github.io/Ananya/home" class="link-item">
+                <i class="fas fa-home text-pink-400"></i> Home
+            </a>
+            <a href="https://nitnapple.github.io/Ananya/Archive" class="link-item">
+                <i class="fas fa-box-archive text-purple-400"></i> Archive
+            </a>
+        </div>
+    </div>
+
+    <!-- Handwritten Note Modal -->
+    <div class="modal-backdrop" id="modal" onclick="closeSurprise()">
+        <div class="note-card" onclick="event.stopPropagation()">
+            <div class="tape"></div>
+            <div class="mb-4 text-3xl">✨</div>
+            <p id="note-text" class="text-gray-700 text-lg font-medium leading-relaxed font-handwritten" style="font-family: 'Quicksand', sans-serif;">
+                Loading...
+            </p>
+            <div class="mt-6 text-sm text-pink-400 font-bold uppercase tracking-widest cursor-pointer" onclick="closeSurprise()">
+                Close Note
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const items = [
+            { icon: 'fa-cake-candles', title: 'Wishes' },
+            { icon: 'fa-wand-magic-sparkles', title: 'Magic' },
+            { icon: 'fa-camera-retro', title: 'Memories' },
+            { icon: 'fa-crown', title: 'Queen' },
+            { icon: 'fa-heart', title: 'Love' },
+            { icon: 'fa-gift', title: 'Surprise' }, // Center start
+            { icon: 'fa-star', title: 'Shine' },
+            { icon: 'fa-face-smile-wink', title: 'Joy' },
+            { icon: 'fa-gem', title: 'Precious' },
+            { icon: 'fa-feather-pointed', title: 'Grace' },
+            { icon: 'fa-music', title: 'Melody' },
+        ];
+
+        const messages = [
+            "🌟 Ananya, your laughter is sunshine made audible.",
+            "🎂 You’re elegance wrapped in confidence and warmth.",
+            "💫 Your grace can silence storms and summon rainbows.",
+            "📷 Like your photographs, you capture beauty in everything.",
+            "🏊‍♀️ The pool may know your strokes, but life knows your strength.",
+            "🎉 Ananya, your smile outshines the morning sun!",
+            "👑 There is something sovereign in how Ananya enters a room.",
+            "🌸 Calm seems to recognize itself in Ananya.",
+            "🎂 Happy Birthday to the empress of elegance!",
+            "🌊 Waves bow in respect when you dive in.",
+            "👑 Born to rule hearts, Happy Birthday Queen Ananya!",
+            "🧁 You're the cupcake this world needed.",
+            "🎈 May your life be filled with gallery-worthy moments!",
+            "🦋 You're art, poetry, and peace in human form.",
+            "🌸 With every click, you freeze beauty in time.",
+            "💐 You deserve every flower that ever bloomed.",
+            "👑 Nobility appears natural, not forced, in Ananya.",
+            "💫 Balance becomes aspirational when modeled by Ananya.",
+            "🦢 Poise looks effortless the way Ananya wears it.",
+            "🍫 Sweeter than chocolate, softer than silk—Ananya!",
+            "💎 You’re the rarest gem wrapped in stardust.",
+            "🎀 Your kindness is your true royal tiara.",
+            "📚 Your intellect makes philosophers rethink love.",
+            "🎨 You add colour to grey days without trying.",
+            "💖 Cuteness, elegance, and brilliance—all in one soul.",
+            "🧚 May your year be as magical as your presence.",
+            "🍒 No cherry on top needed—you *are* the cherry.",
+            "👗 Elegance has your name embroidered on it.",
+            "🛡️ Strong, soft, and stunning—Queen Ananya reigns!",
+            "🧠 Brilliance, beauty, balance—Ananya in 3 words.",
+            "📸 If life is a canvas, you’re both the brush and the muse.",
+            "🌻 May you bloom brighter with every birthday.",
+            "🥰 Chubby cheeks, royal charm, heart of gold!",
+            "🌍 Wherever you go, the Earth smiles wider.",
+            "🧜‍♀️ Mermaid in spirit, monarch in presence.",
+            "🌈 Your aura? A rainbow that sings.",
+            "🍬 Life’s sweeter just because you exist.",
+            "🕯️ You glow like a prayer answered.",
+            "👑 Ananya, you do not wear a crown—the crown learns from you."
+        ];
+
+        // --- STATE ---
+        let activeIndex = 5; 
+        let isPlaying = false;
+        
+        // --- ELEMENTS ---
+        const stage = document.getElementById('stage');
+        const modal = document.getElementById('modal');
+        const noteText = document.getElementById('note-text');
+        const bgLayer = document.getElementById('bgLayer');
+        const musicBtn = document.getElementById('musicToggle');
+        const audio = document.getElementById('bgMusic');
+        const hint = document.getElementById('hint');
+
+        // --- INIT ---
+        function init() {
+            // Create Floating Emojis
+            const emojis = ['🎈', '✨', '🌸', '🧁', '🎵', '🎀', '💖'];
+            for(let i=0; i<10; i++) {
+                const el = document.createElement('div');
+                el.className = 'floater';
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = Math.random() * 90 + '%';
+                el.style.fontSize = (1.5 + Math.random()) + 'rem';
+                el.style.animationDuration = (15 + Math.random() * 10) + 's';
+                el.style.animationDelay = (Math.random() * -10) + 's'; // start mid-animation
+                bgLayer.appendChild(el);
+            }
+
+            // Create Cards
+            items.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'cover';
+                // Add click handler to jump or open
+                el.onclick = () => handleCardClick(index);
+                
+                el.innerHTML = `
+                    <i class="fas ${item.icon} cover-icon"></i>
+                    <h3 class="text-xl font-bold text-gray-600">${item.title}</h3>
+                    <div class="click-hint">Tap to open</div>
+                `;
+                stage.appendChild(el);
+            });
+
+            render();
+            
+            // Initial Confetti Pop
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#f472b6', '#fbbf24']
+                });
+            }, 800);
+        }
+
+        // --- LOGIC ---
+        function handleCardClick(index) {
+            if (activeIndex !== index) {
+                activeIndex = index;
+                render();
+                hint.style.opacity = '0'; // Dismiss hint once interacted
+            } else {
+                openSurprise();
+            }
+        }
+
+        function render() {
+            const covers = document.querySelectorAll('.cover');
+            const isMobile = window.innerWidth < 640;
+            
+            const spacing = isMobile ? 50 : 80;
+            const spread = isMobile ? 140 : 200;
+
+            covers.forEach((cover, index) => {
+                let offset = index - activeIndex;
+                let rotateY = 0;
+                let translateX = 0;
+                let translateZ = 0;
+                let zIndex = 100 - Math.abs(offset);
+                let opacity = 1;
+
+                // Reset classes
+                cover.classList.remove('active-card');
+
+                if (offset === 0) {
+                    // Center
+                    translateX = 0;
+                    translateZ = 150;
+                    rotateY = 0;
+                    cover.classList.add('active-card');
+                } else {
+                    // Sides
+                    if (offset < 0) {
+                        translateX = (offset * spacing) - spread;
+                        rotateY = 45;
+                        translateZ = -50;
+                    } else {
+                        translateX = (offset * spacing) + spread;
+                        rotateY = -45;
+                        translateZ = -50;
+                    }
+                    opacity = Math.max(0.3, 1 - (Math.abs(offset) * 0.25));
+                }
+
+                // Apply styles
+                cover.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                cover.style.zIndex = zIndex;
+                cover.style.opacity = opacity;
+                
+                // Performance: hide far elements
+                cover.style.visibility = Math.abs(offset) > 3 ? 'hidden' : 'visible';
+            });
+        }
+
+        function navLeft() {
+            if (activeIndex > 0) {
+                activeIndex--;
+                render();
+            }
+        }
+
+        function navRight() {
+            if (activeIndex < items.length - 1) {
+                activeIndex++;
+                render();
+            }
+        }
+
+        // --- SURPRISE & MUSIC ---
+        function openSurprise() {
+            // Pick random message
+            const msg = messages[Math.floor(Math.random() * messages.length)];
+            noteText.innerText = msg;
+            modal.classList.add('open');
+
+            // Play music if not already playing (gentle suggestion)
+            if(!isPlaying) {
+                toggleMusic(); 
+            }
+
+            // Confetti Blast
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function closeSurprise() {
+            modal.classList.remove('open');
+        }
+
+        musicBtn.addEventListener('click', toggleMusic);
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+                isPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    musicBtn.classList.add('playing');
+                    musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    isPlaying = true;
+                }).catch(err => {
+                    console.log("Audio play failed (interaction required):", err);
+                });
+            }
+        }
+
+        // --- TOUCH EVENTS ---
+        let startX = 0;
+        let endX = 0;
+        stage.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX, {passive: true});
+        stage.addEventListener('touchend', e => {
+            endX = e.changedTouches[0].screenX;
+            if (startX - endX > 40) navRight();
+            if (endX - startX > 40) navLeft();
+        }, {passive: true});
+
+        // Resize Listener
+        window.addEventListener('resize', render);
+
+        // Keyboard
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') navLeft();
+            if (e.key === 'ArrowRight') navRight();
+        });
+
+        // Start
+        init();
+
+    </script>
+</body>
+</html>
