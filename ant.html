@@ -87,16 +87,34 @@
             </div>
             
             <!-- Warning Label for Ramp Up -->
-            <div id="swarmWarning" class="hidden text-red-600 font-black text-2xl game-font animate-bounce bg-white/80 px-4 py-1 rounded-full border border-red-500">
+            <div id="swarmWarning" class="hidden text-red-600 font-black text-2xl game-font animate-bounce bg-white/80 px-4 py-1 rounded-full border border-red-500 absolute left-1/2 transform -translate-x-1/2 top-20 sm:top-4 whitespace-nowrap">
                 SWARM INCOMING!
             </div>
 
-            <!-- Lives Board -->
-            <div class="bg-white/90 backdrop-blur-sm border-2 border-slate-800 rounded-xl p-3 shadow-lg flex flex-col items-center">
-                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Black Ant Lives</p>
-                <div id="heartsDisplay" class="flex space-x-1 text-3xl">
-                    <span>❤️</span><span>❤️</span><span>❤️</span>
+            <!-- Right Side Controls -->
+            <div class="flex gap-2 pointer-events-auto">
+                <!-- Lives Board -->
+                <div class="bg-white/90 backdrop-blur-sm border-2 border-slate-800 rounded-xl p-3 shadow-lg flex flex-col items-center pointer-events-none">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Lives</p>
+                    <div id="heartsDisplay" class="flex space-x-1 text-3xl">
+                        <span>❤️</span><span>❤️</span><span>❤️</span>
+                    </div>
                 </div>
+
+                <!-- Pause Button -->
+                <button id="pauseBtn" class="bg-yellow-400 hover:bg-yellow-500 border-2 border-slate-800 rounded-xl px-4 shadow-lg text-2xl flex items-center justify-center transition-transform active:scale-95">
+                    ⏸️
+                </button>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pauseScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-auto z-40">
+            <div class="bg-white rounded-3xl p-8 shadow-2xl border-4 border-slate-800 text-center transform scale-100">
+                <h2 class="text-6xl game-font text-slate-800 mb-6">PAUSED</h2>
+                <button id="resumeBtn" class="bg-green-500 hover:bg-green-600 text-white text-3xl game-font py-3 px-10 rounded-xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg">
+                    RESUME
+                </button>
             </div>
         </div>
 
@@ -164,6 +182,9 @@
             finalScore: document.getElementById('finalScore'),
             startBtn: document.getElementById('startBtn'),
             restartBtn: document.getElementById('restartBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            resumeBtn: document.getElementById('resumeBtn'),
+            pauseScreen: document.getElementById('pauseScreen'),
             swarmWarning: document.getElementById('swarmWarning')
         };
 
@@ -202,11 +223,13 @@
         // --- Game State ---
         let gameState = {
             isPlaying: false,
+            isPaused: false,
             score: 0,
             lives: 3,
             lastSpawn: 0,
             lastRampUp: 0,
-            spawnInterval: 1500, // Starting spawn speed (ms)
+            pauseStartTime: 0, // Track when we paused
+            spawnInterval: 1500,
             baseSpeed: 2.5,
             entities: [],
             particles: []
@@ -284,7 +307,7 @@
 
                 this.type = Math.random() < 0.25 ? 'black' : 'red'; 
 
-                // Slightly randomize speed so they don't look like a uniform army
+                // Slightly randomize speed
                 const speedVar = Math.random() * 2;
                 const speed = gameState.baseSpeed + speedVar;
                 
@@ -344,9 +367,10 @@
         // --- Logic ---
         function initGame() {
             gameState.isPlaying = true;
+            gameState.isPaused = false;
             gameState.score = 0;
             gameState.lives = 3;
-            gameState.spawnInterval = 1500; // Start sane
+            gameState.spawnInterval = 1500; 
             gameState.baseSpeed = 2.5;
             gameState.entities = [];
             gameState.particles = [];
@@ -360,9 +384,32 @@
             ui.startScreen.classList.add('hidden');
             ui.gameOverScreen.classList.add('hidden');
             ui.swarmWarning.classList.add('hidden');
+            ui.pauseScreen.classList.add('hidden');
 
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             gameLoop(now);
+        }
+
+        function togglePause() {
+            if (!gameState.isPlaying || gameState.lives <= 0) return;
+
+            gameState.isPaused = !gameState.isPaused;
+
+            if (gameState.isPaused) {
+                // Game Just Paused
+                gameState.pauseStartTime = performance.now();
+                ui.pauseScreen.classList.remove('hidden');
+            } else {
+                // Game Resumed
+                const now = performance.now();
+                const pauseDuration = now - gameState.pauseStartTime;
+                
+                // Shift timers forward so we don't think 10 minutes passed
+                gameState.lastSpawn += pauseDuration;
+                gameState.lastRampUp += pauseDuration;
+                
+                ui.pauseScreen.classList.add('hidden');
+            }
         }
 
         function updateHearts() {
@@ -382,7 +429,7 @@
                 gameState.lives--;
                 updateHearts();
                 playSound('wrong');
-                triggerVibration([200, 50, 200]);
+                triggerVibration([200, 50, 200]); // Long buzz for error
                 gameState.entities.push(new Splat(ant.x, ant.y, '#000'));
                 document.body.classList.add('shake');
                 setTimeout(()=>document.body.classList.remove('shake'), 500);
@@ -395,7 +442,8 @@
                 ui.score.classList.add('pulse-text');
                 
                 playSound('splat');
-                triggerVibration(30); 
+                triggerVibration(40); // Short buzz for success
+                
                 gameState.entities.push(new Splat(ant.x, ant.y, '#b91c1c'));
                 for(let i=0; i<8; i++) gameState.particles.push(new Particle(ant.x, ant.y, '#ef4444'));
             }
@@ -407,10 +455,16 @@
             ui.finalScore.innerText = gameState.score;
             ui.gameOverScreen.classList.remove('hidden');
             ui.swarmWarning.classList.add('hidden');
+            ui.pauseScreen.classList.add('hidden'); // Ensure pause screen is hidden on game over
         }
 
         function gameLoop(timestamp) {
+            animationFrameId = requestAnimationFrame(gameLoop);
+
             if (!gameState.isPlaying) return;
+
+            // PAUSE LOGIC
+            if (gameState.isPaused) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -447,8 +501,6 @@
                 return true;
             });
             gameState.particles = gameState.particles.filter(p => p.life > 0);
-
-            animationFrameId = requestAnimationFrame(gameLoop);
         }
 
         // --- Inputs ---
@@ -467,9 +519,12 @@
             return false;
         }
 
-        canvas.addEventListener('mousedown', e => { if(gameState.isPlaying) checkHit(e.clientX, e.clientY); });
+        canvas.addEventListener('mousedown', e => { 
+            if(gameState.isPlaying && !gameState.isPaused) checkHit(e.clientX, e.clientY); 
+        });
+        
         canvas.addEventListener('touchstart', e => {
-            if (!gameState.isPlaying) return;
+            if (!gameState.isPlaying || gameState.isPaused) return;
             e.preventDefault(); 
             for (let i = 0; i < e.changedTouches.length; i++) {
                 checkHit(e.changedTouches[i].clientX, e.changedTouches[i].clientY);
@@ -478,6 +533,8 @@
 
         ui.startBtn.addEventListener('click', initGame);
         ui.restartBtn.addEventListener('click', initGame);
+        ui.pauseBtn.addEventListener('click', togglePause);
+        ui.resumeBtn.addEventListener('click', togglePause);
     </script>
 </body>
 </html>
