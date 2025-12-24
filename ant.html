@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smash the Ants: Swarm Edition</title>
+    <title>Smash the Ants: Neon Swarm</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap');
@@ -14,10 +14,10 @@
             touch-action: none; /* Prevent browser gestures */
             user-select: none;
             -webkit-user-select: none;
-            background-color: #e5e5f7;
-            /* Picnic Blanket Pattern */
-            background-image: repeating-linear-gradient(45deg, #ffcfcf 25px, transparent 25px, transparent 75px, #ffcfcf 75px, #ffcfcf 100px), repeating-linear-gradient(135deg, #ffcfcf 25px, transparent 25px, transparent 75px, #ffcfcf 75px, #ffcfcf 100px);
-            background-size: 100px 100px;
+            background-color: #050505;
+            /* Subtle dark grid pattern */
+            background-image: linear-gradient(#1a1a1a 1px, transparent 1px), linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+            background-size: 50px 50px;
         }
 
         .game-font {
@@ -65,7 +65,7 @@
 
         @keyframes pulse-scale {
             0% { transform: scale(1); }
-            50% { transform: scale(1.5); color: #ef4444; }
+            50% { transform: scale(1.5); color: #ff0000; text-shadow: 0 0 20px #ff0000; }
             100% { transform: scale(1); }
         }
     </style>
@@ -81,88 +81,88 @@
         <!-- Top HUD -->
         <div class="flex justify-between items-start w-full pointer-events-none">
             <!-- Score Board -->
-            <div class="bg-white/90 backdrop-blur-sm border-2 border-slate-800 rounded-xl p-3 shadow-lg min-w-[100px]">
-                <p class="text-sm text-slate-500 font-bold uppercase tracking-wider">Score</p>
-                <p id="scoreDisplay" class="text-5xl game-font text-slate-800 leading-none">0</p>
+            <div class="bg-slate-900/80 backdrop-blur-sm border-2 border-slate-700 rounded-xl p-3 shadow-[0_0_15px_rgba(255,255,255,0.1)] min-w-[100px]">
+                <p class="text-sm text-slate-400 font-bold uppercase tracking-wider">Score</p>
+                <p id="scoreDisplay" class="text-5xl game-font text-white leading-none drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">0</p>
             </div>
             
             <!-- Warning Label for Ramp Up -->
-            <div id="swarmWarning" class="hidden text-red-600 font-black text-2xl game-font animate-bounce bg-white/80 px-4 py-1 rounded-full border border-red-500 absolute left-1/2 transform -translate-x-1/2 top-20 sm:top-4 whitespace-nowrap">
+            <div id="swarmWarning" class="hidden text-red-500 font-black text-2xl game-font animate-bounce bg-black/80 px-4 py-1 rounded-full border border-red-500 absolute left-1/2 transform -translate-x-1/2 top-20 sm:top-4 whitespace-nowrap shadow-[0_0_20px_#ef4444]">
                 SWARM INCOMING!
             </div>
 
             <!-- Right Side Controls -->
             <div class="flex gap-2 pointer-events-auto">
                 <!-- Lives Board -->
-                <div class="bg-white/90 backdrop-blur-sm border-2 border-slate-800 rounded-xl p-3 shadow-lg flex flex-col items-center pointer-events-none">
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Lives</p>
+                <div class="bg-slate-900/80 backdrop-blur-sm border-2 border-slate-700 rounded-xl p-3 shadow-[0_0_15px_rgba(255,255,255,0.1)] flex flex-col items-center pointer-events-none">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Lives</p>
                     <div id="heartsDisplay" class="flex space-x-1 text-3xl">
                         <span>❤️</span><span>❤️</span><span>❤️</span>
                     </div>
                 </div>
 
                 <!-- Pause Button -->
-                <button id="pauseBtn" class="bg-yellow-400 hover:bg-yellow-500 border-2 border-slate-800 rounded-xl px-4 shadow-lg text-2xl flex items-center justify-center transition-transform active:scale-95">
+                <button id="pauseBtn" class="bg-yellow-500 hover:bg-yellow-400 border-2 border-yellow-700 rounded-xl px-4 shadow-[0_0_10px_#eab308] text-2xl flex items-center justify-center transition-transform active:scale-95">
                     ⏸️
                 </button>
             </div>
         </div>
 
         <!-- Pause Screen -->
-        <div id="pauseScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-auto z-40">
-            <div class="bg-white rounded-3xl p-8 shadow-2xl border-4 border-slate-800 text-center transform scale-100">
-                <h2 class="text-6xl game-font text-slate-800 mb-6">PAUSED</h2>
-                <button id="resumeBtn" class="bg-green-500 hover:bg-green-600 text-white text-3xl game-font py-3 px-10 rounded-xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg">
+        <div id="pauseScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto z-40">
+            <div class="bg-slate-900 rounded-3xl p-8 shadow-[0_0_50px_rgba(255,255,255,0.1)] border-4 border-slate-700 text-center transform scale-100">
+                <h2 class="text-6xl game-font text-white mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">PAUSED</h2>
+                <button id="resumeBtn" class="bg-green-600 hover:bg-green-500 text-white text-3xl game-font py-3 px-10 rounded-xl border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_15px_#16a34a]">
                     RESUME
                 </button>
             </div>
         </div>
 
         <!-- Start Screen -->
-        <div id="startScreen" class="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto z-50">
-            <div class="bg-white rounded-3xl p-6 max-w-sm w-full mx-4 shadow-2xl border-4 border-slate-800 text-center relative overflow-hidden transform transition-all">
-                <div class="absolute top-0 left-0 w-full h-4 bg-red-500"></div>
+        <div id="startScreen" class="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm pointer-events-auto z-50">
+            <div class="bg-slate-900 rounded-3xl p-6 max-w-sm w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.2)] border-4 border-slate-700 text-center relative overflow-hidden transform transition-all">
+                <div class="absolute top-0 left-0 w-full h-4 bg-red-600 box-shadow-[0_0_20px_#dc2626]"></div>
                 
-                <h1 class="text-6xl game-font text-red-600 mb-1 drop-shadow-md mt-4">Smash<br><span class="text-slate-800 text-5xl">The Ants</span></h1>
+                <h1 class="text-6xl game-font text-red-500 mb-1 mt-4 drop-shadow-[0_0_10px_#ef4444]">Smash<br><span class="text-white text-5xl">The Ants</span></h1>
                 
-                <div class="my-4 space-y-3 text-left bg-slate-100 p-4 rounded-xl border border-slate-300">
+                <div class="my-4 space-y-3 text-left bg-black/50 p-4 rounded-xl border border-slate-700">
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-red-600 border-2 border-black flex-shrink-0 shadow-sm"></div>
+                        <div class="w-8 h-8 rounded-full bg-red-600 border-2 border-red-400 shadow-[0_0_10px_#ef4444] flex-shrink-0"></div>
                         <div>
-                            <p class="font-bold text-slate-800 leading-tight">Smash Red Ants</p>
-                            <p class="text-xs text-green-600 font-bold">+ Points</p>
+                            <p class="font-bold text-slate-200 leading-tight">Smash Red Ants</p>
+                            <p class="text-xs text-green-400 font-bold">+ Points</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-full bg-black border-2 border-slate-600 flex-shrink-0 shadow-sm"></div>
+                        <div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-slate-500 shadow-[0_0_10px_#64748b] flex-shrink-0"></div>
                         <div>
-                            <p class="font-bold text-slate-800 leading-tight">Avoid Black Ants</p>
-                            <p class="text-xs text-red-600 font-bold">-1 Life (3 Max)</p>
+                            <p class="font-bold text-slate-200 leading-tight">Avoid Black Ants</p>
+                            <p class="text-xs text-red-400 font-bold">-1 Life (3 Max)</p>
                         </div>
                     </div>
-                    <div class="bg-red-100 p-2 rounded border border-red-200 mt-2">
-                        <p class="text-xs text-red-800 font-bold text-center">⚠️ WARNING: Ant numbers increase 40% every 2 seconds!</p>
+                    <div class="bg-red-900/30 p-2 rounded border border-red-900/50 mt-2">
+                        <p class="text-xs text-red-400 font-bold text-center">⚠️ WARNING: Ant numbers increase 40% every 2 seconds!</p>
                     </div>
                 </div>
 
-                <button id="startBtn" class="w-full bg-green-500 hover:bg-green-600 text-white text-3xl game-font py-4 rounded-xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg animate-pulse">
+                <button id="startBtn" class="w-full bg-green-600 hover:bg-green-500 text-white text-3xl game-font py-4 rounded-xl border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_20px_#16a34a] animate-pulse">
                     START SWARM
                 </button>
             </div>
         </div>
 
         <!-- Game Over Screen -->
-        <div id="gameOverScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto z-50">
-            <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl border-4 border-slate-800 text-center relative">
-                <h2 id="gameOverTitle" class="text-6xl game-font text-slate-800 mb-2">GAME OVER</h2>
-                <p id="gameOverReason" class="text-red-500 font-bold text-lg mb-6 leading-tight">You smashed 3 Black Ants!</p>
+        <div id="gameOverScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto z-50">
+            <div class="bg-slate-900 rounded-3xl p-8 max-w-sm w-full mx-4 shadow-[0_0_50px_rgba(239,68,68,0.2)] border-4 border-slate-700 text-center relative">
+                <h2 id="gameOverTitle" class="text-6xl game-font text-white mb-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">GAME OVER</h2>
+                <p id="gameOverReason" class="text-red-500 font-bold text-lg mb-6 leading-tight drop-shadow-[0_0_5px_#ef4444]">You smashed 3 Black Ants!</p>
                 
-                <div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4 mb-6">
-                    <p class="text-slate-600 uppercase text-xs font-bold tracking-widest">Final Score</p>
-                    <p id="finalScore" class="text-7xl game-font text-slate-800">0</p>
+                <div class="bg-slate-800 border-2 border-slate-600 rounded-xl p-4 mb-6">
+                    <p class="text-slate-400 uppercase text-xs font-bold tracking-widest">Final Score</p>
+                    <p id="finalScore" class="text-7xl game-font text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">0</p>
                 </div>
 
-                <button id="restartBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white text-3xl game-font py-4 rounded-xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg">
+                <button id="restartBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-3xl game-font py-4 rounded-xl border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_20px_#2563eb]">
                     RETRY
                 </button>
             </div>
@@ -259,10 +259,13 @@
                 this.life -= this.decay; this.size *= 0.9;
             }
             draw(ctx) {
+                ctx.save();
                 ctx.globalAlpha = Math.max(0, this.life);
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-                ctx.globalAlpha = 1.0;
+                ctx.restore();
             }
         }
 
@@ -281,6 +284,9 @@
                 if (this.alpha <= 0) return;
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
                 ctx.scale(this.scale, this.scale); ctx.globalAlpha = this.alpha;
+                // Splats don't glow too much to keep background clean, or maybe faint glow
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.moveTo(0, -10); ctx.bezierCurveTo(10, -15, 20, -5, 10, 5);
@@ -337,10 +343,19 @@
             draw(ctx) {
                 if (this.dead) return;
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle + Math.PI / 2);
-                const color = this.type === 'red' ? '#ef4444' : '#111';
                 
+                // Bright Neon Colors
+                // Red Ant: Bright Red. Black Ant: Very dark grey with white rim light/glow
+                const color = this.type === 'red' ? '#ff3333' : '#1f2937'; 
+                const glowColor = this.type === 'red' ? '#ff0000' : '#ffffff'; // White glow for black ants to see them
+
+                // Enable Glow
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = glowColor;
+
                 // Legs
-                ctx.strokeStyle = '#333'; ctx.lineWidth = 2;
+                ctx.strokeStyle = this.type === 'red' ? '#880000' : '#4b5563'; 
+                ctx.lineWidth = 2;
                 const offset = Math.sin(this.legAngle) * 6;
                 for(let i=-1; i<=1; i++) {
                     let yPos = i * 6;
@@ -356,8 +371,10 @@
                 ctx.beginPath(); ctx.ellipse(0, 0, 8, 10, 0, 0, Math.PI*2); ctx.fill();
                 ctx.beginPath(); ctx.arc(0, -12, 10, 0, Math.PI*2); ctx.fill();
                 
-                // Eyes
-                ctx.fillStyle = 'white';
+                // Eyes (Glowing)
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = '#ffffff';
                 ctx.beginPath(); ctx.arc(-4, -15, 3, 0, Math.PI*2); ctx.fill();
                 ctx.beginPath(); ctx.arc(4, -15, 3, 0, Math.PI*2); ctx.fill();
                 ctx.restore();
@@ -430,7 +447,7 @@
                 updateHearts();
                 playSound('wrong');
                 triggerVibration([200, 50, 200]); // Long buzz for error
-                gameState.entities.push(new Splat(ant.x, ant.y, '#000'));
+                gameState.entities.push(new Splat(ant.x, ant.y, '#333')); // Darker splat
                 document.body.classList.add('shake');
                 setTimeout(()=>document.body.classList.remove('shake'), 500);
                 if (gameState.lives <= 0) gameOver("You smashed 3 Black Ants!");
@@ -445,7 +462,7 @@
                 triggerVibration(40); // Short buzz for success
                 
                 gameState.entities.push(new Splat(ant.x, ant.y, '#b91c1c'));
-                for(let i=0; i<8; i++) gameState.particles.push(new Particle(ant.x, ant.y, '#ef4444'));
+                for(let i=0; i<8; i++) gameState.particles.push(new Particle(ant.x, ant.y, '#ff0000'));
             }
         }
 
