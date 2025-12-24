@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smash the Ants: Neon Swarm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Smash the Ants: Neon Swarm (Optimized)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap');
@@ -41,6 +41,11 @@
             height: 100%;
             z-index: 10;
             pointer-events: none; /* Let clicks pass through to canvas unless on a button */
+            /* Safe area for notched phones */
+            padding-top: max(1rem, env(safe-area-inset-top));
+            padding-left: max(1rem, env(safe-area-inset-left));
+            padding-right: max(1rem, env(safe-area-inset-right));
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
         }
 
         .pointer-events-auto {
@@ -76,54 +81,59 @@
     <canvas id="gameCanvas"></canvas>
 
     <!-- UI Overlay -->
-    <div id="ui-layer" class="flex flex-col justify-between p-4">
+    <div id="ui-layer" class="flex flex-col justify-between">
         
         <!-- Top HUD -->
         <div class="flex justify-between items-start w-full pointer-events-none">
             <!-- Score Board -->
-            <div class="bg-slate-900/80 backdrop-blur-sm border-2 border-slate-700 rounded-xl p-3 shadow-[0_0_15px_rgba(255,255,255,0.1)] min-w-[100px]">
-                <p class="text-sm text-slate-400 font-bold uppercase tracking-wider">Score</p>
-                <p id="scoreDisplay" class="text-5xl game-font text-white leading-none drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">0</p>
+            <div class="bg-slate-900/80 backdrop-blur-sm border-2 border-slate-700 rounded-xl p-2 sm:p-3 shadow-[0_0_15px_rgba(255,255,255,0.1)] min-w-[80px] sm:min-w-[100px]">
+                <p class="text-xs sm:text-sm text-slate-400 font-bold uppercase tracking-wider">Score</p>
+                <p id="scoreDisplay" class="text-4xl sm:text-5xl game-font text-white leading-none drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">0</p>
             </div>
             
             <!-- Warning Label for Ramp Up -->
-            <div id="swarmWarning" class="hidden text-red-500 font-black text-2xl game-font animate-bounce bg-black/80 px-4 py-1 rounded-full border border-red-500 absolute left-1/2 transform -translate-x-1/2 top-20 sm:top-4 whitespace-nowrap shadow-[0_0_20px_#ef4444]">
+            <div id="swarmWarning" class="hidden text-red-500 font-black text-xl sm:text-2xl game-font animate-bounce bg-black/80 px-4 py-1 rounded-full border border-red-500 absolute left-1/2 transform -translate-x-1/2 top-24 sm:top-4 whitespace-nowrap shadow-[0_0_20px_#ef4444]">
                 SWARM INCOMING!
             </div>
 
             <!-- Right Side Controls -->
-            <div class="flex gap-2 pointer-events-auto">
+            <div class="flex gap-2 pointer-events-auto items-start">
                 <!-- Lives Board -->
-                <div class="bg-slate-900/80 backdrop-blur-sm border-2 border-slate-700 rounded-xl p-3 shadow-[0_0_15px_rgba(255,255,255,0.1)] flex flex-col items-center pointer-events-none">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Lives</p>
-                    <div id="heartsDisplay" class="flex space-x-1 text-3xl">
+                <div class="bg-slate-900/80 backdrop-blur-sm border-2 border-slate-700 rounded-xl p-2 sm:p-3 shadow-[0_0_15px_rgba(255,255,255,0.1)] flex flex-col items-center pointer-events-none mr-1">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Lives</p>
+                    <div id="heartsDisplay" class="flex space-x-0.5 sm:space-x-1 text-xl sm:text-3xl">
                         <span>❤️</span><span>❤️</span><span>❤️</span>
                     </div>
                 </div>
 
+                <!-- Music Button -->
+                <button id="musicBtn" class="bg-slate-700 hover:bg-slate-600 border-2 border-slate-500 rounded-full w-12 h-12 sm:w-14 sm:h-14 shadow-[0_0_10px_#64748b] text-xl sm:text-2xl flex items-center justify-center transition-transform active:scale-95">
+                    🎵
+                </button>
+
                 <!-- Pause Button -->
-                <button id="pauseBtn" class="bg-yellow-500 hover:bg-yellow-400 border-2 border-yellow-700 rounded-xl px-4 shadow-[0_0_10px_#eab308] text-2xl flex items-center justify-center transition-transform active:scale-95">
+                <button id="pauseBtn" class="bg-yellow-500 hover:bg-yellow-400 border-2 border-yellow-700 rounded-full w-12 h-12 sm:w-14 sm:h-14 shadow-[0_0_10px_#eab308] text-xl sm:text-2xl flex items-center justify-center transition-transform active:scale-95">
                     ⏸️
                 </button>
             </div>
         </div>
 
         <!-- Pause Screen -->
-        <div id="pauseScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto z-40">
-            <div class="bg-slate-900 rounded-3xl p-8 shadow-[0_0_50px_rgba(255,255,255,0.1)] border-4 border-slate-700 text-center transform scale-100">
+        <div id="pauseScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto z-40 p-4">
+            <div class="bg-slate-900 rounded-3xl p-8 shadow-[0_0_50px_rgba(255,255,255,0.1)] border-4 border-slate-700 text-center transform scale-100 w-full max-w-sm">
                 <h2 class="text-6xl game-font text-white mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">PAUSED</h2>
-                <button id="resumeBtn" class="bg-green-600 hover:bg-green-500 text-white text-3xl game-font py-3 px-10 rounded-xl border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_15px_#16a34a]">
+                <button id="resumeBtn" class="bg-green-600 hover:bg-green-500 text-white text-3xl game-font py-3 w-full rounded-xl border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_15px_#16a34a]">
                     RESUME
                 </button>
             </div>
         </div>
 
         <!-- Start Screen -->
-        <div id="startScreen" class="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm pointer-events-auto z-50">
-            <div class="bg-slate-900 rounded-3xl p-6 max-w-sm w-full mx-4 shadow-[0_0_40px_rgba(239,68,68,0.2)] border-4 border-slate-700 text-center relative overflow-hidden transform transition-all">
+        <div id="startScreen" class="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm pointer-events-auto z-50 p-4">
+            <div class="bg-slate-900 rounded-3xl p-6 w-[95%] max-w-sm mx-auto shadow-[0_0_40px_rgba(239,68,68,0.2)] border-4 border-slate-700 text-center relative overflow-hidden transform transition-all">
                 <div class="absolute top-0 left-0 w-full h-4 bg-red-600 box-shadow-[0_0_20px_#dc2626]"></div>
                 
-                <h1 class="text-6xl game-font text-red-500 mb-1 mt-4 drop-shadow-[0_0_10px_#ef4444]">Smash<br><span class="text-white text-5xl">The Ants</span></h1>
+                <h1 class="text-5xl sm:text-6xl game-font text-red-500 mb-1 mt-4 drop-shadow-[0_0_10px_#ef4444]">Smash<br><span class="text-white text-4xl sm:text-5xl">The Ants</span></h1>
                 
                 <div class="my-4 space-y-3 text-left bg-black/50 p-4 rounded-xl border border-slate-700">
                     <div class="flex items-center space-x-3">
@@ -141,25 +151,25 @@
                         </div>
                     </div>
                     <div class="bg-red-900/30 p-2 rounded border border-red-900/50 mt-2">
-                        <p class="text-xs text-red-400 font-bold text-center">⚠️ WARNING: Ant numbers increase 40% every 2 seconds!</p>
+                        <p class="text-xs text-red-400 font-bold text-center">⚠️ Ant numbers increase 40% every 2s!</p>
                     </div>
                 </div>
 
                 <button id="startBtn" class="w-full bg-green-600 hover:bg-green-500 text-white text-3xl game-font py-4 rounded-xl border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_20px_#16a34a] animate-pulse">
-                    START SWARM
+                    PLAY NOW
                 </button>
             </div>
         </div>
 
         <!-- Game Over Screen -->
-        <div id="gameOverScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto z-50">
-            <div class="bg-slate-900 rounded-3xl p-8 max-w-sm w-full mx-4 shadow-[0_0_50px_rgba(239,68,68,0.2)] border-4 border-slate-700 text-center relative">
-                <h2 id="gameOverTitle" class="text-6xl game-font text-white mb-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">GAME OVER</h2>
+        <div id="gameOverScreen" class="hidden absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-md pointer-events-auto z-50 p-4">
+            <div class="bg-slate-900 rounded-3xl p-8 w-[95%] max-w-sm mx-auto shadow-[0_0_50px_rgba(239,68,68,0.2)] border-4 border-slate-700 text-center relative">
+                <h2 id="gameOverTitle" class="text-5xl sm:text-6xl game-font text-white mb-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">GAME OVER</h2>
                 <p id="gameOverReason" class="text-red-500 font-bold text-lg mb-6 leading-tight drop-shadow-[0_0_5px_#ef4444]">You smashed 3 Black Ants!</p>
                 
                 <div class="bg-slate-800 border-2 border-slate-600 rounded-xl p-4 mb-6">
                     <p class="text-slate-400 uppercase text-xs font-bold tracking-widest">Final Score</p>
-                    <p id="finalScore" class="text-7xl game-font text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">0</p>
+                    <p id="finalScore" class="text-6xl sm:text-7xl game-font text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">0</p>
                 </div>
 
                 <button id="restartBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-3xl game-font py-4 rounded-xl border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all shadow-[0_0_20px_#2563eb]">
@@ -183,17 +193,130 @@
             startBtn: document.getElementById('startBtn'),
             restartBtn: document.getElementById('restartBtn'),
             pauseBtn: document.getElementById('pauseBtn'),
+            musicBtn: document.getElementById('musicBtn'),
             resumeBtn: document.getElementById('resumeBtn'),
             pauseScreen: document.getElementById('pauseScreen'),
             swarmWarning: document.getElementById('swarmWarning')
         };
 
-        // --- Audio Context ---
+        // --- Audio Context & BGM System ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
 
+        // 8-bit Music Sequencer
+        const bgmSystem = {
+            isPlaying: false,
+            isMuted: false,
+            tempo: 140,
+            lookahead: 25.0, // ms
+            scheduleAheadTime: 0.1, // s
+            nextNoteTime: 0,
+            noteIndex: 0,
+            timerID: null,
+            // Simple fast paced loop notes (MIDI numbers converted to Hz approx)
+            // Pattern: C minor-ish action pattern
+            melody: [
+                523.25, 0, 523.25, 622.25, 523.25, 0, 392.00, 0, // C Eb C G
+                523.25, 0, 523.25, 783.99, 523.25, 0, 392.00, 0, // C G(hi) C G
+                349.23, 0, 349.23, 0, 392.00, 0, 466.16, 0,      // F F G Bb
+                523.25, 523.25, 392.00, 392.00, 622.25, 622.25, 783.99, 783.99 // Fast run
+            ],
+            bass: [
+                130.81, 0, 130.81, 0, 130.81, 0, 130.81, 0,
+                130.81, 0, 130.81, 0, 130.81, 0, 130.81, 0,
+                116.54, 0, 116.54, 0, 116.54, 0, 116.54, 0,
+                155.56, 155.56, 155.56, 155.56, 196.00, 196.00, 196.00, 196.00
+            ],
+
+            start() {
+                if (this.isPlaying || this.isMuted) return;
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                this.isPlaying = true;
+                this.nextNoteTime = audioCtx.currentTime;
+                this.noteIndex = 0;
+                this.scheduler();
+            },
+
+            stop() {
+                this.isPlaying = false;
+                window.clearTimeout(this.timerID);
+            },
+
+            toggleMute() {
+                this.isMuted = !this.isMuted;
+                ui.musicBtn.innerText = this.isMuted ? '🔇' : '🎵';
+                if (this.isMuted) {
+                    this.stop();
+                } else if (gameState.isPlaying && !gameState.isPaused) {
+                    this.start();
+                }
+            },
+
+            scheduler() {
+                if (!this.isPlaying) return;
+                // While there are notes that will need to play before the next interval, schedule them
+                while (this.nextNoteTime < audioCtx.currentTime + this.scheduleAheadTime) {
+                    this.playNote(this.nextNoteTime, this.noteIndex);
+                    this.nextNote();
+                }
+                this.timerID = window.setTimeout(() => this.scheduler(), this.lookahead);
+            },
+
+            nextNote() {
+                const secondsPerBeat = 60.0 / this.tempo;
+                this.nextNoteTime += 0.25 * secondsPerBeat; // 16th notes
+                this.noteIndex++;
+                if (this.noteIndex >= this.melody.length) {
+                    this.noteIndex = 0;
+                }
+            },
+
+            playNote(time, index) {
+                const secondsPerBeat = 60.0 / this.tempo;
+                const duration = 0.25 * secondsPerBeat;
+
+                // Melody Voice (Square wave for NES style)
+                const noteFreq = this.melody[index];
+                if (noteFreq) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.value = noteFreq;
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    gain.gain.setValueAtTime(0.03, time); // Low volume bgm
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + duration - 0.01);
+                    
+                    osc.start(time);
+                    osc.stop(time + duration);
+                }
+
+                // Bass Voice (Sawtooth or Triangle)
+                const bassFreq = this.bass[index];
+                if (bassFreq) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = bassFreq;
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    gain.gain.setValueAtTime(0.05, time); 
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + duration - 0.01);
+                    
+                    osc.start(time);
+                    osc.stop(time + duration);
+                }
+            }
+        };
+
+        // SFX System (Existing)
         function playSound(type) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
+            // Don't play SFX if context is messed up or muted logic could go here
             
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
@@ -203,7 +326,7 @@
 
             if (type === 'splat') {
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300 + Math.random()*100, now); // Varied pitch
+                osc.frequency.setValueAtTime(300 + Math.random()*100, now); 
                 osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
                 gainNode.gain.setValueAtTime(0.3, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
@@ -228,7 +351,7 @@
             lives: 3,
             lastSpawn: 0,
             lastRampUp: 0,
-            pauseStartTime: 0, // Track when we paused
+            pauseStartTime: 0,
             spawnInterval: 1500,
             baseSpeed: 2.5,
             entities: [],
@@ -261,10 +384,10 @@
             draw(ctx) {
                 ctx.save();
                 ctx.globalAlpha = Math.max(0, this.life);
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                ctx.globalAlpha = Math.max(0, this.life * 0.4);
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2); ctx.fill();
                 ctx.restore();
             }
         }
@@ -278,20 +401,16 @@
             }
             update() {
                 if (this.scale < this.maxScale) this.scale += 0.2;
-                else this.alpha -= 0.005; 
+                else this.alpha -= 0.01;
             }
             draw(ctx) {
                 if (this.alpha <= 0) return;
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
                 ctx.scale(this.scale, this.scale); ctx.globalAlpha = this.alpha;
-                // Splats don't glow too much to keep background clean, or maybe faint glow
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = this.color;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.moveTo(0, -10); ctx.bezierCurveTo(10, -15, 20, -5, 10, 5);
-                ctx.bezierCurveTo(20, 15, 5, 20, 0, 10); ctx.bezierCurveTo(-10, 20, -20, 10, -10, 5);
-                ctx.bezierCurveTo(-20, -5, -10, -15, 0, -10); ctx.fill();
+                ctx.ellipse(0, 0, 15, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
                 ctx.restore();
             }
         }
@@ -313,7 +432,6 @@
 
                 this.type = Math.random() < 0.25 ? 'black' : 'red'; 
 
-                // Slightly randomize speed
                 const speedVar = Math.random() * 2;
                 const speed = gameState.baseSpeed + speedVar;
                 
@@ -344,17 +462,16 @@
                 if (this.dead) return;
                 ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle + Math.PI / 2);
                 
-                // Bright Neon Colors
-                // Red Ant: Bright Red. Black Ant: Very dark grey with white rim light/glow
-                const color = this.type === 'red' ? '#ff3333' : '#1f2937'; 
-                const glowColor = this.type === 'red' ? '#ff0000' : '#ffffff'; // White glow for black ants to see them
+                const isRed = this.type === 'red';
+                const bodyColor = isRed ? '#ff3333' : '#1f2937'; 
+                const glowColor = isRed ? 'rgba(255, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.15)'; 
 
-                // Enable Glow
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = glowColor;
+                ctx.fillStyle = glowColor;
+                ctx.beginPath();
+                ctx.arc(0, 0, 35, 0, Math.PI * 2);
+                ctx.fill();
 
-                // Legs
-                ctx.strokeStyle = this.type === 'red' ? '#880000' : '#4b5563'; 
+                ctx.strokeStyle = isRed ? '#880000' : '#4b5563'; 
                 ctx.lineWidth = 2;
                 const offset = Math.sin(this.legAngle) * 6;
                 for(let i=-1; i<=1; i++) {
@@ -365,16 +482,12 @@
                     ctx.moveTo(5, yPos); ctx.lineTo(20 + (i%2==0 ? offset : -offset), yPos - 5); ctx.stroke();
                 }
 
-                // Body
-                ctx.fillStyle = color;
+                ctx.fillStyle = bodyColor;
                 ctx.beginPath(); ctx.ellipse(0, 15, 12, 16, 0, 0, Math.PI*2); ctx.fill();
                 ctx.beginPath(); ctx.ellipse(0, 0, 8, 10, 0, 0, Math.PI*2); ctx.fill();
                 ctx.beginPath(); ctx.arc(0, -12, 10, 0, Math.PI*2); ctx.fill();
                 
-                // Eyes (Glowing)
                 ctx.fillStyle = '#ffffff';
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = '#ffffff';
                 ctx.beginPath(); ctx.arc(-4, -15, 3, 0, Math.PI*2); ctx.fill();
                 ctx.beginPath(); ctx.arc(4, -15, 3, 0, Math.PI*2); ctx.fill();
                 ctx.restore();
@@ -405,6 +518,8 @@
 
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             gameLoop(now);
+            
+            bgmSystem.start(); // Start Music
         }
 
         function togglePause() {
@@ -413,19 +528,16 @@
             gameState.isPaused = !gameState.isPaused;
 
             if (gameState.isPaused) {
-                // Game Just Paused
                 gameState.pauseStartTime = performance.now();
                 ui.pauseScreen.classList.remove('hidden');
+                bgmSystem.stop(); // Stop music on pause
             } else {
-                // Game Resumed
                 const now = performance.now();
                 const pauseDuration = now - gameState.pauseStartTime;
-                
-                // Shift timers forward so we don't think 10 minutes passed
                 gameState.lastSpawn += pauseDuration;
                 gameState.lastRampUp += pauseDuration;
-                
                 ui.pauseScreen.classList.add('hidden');
+                bgmSystem.start(); // Resume music
             }
         }
 
@@ -446,8 +558,8 @@
                 gameState.lives--;
                 updateHearts();
                 playSound('wrong');
-                triggerVibration([200, 50, 200]); // Long buzz for error
-                gameState.entities.push(new Splat(ant.x, ant.y, '#333')); // Darker splat
+                triggerVibration([200, 50, 200]); 
+                gameState.entities.push(new Splat(ant.x, ant.y, '#333')); 
                 document.body.classList.add('shake');
                 setTimeout(()=>document.body.classList.remove('shake'), 500);
                 if (gameState.lives <= 0) gameOver("You smashed 3 Black Ants!");
@@ -455,14 +567,14 @@
                 gameState.score += 10;
                 ui.score.innerText = gameState.score;
                 ui.score.classList.remove('pulse-text');
-                void ui.score.offsetWidth; // trigger reflow
+                void ui.score.offsetWidth; 
                 ui.score.classList.add('pulse-text');
                 
                 playSound('splat');
-                triggerVibration(40); // Short buzz for success
+                triggerVibration(40); 
                 
                 gameState.entities.push(new Splat(ant.x, ant.y, '#b91c1c'));
-                for(let i=0; i<8; i++) gameState.particles.push(new Particle(ant.x, ant.y, '#ff0000'));
+                for(let i=0; i<5; i++) gameState.particles.push(new Particle(ant.x, ant.y, '#ff0000'));
             }
         }
 
@@ -472,26 +584,25 @@
             ui.finalScore.innerText = gameState.score;
             ui.gameOverScreen.classList.remove('hidden');
             ui.swarmWarning.classList.add('hidden');
-            ui.pauseScreen.classList.add('hidden'); // Ensure pause screen is hidden on game over
+            ui.pauseScreen.classList.add('hidden'); 
+            bgmSystem.stop(); // Stop music
         }
 
         function gameLoop(timestamp) {
             animationFrameId = requestAnimationFrame(gameLoop);
 
             if (!gameState.isPlaying) return;
-
-            // PAUSE LOGIC
             if (gameState.isPaused) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // --- DIFFICULTY RAMP UP (Every 2 Seconds) ---
+            // --- DIFFICULTY RAMP UP ---
             if (timestamp - gameState.lastRampUp > 2000) {
-                // Increase number of ants by 40% = Reduce interval by ~1.4
-                gameState.spawnInterval = Math.max(80, gameState.spawnInterval / 1.4); 
+                if (gameState.spawnInterval > 100) {
+                    gameState.spawnInterval = gameState.spawnInterval / 1.4; 
+                }
                 gameState.lastRampUp = timestamp;
                 
-                // Show warning when it gets crazy
                 if (gameState.spawnInterval < 400 && ui.swarmWarning.classList.contains('hidden')) {
                     ui.swarmWarning.classList.remove('hidden');
                 }
@@ -503,15 +614,19 @@
                 gameState.lastSpawn = timestamp;
             }
 
-            // Draw Entities
-            // Layer 1: Splats
+            // Drawing
             gameState.entities.forEach(e => { if (e.type === 'splat') { e.update(); e.draw(ctx); } });
-            // Layer 2: Ants
-            gameState.entities.forEach(e => { if (e instanceof Ant) { e.update(); e.draw(ctx); } });
-            // Layer 3: Particles
+            
+            for (let i = 0; i < gameState.entities.length; i++) {
+                const e = gameState.entities[i];
+                if (e instanceof Ant) {
+                    e.update();
+                    e.draw(ctx);
+                }
+            }
+
             gameState.particles.forEach(p => { p.update(); p.draw(ctx); });
             
-            // Cleanup
             gameState.entities = gameState.entities.filter(e => {
                 if (e instanceof Ant) return !e.dead && !e.escaped;
                 if (e.type === 'splat') return e.alpha > 0;
@@ -527,7 +642,8 @@
                 if (e instanceof Ant && !e.dead) {
                     const dx = x - e.x;
                     const dy = y - e.y;
-                    if (Math.sqrt(dx*dx + dy*dy) < e.radius + 15) {
+                    // Increased hit radius for mobile touch tolerance (Radius 30 + 30px buffer)
+                    if (Math.sqrt(dx*dx + dy*dy) < e.radius + 30) {
                         handleSmash(e);
                         return true; 
                     }
@@ -552,6 +668,7 @@
         ui.restartBtn.addEventListener('click', initGame);
         ui.pauseBtn.addEventListener('click', togglePause);
         ui.resumeBtn.addEventListener('click', togglePause);
+        ui.musicBtn.addEventListener('click', () => bgmSystem.toggleMute());
     </script>
 </body>
 </html>
