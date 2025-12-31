@@ -318,8 +318,9 @@
         function rotateToMouse(e) {
             if (!bounds) bounds = card.getBoundingClientRect();
             
-            const mouseX = e.clientX || e.touches[0].clientX;
-            const mouseY = e.clientY || e.touches[0].clientY;
+            // Fix: Check property existence explicitly to avoid "undefined" error on mouse events
+            const mouseX = (e.clientX !== undefined) ? e.clientX : e.touches[0].clientX;
+            const mouseY = (e.clientY !== undefined) ? e.clientY : e.touches[0].clientY;
             
             const leftX = mouseX - bounds.x;
             const topY = mouseY - bounds.y;
