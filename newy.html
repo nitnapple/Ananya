@@ -353,6 +353,95 @@
     </div>
 
     <script>
+        /* --- SOUND ENGINE (Web Audio API) --- */
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTick(time) {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            // Short high pitch click
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, time);
+            osc.frequency.exponentialRampToValueAtTime(50, time + 0.05);
+            
+            gain.gain.setValueAtTime(0.1, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.05);
+        }
+
+        function playWheelSound(duration) {
+            initAudio();
+            const now = audioCtx.currentTime;
+            let count = 0;
+            // Simulate slowing down ticks
+            for (let i = 0; i < duration * 1000; i += (50 + (i/5))) {
+                playTick(now + (i / 1000));
+            }
+        }
+
+        function playPopSound() {
+            initAudio();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            // Start high, drop fast (Bloop sound)
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(100, now + 0.15);
+
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.15);
+        }
+
+        function playWinSound() {
+            initAudio();
+            const now = audioCtx.currentTime;
+            // Major chord arp
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const t = now + (i * 0.1);
+
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                
+                gain.gain.setValueAtTime(0, t);
+                gain.gain.linearRampToValueAtTime(0.1, t + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(t);
+                osc.stop(t + 1.5);
+            });
+        }
+
+
         /* --- 50 Wishes Data --- */
         const allWishes = [
             "May this year bring you endless happiness and love.",
@@ -425,6 +514,9 @@
             isSpinning = true;
             spinBtn.classList.add('invisible');
 
+            // Initialize audio on first user interaction
+            initAudio();
+
             // Reset bubbles state just in case
             bubblesStage.innerHTML = '';
             completionMsg.classList.add('hidden');
@@ -432,13 +524,17 @@
             // Random rotation
             const rotations = 5 + Math.random() * 5; 
             const degrees = rotations * 360;
+            const duration = 3000; // 3 seconds
             
-            wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
+            // Audio Effect
+            playWheelSound(3);
+
+            wheel.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
             wheel.style.transform = `rotate(${degrees}deg)`;
 
             setTimeout(() => {
                 transitionToBubbles();
-            }, 3000);
+            }, duration);
         }
 
         function transitionToBubbles() {
@@ -468,15 +564,15 @@
                 b.style.width = `${size}px`;
                 b.style.height = `${size}px`;
 
-                // Constrain within the card content (approx 80% width/height)
+                // Constrain within the card content
                 const left = 10 + Math.random() * 70;
                 const top = 10 + Math.random() * 60; 
                 b.style.left = `${left}%`;
                 b.style.top = `${top}%`;
 
                 // Random Float Delay
-                b.style.animationDelay = `-${Math.random() * 5}s`; // Negative delay for instant random start phase
-                b.style.animationDuration = `${4 + Math.random() * 4}s`; // Different speeds
+                b.style.animationDelay = `-${Math.random() * 5}s`; 
+                b.style.animationDuration = `${4 + Math.random() * 4}s`; 
 
                 // Scale in
                 b.style.transform = 'scale(0)';
@@ -488,7 +584,6 @@
                 const randomWish = allWishes[Math.floor(Math.random() * allWishes.length)];
                 
                 b.onclick = (e) => {
-                    // Prevent double clicks or clicking other bubbles while one is opening
                     if (wishReveal.classList.contains('active')) return;
                     popBubble(e.currentTarget, randomWish);
                 };
@@ -501,9 +596,11 @@
         function popBubble(element, wishText) {
             currentBubbleElement = element;
             
+            playPopSound(); // Sound Effect
+
             // Pop Animation
             element.style.animation = 'popEffect 0.3s forwards';
-            element.style.pointerEvents = 'none'; // Disable further clicks on this one
+            element.style.pointerEvents = 'none'; 
             
             setTimeout(() => {
                 showWish(wishText);
@@ -536,11 +633,12 @@
         }
 
         function showCompletionAndReset() {
+            playWinSound(); // Sound Effect
             completionMsg.classList.remove('hidden');
             
             setTimeout(() => {
                 resetGame();
-            }, 1500);
+            }, 2000); // Wait a bit longer to enjoy the win
         }
 
         function resetGame() {
