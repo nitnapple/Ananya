@@ -7,17 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Dancing+Script:wght@600&family=Montserrat:wght@300;400;600&display=swap');
+        /* Updated to Classic Fonts: Playfair Display (Headers) and Lora (Body) */
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
         body {
             background-color: #050505;
             overflow: hidden; /* Prevent body scroll, handle inside card */
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Lora', serif; /* Classic Serif for body text */
         }
 
         /* 3D Container & Card */
         .scene {
-            perspective: 1000px;
+            perspective: 1200px;
             height: 100vh;
             width: 100vw;
             display: flex;
@@ -30,19 +31,19 @@
         .card {
             width: 90%;
             max-width: 450px;
-            height: 80vh; /* Taller for the list */
+            height: 80vh; 
             max-height: 700px;
             transform-style: preserve-3d;
             border-radius: 20px;
-            transition: transform 0.1s ease-out; /* Smooth instant movement */
+            transition: transform 0.1s ease-out;
             position: relative;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(25, 25, 25, 0.4);
             box-shadow: 
-                0 20px 50px rgba(0,0,0,0.5),
-                0 0 0 1px rgba(255, 215, 0, 0.1); /* Gold subtle border */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+                0 30px 60px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255, 215, 0, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         /* Ambient float animation when not interacting */
@@ -64,19 +65,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* To make text appear slightly off the card surface */
-            transform: translateZ(40px);
+            /* Base z-offset for content container */
+            transform: translateZ(20px);
             text-align: center;
             color: white;
             z-index: 20;
+            transform-style: preserve-3d;
         }
 
         .card-bg-gradient {
             position: absolute;
             inset: 0;
             border-radius: 20px;
-            background: radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.15), transparent 60%),
-                        linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+            background: radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.1), transparent 70%),
+                        linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
             z-index: 1;
         }
 
@@ -84,32 +86,36 @@
             position: absolute;
             inset: -2px;
             border-radius: 22px;
-            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.4), transparent);
             z-index: 0;
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
         /* Typography */
         h1.name-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            background: linear-gradient(to right, #fff, #ffd700);
+            font-family: 'Playfair Display', serif; /* Elegant Classic Serif */
+            font-style: italic;
+            font-size: 3.2rem;
+            background: linear-gradient(to bottom right, #fff 30%, #ffd700 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
-            margin-bottom: 5px;
-            line-height: 1.2;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            line-height: 1.1;
+            pointer-events: none;
         }
 
         h2.year-title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
             letter-spacing: 4px;
-            color: #d4af37;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 10px;
+            color: #f0e68c;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+            padding-bottom: 12px;
             width: 100%;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         /* Scrollable Wishes Area */
@@ -117,22 +123,23 @@
             flex-grow: 1;
             width: 100%;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
             padding: 15px;
             text-align: left;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             scrollbar-width: thin;
-            scrollbar-color: #d4af37 rgba(0,0,0,0.1);
+            scrollbar-color: #d4af37 rgba(0,0,0,0.2);
             mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
             -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         .wishes-container::-webkit-scrollbar {
             width: 6px;
         }
         .wishes-container::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.2);
             border-radius: 10px;
         }
         .wishes-container::-webkit-scrollbar-thumb {
@@ -141,57 +148,46 @@
         }
 
         .wish-item {
-            font-size: 0.95rem;
-            color: #e0e0e0;
+            font-size: 1rem; /* Slightly larger for readability with serif */
+            color: #d1d1d1;
             padding: 12px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            line-height: 1.5;
-            transition: color 0.3s;
-        }
-
-        .wish-item:last-child {
-            border-bottom: none;
+            gap: 12px;
+            line-height: 1.6;
+            transition: all 0.3s ease;
         }
 
         .wish-item:hover {
-            color: #ffd700;
+            color: #fff;
+            transform: translateX(5px);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+            font-style: italic; /* Classic touch on hover */
         }
 
         .wish-icon {
-            color: #d4af37;
-            margin-top: 3px;
+            color: #ffd700;
+            margin-top: 5px;
             font-size: 0.8rem;
+            filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5));
         }
 
-        /* Depth Layers */
-        .layer-depth-1 { transform: translateZ(20px); }
-        .layer-depth-2 { transform: translateZ(50px); }
+        /* Parallax Depth Layers */
+        .layer-bg { transform: translateZ(0px); }
+        .layer-mid { transform: translateZ(40px); }
+        .layer-high { transform: translateZ(80px); }
+        .layer-super { transform: translateZ(110px); }
 
-        /* Background Particles */
+        /* Background Particles Container */
         #canvas-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
             z-index: 1;
-        }
-        
-        /* Mobile Note */
-        .mobile-hint {
-            position: absolute;
-            bottom: 20px;
-            color: rgba(255,255,255,0.4);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            pointer-events: none;
-            z-index: 5;
-            opacity: 0;
-            animation: fadeIn 2s 2s forwards;
+            transition: transform 0.1s ease-out;
         }
 
         @keyframes fadeIn { to { opacity: 1; } }
@@ -210,21 +206,28 @@
             <div class="card-bg-gradient"></div>
             
             <div class="card-content">
-                <div class="layer-depth-2 w-full flex flex-col items-center">
+                <!-- High Depth Layer: Titles -->
+                <div class="layer-super w-full flex flex-col items-center">
                     <h1 class="name-title">Happy New Year<br>Ananya</h1>
+                </div>
+
+                <!-- Mid Depth Layer: Year -->
+                <div class="layer-high w-full flex flex-col items-center">
                     <h2 class="year-title">2026</h2>
                 </div>
 
-                <div class="wishes-container layer-depth-1" id="wishes-list">
+                <!-- Base/Mid Depth Layer: List -->
+                <div class="wishes-container layer-mid" id="wishes-list">
                     <!-- Wishes injected by JS -->
                 </div>
 
-                <div class="mt-4 text-xs text-yellow-500/60 layer-depth-1">
-                    <i class="fas fa-heart text-red-500/80 mr-1 animate-pulse"></i>Scroll to read your wishes
+                <!-- Lower Depth Layer: Instructions -->
+                <div class="mt-4 text-xs text-yellow-500/60 layer-mid">
+                    <i class="fas fa-heart text-red-500/80 mr-1 animate-pulse"></i>Scroll for wishes
                 </div>
             </div>
         </div>
-        <div class="mobile-hint" id="hint-text">Move cursor or drag to tilt</div>
+        <!-- Removed Hint Text as requested -->
     </div>
 
     <script>
@@ -289,91 +292,97 @@
             const div = document.createElement('div');
             div.className = 'wish-item';
             div.innerHTML = `<i class="fas fa-star wish-icon"></i><span>${wish}</span>`;
-            div.style.animation = `fadeIn 0.5s ease forwards ${index * 0.05}s`;
-            div.style.opacity = '0'; // Start hidden for animation
+            div.style.animation = `fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards ${index * 0.05}s`;
+            div.style.opacity = '0'; 
             wishesContainer.appendChild(div);
         });
 
-        // Add keyframes for list loading
         const styleSheet = document.createElement("style");
         styleSheet.innerText = `
             @keyframes fadeIn {
                 to { opacity: 1; transform: translateY(0); }
-                from { opacity: 0; transform: translateY(10px); }
+                from { opacity: 0; transform: translateY(20px); }
             }
         `;
         document.head.appendChild(styleSheet);
 
 
-        /* --- 3D Tilt Logic --- */
+        /* --- Advanced 3D Parallax & Tilt Logic --- */
         const card = document.getElementById('card');
         const scene = document.getElementById('scene');
-        const hintText = document.getElementById('hint-text');
-
-        let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        if(isTouchDevice) hintText.innerText = "Drag to tilt the card";
+        const canvasContainer = document.getElementById('canvas-container');
+        // Removed hint text JS logic
 
         let bounds;
         
         function rotateToMouse(e) {
             if (!bounds) bounds = card.getBoundingClientRect();
             
-            // Fix: Check property existence explicitly to avoid "undefined" error on mouse events
-            const mouseX = (e.clientX !== undefined) ? e.clientX : e.touches[0].clientX;
-            const mouseY = (e.clientY !== undefined) ? e.clientY : e.touches[0].clientY;
+            // Safe coordinate detection
+            const clientX = (e.clientX !== undefined) ? e.clientX : (e.touches ? e.touches[0].clientX : 0);
+            const clientY = (e.clientY !== undefined) ? e.clientY : (e.touches ? e.touches[0].clientY : 0);
+            
+            const mouseX = clientX;
+            const mouseY = clientY;
             
             const leftX = mouseX - bounds.x;
             const topY = mouseY - bounds.y;
             
+            // Center calculation
             const center = {
                 x: leftX - bounds.width / 2,
                 y: topY - bounds.height / 2
             }
             
-            const distance = Math.sqrt(center.x**2 + center.y**2);
-
-            // Rotate calculation
-            // Max rotation is 15 degrees
-            const rotateX = (center.y / (bounds.height/2)) * -15; 
-            const rotateY = (center.x / (bounds.width/2)) * 15;
+            // 1. CARD TILT
+            // Max rotation degrees
+            const rotateX = (center.y / (bounds.height/2)) * -18; 
+            const rotateY = (center.x / (bounds.width/2)) * 18;
 
             card.style.transform = `
                 rotateX(${rotateX}deg)
                 rotateY(${rotateY}deg)
-                scale3d(1.02, 1.02, 1.02)
+                scale3d(1.05, 1.05, 1.05)
             `;
             
-            // Dynamic Shadow based on tilt
-            const shadowX = -rotateY * 2;
-            const shadowY = rotateX * 2;
+            // 2. DYNAMIC SHADOW
+            const shadowX = -rotateY * 1.5;
+            const shadowY = rotateX * 1.5;
             card.style.boxShadow = `
-                ${shadowX}px ${shadowY + 20}px 30px rgba(0,0,0,0.4),
+                ${shadowX}px ${shadowY + 30}px 50px rgba(0,0,0,0.6),
                 0 0 0 1px rgba(255, 215, 0, 0.2)
             `;
 
-            // Adjust glare/gradient background slightly
+            // 3. BACKGROUND PARALLAX (Inverse movement)
+            // Move background opposite to mouse to create depth
+            const bgMoveX = (center.x / window.innerWidth) * -40;
+            const bgMoveY = (center.y / window.innerHeight) * -40;
+            canvasContainer.style.transform = `translate(${bgMoveX}px, ${bgMoveY}px)`;
+
+            // 4. DYNAMIC LIGHTING
             const bg = card.querySelector('.card-bg-gradient');
             bg.style.background = `
-                radial-gradient(circle at ${50 + (center.x/5)}% ${0 + (center.y/5)}%, rgba(255, 215, 0, 0.2), transparent 60%),
-                linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%)
+                radial-gradient(circle at ${50 + (center.x/4)}% ${20 + (center.y/4)}%, rgba(255, 215, 0, 0.15), transparent 60%),
+                linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)
             `;
         }
 
         function stopRotate() {
-            // Add floating class back for ambient animation
             card.classList.add('floating');
-            
             card.style.transform = '';
-            card.style.boxShadow = '0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255, 215, 0, 0.1)';
+            card.style.boxShadow = '0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255, 215, 0, 0.15)';
             
+            // Reset background parallax
+            canvasContainer.style.transform = 'translate(0, 0)';
+
             const bg = card.querySelector('.card-bg-gradient');
             bg.style.background = `
-                radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.15), transparent 60%),
-                linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%)
+                radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.1), transparent 70%),
+                linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)
             `;
         }
 
-        // Mouse Events
+        // Listeners
         scene.addEventListener('mouseenter', () => {
             bounds = card.getBoundingClientRect();
             card.classList.remove('floating');
@@ -386,22 +395,19 @@
         
         scene.addEventListener('mouseleave', stopRotate);
 
-        // Touch Events
         scene.addEventListener('touchstart', (e) => {
             bounds = card.getBoundingClientRect();
             card.classList.remove('floating');
         });
 
         scene.addEventListener('touchmove', (e) => {
-            // Prevent scrolling body while touching card area
-            // e.preventDefault(); 
             window.requestAnimationFrame(() => rotateToMouse(e));
         });
 
         scene.addEventListener('touchend', stopRotate);
 
 
-        /* --- Background Particles (Fireworks style) --- */
+        /* --- Background Particles --- */
         const canvas = document.getElementById('fireworks');
         const ctx = canvas.getContext('2d');
         
@@ -409,8 +415,9 @@
         let particles = [];
 
         function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
+            // Oversized canvas for parallax
+            width = window.innerWidth * 1.2;
+            height = window.innerHeight * 1.2;
             canvas.width = width;
             canvas.height = height;
         }
@@ -428,8 +435,8 @@
                 this.vx = (Math.random() - 0.5) * 4;
                 this.vy = -(Math.random() * 4 + 4);
                 this.alpha = 1;
-                this.color = `hsl(${Math.random() * 60 + 30}, 100%, 70%)`; // Gold/Yellow/Orange hues
-                this.size = Math.random() * 2 + 1;
+                this.color = `hsl(${Math.random() * 50 + 40}, 100%, 75%)`; // Gold/Yellow
+                this.size = Math.random() * 2 + 0.5;
                 this.gravity = 0.05;
                 this.exploding = false;
                 this.shards = [];
@@ -442,7 +449,7 @@
                     this.vy += this.gravity;
                     this.alpha -= 0.005;
 
-                    if (this.vy > -1 && Math.random() > 0.95) {
+                    if (this.vy > -1 && Math.random() > 0.96) {
                         this.explode();
                     }
                     
@@ -461,7 +468,8 @@
 
             explode() {
                 this.exploding = true;
-                for (let i = 0; i < 20; i++) {
+                const count = Math.random() * 10 + 10;
+                for (let i = 0; i < count; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const speed = Math.random() * 3;
                     this.shards.push({
@@ -487,7 +495,7 @@
                         ctx.fillStyle = shard.color;
                         ctx.globalAlpha = shard.alpha;
                         ctx.beginPath();
-                        ctx.arc(shard.x, shard.y, 1.5, 0, Math.PI * 2);
+                        ctx.arc(shard.x, shard.y, 1.2, 0, Math.PI * 2);
                         ctx.fill();
                     });
                 }
@@ -496,17 +504,24 @@
         }
 
         // Initialize particles
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             particles.push(new Particle());
         }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            // Draw star background
-            ctx.fillStyle = 'white';
-            for(let i=0; i<10; i++) {
-                if(Math.random() > 0.5)
-                ctx.fillRect(Math.random()*width, Math.random()*height, 1, 1);
+            
+            // Draw static stars
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            for(let i=0; i<15; i++) {
+                // Simple pseudo-random stars based on frame to avoid object overhead
+                // Actually better to draw fixed stars in this loop for performance? 
+                // Let's just draw random noise for sparkle
+                if(Math.random() > 0.95) {
+                    const x = Math.random() * width;
+                    const y = Math.random() * height;
+                    ctx.fillRect(x, y, 1.5, 1.5);
+                }
             }
             
             particles.forEach(p => {
