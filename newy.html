@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year Ananya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            background-color: #050505;
+            overflow: hidden;
+            font-family: 'Lora', serif;
+            user-select: none;
+        }
+
+        /* 3D Container & Card */
+        .scene {
+            perspective: 1200px;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 450px;
+            height: 80vh; 
+            max-height: 700px;
+            transform-style: preserve-3d;
+            border-radius: 20px;
+            transition: transform 0.1s ease-out;
+            position: relative;
+            background: rgba(25, 25, 25, 0.6);
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255, 215, 0, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .card.floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotateX(0) rotateY(0); }
+            50% { transform: translateY(-15px) rotateX(2deg) rotateY(-2deg); }
+            100% { transform: translateY(0px) rotateX(0) rotateY(0); }
+        }
+
+        /* Content inside the card */
+        .card-content {
+            position: absolute;
+            inset: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateZ(20px);
+            text-align: center;
+            color: white;
+            z-index: 20;
+            transform-style: preserve-3d;
+        }
+
+        .card-bg-gradient {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.1), transparent 70%),
+                        linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+            z-index: 1;
+        }
+
+        /* Titles */
+        h1.name-title {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            background: linear-gradient(to bottom right, #fff 30%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            margin-top: 10px;
+            margin-bottom: 5px;
+            pointer-events: none;
+        }
+
+        h2.year-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #f0e68c;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        /* GAME STAGE */
+        .game-stage {
+            width: 100%;
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+        }
+
+        /* WHEEL */
+        .wheel-container {
+            width: 250px;
+            height: 250px;
+            position: relative;
+            transition: opacity 0.5s, transform 0.5s;
+            cursor: pointer;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #d4af37;
+            background: radial-gradient(circle, #2a2a2a 0%, #000 100%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .spoke {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, #d4af37 0%, transparent 40%, transparent 60%, #d4af37 100%);
+            transform: translateX(-50%);
+        }
+
+        .center-knob {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #ffd700, #b8860b);
+            border-radius: 50%;
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        .wheel-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            text-shadow: 0 2px 4px black;
+        }
+
+        .spin-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+
+        .spin-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* BUBBLES */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 215, 0, 0.2) 60%, rgba(255, 215, 0, 0.1) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2), 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            /* Changed animation to float around instead of float up */
+            animation: hoverFloat 6s ease-in-out infinite; 
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes hoverFloat {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -15px); }
+            50% { transform: translate(-5px, 10px); }
+            75% { transform: translate(-15px, -5px); }
+        }
+
+        @keyframes popEffect {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* WISH REVEAL OVERLAY */
+        .wish-reveal {
+            position: absolute;
+            inset: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 1px solid #d4af37;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 50;
+        }
+
+        .wish-reveal.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .wish-text {
+            font-size: 1.2rem;
+            color: #fff;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .close-wish-btn {
+            color: #d4af37;
+            border-bottom: 1px solid #d4af37;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding-bottom: 2px;
+            transition: color 0.3s;
+        }
+        .close-wish-btn:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+
+        /* Background Particles Container */
+        #canvas-container {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            z-index: 1;
+            transition: transform 0.1s ease-out;
+        }
+
+        .hidden { display: none !important; }
+        .invisible { opacity: 0; pointer-events: none; }
+        
+        /* Message when all popped */
+        .all-popped-msg {
+            color: #d4af37;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            animation: fadeIn 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container">
+        <canvas id="fireworks"></canvas>
+    </div>
+
+    <div class="scene" id="scene">
+        <div class="card floating" id="card">
+            <div class="card-bg-gradient"></div>
+            
+            <div class="card-content">
+                <h1 class="name-title">Happy New Year<br>Ananya</h1>
+                <h2 class="year-title">2026</h2>
+
+                <div class="game-stage">
+                    
+                    <!-- 1. WHEEL STAGE -->
+                    <div id="wheel-stage" class="flex flex-col items-center transition-all duration-700">
+                        <div class="wheel-container" id="wheel-container" onclick="spinWheel()">
+                            <div class="wheel" id="wheel">
+                                <div class="spoke" style="transform: translateX(-50%) rotate(0deg)"></div>
+                                <div class="spoke" style="transform: translateX(-50%) rotate(45deg)"></div>
+                                <div class="spoke" style="transform: translateX(-50%) rotate(90deg)"></div>
+                                <div class="spoke" style="transform: translateX(-50%) rotate(135deg)"></div>
+                                <div class="center-knob"></div>
+                            </div>
+                            <div class="wheel-text mt-4"></div>
+                        </div>
+                        <button class="spin-btn" id="spin-btn" onclick="spinWheel()">Tap to Spin</button>
+                    </div>
+
+                    <!-- 2. BUBBLES STAGE -->
+                    <div id="bubbles-stage" class="absolute inset-0 pointer-events-none"></div>
+                    
+                    <!-- 3. ALL DONE MSG (Replaces bubbles briefly) -->
+                    <div id="completion-msg" class="absolute inset-0 flex items-center justify-center hidden pointer-events-none">
+                        <div class="all-popped-msg">All Wishes Revealed!</div>
+                    </div>
+
+                    <!-- 4. REVEAL MODAL -->
+                    <div id="wish-reveal" class="wish-reveal">
+                        <i class="fas fa-quote-left text-yellow-500 mb-4 text-xl"></i>
+                        <p class="wish-text" id="wish-target-text">Your wish goes here...</p>
+                        <div class="flex gap-4">
+                            <div class="close-wish-btn" onclick="closeWishModal()">Continue</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- 50 Wishes Data --- */
+        const allWishes = [
+            "May this year bring you endless happiness and love.",
+            "Wishing you a year filled with new adventures.",
+            "May your dreams take flight in 2026.",
+            "Here's to a year of health, wealth, and joy.",
+            "May every day glow with good cheer.",
+            "Wishing you strength to conquer your goals.",
+            "May laughter fill your home and heart.",
+            "Write a beautiful new chapter this year.",
+            "Find peace and serenity in every moment.",
+            "Success in every step you take.",
+            "May the New Year bring warmth and light.",
+            "Cheers to making beautiful memories.",
+            "Surround yourself with positivity.",
+            "A year as bright as your smile, Ananya.",
+            "May kindness follow you everywhere.",
+            "Crush your goals and set new ones.",
+            "A year full of pleasant surprises.",
+            "Unwavering focus and boundless energy.",
+            "Discover new passions and joys.",
+            "A fresh start and a bright future.",
+            "Hard work pays off in ways imagined.",
+            "Love that grows stronger every day.",
+            "Find beauty in the small things.",
+            "A year of growth, learning, and fun.",
+            "Light heart and bright days ahead.",
+            "Courage to chase wildest dreams.",
+            "Inspire others just by being you.",
+            "Moments that take your breath away.",
+            "Overcome every challenge with grace.",
+            "Abundance in all things good.",
+            "Path lined with sunshine and flowers.",
+            "Friendship, family, and fun times.",
+            "Balance and harmony in your life.",
+            "A year that sparkles with magic.",
+            "Blessed with opportunities galore.",
+            "Make every second count.",
+            "Confidence soaring to new heights.",
+            "Peaceful rest and energetic days.",
+            "Be the reason someone smiles.",
+            "A year of breaking boundaries.",
+            "Creativity flowing effortlessly.",
+            "Safety and security all year long.",
+            "Comfort in the company of loved ones.",
+            "A year of exciting journeys.",
+            "Wisdom guiding your decisions.",
+            "A heart full of gratitude.",
+            "Closer to your true self.",
+            "365 days of limitless possibilities.",
+            "Spirit remaining unbreakable.",
+            "Make it your best year yet."
+        ];
+
+        /* --- Game Logic --- */
+        const wheelStage = document.getElementById('wheel-stage');
+        const wheel = document.getElementById('wheel');
+        const bubblesStage = document.getElementById('bubbles-stage');
+        const wishReveal = document.getElementById('wish-reveal');
+        const wishTargetText = document.getElementById('wish-target-text');
+        const spinBtn = document.getElementById('spin-btn');
+        const completionMsg = document.getElementById('completion-msg');
+
+        let isSpinning = false;
+        let activeBubbles = [];
+        let currentBubbleElement = null;
+
+        function spinWheel() {
+            if(isSpinning) return;
+            isSpinning = true;
+            spinBtn.classList.add('invisible');
+
+            // Reset bubbles state just in case
+            bubblesStage.innerHTML = '';
+            completionMsg.classList.add('hidden');
+
+            // Random rotation
+            const rotations = 5 + Math.random() * 5; 
+            const degrees = rotations * 360;
+            
+            wheel.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)";
+            wheel.style.transform = `rotate(${degrees}deg)`;
+
+            setTimeout(() => {
+                transitionToBubbles();
+            }, 3000);
+        }
+
+        function transitionToBubbles() {
+            wheelStage.style.opacity = '0';
+            wheelStage.style.transform = 'scale(0.8)';
+            
+            setTimeout(() => {
+                wheelStage.classList.add('hidden');
+                spawnBubbles();
+            }, 500);
+        }
+
+        function spawnBubbles() {
+            bubblesStage.innerHTML = ''; 
+            bubblesStage.style.pointerEvents = 'auto';
+            activeBubbles = [];
+
+            // Spawn 5 bubbles
+            const bubbleCount = 5;
+            for(let i=0; i<bubbleCount; i++) {
+                const b = document.createElement('div');
+                b.className = 'bubble';
+                b.id = `bubble-${i}`;
+                
+                // Random Size
+                const size = 60 + Math.random() * 40;
+                b.style.width = `${size}px`;
+                b.style.height = `${size}px`;
+
+                // Constrain within the card content (approx 80% width/height)
+                const left = 10 + Math.random() * 70;
+                const top = 10 + Math.random() * 60; 
+                b.style.left = `${left}%`;
+                b.style.top = `${top}%`;
+
+                // Random Float Delay
+                b.style.animationDelay = `-${Math.random() * 5}s`; // Negative delay for instant random start phase
+                b.style.animationDuration = `${4 + Math.random() * 4}s`; // Different speeds
+
+                // Scale in
+                b.style.transform = 'scale(0)';
+                setTimeout(() => {
+                    b.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    b.style.transform = 'scale(1)';
+                }, i * 150);
+
+                const randomWish = allWishes[Math.floor(Math.random() * allWishes.length)];
+                
+                b.onclick = (e) => {
+                    // Prevent double clicks or clicking other bubbles while one is opening
+                    if (wishReveal.classList.contains('active')) return;
+                    popBubble(e.currentTarget, randomWish);
+                };
+                
+                bubblesStage.appendChild(b);
+                activeBubbles.push(b.id);
+            }
+        }
+
+        function popBubble(element, wishText) {
+            currentBubbleElement = element;
+            
+            // Pop Animation
+            element.style.animation = 'popEffect 0.3s forwards';
+            element.style.pointerEvents = 'none'; // Disable further clicks on this one
+            
+            setTimeout(() => {
+                showWish(wishText);
+            }, 200);
+        }
+
+        function showWish(text) {
+            wishTargetText.innerText = text;
+            wishReveal.classList.add('active');
+        }
+
+        function closeWishModal() {
+            wishReveal.classList.remove('active');
+            
+            // Remove the popped bubble from DOM after modal closes
+            if(currentBubbleElement) {
+                currentBubbleElement.remove();
+                // Update active list
+                activeBubbles = activeBubbles.filter(id => id !== currentBubbleElement.id);
+                currentBubbleElement = null;
+            }
+
+            // Check if game over
+            if (activeBubbles.length === 0) {
+                // All popped
+                setTimeout(() => {
+                    showCompletionAndReset();
+                }, 300);
+            }
+        }
+
+        function showCompletionAndReset() {
+            completionMsg.classList.remove('hidden');
+            
+            setTimeout(() => {
+                resetGame();
+            }, 1500);
+        }
+
+        function resetGame() {
+            completionMsg.classList.add('hidden');
+            
+            wheelStage.classList.remove('hidden');
+            // Small delay to allow display block to apply before opacity transition
+            setTimeout(() => {
+                wheelStage.style.opacity = '1';
+                wheelStage.style.transform = 'scale(1)';
+                
+                // Reset wheel rotation for visual reset
+                wheel.style.transition = 'none';
+                wheel.style.transform = 'rotate(0deg)';
+                
+                spinBtn.innerText = "Spin Again";
+                spinBtn.classList.remove('invisible');
+                isSpinning = false;
+            }, 50);
+        }
+
+
+        /* --- 3D Parallax Logic --- */
+        const card = document.getElementById('card');
+        const scene = document.getElementById('scene');
+        const canvasContainer = document.getElementById('canvas-container');
+        let bounds;
+        
+        function rotateToMouse(e) {
+            if (!bounds) bounds = card.getBoundingClientRect();
+            const clientX = (e.clientX !== undefined) ? e.clientX : (e.touches ? e.touches[0].clientX : 0);
+            const clientY = (e.clientY !== undefined) ? e.clientY : (e.touches ? e.touches[0].clientY : 0);
+            
+            const mouseX = clientX;
+            const mouseY = clientY;
+            const leftX = mouseX - bounds.x;
+            const topY = mouseY - bounds.y;
+            const center = { x: leftX - bounds.width / 2, y: topY - bounds.height / 2 }
+            
+            const rotateX = (center.y / (bounds.height/2)) * -12; 
+            const rotateY = (center.x / (bounds.width/2)) * 12;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            
+            const bgMoveX = (center.x / window.innerWidth) * -30;
+            const bgMoveY = (center.y / window.innerHeight) * -30;
+            canvasContainer.style.transform = `translate(${bgMoveX}px, ${bgMoveY}px)`;
+        }
+
+        function stopRotate() {
+            card.classList.add('floating');
+            card.style.transform = '';
+            canvasContainer.style.transform = 'translate(0, 0)';
+        }
+
+        scene.addEventListener('mouseenter', () => { bounds = card.getBoundingClientRect(); card.classList.remove('floating'); });
+        scene.addEventListener('mousemove', (e) => { card.classList.remove('floating'); window.requestAnimationFrame(() => rotateToMouse(e)); });
+        scene.addEventListener('mouseleave', stopRotate);
+        scene.addEventListener('touchstart', () => { bounds = card.getBoundingClientRect(); card.classList.remove('floating'); });
+        scene.addEventListener('touchmove', (e) => { window.requestAnimationFrame(() => rotateToMouse(e)); });
+        scene.addEventListener('touchend', stopRotate);
+
+
+        /* --- Background Particles --- */
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = window.innerWidth * 1.2;
+            height = window.innerHeight * 1.2;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 100;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = -(Math.random() * 4 + 4);
+                this.alpha = 1;
+                this.color = `hsl(${Math.random() * 50 + 40}, 100%, 75%)`;
+                this.size = Math.random() * 2 + 0.5;
+                this.gravity = 0.05;
+                this.exploding = false;
+                this.shards = [];
+            }
+            update() {
+                if (!this.exploding) {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.vy += this.gravity;
+                    this.alpha -= 0.005;
+                    if (this.vy > -1 && Math.random() > 0.96) this.explode();
+                    if (this.y > height + 50 || this.alpha <= 0) this.reset();
+                } else {
+                    this.shards.forEach(shard => {
+                        shard.x += shard.vx;
+                        shard.y += shard.vy;
+                        shard.vy += 0.05;
+                        shard.alpha -= 0.015;
+                    });
+                    this.shards = this.shards.filter(s => s.alpha > 0);
+                    if (this.shards.length === 0) this.reset();
+                }
+            }
+            explode() {
+                this.exploding = true;
+                const count = Math.random() * 10 + 10;
+                for (let i = 0; i < count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 3;
+                    this.shards.push({
+                        x: this.x, y: this.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+                        alpha: 1, color: this.color
+                    });
+                }
+            }
+            draw() {
+                if (!this.exploding) {
+                    ctx.fillStyle = this.color; ctx.globalAlpha = this.alpha; ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                } else {
+                    this.shards.forEach(shard => {
+                        ctx.fillStyle = shard.color; ctx.globalAlpha = shard.alpha; ctx.beginPath();
+                        ctx.arc(shard.x, shard.y, 1.2, 0, Math.PI * 2); ctx.fill();
+                    });
+                }
+                ctx.globalAlpha = 1;
+            }
+        }
+        for (let i = 0; i < 40; i++) particles.push(new Particle());
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
