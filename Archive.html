@@ -6,11 +6,15 @@
     <title>Ananya's Academic Journey</title>
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/Assignments/refs/heads/main/crown.ico">
     
+    <!-- Fonts: Standard, Elegant, and Handwritten -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">
 
+    <!-- Tailwind & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <meta name="description" content="Summarized notes, assignments, presentations, and important academic updates for Ananya's BA Programme 6th Semester.">
     <meta property="og:title" content="Ananya's Academic Journey | BA Programme 6th Semester">
@@ -26,16 +30,19 @@
 
     <style>
         /* Base transition for smooth theme switching */
-        body, header, footer, div, h1, h2, h3, p, a {
+        body, header, footer, div, h1, h2, h3, p, a, section, li, img, button {
             transition: all 0.5s ease;
         }
 
-        /* SOPHISTICATED THEME CLASSES (Active by default via Body class) */
+        /* =========================================
+           1. SOPHISTICATED THEME (Elegant Mode)
+           ========================================= */
         body.sophisticated-mode {
             background-color: #ffffff !important;
             color: #1a1a1a !important;
             font-family: 'Cormorant Garamond', serif !important;
             font-size: 1.1rem;
+            background-image: none !important; /* Remove any patterns */
         }
 
         body.sophisticated-mode h1, 
@@ -45,23 +52,23 @@
             font-family: 'Great Vibes', cursive !important;
             font-weight: normal !important;
             letter-spacing: 1px;
+            color: #000 !important;
         }
 
-        /* Override Header Colors */
+        /* Sophisticated Header & Footer */
         body.sophisticated-mode header {
             background-color: #ffffff !important;
             color: #000000 !important;
             border-bottom: 1px solid #000000;
             box-shadow: none !important;
         }
-
-        /* Override Footer Colors */
         body.sophisticated-mode footer {
             background-color: #000000 !important;
             color: #ffffff !important;
+            border: none !important;
         }
 
-        /* Override Tailwind Purples and Greens */
+        /* Sophisticated Overrides */
         body.sophisticated-mode .text-purple-700, 
         body.sophisticated-mode .text-green-600, 
         body.sophisticated-mode .text-blue-600, 
@@ -69,67 +76,169 @@
         body.sophisticated-mode .text-red-600 {
             color: #000000 !important;
         }
-
-        body.sophisticated-mode .bg-purple-700, 
-        body.sophisticated-mode .bg-purple-800,
-        body.sophisticated-mode .bg-yellow-500, 
-        body.sophisticated-mode .bg-blue-500, 
-        body.sophisticated-mode .bg-pink-600, 
-        body.sophisticated-mode .bg-gray-900 {
+        body.sophisticated-mode .bg-white,
+        body.sophisticated-mode .bg-gray-50 {
             background-color: #ffffff !important;
-            color: #000000 !important;
-        }
-
-        /* Borders instead of shadows */
-        body.sophisticated-mode section {
             box-shadow: none !important;
             border: 1px solid #e5e5e5;
+            transform: none !important; /* Reset rotation */
         }
-
-        /* Grayscale Images */
+        
+        /* Sophisticated Images (Grayscale) */
         body.sophisticated-mode img, 
         body.sophisticated-mode svg {
             filter: grayscale(100%) contrast(110%);
+            border: none !important;
+            box-shadow: none !important;
         }
-        
         body.sophisticated-mode img:hover {
             filter: grayscale(0%);
+            transform: scale(1.02);
         }
 
-        /* Restore Button Styling */
+        /* =========================================
+           2. HANDWRITTEN THEME (Note Mode)
+           ========================================= */
+        body.handwritten-mode {
+            background-color: #fcfaf2 !important; /* Cream paper */
+            background-image: radial-gradient(#d0d0d0 1px, transparent 1px);
+            background-size: 20px 20px; /* Dot grid */
+            color: #2c3e50 !important; /* Ink blue/grey */
+            font-family: 'Patrick Hand', 'Caveat', cursive !important;
+            font-size: 1.2rem;
+            letter-spacing: 0.02em;
+        }
+
+        body.handwritten-mode h1, 
+        body.handwritten-mode h2, 
+        body.handwritten-mode h3 {
+            font-family: 'Caveat', cursive !important;
+            font-weight: 700 !important;
+            color: #d35400 !important; /* Burnt orange ink */
+        }
+        body.handwritten-mode .font-bold {
+            font-weight: 700 !important;
+        }
+
+        /* Handwritten Header */
+        body.handwritten-mode header {
+            background-color: #fffbf0 !important;
+            color: #2c3e50 !important;
+            border-bottom: 2px dashed #bdc3c7;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        }
+        body.handwritten-mode header h1 {
+            font-size: 2.5rem;
+            transform: rotate(-1deg);
+        }
+
+        /* Handwritten Footer */
+        body.handwritten-mode footer {
+            background-color: #2c3e50 !important; /* Chalkboard */
+            color: #ecf0f1 !important;
+            font-family: 'Caveat', cursive;
+            border-top: 4px solid #f1c40f;
+        }
+
+        /* Handwritten Content Boxes */
+        body.handwritten-mode .bg-white,
+        body.handwritten-mode .bg-gray-50 {
+            background-color: #ffffff !important;
+            border: 1px solid #e0e0e0;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1) !important;
+            border-radius: 2px;
+            transform: rotate(0.3deg);
+            margin-bottom: 2rem;
+        }
+        body.handwritten-mode .bg-gray-50 {
+             transform: rotate(-0.5deg);
+        }
+
+        /* Handwritten Images (Polaroid) */
+        body.handwritten-mode img {
+            border: 5px solid #fff;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            filter: sepia(30%) contrast(110%);
+        }
+        body.handwritten-mode img:hover {
+            transform: scale(1.02) rotate(1deg);
+            filter: sepia(0%);
+        }
+
+        /* Handwritten Text Colors */
+        body.handwritten-mode .text-purple-700 { color: #8e44ad !important; }
+        body.handwritten-mode .text-green-600 { color: #27ae60 !important; }
+        body.handwritten-mode .text-red-600 { color: #c0392b !important; }
+        body.handwritten-mode .text-blue-600 { color: #2980b9 !important; }
+
+        /* Handwritten Mobile Menu */
+        body.handwritten-mode #mobile-menu {
+            background-color: #fffbf0 !important;
+            color: #2c3e50 !important;
+            border-left: 2px dashed #bdc3c7;
+        }
+        body.handwritten-mode #mobile-menu a {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        /* =========================================
+           BUTTON STYLING
+           ========================================= */
         #theme-btn {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 100;
             padding: 10px 20px;
-            border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s;
         }
         #theme-btn:hover {
             transform: scale(1.05);
         }
-        
-        /* Styles for button in Sophisticated Mode */
+
+        /* Button in Handwritten Mode */
+        body.handwritten-mode #theme-btn {
+            background-color: #fff;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+        }
+
+        /* Button in Sophisticated Mode */
         body.sophisticated-mode #theme-btn {
             background-color: #000;
             color: #fff;
             border: 1px solid #fff;
+            border-radius: 50px;
             font-family: 'Cormorant Garamond', serif;
         }
 
-        /* Styles for button in Old Look Mode */
-        body:not(.sophisticated-mode) #theme-btn {
+        /* Button in Old Look Mode */
+        body:not(.sophisticated-mode):not(.handwritten-mode) #theme-btn {
             background-color: #6b21a8; /* Purple */
             color: #fff;
             border: 2px solid #fff;
+            border-radius: 50px;
             font-family: sans-serif;
+        }
+
+        /* Countdown specific fix */
+        body.sophisticated-mode #exam-list li, 
+        body.handwritten-mode #exam-list li {
+            border-bottom: 1px dashed #dcdcdc;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
         }
     </style>
 
+    <!-- Analytics (Preserved) -->
     <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -161,9 +270,9 @@
     </script>
 </head>
 
-<body class="bg-gray-100 text-gray-900 sophisticated-mode" id="body">
+<body class="bg-gray-100 text-gray-900 handwritten-mode" id="body">
 
-<button id="theme-btn" onclick="toggleTheme()">↺ Restore Old Look</button>
+<button id="theme-btn" onclick="toggleTheme()">↺ Switch to Old Theme</button>
 
 <header class="text-white py-6 text-center shadow-lg transition-colors duration-500 bg-purple-700" id="header">
   <div class="container mx-auto px-4">
@@ -216,25 +325,43 @@
 </header>
 
 <script>
-  let isSophisticated = true; // Default state
+  // State Management
+  // 0: Old Theme (Purple/Color)
+  // 1: Sophisticated Theme (B/W)
+  // 2: Handwritten Theme (Paper/Ink)
+  
+  // Default is 2 (Handwritten)
+  let currentThemeIndex = 2; 
 
   function toggleTheme() {
-      const body = document.getElementById('body');
+      // Cycle: 2 (Handwritten) -> 0 (Old) -> 1 (Sophisticated) -> 2 ...
+      currentThemeIndex = (currentThemeIndex + 1) % 3;
+      applyTheme(currentThemeIndex);
+  }
+
+  function applyTheme(index) {
+      const body = document.body;
       const btn = document.getElementById('theme-btn');
-      
-      if (isSophisticated) {
-          // Switch to Old Look
-          body.classList.remove('sophisticated-mode');
+
+      // Reset classes
+      body.classList.remove('sophisticated-mode', 'handwritten-mode');
+
+      if (index === 0) {
+          // OLD THEME
           btn.textContent = "✨ Switch to Elegant Mode";
-          isSophisticated = false;
-          // Trigger update to restore dynamic background colors immediately
+          // Trigger color update immediately
           updateGreetingAndBG();
-      } else {
-          // Switch to Sophisticated Look
+      } else if (index === 1) {
+          // SOPHISTICATED THEME
           body.classList.add('sophisticated-mode');
-          btn.textContent = "↺ Restore Old Look";
-          isSophisticated = true;
-          // Trigger update to force white background
+          btn.textContent = "✎ Switch to Handwritten Mode";
+          // Force updates
+          updateGreetingAndBG();
+      } else if (index === 2) {
+          // HANDWRITTEN THEME
+          body.classList.add('handwritten-mode');
+          btn.textContent = "↺ Switch to Old Theme";
+          // Force updates
           updateGreetingAndBG();
       }
   }
@@ -259,27 +386,7 @@
     return { bgColor, greetText };
   }
 
-  // Show initial welcome, then switch to time-based greeting
-  function showGreeting() {
-    const header = document.getElementById("header");
-    const greeting = document.getElementById("greeting");
-    
-    // Initial State
-    greeting.textContent = "Welcome, Ananya 👑";
-    
-    // If not sophisticated, apply purple default immediately
-    if (!isSophisticated) {
-        header.classList.add("bg-purple-700");
-    }
-
-    setTimeout(function() {
-      updateGreetingAndBG();
-      // Update greeting every minute
-      setInterval(updateGreetingAndBG, 60 * 1000);
-    }, 3000);
-  }
-
-  // Update greeting and background color based on time
+  // Update greeting and background color based on time and theme
   function updateGreetingAndBG() {
     const nowIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
     const hours = nowIST.getHours();
@@ -291,16 +398,16 @@
     greeting.textContent = greetText;
     document.getElementById("date").textContent = nowIST.toDateString();
 
+    // Remove old classes first
+    header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700", "bg-white");
+
     // Logic for Colors
-    if (isSophisticated) {
-        // In sophisticated mode, we force white background via CSS !important, 
-        // so we don't need to add tailwind color classes, but we should clean them up 
-        // to ensure clean switching.
-        // Actually, CSS !important handles it, but let's be safe.
-    } else {
-        // "Old Look" - Dynamic Colors
-        header.classList.remove("bg-yellow-500", "bg-blue-500", "bg-pink-600", "bg-gray-900", "bg-purple-700", "bg-white");
+    if (currentThemeIndex === 0) {
+        // OLD THEME: Apply dynamic time-based color
         header.classList.add(bgColor);
+    } else {
+        // Sophisticated or Handwritten: CSS !important handles it, 
+        // but we clean up classes just in case.
     }
   }
 
@@ -337,10 +444,11 @@
       });
     });
 
-    // Greeting and time
-    showGreeting();
+    // Initial load
     updateTime();
+    updateGreetingAndBG();
     setInterval(updateTime, 1000);
+    setInterval(updateGreetingAndBG, 60000); // Check greeting every minute
   });
 </script>
     
@@ -352,7 +460,7 @@
             <li class="text-gray-700">
                 <strong>Summarized notes of DSE Sanskrit, Art of Balanced Living have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 31st May 2025.</span>
                 <em class="block text-gray-500">[Saturday, 31st May 2025]</em>
-            </li>     
+            </li>    
 
              <li class="text-gray-700">
                 <strong>Sample question paper of DSE Sanskrit, Art of Balanced Living have been added.</strong> Check them out in the 🚀 Summarized Section!</span> <span class="text-green-600 font-bold">✅ 31st May 2025.</span>
@@ -639,7 +747,7 @@
                 
                 <a href="https://nitnapple.github.io/Ananya/PPA" style="text-decoration:none">
                     <img src="https://symbl-cdn.com/i/webp/7e/c42c012fd4d26fae11919aa456f5d7.webp"
-                         alt="Assignment Cover" 
+                        alt="Assignment Cover" 
                         class="w-full h-32 object-cover rounded">
                     <h3 class="mt-2 font-medium">🌐 Perspectives on Public Administration: <span class="text-blue-600 font-bold">Webpage </span></h3>
                 </a>
@@ -864,7 +972,7 @@
               <li class="text-gray-700">
                 <strong>The last date for filling out the 6th semester exam form has been extended.</strong> – <span class="text-green-600 font-bold">⚠️ 10th April 2025</span>
                 <em class="block text-gray-500">[Deadline: Thursday, 10th April 2025]</em>
-            </li>     
+            </li>    
         </ol>
         <p class="mt-4 text-gray-500 italic">Updated on Friday, 28th March 2025</p>
     </section>
