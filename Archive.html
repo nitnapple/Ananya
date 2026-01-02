@@ -30,7 +30,7 @@
 
     <style>
         /* Base transition for smooth theme switching */
-        body, header, footer, div, h1, h2, h3, p, a, section, li, img, button {
+        body, header, footer, div, h1, h2, h3, p, a, section, li, img, button, svg {
             transition: all 0.5s ease;
         }
 
@@ -84,9 +84,20 @@
             transform: none !important; /* Reset rotation */
         }
         
+        /* Mobile Menu & Button Visibility Fix for Sophisticated */
+        body.sophisticated-mode .bg-purple-800 {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-left: 1px solid #000;
+        }
+        body.sophisticated-mode #menu-btn,
+        body.sophisticated-mode #close-menu {
+            color: #000000 !important;
+        }
+        
         /* Sophisticated Images (Grayscale) */
         body.sophisticated-mode img, 
-        body.sophisticated-mode svg {
+        body.sophisticated-mode svg.w-full { /* only content SVGs if needed */
             filter: grayscale(100%) contrast(110%);
             border: none !important;
             box-shadow: none !important;
@@ -181,6 +192,12 @@
             font-family: 'Caveat', cursive;
             font-size: 1.5rem;
             color: #2c3e50;
+        }
+        
+        /* Mobile Menu Buttons Visibility Fix for Handwritten */
+        body.handwritten-mode #menu-btn,
+        body.handwritten-mode #close-menu {
+            color: #2c3e50 !important;
         }
 
         /* =========================================
