@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Royal Cryptex: The Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0f10;
+            --gold: #d4af37;
+            --gold-light: #f9e29c;
+            --gold-shadow: #8a6e03;
+            --stone: #2a2a2c;
+            --stone-light: #3e3e40;
+            --stone-dark: #151516;
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Cinzel', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: none; /* Critical for custom swipe handling */
+            /* Vintage Map Background */
+            background: 
+                radial-gradient(circle at center, rgba(15, 15, 16, 0.85), #000),
+                url('https://upload.wikimedia.org/wikipedia/commons/7/7f/World_Map_1689.JPG');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            z-index: 10;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .level-info {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        /* The Cryptex Machine */
+        #game-area {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        #cryptex-frame {
+            position: relative;
+            width: 95%;
+            max-width: 600px;
+            height: 300px; /* Visible area height */
+            background: linear-gradient(to right, #111, #333 10%, #333 90%, #111);
+            border: 4px solid var(--gold-shadow);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            overflow: hidden;
+            display: flex;
+            justify-content: space-evenly;
+            /* Inner shadow for depth */
+            box-shadow: inset 0 0 50px #000;
+        }
+
+        /* The Selection Highlight */
+        #target-bar {
+            position: absolute;
+            top: 50%;
+            left: -5%;
+            width: 110%;
+            height: 80px; /* Should match tile height */
+            transform: translateY(-50%);
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            background: linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.0));
+            z-index: 5;
+            pointer-events: none;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #target-bar::before, #target-bar::after {
+            content: '◄';
+            color: var(--gold);
+            font-size: 2rem;
+            padding: 0 10px;
+            text-shadow: 0 0 10px var(--gold);
+        }
+        #target-bar::after { content: '►'; }
+
+        /* Columns */
+        .column {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            cursor: grab;
+            touch-action: none;
+            /* 3D look */
+            background: 
+                linear-gradient(to right, rgba(0,0,0,0.8), transparent 20%, transparent 80%, rgba(0,0,0,0.8)),
+                linear-gradient(to bottom, #222, #444);
+            border-left: 1px solid #111;
+            border-right: 1px solid #111;
+        }
+        
+        .column:active { cursor: grabbing; }
+
+        .strip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Will be moved via JS transform */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tile {
+            height: 80px; /* Fixed height matching target bar */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #888;
+            text-shadow: 0 -1px 1px #000;
+            user-select: none;
+        }
+        
+        /* Highlight letters in the target zone */
+        .column.correct .strip .tile.active {
+            color: var(--gold-light);
+            text-shadow: 0 0 15px var(--gold);
+        }
+
+        /* Overlays (Gradients to hide top/bottom) */
+        #overlay-top, #overlay-bottom {
+            position: absolute;
+            left: 0; width: 100%; height: 35%;
+            z-index: 4;
+            pointer-events: none;
+        }
+        #overlay-top { top: 0; background: linear-gradient(to bottom, #000, transparent); }
+        #overlay-bottom { bottom: 0; background: linear-gradient(to top, #000, transparent); }
+
+        /* Victory Modal */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        #modal-overlay.visible { opacity: 1; pointer-events: auto; }
+
+        .modal {
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            border: 2px solid var(--gold);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #modal-overlay.visible .modal { transform: scale(1); }
+        
+        .modal h2 { color: var(--gold); font-size: 2.5rem; margin-bottom: 10px; }
+        .modal p { font-family: 'Lato', sans-serif; font-size: 1.2rem; color: #ccc; }
+
+        .btn {
+            background: linear-gradient(to bottom, #d4af37, #8a6e03);
+            color: #111;
+            border: none;
+            padding: 15px 40px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        .sound-toggle {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            z-index: 50;
+        }
+
+        /* Confetti */
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 90;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <header>
+        <h1>ROYAL CRYPTEX</h1>
+        <div class="level-info" id="level-display">Level 1: The Gate</div>
+    </header>
+
+    <button class="sound-toggle" onclick="toggleAudio()">Sound: OFF</button>
+
+    <div id="game-area">
+        <div id="cryptex-frame">
+            <div id="overlay-top"></div>
+            
+            <!-- Columns injected by JS -->
+            <div id="columns-container" style="display:flex; width:100%; height:100%;"></div>
+
+            <div id="target-bar"></div>
+            <div id="overlay-bottom"></div>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title">Unlocked!</h2>
+            <p id="modal-msg">The gate opens...</p>
+            <button class="btn" onclick="Game.nextLevel()">Proceed</button>
+        </div>
+    </div>
+
+    <script>
+        /* --- AUDIO SYSTEM --- */
+        const AudioSys = {
+            ctx: null, enabled: false,
+            init() { 
+                const AC = window.AudioContext || window.webkitAudioContext; 
+                this.ctx = new AC(); 
+            },
+            play(type) {
+                if(!this.enabled || !this.ctx) return;
+                const t = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const g = this.ctx.createGain();
+                osc.connect(g); g.connect(this.ctx.destination);
+                
+                if(type === 'click') {
+                    // Mechanical Tick
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(100, t);
+                    g.gain.setValueAtTime(0.05, t);
+                    g.gain.exponentialRampToValueAtTime(0.001, t+0.03);
+                    osc.start(t); osc.stop(t+0.03);
+                } else if(type === 'unlock') {
+                    // Heavy mechanism thud + chime
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(50, t);
+                    g.gain.setValueAtTime(0.3, t);
+                    g.gain.exponentialRampToValueAtTime(0.001, t+0.5);
+                    osc.start(t); osc.stop(t+0.5);
+
+                    // Chime
+                    const osc2 = this.ctx.createOscillator();
+                    const g2 = this.ctx.createGain();
+                    osc2.connect(g2); g2.connect(this.ctx.destination);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(523.25, t+0.2); // C5
+                    g2.gain.setValueAtTime(0, t+0.2);
+                    g2.gain.linearRampToValueAtTime(0.1, t+0.3);
+                    g2.gain.exponentialRampToValueAtTime(0.001, t+1.5);
+                    osc2.start(t+0.2); osc2.stop(t+1.5);
+                }
+            }
+        };
+
+        function toggleAudio() {
+            AudioSys.enabled = !AudioSys.enabled;
+            const btn = document.querySelector('.sound-toggle');
+            if(AudioSys.enabled) { 
+                AudioSys.init(); 
+                btn.textContent = "Sound: ON";
+                btn.style.background = "var(--gold)";
+                btn.style.color = "#000";
+            } else {
+                btn.textContent = "Sound: OFF";
+                btn.style.background = "transparent";
+                btn.style.color = "var(--gold)";
+            }
+        }
+
+        /* --- GAME ENGINE --- */
+        const TILE_HEIGHT = 80;
+        const VISIBLE_ROWS = 3; // Though we render many more
+
+        const LEVELS = [
+            { word: "CASTLE", hint: "A Royal Home" },
+            { word: "TRAVEL", hint: "Moving Across Lands" },
+            { word: "BEAUTY", hint: "Elegance and Grace" },
+            { word: "QUEENS", hint: "Rulers of the Realm" },
+            { word: "ANANYA", hint: "The Lost Princess" }
+        ];
+
+        const Game = {
+            levelIdx: 0,
+            targetWord: "",
+            columns: [], // { el, strip, letters, offset, velocity, isDragging, lastY, touchId }
+            
+            init() {
+                this.loadLevel(0);
+                this.animate();
+            },
+
+            loadLevel(idx) {
+                this.levelIdx = idx;
+                const data = LEVELS[idx];
+                this.targetWord = data.word;
+                document.getElementById('level-display').textContent = `Level ${idx+1}: ${data.hint}`;
+                
+                this.buildGrid();
+                document.getElementById('modal-overlay').classList.remove('visible');
+            },
+
+            buildGrid() {
+                const container = document.getElementById('columns-container');
+                container.innerHTML = '';
+                this.columns = [];
+
+                for(let i=0; i<this.targetWord.length; i++) {
+                    const targetChar = this.targetWord[i];
+                    
+                    // Generate Strip Content (Random + Target)
+                    // We make a long strip to simulate a wheel. 
+                    // To handle infinite scroll properly in a simple way, we make it very long 
+                    // and snap back, or just bounded long enough. Let's do bounded but long.
+                    const pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    const length = 20; // 20 tiles high
+                    const targetPos = Math.floor(Math.random() * (length - 4)) + 2; // Avoid very top/bottom
+                    
+                    let letters = [];
+                    for(let j=0; j<length; j++) {
+                        if(j === targetPos) letters.push(targetChar);
+                        else letters.push(pool[Math.floor(Math.random() * pool.length)]);
+                    }
+
+                    // DOM
+                    const colEl = document.createElement('div');
+                    colEl.className = 'column';
+                    
+                    const stripEl = document.createElement('div');
+                    stripEl.className = 'strip';
+                    
+                    letters.forEach(char => {
+                        const tile = document.createElement('div');
+                        tile.className = 'tile';
+                        tile.textContent = char;
+                        stripEl.appendChild(tile);
+                    });
+
+                    colEl.appendChild(stripEl);
+                    container.appendChild(colEl);
+
+                    // Initial Position (Random offset, ensure not already solved)
+                    // Start somewhere away from target
+                    let startIdx = Math.floor(Math.random() * (length - 6));
+                    if(startIdx === targetPos - 1) startIdx += 2; // Nudge away
+                    
+                    // We want index 1 to be the center (since 3 visible rows: 0, 1, 2)
+                    // So translateY should align `startIdx` to the middle row.
+                    // Frame height is 300 (approx 3.75 tiles). Middle is ~110px.
+                    // But simpler: Center of frame is fixed.
+                    // We align the strip such that tile[k] is in center.
+                    // Center Y of frame = 150. Tile height 80.
+                    // To center tile k: translateY = 150 - (k * 80) - 40.
+                    const initialY = 150 - (startIdx * 80) - 40;
+
+                    const colObj = {
+                        id: i,
+                        el: colEl,
+                        strip: stripEl,
+                        letters: letters,
+                        y: initialY,
+                        targetY: initialY,
+                        velocity: 0,
+                        isDragging: false,
+                        lastTouchY: 0,
+                        minY: 150 - ((length-1) * 80) - 40, // Bottom of last tile at center
+                        maxY: 150 - (0 * 80) - 40, // Top of first tile at center
+                        targetChar: targetChar
+                    };
+
+                    this.columns.push(colObj);
+                    this.attachEvents(colObj);
+                    
+                    // Apply initial transform
+                    stripEl.style.transform = `translateY(${initialY}px)`;
+                }
+            },
+
+            attachEvents(col) {
+                const onStart = (y) => {
+                    col.isDragging = true;
+                    col.lastTouchY = y;
+                    col.velocity = 0;
+                    col.el.style.cursor = 'grabbing';
+                };
+
+                const onMove = (y) => {
+                    if(!col.isDragging) return;
+                    const delta = y - col.lastTouchY;
+                    col.lastTouchY = y;
+                    col.y += delta;
+                    
+                    // Soft boundaries (elasticity)
+                    if(col.y > col.maxY + 50) col.y = col.maxY + 50 + (delta*0.1);
+                    if(col.y < col.minY - 50) col.y = col.minY - 50 + (delta*0.1);
+
+                    // Sound on tile crossing
+                    if(Math.abs(col.y % TILE_HEIGHT) < 5) {
+                        // Debounce sound slightly
+                         if(!col.tickCooldown) {
+                             AudioSys.play('click');
+                             col.tickCooldown = true;
+                             setTimeout(() => col.tickCooldown = false, 100);
+                         }
+                    }
+                };
+
+                const onEnd = () => {
+                    col.isDragging = false;
+                    col.el.style.cursor = 'grab';
+                    this.snap(col);
+                };
+
+                // Mouse
+                col.el.addEventListener('mousedown', e => onStart(e.clientY));
+                window.addEventListener('mousemove', e => onMove(e.clientY));
+                window.addEventListener('mouseup', onEnd);
+
+                // Touch
+                col.el.addEventListener('touchstart', e => {
+                    e.preventDefault(); // Prevent scroll
+                    onStart(e.touches[0].clientY);
+                }, {passive: false});
+                
+                window.addEventListener('touchmove', e => {
+                    if(col.isDragging) onMove(e.touches[0].clientY);
+                }, {passive: false});
+                
+                window.addEventListener('touchend', onEnd);
+            },
+
+            snap(col) {
+                // Constrain to bounds first
+                let clampedY = Math.max(col.minY, Math.min(col.maxY, col.y));
+                
+                // Calculate nearest slot
+                // formula: Y = 150 - (index * 80) - 40
+                // index * 80 = 150 - 40 - Y
+                // index = (110 - Y) / 80
+                let rawIdx = (110 - clampedY) / 80;
+                let snapIdx = Math.round(rawIdx);
+                
+                col.targetY = 150 - (snapIdx * 80) - 40;
+            },
+
+            animate() {
+                this.columns.forEach(col => {
+                    if(!col.isDragging) {
+                        // Smooth damping to target
+                        const diff = col.targetY - col.y;
+                        if(Math.abs(diff) > 0.5) {
+                            col.y += diff * 0.15; // Animation speed
+                        } else {
+                            col.y = col.targetY;
+                        }
+                    }
+                    col.strip.style.transform = `translateY(${col.y}px)`;
+                    this.highlightCenter(col);
+                });
+
+                this.checkWin();
+                requestAnimationFrame(() => this.animate());
+            },
+
+            highlightCenter(col) {
+                // Determine which index is currently centered
+                // index = (110 - Y) / 80
+                const centerIdx = Math.round((110 - col.y) / 80);
+                const tiles = col.strip.querySelectorAll('.tile');
+                
+                tiles.forEach((t, i) => {
+                    if(i === centerIdx) {
+                        t.style.color = '#fff';
+                        t.style.textShadow = '0 0 10px #fff';
+                        t.style.transform = 'scale(1.1)';
+                    } else {
+                        t.style.color = '#555';
+                        t.style.textShadow = 'none';
+                        t.style.transform = 'scale(1)';
+                    }
+                });
+            },
+
+            checkWin() {
+                // Don't check if dragging
+                if(this.columns.some(c => c.isDragging)) return;
+                // Don't check if still moving significantly
+                if(this.columns.some(c => Math.abs(c.targetY - c.y) > 2)) return;
+
+                let matchCount = 0;
+                this.columns.forEach(col => {
+                    const centerIdx = Math.round((110 - col.y) / 80);
+                    if(col.letters[centerIdx] === col.targetChar) {
+                        matchCount++;
+                    }
+                });
+
+                if(matchCount === this.targetWord.length && !this.levelComplete) {
+                    this.levelComplete = true;
+                    this.triggerWin();
+                }
+            },
+
+            triggerWin() {
+                AudioSys.play('unlock');
+                FX.burst();
+                
+                setTimeout(() => {
+                    const modal = document.getElementById('modal-overlay');
+                    const title = document.getElementById('modal-title');
+                    const msg = document.getElementById('modal-msg');
+                    const btn = document.querySelector('.modal .btn');
+
+                    if(this.levelIdx >= LEVELS.length - 1) {
+                        title.textContent = "ROYAL SECRETS REVEALED";
+                        msg.textContent = "You have unlocked the name: ANANYA";
+                        btn.textContent = "Play Again";
+                    } else {
+                        title.textContent = "UNLOCKED";
+                        msg.textContent = `The code ${this.targetWord} is accepted.`;
+                        btn.textContent = "Next Level";
+                    }
+                    modal.classList.add('visible');
+                }, 1000);
+            },
+
+            nextLevel() {
+                this.levelComplete = false;
+                if(this.levelIdx >= LEVELS.length - 1) {
+                    this.loadLevel(0);
+                } else {
+                    this.loadLevel(this.levelIdx + 1);
+                }
+            }
+        };
+
+        /* --- CONFETTI FX --- */
+        const FX = {
+            canvas: document.getElementById('confetti-canvas'),
+            ctx: document.getElementById('confetti-canvas').getContext('2d'),
+            particles: [],
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            },
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            },
+            burst() {
+                for(let i=0; i<150; i++) {
+                    this.particles.push({
+                        x: window.innerWidth/2, y: window.innerHeight/2,
+                        vx: (Math.random()-0.5)*20, vy: (Math.random()-0.5)*20,
+                        color: `hsl(${Math.random()*50+40}, 100%, 50%)`,
+                        life: 1.0
+                    });
+                }
+            },
+            loop() {
+                this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+                for(let i=this.particles.length-1; i>=0; i--) {
+                    let p = this.particles[i];
+                    p.x += p.vx; p.y += p.vy;
+                    p.vy += 0.1; // gravity
+                    p.life -= 0.01;
+                    if(p.life <= 0) { this.particles.splice(i,1); continue; }
+                    this.ctx.globalAlpha = p.life;
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.fillRect(p.x, p.y, 6, 6);
+                }
+                requestAnimationFrame(() => this.loop());
+            }
+        };
+
+        FX.init();
+        Game.init();
+    </script>
+</body>
+</html>
