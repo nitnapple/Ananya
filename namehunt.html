@@ -602,8 +602,7 @@
             const levelName = GAME_CONFIG.levels[levelIdx];
             
             document.getElementById('level-title').textContent = `Level ${gameState.level}`;
-            // Optional: show the word they need to spell on the splash screen
-            // document.getElementById('level-screen').querySelector('p').textContent = `Spell: ${levelName}`;
+            document.getElementById('level-screen').querySelector('p').innerHTML = `Weave the word:<br><b style="font-size: 1.5rem; color: var(--accent);">${levelName}</b>`;
             
             document.getElementById('level-screen').classList.remove('hidden');
         }
