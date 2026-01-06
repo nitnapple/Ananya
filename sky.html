@@ -36,9 +36,9 @@
             z-index: 10;
         }
         h1 {
-            font-size: clamp(2.5rem, 10vw, 5rem);
+            font-size: clamp(2rem, 8vw, 4rem);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
             text-shadow: 0 0 20px #00d2ff, 0 0 40px #00d2ff;
             margin: 0 0 20px 0;
             padding: 0 20px;
@@ -46,27 +46,28 @@
             line-height: 1.1;
         }
         p {
-            font-size: clamp(1.1rem, 5vw, 1.4rem);
+            font-size: clamp(1rem, 4.5vw, 1.2rem);
             color: #ccc;
-            margin-top: 10px;
+            margin-top: 5px;
             text-shadow: 0 0 5px rgba(0,0,0,0.8);
             padding: 0 20px;
             max-width: 600px;
+            line-height: 1.4;
         }
         .btn {
             pointer-events: auto;
             background: linear-gradient(45deg, #ff00cc, #3333ff);
             border: 2px solid rgba(255,255,255,0.4);
-            padding: 20px 50px;
-            min-width: 200px;
+            padding: 15px 40px;
+            min-width: 180px;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 5px 25px rgba(51, 51, 255, 0.6);
             transition: transform 0.1s, box-shadow 0.1s;
-            margin-top: 40px;
+            margin-top: 30px;
             text-transform: uppercase;
             letter-spacing: 2px;
             -webkit-tap-highlight-color: transparent;
@@ -78,54 +79,59 @@
             background: linear-gradient(45deg, #d400aa, #2222dd);
         }
         
-        /* HUD UPDATED FOR MOBILE */
+        /* --- OPTIMIZED MOBILE HUD --- */
         .hud-top {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: auto;
-            padding: 10px 15px;
-            padding-top: max(15px, env(safe-area-inset-top));
+            padding: 8px 12px;
+            padding-top: max(10px, env(safe-area-inset-top));
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             pointer-events: none;
             z-index: 5;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
         }
 
-        /* Top row: Lives, Level, Vol */
+        /* Top Bar: Lives Left, Vol Right */
         .hud-row-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            height: 40px;
         }
 
-        /* Second row: Score, Time */
+        /* Stats Bar: Level, Score, Time centered/spaced */
         .hud-row-stats {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             width: 100%;
+            gap: 15px;
             font-family: monospace;
             font-size: 1rem;
             text-shadow: 1px 1px 2px black;
-            padding: 0 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 4px 0;
         }
 
-        .level-tag { color: #ffeb3b; font-weight: bold; font-size: 1.2rem; }
+        .level-tag { color: #ffeb3b; font-weight: bold; }
         .score-tag { color: #00e676; font-weight: bold; }
         .time-tag { color: #00d2ff; font-weight: bold; }
 
         .lives-container {
             display: flex;
             gap: 4px;
+            align-items: center;
         }
         .life-pip {
-            width: 20px;
+            width: 18px;
             height: 8px;
             background: #ff3366;
             box-shadow: 0 0 5px #ff3366;
@@ -140,24 +146,36 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            margin-top: 5px;
+            margin-top: 2px;
+            min-height: 45px; /* Reserve space */
         }
         
         .target-word {
             display: flex;
-            gap: 3px;
+            gap: 4px;
             flex-wrap: wrap; 
             justify-content: center;
         }
+        
+        /* Compact mode for long words */
+        .target-word.compact {
+            gap: 2px;
+        }
+        .target-word.compact .letter-slot {
+            width: 20px;
+            height: 28px;
+            font-size: 1rem;
+            border-bottom-width: 2px;
+        }
 
         .letter-slot {
-            width: 26px;
-            height: 36px;
-            border-bottom: 2px solid rgba(0, 210, 255, 0.5);
+            width: 30px;
+            height: 40px;
+            border-bottom: 3px solid rgba(0, 210, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-family: monospace;
             font-weight: bold;
             color: #00d2ff;
@@ -167,7 +185,7 @@
         .letter-slot.filled {
             background: rgba(0, 210, 255, 0.2);
             text-shadow: 0 0 10px #00d2ff;
-            border-bottom: 2px solid #fff;
+            border-bottom: 3px solid #fff;
             color: #fff;
             transform: scale(1.1);
         }
@@ -177,14 +195,13 @@
             width: 10px;
         }
         
-        /* Larger Mobile Touch Target for Volume */
         #vol-btn {
             pointer-events: auto;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid #999;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
             color: #fff;
             border-radius: 50%;
-            width: 44px; /* Mobile accessible size */
+            width: 44px;
             height: 44px;
             font-size: 1.2rem;
             cursor: pointer;
@@ -192,14 +209,16 @@
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
-            backdrop-filter: blur(5px);
         }
         
         /* Small Screen Optimizations */
         @media (max-width: 380px) {
-            .letter-slot { width: 20px; height: 30px; font-size: 1rem; }
-            .hud-row-stats { font-size: 0.9rem; }
-            h1 { font-size: 2rem; }
+            .letter-slot { width: 24px; height: 32px; font-size: 1.1rem; }
+            .hud-row-stats { font-size: 0.85rem; gap: 10px; }
+            .btn { padding: 12px 30px; font-size: 1.1rem; }
+            
+            /* Even smaller for compact mode on tiny screens */
+            .target-word.compact .letter-slot { width: 16px; height: 22px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -209,20 +228,20 @@
 
 <!-- HUD -->
 <div class="hud-top" id="game-hud" style="display: none;">
-    <!-- Row 1: Key Info & Controls -->
+    <!-- Row 1: Lives & Vol -->
     <div class="hud-row-top">
         <div class="lives-container" id="lives-display"></div>
-        <div class="level-tag" id="level-display">LVL 1</div>
         <button id="vol-btn">🔊</button>
     </div>
     
-    <!-- Row 2: Secondary Stats -->
+    <!-- Row 2: Stats -->
     <div class="hud-row-stats">
+        <div class="level-tag" id="level-display">LVL 1</div>
         <div class="score-tag" id="score-display">PTS: 0</div>
         <div class="time-tag" id="time-display">00:00</div>
     </div>
 
-    <!-- Row 3: The Objective -->
+    <!-- Row 3: Word -->
     <div class="target-word-container">
         <div class="target-word" id="word-display">
             <!-- populated by js -->
@@ -235,28 +254,28 @@
     <div id="start-screen">
         <h1>Sky Force:<br>Ananya</h1>
         <p>10 Levels. One Mission.</p>
-        <p style="color: #ffeb3b; margin-top: 15px; font-size: 0.9rem;">DRAG TO MOVE • AUTO-FIRE</p>
+        <p style="color: #ffeb3b; font-weight: bold; font-size: 0.9rem; margin-top: 15px;">DRAG TO MOVE • AUTO-FIRE</p>
         <button class="btn" id="start-btn">ENGAGE</button>
     </div>
     
     <div id="end-screen" style="display: none;">
         <h1 id="end-title">MISSION COMPLETE</h1>
         <p id="end-subtitle">ALL TARGETS SECURED</p>
-        <p id="final-score" style="color: #00e676; margin-top: 10px; font-size: 1.5rem; font-weight: bold;"></p>
+        <p id="final-score" style="color: #00e676; margin-top: 10px; font-size: 1.3rem; font-weight: bold;"></p>
         <button class="btn" id="restart-btn">REPLAY</button>
     </div>
     
     <!-- Level Transition Overlay -->
     <div id="level-screen" style="display: none;">
         <h1 id="level-title" style="font-size: 3rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255, 235, 59, 0.5);">LEVEL 2</h1>
-        <p id="level-subtitle" style="font-size: 1.5rem; letter-spacing: 5px;">SHANDILYA</p>
+        <p id="level-subtitle" style="font-size: 1.2rem; letter-spacing: 3px; margin-top: 10px;">SHANDILYA</p>
     </div>
 </div>
 
 <script>
 /**
  * ------------------------------------------------------------------
- * GAME DATA
+ * GAME DATA & ASSETS
  * ------------------------------------------------------------------
  */
 const LEVELS = [
@@ -271,6 +290,10 @@ const LEVELS = [
     "TOKYO",
     "JUJUTSU KAISEN"
 ];
+
+const asteroidImg = new Image();
+asteroidImg.crossOrigin = "Anonymous";
+asteroidImg.src = "https://cdn.creazilla.com/cliparts/4310/asteroid-clipart-xl.png";
 
 /**
  * ------------------------------------------------------------------
@@ -319,7 +342,7 @@ const AudioSys = {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(800, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime); // Lower vol for rapid fire
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
         osc.connect(gain);
         gain.connect(this.masterGain);
@@ -374,7 +397,7 @@ const AudioSys = {
         osc1.type = 'sawtooth';
         osc1.frequency.value = 55; // A1
         const gain1 = this.ctx.createGain();
-        gain1.gain.value = 0.1;
+        gain1.gain.value = 0.08;
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.value = 400;
@@ -389,7 +412,7 @@ const AudioSys = {
             const kGain = this.ctx.createGain();
             kOsc.frequency.setValueAtTime(150, this.ctx.currentTime);
             kOsc.frequency.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
-            kGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+            kGain.gain.setValueAtTime(0.25, this.ctx.currentTime);
             kGain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
             kOsc.connect(kGain);
             kGain.connect(this.masterGain);
@@ -445,6 +468,10 @@ let foundLetters = [];
 let currentTarget = "";
 let levelTransitioning = false;
 
+// Timers for cleanup
+let winTimeout = null;
+let levelTimeout = null;
+
 // Player
 const player = {
     x: 0, y: 0,
@@ -461,7 +488,7 @@ const input = {
     active: false,
     offsetX: 0,
     offsetY: 0,
-    rawX: 0, // For visual touch indicator
+    rawX: 0,
     rawY: 0
 };
 
@@ -512,9 +539,6 @@ function handleInputMove(x, y) {
 }
 
 canvas.addEventListener('mousedown', e => {
-    // Mouse behaves like touch (relative offset) for consistency, 
-    // or we can keep it direct. Let's make it direct but with the offset logic 
-    // so it doesn't snap if you click far away.
     handleInputStart(e.clientX, e.clientY);
 });
 canvas.addEventListener('mousemove', e => {
@@ -563,7 +587,6 @@ function initStars() {
 }
 
 function initHUD() {
-    // Lives
     livesContainer.innerHTML = '';
     for(let i=0; i<5; i++) {
         const pip = document.createElement('div');
@@ -577,10 +600,16 @@ function initHUD() {
 function updateLevelHUD() {
     levelDisplay.innerText = `LVL ${currentLevelIndex + 1}`;
     
-    // Set up word slots
     wordDisplay.innerHTML = '';
     foundLetters = [];
     currentTarget = LEVELS[currentLevelIndex];
+    
+    // Auto-compact for long words (Mobile UX Fix)
+    if(currentTarget.length > 8) {
+        wordDisplay.classList.add('compact');
+    } else {
+        wordDisplay.classList.remove('compact');
+    }
     
     for(let i=0; i<currentTarget.length; i++) {
         const char = currentTarget[i];
@@ -588,9 +617,8 @@ function updateLevelHUD() {
         slot.id = `word-slot-${i}`;
         
         if (char === ' ') {
-            // Space handling
             slot.className = 'letter-slot space';
-            foundLetters.push(true); // Space is already found
+            foundLetters.push(true); 
         } else {
             slot.className = 'letter-slot';
             slot.innerText = ''; 
@@ -609,19 +637,30 @@ function updateLivesUI() {
     }
 }
 
+function clearGameTimeouts() {
+    if(winTimeout) clearTimeout(winTimeout);
+    if(levelTimeout) clearTimeout(levelTimeout);
+    winTimeout = null;
+    levelTimeout = null;
+}
+
 function startGame() {
+    clearGameTimeouts(); 
     AudioSys.init();
     AudioSys.startBGM();
     
     startScreen.style.display = 'none';
     endScreen.style.display = 'none';
+    levelScreen.style.display = 'none'; 
     hud.style.display = 'flex';
     
     gameRunning = true;
     lives = 5;
     score = 0;
+    scoreDisplay.innerText = `PTS: ${score}`;
     frameCount = 0;
     currentLevelIndex = 0;
+    levelTransitioning = false;
     gameStartTime = Date.now();
     
     bullets = [];
@@ -629,7 +668,6 @@ function startGame() {
     particles = [];
     floatingTexts = [];
     
-    // Reset pos
     player.x = width/2;
     player.y = height - 150;
     input.x = width/2;
@@ -650,7 +688,6 @@ function nextLevel() {
         return;
     }
 
-    // Clear enemies
     enemies = [];
     bullets = [];
     
@@ -664,14 +701,18 @@ function nextLevel() {
     scoreDisplay.innerText = `PTS: ${score}`;
     AudioSys.playCollect();
 
-    setTimeout(() => {
+    levelTimeout = setTimeout(() => {
+        if(!gameRunning) return; 
         levelScreen.style.display = 'none';
         levelTransitioning = false;
         updateLevelHUD();
+        enemies = [];
+        bullets = [];
     }, 2000);
 }
 
 function gameOver(win) {
+    clearGameTimeouts(); 
     gameRunning = false;
     AudioSys.stopBGM();
     hud.style.display = 'none';
@@ -700,7 +741,6 @@ function spawnEnemy() {
     
     const size = 30 + Math.random() * 20;
     
-    // Drop logic: High chance for needed letters
     let char = '';
     const neededIndices = foundLetters.map((found, idx) => found ? -1 : idx).filter(i => i !== -1);
     
@@ -718,8 +758,8 @@ function spawnEnemy() {
         w: size,
         h: size,
         letter: char,
-        hp: 2,
-        vy: Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2), // Get faster each level
+        hp: Math.floor(Math.random() * 3) + 3, // HP: 3 to 5
+        vy: Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2), 
         rot: Math.random() * Math.PI,
         rotSpeed: (Math.random()-0.5) * 0.05
     });
@@ -781,11 +821,9 @@ function loop() {
     ctx.globalAlpha = 1;
 
     // 2. PLAYER LOGIC
-    // Smooth lerp
     player.x += (input.x - player.x) * 0.2; 
     player.y += (input.y - player.y) * 0.2;
     
-    // Clamp
     if(player.x < 25) { player.x = 25; input.x = 25; } 
     if(player.x > width-25) { player.x = width-25; input.x = width-25; }
     if(player.y < 25) { player.y = 25; input.y = 25; }
@@ -798,7 +836,7 @@ function loop() {
     
     if(player.invulnerable > 0) player.invulnerable--;
     
-    // VISUAL: Draw Touch Indicator (Where your finger is)
+    // VISUAL: Draw Touch Indicator
     if(input.active) {
         ctx.globalCompositeOperation = 'lighter';
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
@@ -807,7 +845,6 @@ function loop() {
         ctx.arc(input.rawX, input.rawY, 30, 0, Math.PI*2);
         ctx.stroke();
         
-        // Connection line to ship
         ctx.beginPath();
         ctx.moveTo(input.rawX, input.rawY);
         ctx.lineTo(player.x, player.y);
@@ -856,23 +893,25 @@ function loop() {
                             collected = true;
                             
                             const slot = document.getElementById(`word-slot-${k}`);
-                            slot.innerText = e.letter;
-                            slot.classList.add('filled');
+                            if(slot) {
+                                slot.innerText = e.letter;
+                                slot.classList.add('filled');
+                            }
                             
-                            score += 100; // Big points for letter
+                            score += 100; 
                             floatingTexts.push({x: e.x, y: e.y, text: e.letter, life: 1.0, vy: -2});
                             AudioSys.playCollect();
                             break; 
                         }
                     }
-                    if(!collected) score += 10; // Small points for rocks
+                    if(!collected) score += 10;
                     scoreDisplay.innerText = `PTS: ${score}`;
                     
                     enemies.splice(j,1);
                     
                     // CHECK WIN LEVEL
                     if(foundLetters.every(x=>x)) {
-                        setTimeout(nextLevel, 1000);
+                        winTimeout = setTimeout(nextLevel, 1000);
                     }
                 }
                 break;
@@ -891,35 +930,54 @@ function loop() {
         ctx.translate(e.x, e.y);
         ctx.rotate(e.rot);
         
-        ctx.fillStyle = '#444';
+        // Check Needed
         let isNeeded = false;
-        // Check if letter is needed in current level
         for(let k=0; k<currentTarget.length; k++) {
             if(currentTarget[k] === e.letter && !foundLetters[k]) isNeeded = true;
         }
 
-        if(isNeeded) {
-            ctx.strokeStyle = '#00ff00';
-            ctx.lineWidth = 2;
+        // Draw Image if loaded
+        if (asteroidImg.complete && asteroidImg.naturalWidth !== 0) {
+            if(isNeeded) {
+                ctx.shadowColor = '#00ff00';
+                ctx.shadowBlur = 15;
+            }
+            ctx.drawImage(asteroidImg, -e.w/2, -e.h/2, e.w, e.h);
+            ctx.shadowBlur = 0;
         } else {
-            ctx.strokeStyle = '#666';
-            ctx.lineWidth = 1;
+            // Fallback polygon
+            ctx.fillStyle = '#444';
+            if(isNeeded) {
+                ctx.strokeStyle = '#00ff00';
+                ctx.lineWidth = 2;
+            } else {
+                ctx.strokeStyle = '#666';
+                ctx.lineWidth = 1;
+            }
+            ctx.beginPath();
+            for(let s=0; s<6; s++) {
+                const angle = s * Math.PI/3;
+                ctx.lineTo(Math.cos(angle)*e.w/2, Math.sin(angle)*e.h/2);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
         }
         
-        ctx.beginPath();
-        for(let s=0; s<6; s++) {
-            const angle = s * Math.PI/3;
-            ctx.lineTo(Math.cos(angle)*e.w/2, Math.sin(angle)*e.h/2);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        
+        // Draw Letter
         ctx.rotate(-e.rot); 
-        ctx.fillStyle = isNeeded ? '#00ff00' : '#aaa';
+        ctx.fillStyle = isNeeded ? '#00ff00' : '#fff';
         ctx.font = 'bold 24px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        
+        // Add stroke/shadow to ensure text is visible on top of image
+        ctx.shadowColor = '#000';
+        ctx.shadowBlur = 4;
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+        ctx.strokeText(e.letter, 0, 0);
+        ctx.shadowBlur = 0;
         ctx.fillText(e.letter, 0, 0);
         
         ctx.restore();
