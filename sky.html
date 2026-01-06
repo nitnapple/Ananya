@@ -33,6 +33,17 @@
             text-align: center;
             z-index: 10;
         }
+        /* Animated Boss Element (Overlay) */
+        #boss-entity {
+            position: absolute;
+            display: none; /* Hidden by default */
+            transform: translate(-50%, -50%);
+            z-index: 4; /* Below HUD, Above Canvas */
+            pointer-events: none;
+            /* Filter drop-shadow for visibility against space */
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
+        }
+        
         h1 {
             font-size: clamp(2rem, 8vw, 4rem);
             text-transform: uppercase;
@@ -91,7 +102,7 @@
             flex-direction: column;
             gap: 4px;
             pointer-events: none;
-            z-index: 5;
+            z-index: 20; /* High Z-index to stay above boss */
             background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 80%, transparent 100%);
         }
 
@@ -133,41 +144,26 @@
         .lives-container { display: flex; gap: 8px; align-items: center; margin-left: 5px; }
         
         .life-pip {
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             background-color: #ff3366;
             display: inline-block;
             transform: rotate(-45deg);
             position: relative;
-            box-shadow: none; /* Reset */
+            box-shadow: none;
             animation: beat 1s infinite alternate;
         }
-        
-        .life-pip::before,
-        .life-pip::after {
-            content: "";
-            width: 12px;
-            height: 12px;
-            background-color: #ff3366;
-            border-radius: 50%;
-            position: absolute;
+        .life-pip::before, .life-pip::after {
+            content: ""; width: 16px; height: 16px;
+            background-color: #ff3366; border-radius: 50%; position: absolute;
         }
+        .life-pip::before { top: -8px; left: 0; }
+        .life-pip::after { top: 0; left: 8px; }
         
-        .life-pip::before { top: -6px; left: 0; }
-        .life-pip::after { top: 0; left: 6px; }
-        
-        .life-pip.lost {
-            background-color: #444;
-            animation: none;
-        }
-        .life-pip.lost::before,
-        .life-pip.lost::after {
-            background-color: #444;
-        }
+        .life-pip.lost { background-color: #444; animation: none; }
+        .life-pip.lost::before, .life-pip.lost::after { background-color: #444; }
 
-        @keyframes beat {
-            to { transform: rotate(-45deg) scale(1.1); }
-        }
+        @keyframes beat { to { transform: rotate(-45deg) scale(1.1); } }
         
         .target-word-container {
             display: flex;
@@ -209,9 +205,9 @@
         
         #pause-screen, #end-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 10, 0.9); backdrop-filter: blur(10px);
+            background: rgba(5, 5, 10, 0.95); backdrop-filter: blur(10px);
             display: none; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 20; pointer-events: auto; padding: 20px; box-sizing: border-box;
+            z-index: 30; pointer-events: auto; padding: 20px; box-sizing: border-box;
         }
 
         #end-title { font-size: clamp(2.5rem, 9vw, 4.5rem); margin-bottom: 5px; line-height: 1.1; text-align: center; }
@@ -233,6 +229,9 @@
     </style>
 </head>
 <body>
+
+<!-- Animated Boss IMG in DOM -->
+<img id="boss-entity" src="" alt="Boss">
 
 <canvas id="gameCanvas"></canvas>
 
@@ -262,7 +261,7 @@
 <div id="ui-layer">
     <div id="start-screen">
         <h1>Sky Force:<br>Ananya</h1>
-        <p>10 Levels • Massive Bosses • Powerups</p>
+        <p>10 Levels • Animated Bosses • Powerups</p>
         <p style="color: #ffeb3b; font-weight: bold; font-size: 0.9rem; margin-top: 15px;">DRAG TO MOVE • AUTO-FIRE</p>
         <button class="btn" id="start-btn">ENGAGE</button>
     </div>
@@ -313,9 +312,12 @@ const meteorImg = new Image();
 meteorImg.crossOrigin = "Anonymous";
 meteorImg.src = "https://pngimg.com/uploads/meteor/meteor_PNG9.png";
 
-const bossImg = new Image();
-bossImg.crossOrigin = "Anonymous";
-bossImg.src = "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023292-F42MK2JVX2T2XGE6H77U/UFO-dancing.gif";
+// Boss URLs (Used for DOM element)
+const BOSS_URLS = {
+    generic: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023292-F42MK2JVX2T2XGE6H77U/UFO-dancing.gif",
+    level5: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023819-209B50XVZI4AHLMRVJ89/UFO-kissy.gif",
+    level10: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873024427-EP9L5HL8TDC44G9BBD7N/UFO-shocked.gif"
+};
 
 /**
  * ------------------------------------------------------------------
@@ -484,6 +486,7 @@ const endScreen = document.getElementById('end-screen');
 const levelScreen = document.getElementById('level-screen');
 const pauseScreen = document.getElementById('pause-screen');
 const hud = document.getElementById('game-hud');
+const bossImgEl = document.getElementById('boss-entity');
 
 // HUD Elements
 const livesContainer = document.getElementById('lives-display');
@@ -509,6 +512,7 @@ let boss = null;
 
 // Game State
 let gameRunning = false;
+let animFrameId = null; // Store requestAnimationFrame ID
 window.isPaused = false; 
 let frameCount = 0;
 let lives = 5;
@@ -602,12 +606,14 @@ volBtn.addEventListener('click', () => {
 pauseBtn.addEventListener('click', togglePause);
 resumeBtn.addEventListener('click', togglePause);
 quitBtn.addEventListener('click', () => {
-    togglePause(); 
+    togglePause(); // Unpause logic state
     gameRunning = false;
+    bossImgEl.style.display = 'none';
     hud.style.display = 'none';
     pauseScreen.style.display = 'none';
     startScreen.style.display = 'flex';
     AudioSys.stopBGM();
+    if(animFrameId) cancelAnimationFrame(animFrameId);
 });
 
 function togglePause() {
@@ -620,7 +626,7 @@ function togglePause() {
     } else {
         pauseScreen.style.display = 'none';
         pausedTime += (Date.now() - pauseStart);
-        requestAnimationFrame(loop);
+        animFrameId = requestAnimationFrame(loop);
     }
 }
 
@@ -635,7 +641,6 @@ function initBackground() {
     for(let i=0; i<80; i++) stars.push({ x: Math.random()*width, y: Math.random()*height, size: Math.random()*2+0.5, speed: Math.random()*4+1 });
     
     backgroundObjects = [];
-    // Only 4 background objects for performance - now only meteors/asteroids
     for(let i=0; i<4; i++) {
         backgroundObjects.push({
             x: Math.random()*width,
@@ -711,7 +716,12 @@ function clearGameTimeouts() {
 }
 
 function startGame() {
+    // 1. Cleanup previous state
+    if(animFrameId) cancelAnimationFrame(animFrameId);
     clearGameTimeouts(); 
+    AudioSys.stopBGM();
+    
+    // 2. Initialize
     AudioSys.init();
     AudioSys.startBGM();
     AudioSys.speak("Level 1. Ananya.");
@@ -719,6 +729,7 @@ function startGame() {
     startScreen.style.display = 'none'; endScreen.style.display = 'none';
     levelScreen.style.display = 'none'; pauseScreen.style.display = 'none';
     hud.style.display = 'flex';
+    bossImgEl.style.display = 'none';
     
     gameRunning = true; window.isPaused = false;
     lives = 5; score = 0; frameCount = 0; currentLevelIndex = 0;
@@ -734,7 +745,9 @@ function startGame() {
     
     initBackground();
     initHUD();
-    requestAnimationFrame(loop);
+    
+    // 3. Start Loop
+    animFrameId = requestAnimationFrame(loop);
 }
 
 function resetPowerups() {
@@ -751,6 +764,7 @@ function nextLevel() {
     levelTransitioning = true;
     resetPowerups();
     boss = null;
+    bossImgEl.style.display = 'none'; 
     
     if (currentLevelIndex >= LEVELS.length) {
         gameOver(true);
@@ -785,6 +799,9 @@ function nextLevel() {
 function gameOver(win) {
     clearGameTimeouts(); 
     gameRunning = false;
+    if(animFrameId) cancelAnimationFrame(animFrameId);
+    
+    bossImgEl.style.display = 'none';
     AudioSys.stopBGM();
     hud.style.display = 'none'; levelScreen.style.display = 'none';
     endScreen.style.display = 'flex';
@@ -810,16 +827,24 @@ function spawnBoss() {
     AudioSys.speak("Warning. Boss Approaching.");
     let type = 'normal';
     let hp = 100 + (currentLevelIndex * 10);
-    // Base size for normal boss
-    let w = 120;
-    let h = 80; 
+    // Base size
+    let w = 140;
+    let h = 100; 
+    let imgSrc = BOSS_URLS.generic;
     
-    // Size overrides
-    if (currentLevelIndex === 4) { type = 'big'; hp = 300; w = 200; h = 130; }
-    if (currentLevelIndex === 9) { type = 'final'; hp = 1000; w = 280; h = 180; }
+    if (currentLevelIndex === 4) { 
+        type = 'big'; hp = 300; w = 220; h = 150; 
+        imgSrc = BOSS_URLS.level5;
+    }
+    if (currentLevelIndex === 9) { 
+        type = 'final'; hp = 1000; w = 300; h = 200; 
+        imgSrc = BOSS_URLS.level10;
+    }
 
     boss = {
-        x: width/2, y: -150, 
+        x: width/2, 
+        y: -150, 
+        targetY: height * 0.35, // Move lower to avoid HUD (35% down)
         w: w, h: h,
         hp: hp, maxHp: hp,
         vx: 2, vy: 1,
@@ -828,12 +853,22 @@ function spawnBoss() {
         shootTimer: 0,
         minionTimer: 0
     };
+
+    // Show Animated GIF Overlay
+    bossImgEl.src = imgSrc;
+    bossImgEl.style.width = w + 'px';
+    bossImgEl.style.height = h + 'px';
+    bossImgEl.style.display = 'block';
 }
 
 function spawnPowerup(x, y) {
     const types = ['beam', 'shield', 'spread', 'magnet', 'freeze'];
     const type = types[Math.floor(Math.random() * types.length)];
     powerups.push({ x: x, y: y, vy: 2, w: 30, h: 30, type: type });
+}
+
+function spawnHeart(x, y) {
+    powerups.push({ x: x, y: y, vy: 2, w: 30, h: 30, type: 'heart' });
 }
 
 function spawnBossMinion() {
@@ -845,7 +880,7 @@ function spawnBossMinion() {
             letter: '', isTrap: false, hp: 10,
             vy: 3, rot: 0, rotSpeed: 0,
             scale: 1,
-            isMinion: true // Flag to render as mini boss
+            isMinion: true 
         });
     }
 }
@@ -856,8 +891,8 @@ function spawnEnemy() {
     // Scale Logic
     let scale = 1;
     const r = Math.random();
-    if(r < 0.1) scale = 3; // 10% Huge
-    else if(r < 0.25) scale = 2; // 15% Big
+    if(r < 0.1) scale = 3; 
+    else if(r < 0.25) scale = 2; 
     
     const baseSize = 30 + Math.random() * 20;
     const size = baseSize * scale;
@@ -880,12 +915,8 @@ function spawnEnemy() {
         char = alpha[Math.floor(Math.random() * alpha.length)];
     }
 
-    // Increased Durability for big rocks
-    // Base 3-5 + Level Scaling
-    // Multiplier: Scale * 1.5 to make them tanky
     let hp = (Math.floor(Math.random() * 3) + 3) * scale * 1.5;
 
-    // Meteor variant chance
     const isMeteor = Math.random() < 0.3;
     const imgType = isMeteor ? 'meteor' : 'asteroid';
     const speedMult = isMeteor ? 1.5 : 1;
@@ -898,12 +929,17 @@ function spawnEnemy() {
         isTrap: isTrap,
         hp: hp,
         imgType: imgType,
-        // Bigger rocks move slower, meteors faster
         vy: (Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2)) / scale * speedMult,
         rot: Math.random() * Math.PI,
         rotSpeed: ((Math.random()-0.5) * 0.05) / scale,
         scale: scale
     });
+    
+    // Spawn Extra Lives Chance (floating in level) - ~2-3 per level average
+    // Frame check 35, avg level 60sec = ~100 spawns. 3/100 = 0.03
+    if(Math.random() < 0.05) { 
+        spawnHeart(Math.random() * width, -50);
+    }
 }
 
 function spawnBullet(offset = 0, angle = 0) {
@@ -919,7 +955,6 @@ function spawnBullet(offset = 0, angle = 0) {
 }
 
 function createParticles(x, y, color, amount, type = 'spark') {
-    // Reduced particle counts for performance
     let actualAmount = Math.min(amount, 8); 
     if(type === 'smoke') actualAmount = Math.min(amount, 4);
 
@@ -993,22 +1028,19 @@ function loop() {
     // 1. BG - With Blur Filter for Depth
     ctx.filter = 'blur(4px)'; 
     
-    // Background Objects (Asteroids/Meteors instead of circles)
     backgroundObjects.forEach(p => {
         p.y += p.speed * (powerupState.freeze > 0 ? 0.2 : 1);
         if(p.y > height + 100) { p.y = -100; p.x = Math.random()*width; }
         
-        // Draw dark background image
         let img = p.type === 'meteor' ? meteorImg : asteroidImg;
         if (img.complete && img.naturalWidth !== 0) {
-            ctx.globalAlpha = 0.3; // Make them fade into background
+            ctx.globalAlpha = 0.3; 
             ctx.drawImage(img, p.x, p.y, p.size, p.size);
             ctx.globalAlpha = 1;
         }
     });
-    ctx.filter = 'none'; // Reset filter immediately
+    ctx.filter = 'none'; 
 
-    // Stars (No blur for crisp stars)
     ctx.fillStyle = 'white';
     stars.forEach(s => {
         s.y += s.speed * (powerupState.freeze > 0 ? 0.2 : 1);
@@ -1085,7 +1117,6 @@ function loop() {
             let b = bullets[i];
             b.x += b.vx || 0; b.y += b.vy;
             
-            // LAG FIX: NO SHADOWS
             ctx.fillStyle = b.color;
             ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h); 
             
@@ -1119,31 +1150,21 @@ function loop() {
         ctx.translate(e.x, e.y); ctx.rotate(e.rot);
         
         if (e.isMinion) {
-             // Draw mini boss using bossImg
-             if(bossImg.complete) {
-                 ctx.drawImage(bossImg, -e.w/2, -e.h/2, e.w, e.h);
-             } else {
-                 ctx.fillStyle = 'red'; ctx.fillRect(-e.w/2, -e.h/2, e.w, e.h);
-             }
+             // Minions use asteroid img for now to differentiate from main UFOs easily, or could use small UFO
+             if(asteroidImg.complete) ctx.drawImage(asteroidImg, -e.w/2, -e.h/2, e.w, e.h);
         } else {
             let img = (e.imgType === 'meteor' && meteorImg.complete) ? meteorImg : asteroidImg;
-
             if (img.complete && img.naturalWidth !== 0) {
-                // LAG FIX: Removed Shadows
+                // Ensure scale is applied via w/h in drawImage
                 ctx.drawImage(img, -e.w/2, -e.h/2, e.w, e.h);
             } else {
-                ctx.fillStyle = e.isTrap ? '#500' : '#444';
-                ctx.beginPath();
-                for(let s=0; s<6; s++) {
-                    const angle = s * Math.PI/3;
-                    ctx.lineTo(Math.cos(angle)*e.w/2, Math.sin(angle)*e.h/2);
-                }
-                ctx.fill();
+                ctx.fillStyle = '#444';
+                ctx.beginPath(); ctx.arc(0,0, e.w/2, 0, Math.PI*2); ctx.fill();
             }
             
             ctx.rotate(-e.rot); 
             ctx.fillStyle = e.isTrap ? '#ff0000' : (isLetterNeeded(e.letter) ? '#00ff00' : '#fff');
-            ctx.font = `bold ${24 + (e.scale-1)*10}px monospace`; // Scale text
+            ctx.font = `bold ${24 + (e.scale-1)*10}px monospace`; 
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             
             // Simple outline for performance
@@ -1173,51 +1194,33 @@ function loop() {
     if(boss) {
         if(boss.phase === 'enter') {
             boss.y += 2;
-            if(boss.y >= 100) boss.phase = 'fight';
+            if(boss.y >= boss.targetY) boss.phase = 'fight';
         } else {
             boss.x += Math.sin(frameCount * 0.05) * 3 * moveMult;
             boss.shootTimer++;
             if(boss.shootTimer > 60) {
                 boss.shootTimer = 0;
-                enemies.push({ x: boss.x, y: boss.y + 50, w: 20, h: 20, letter: '!', isTrap: true, hp: 1, vy: 5, rot: 0, rotSpeed: 0.2, scale: 1 });
+                enemies.push({ x: boss.x, y: boss.y + 50, w: 20, h: 20, letter: '!', isTrap: true, hp: 1, vy: 5, rot: 0, rotSpeed: 0.2, scale: 1, isMinion: true });
             }
-            // MINION SPAWNING
-            if(boss.type === 'big') { // Level 5
+            if(boss.type === 'big') { 
                  boss.minionTimer++;
-                 if(boss.minionTimer > 300) { // 5 seconds at 60fps
+                 if(boss.minionTimer > 300) { 
                      boss.minionTimer = 0;
                      spawnBossMinion();
                  }
             }
         }
         
+        // Update DOM element position
+        bossImgEl.style.left = boss.x + 'px';
+        bossImgEl.style.top = boss.y + 'px';
+        
+        // Canvas Drawing for HP Bar only (Image is DOM)
         ctx.save(); ctx.translate(boss.x, boss.y);
-        // KEEP Boss Shadow (Important target)
-        // Draw boss image if loaded, otherwise fallback
-        if(bossImg.complete && bossImg.naturalWidth !== 0) {
-            ctx.shadowBlur = 20; ctx.shadowColor = 'red';
-            ctx.drawImage(bossImg, -boss.w/2, -boss.h/2, boss.w, boss.h);
-            ctx.shadowBlur = 0;
-        } else {
-            ctx.fillStyle = '#ff3300'; ctx.shadowBlur = 20; ctx.shadowColor = 'red';
-            ctx.beginPath(); ctx.moveTo(0, 50); ctx.lineTo(60, -30); ctx.lineTo(0, -50); ctx.lineTo(-60, -30); ctx.fill();
-        }
-        
-        // Draw Health Bar
-        const barW = boss.w;
-        const barH = 10;
-        const yOffset = -boss.h/2 - 20;
-        
-        ctx.fillStyle = 'rgba(0,0,0,0.5)';
-        ctx.fillRect(-barW/2, yOffset, barW, barH);
-        
-        ctx.fillStyle = '#ff0000';
-        ctx.fillRect(-barW/2, yOffset, barW * (Math.max(0, boss.hp) / boss.maxHp), barH);
-        
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(-barW/2, yOffset, barW, barH);
-
+        const barW = boss.w; const barH = 10; const yOffset = -boss.h/2 - 20;
+        ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(-barW/2, yOffset, barW, barH);
+        ctx.fillStyle = '#ff0000'; ctx.fillRect(-barW/2, yOffset, barW * (Math.max(0, boss.hp) / boss.maxHp), barH);
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.strokeRect(-barW/2, yOffset, barW, barH);
         ctx.restore();
         
         if(player.invulnerable === 0 && Math.abs(player.x - boss.x) < (boss.w/2 + player.w/2) && Math.abs(player.y - boss.y) < (boss.h/2 + player.h/2)) {
@@ -1225,22 +1228,43 @@ function loop() {
         }
     }
     
-    // 7. POWERUPS
+    // 7. POWERUPS & HEARTS
     for (let i = powerups.length - 1; i >= 0; i--) {
         let p = powerups[i];
-        if(powerupState.magnet > 0) { p.x += (player.x - p.x) * 0.1; p.y += (player.y - p.y) * 0.1; } else { p.y += p.vy; }
+        if(powerupState.magnet > 0 && p.type !== 'heart') { p.x += (player.x - p.x) * 0.1; p.y += (player.y - p.y) * 0.1; } else { p.y += p.vy; }
         
         ctx.save(); ctx.translate(p.x, p.y);
-        ctx.fillStyle = '#ffeb3b';
-        ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = '#000'; ctx.font = 'bold 16px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        let icon = "⚡";
-        if(p.type === 'shield') icon = "🛡️"; if(p.type === 'spread') icon = "🚀"; if(p.type === 'magnet') icon = "🧲"; if(p.type === 'freeze') icon = "❄️";
-        ctx.fillText(icon, 0, 2);
+        
+        if (p.type === 'heart') {
+            // Draw Heart
+            ctx.fillStyle = '#ff3366';
+            ctx.beginPath();
+            ctx.moveTo(0, 5);
+            ctx.bezierCurveTo(0, 5, -10, -5, -5, -10);
+            ctx.bezierCurveTo(0, -13, 0, -8, 0, -5);
+            ctx.bezierCurveTo(0, -8, 0, -13, 5, -10);
+            ctx.bezierCurveTo(10, -5, 0, 5, 0, 5);
+            ctx.fill();
+        } else {
+            ctx.fillStyle = '#ffeb3b';
+            ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#000'; ctx.font = 'bold 16px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            let icon = "⚡";
+            if(p.type === 'shield') icon = "🛡️"; if(p.type === 'spread') icon = "🚀"; if(p.type === 'magnet') icon = "🧲"; if(p.type === 'freeze') icon = "❄️";
+            ctx.fillText(icon, 0, 2);
+        }
         ctx.restore();
         
         if(Math.sqrt((player.x - p.x)**2 + (player.y - p.y)**2) < (player.w/2 + 15)) {
-            activatePowerup(p.type); powerups.splice(i, 1); continue;
+            if(p.type === 'heart') {
+                lives = Math.min(lives + 1, 5); // Cap at 5
+                updateLivesUI();
+                AudioSys.playCollect(true);
+                floatingTexts.push({x: player.x, y: player.y - 40, text: "❤️", life: 1.5, vy: -1, color: '#ff3366'});
+            } else {
+                activatePowerup(p.type);
+            }
+            powerups.splice(i, 1); continue;
         }
         if(p.y > height + 50) powerups.splice(i, 1);
     }
@@ -1288,101 +1312,8 @@ function loop() {
     }
     ctx.globalAlpha = 1; ctx.shadowBlur = 0;
     
+    animFrameId = requestAnimationFrame(loop);
     ctx.restore(); 
-    requestAnimationFrame(loop);
-}
-
-// --- HELPERS ---
-
-function hitEnemy(e, index, damage) {
-    e.hp -= damage; e.y -= 2;
-    createParticles(e.x, e.y, '#fff', 2, 'spark'); // Hit spark
-    
-    if (e.hp <= 0) {
-        if(e.isTrap) {
-            score = Math.max(0, score - 200); combo = 1; updateComboUI();
-            screenShake = 10; vibrate(50);
-            createParticles(e.x, e.y, 'red', 10, 'smoke');
-            floatingTexts.push({x: e.x, y: e.y, text: "TRAP!", color: 'red', life: 1.0, vy: -1});
-            enemies.splice(index, 1); scoreDisplay.innerText = `PTS: ${score}`;
-            return;
-        }
-
-        AudioSys.playExplosion(); 
-        
-        // HAPTIC FEEDBACK (Harder for bigger rocks)
-        if(e.scale >= 3) vibrate([50, 20, 50]); // Triple thump
-        else if(e.scale >= 2) vibrate(30); 
-        else vibrate(15);
-
-        createParticles(e.x, e.y, '#ffaa00', 8, 'smoke');
-        createParticles(e.x, e.y, '#ffcc00', 8, 'spark');
-        
-        let collected = false;
-        
-        for(let k=0; k<currentTarget.length; k++) {
-            if(currentTarget[k] === e.letter && !foundLetters[k]) {
-                foundLetters[k] = true; collected = true;
-                const slot = document.getElementById(`word-slot-${k}`);
-                if(slot) { slot.innerText = e.letter; slot.classList.add('filled'); }
-                
-                score += 100 * combo;
-                floatingTexts.push({x: e.x, y: e.y, text: e.letter, isLetter:true, life: 1.0, vy: -2});
-                AudioSys.playCollect(true);
-                combo++; updateComboUI();
-                break; 
-            }
-        }
-        
-        if(!collected) score += 10 * combo;
-        scoreDisplay.innerText = `PTS: ${score}`;
-        
-        if(Math.random() < 0.08) spawnPowerup(e.x, e.y);
-        enemies.splice(index, 1);
-        
-        // LEVEL ADVANCEMENT
-        // Ensure boss is dead AND letters are found
-        if(foundLetters.every(x=>x) && !winTimeout && !levelTransitioning && !boss) {
-            winTimeout = setTimeout(nextLevel, 1000);
-        }
-    }
-}
-
-function takeDamage() {
-    lives--; combo = 1; updateComboUI(); updateLivesUI();
-    player.invulnerable = 100; screenShake = 20; 
-    createParticles(player.x, player.y, '#ff3366', 20, 'smoke');
-    AudioSys.playExplosion(); vibrate(200);
-    if(lives <= 0) gameOver(false);
-}
-
-function activatePowerup(type) {
-    AudioSys.playPowerupCollect(); AudioSys.speak(type);
-    floatingTexts.push({x: player.x, y: player.y - 40, text: type.toUpperCase() + "!", life: 1.5, vy: -1, color: '#fff'});
-    if(type === 'shield') powerupState.shield = true;
-    if(type === 'beam') powerupState.beam = 300; 
-    if(type === 'spread') powerupState.spread = 600; 
-    if(type === 'magnet') powerupState.magnet = 600;
-    if(type === 'freeze') powerupState.freeze = 300;
-}
-
-function killBoss() {
-    createParticles(boss.x, boss.y, '#ffaa00', 30, 'smoke');
-    createParticles(boss.x, boss.y, '#fff', 20, 'spark');
-    screenShake = 30; score += 5000; boss = null;
-    floatingTexts.push({x: width/2, y: height/2, text: "BOSS DEFEATED!", color: 'gold', life: 3.0, vy: -0.5});
-    AudioSys.speak("Boss Defeated");
-    
-    // Check if word is also done to advance
-    if(foundLetters.every(x=>x)) { winTimeout = setTimeout(nextLevel, 2000); } 
-    else { AudioSys.speak("Finish the word!"); }
-}
-
-function isLetterNeeded(char) {
-    for(let k=0; k<currentTarget.length; k++) {
-        if(currentTarget[k] === char && !foundLetters[k]) return true;
-    }
-    return false;
 }
 
 document.getElementById('start-btn').addEventListener('click', startGame);
