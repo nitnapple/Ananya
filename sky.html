@@ -79,7 +79,7 @@
             background: linear-gradient(45deg, #d400aa, #2222dd);
         }
         
-        /* --- OPTIMIZED MOBILE HUD --- */
+        /* --- OPTIMIZED HUD --- */
         .hud-top {
             position: absolute;
             top: 0;
@@ -91,19 +91,25 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
             pointer-events: none;
             z-index: 5;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 80%, transparent 100%);
         }
 
-        /* Top Bar: Lives Left, Vol Right */
+        /* Top Bar: Lives Left, Controls Right */
         .hud-row-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            height: 40px;
+            height: 44px;
+        }
+
+        .controls-container {
+            display: flex;
+            gap: 10px;
+            pointer-events: auto;
         }
 
         /* Stats Bar: Level, Score, Time centered/spaced */
@@ -112,13 +118,14 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            gap: 15px;
+            gap: 12px;
             font-family: monospace;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-shadow: 1px 1px 2px black;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 4px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 2px 0;
+            margin-bottom: 4px;
         }
 
         .level-tag { color: #ffeb3b; font-weight: bold; }
@@ -127,7 +134,7 @@
 
         .lives-container {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             align-items: center;
         }
         .life-pip {
@@ -146,42 +153,45 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            margin-top: 2px;
-            min-height: 45px; /* Reserve space */
+            margin-top: 0;
+            min-height: 40px; 
         }
         
         .target-word {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap; 
             justify-content: center;
         }
         
-        /* Compact mode for long words */
-        .target-word.compact {
-            gap: 2px;
-        }
-        .target-word.compact .letter-slot {
-            width: 20px;
-            height: 28px;
-            font-size: 1rem;
-            border-bottom-width: 2px;
-        }
-
+        /* Default letter slot */
         .letter-slot {
-            width: 30px;
-            height: 40px;
+            width: 28px;
+            height: 38px;
             border-bottom: 3px solid rgba(0, 210, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-family: monospace;
             font-weight: bold;
             color: #00d2ff;
             background: rgba(0, 210, 255, 0.05);
             transition: all 0.3s;
         }
+
+        /* Compact mode for very long words on mobile */
+        .target-word.compact {
+            gap: 2px;
+        }
+        .target-word.compact .letter-slot {
+            width: 6vw; /* Responsive width */
+            max-width: 24px;
+            height: 32px;
+            font-size: 0.9rem;
+            border-bottom-width: 2px;
+        }
+
         .letter-slot.filled {
             background: rgba(0, 210, 255, 0.2);
             text-shadow: 0 0 10px #00d2ff;
@@ -192,33 +202,44 @@
         .letter-slot.space {
             border: none;
             background: transparent;
-            width: 10px;
+            width: 8px;
         }
         
-        #vol-btn {
-            pointer-events: auto;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
+        /* Circular Buttons */
+        .circle-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.4);
             color: #fff;
             border-radius: 50%;
-            width: 44px;
+            width: 44px; /* Accessible Touch Size */
             height: 44px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(4px);
+            font-weight: bold;
+        }
+        .circle-btn:active {
+            background: rgba(255,255,255,0.3);
+            transform: scale(0.95);
         }
         
+        /* Pause Overlay */
+        #pause-screen {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 20;
+        }
+
         /* Small Screen Optimizations */
         @media (max-width: 380px) {
-            .letter-slot { width: 24px; height: 32px; font-size: 1.1rem; }
-            .hud-row-stats { font-size: 0.85rem; gap: 10px; }
+            .hud-row-stats { font-size: 0.8rem; gap: 8px; }
             .btn { padding: 12px 30px; font-size: 1.1rem; }
-            
-            /* Even smaller for compact mode on tiny screens */
-            .target-word.compact .letter-slot { width: 16px; height: 22px; font-size: 0.8rem; }
+            .circle-btn { width: 40px; height: 40px; font-size: 1rem; }
+            h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -228,10 +249,13 @@
 
 <!-- HUD -->
 <div class="hud-top" id="game-hud" style="display: none;">
-    <!-- Row 1: Lives & Vol -->
+    <!-- Row 1: Lives & Controls -->
     <div class="hud-row-top">
         <div class="lives-container" id="lives-display"></div>
-        <button id="vol-btn">🔊</button>
+        <div class="controls-container">
+            <button class="circle-btn" id="pause-btn">||</button>
+            <button class="circle-btn" id="vol-btn">🔊</button>
+        </div>
     </div>
     
     <!-- Row 2: Stats -->
@@ -258,6 +282,12 @@
         <button class="btn" id="start-btn">ENGAGE</button>
     </div>
     
+    <div id="pause-screen" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+        <h1 style="color: #ffeb3b; font-size: 3rem;">PAUSED</h1>
+        <button class="btn" id="resume-btn">RESUME</button>
+        <button class="btn" id="quit-btn" style="background: transparent; border: 1px solid #666; margin-top: 15px; font-size: 1rem; padding: 10px 30px;">QUIT</button>
+    </div>
+
     <div id="end-screen" style="display: none;">
         <h1 id="end-title">MISSION COMPLETE</h1>
         <p id="end-subtitle">ALL TARGETS SECURED</p>
@@ -342,7 +372,7 @@ const AudioSys = {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(800, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.15, this.ctx.currentTime); // Lower vol for rapid fire
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
         osc.connect(gain);
         gain.connect(this.masterGain);
@@ -407,7 +437,7 @@ const AudioSys = {
         this.bgmOscillators.push(osc1);
 
         this.beatInterval = setInterval(() => {
-            if(this.isMuted || !this.ctx) return;
+            if(this.isMuted || !this.ctx || window.isPaused) return; // Don't play beat if paused
             const kOsc = this.ctx.createOscillator();
             const kGain = this.ctx.createGain();
             kOsc.frequency.setValueAtTime(150, this.ctx.currentTime);
@@ -439,6 +469,7 @@ const uiLayer = document.getElementById('ui-layer');
 const startScreen = document.getElementById('start-screen');
 const endScreen = document.getElementById('end-screen');
 const levelScreen = document.getElementById('level-screen');
+const pauseScreen = document.getElementById('pause-screen');
 const hud = document.getElementById('game-hud');
 
 // HUD Elements
@@ -448,6 +479,9 @@ const levelDisplay = document.getElementById('level-display');
 const scoreDisplay = document.getElementById('score-display');
 const timeDisplay = document.getElementById('time-display');
 const volBtn = document.getElementById('vol-btn');
+const pauseBtn = document.getElementById('pause-btn');
+const resumeBtn = document.getElementById('resume-btn');
+const quitBtn = document.getElementById('quit-btn');
 
 let width, height;
 let particles = [];
@@ -458,11 +492,14 @@ let floatingTexts = [];
 
 // Game State
 let gameRunning = false;
+window.isPaused = false; // Exposed for audio system
 let frameCount = 0;
 let lives = 5;
 let currentLevelIndex = 0;
 let score = 0;
 let gameStartTime = 0;
+let pausedTime = 0; // To track time spent in pause
+let pauseStart = 0;
 let currentTimeStr = "00:00";
 let foundLetters = []; 
 let currentTarget = "";
@@ -520,6 +557,7 @@ function vibrate(ms) {
 
 // Input Handling
 function handleInputStart(x, y) {
+    if(window.isPaused) return;
     input.active = true;
     input.rawX = x;
     input.rawY = y;
@@ -531,7 +569,7 @@ function handleInputStart(x, y) {
 }
 
 function handleInputMove(x, y) {
-    if(!input.active) return;
+    if(!input.active || window.isPaused) return;
     input.rawX = x;
     input.rawY = y;
     input.x = x + input.offsetX;
@@ -563,10 +601,45 @@ canvas.addEventListener('touchend', (e) => {
     if(e.touches.length === 0) input.active = false;
 });
 
+// Controls
 volBtn.addEventListener('click', () => {
     const isMuted = AudioSys.toggleMute();
     volBtn.innerText = isMuted ? '🔇' : '🔊';
 });
+
+pauseBtn.addEventListener('click', () => {
+    togglePause();
+});
+
+resumeBtn.addEventListener('click', () => {
+    togglePause();
+});
+
+quitBtn.addEventListener('click', () => {
+    togglePause(); // Unpause logic state first
+    gameRunning = false;
+    hud.style.display = 'none';
+    pauseScreen.style.display = 'none';
+    startScreen.style.display = 'flex';
+    AudioSys.stopBGM();
+});
+
+function togglePause() {
+    if(!gameRunning) return;
+    window.isPaused = !window.isPaused;
+    
+    if(window.isPaused) {
+        pauseScreen.style.display = 'flex';
+        pauseStart = Date.now();
+        // Clear input to prevent shooting on resume
+        input.active = false; 
+    } else {
+        pauseScreen.style.display = 'none';
+        pausedTime += (Date.now() - pauseStart);
+        // Resume loop
+        requestAnimationFrame(loop);
+    }
+}
 
 /**
  * ------------------------------------------------------------------
@@ -605,6 +678,7 @@ function updateLevelHUD() {
     currentTarget = LEVELS[currentLevelIndex];
     
     // Auto-compact for long words (Mobile UX Fix)
+    // Using simple character count heuristic
     if(currentTarget.length > 8) {
         wordDisplay.classList.add('compact');
     } else {
@@ -651,10 +725,12 @@ function startGame() {
     
     startScreen.style.display = 'none';
     endScreen.style.display = 'none';
-    levelScreen.style.display = 'none'; 
+    levelScreen.style.display = 'none';
+    pauseScreen.style.display = 'none';
     hud.style.display = 'flex';
     
     gameRunning = true;
+    window.isPaused = false;
     lives = 5;
     score = 0;
     scoreDisplay.innerText = `PTS: ${score}`;
@@ -662,6 +738,7 @@ function startGame() {
     currentLevelIndex = 0;
     levelTransitioning = false;
     gameStartTime = Date.now();
+    pausedTime = 0;
     
     bullets = [];
     enemies = [];
@@ -680,9 +757,7 @@ function startGame() {
 }
 
 function nextLevel() {
-    // Reset the win timeout lock for the next level logic
     winTimeout = null;
-    
     currentLevelIndex++;
     levelTransitioning = true;
     
@@ -791,7 +866,9 @@ function createExplosion(x, y, color, amount) {
 
 function updateTime() {
     if (levelTransitioning) return;
-    const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+    // Calculate effective time by subtracting paused duration
+    const effectiveTime = Date.now() - gameStartTime - pausedTime;
+    const elapsed = Math.max(0, Math.floor(effectiveTime / 1000));
     const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
     const s = (elapsed % 60).toString().padStart(2, '0');
     currentTimeStr = `${m}:${s}`;
@@ -805,7 +882,8 @@ function updateTime() {
  */
 function loop() {
     if(!gameRunning) return;
-    
+    if(window.isPaused) return; // Stop update loop
+
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#050510';
     ctx.fillRect(0, 0, width, height);
