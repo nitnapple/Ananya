@@ -36,34 +36,36 @@
             z-index: 10;
         }
         h1 {
-            font-size: clamp(2rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 10vw, 5rem);
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.1em;
             text-shadow: 0 0 20px #00d2ff, 0 0 40px #00d2ff;
             margin: 0 0 20px 0;
             padding: 0 20px;
             opacity: 1;
-            line-height: 1.2;
+            line-height: 1.1;
         }
         p {
-            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-size: clamp(1.1rem, 5vw, 1.4rem);
             color: #ccc;
             margin-top: 10px;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
             padding: 0 20px;
+            max-width: 600px;
         }
         .btn {
             pointer-events: auto;
             background: linear-gradient(45deg, #ff00cc, #3333ff);
             border: 2px solid rgba(255,255,255,0.4);
-            padding: 20px 60px;
+            padding: 20px 50px;
+            min-width: 200px;
             color: white;
             font-size: 1.5rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(51, 51, 255, 0.6);
-            transition: all 0.2s;
+            box-shadow: 0 5px 25px rgba(51, 51, 255, 0.6);
+            transition: transform 0.1s, box-shadow 0.1s;
             margin-top: 40px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -72,46 +74,55 @@
         }
         .btn:active {
             transform: scale(0.95);
-            box-shadow: 0 0 10px rgba(51, 51, 255, 0.8);
+            box-shadow: 0 2px 10px rgba(51, 51, 255, 0.8);
             background: linear-gradient(45deg, #d400aa, #2222dd);
         }
         
-        /* HUD UPDATED */
+        /* HUD UPDATED FOR MOBILE */
         .hud-top {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: auto;
-            min-height: 100px;
             padding: 10px 15px;
             padding-top: max(15px, env(safe-area-inset-top));
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             pointer-events: none;
             z-index: 5;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
         }
 
-        .stats-row {
+        /* Top row: Lives, Level, Vol */
+        .hud-row-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Second row: Score, Time */
+        .hud-row-stats {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
             font-family: monospace;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-shadow: 1px 1px 2px black;
+            padding: 0 5px;
         }
 
-        .level-tag { color: #ffeb3b; font-weight: bold; }
-        .score-tag { color: #00e676; }
-        .time-tag { color: #00d2ff; }
+        .level-tag { color: #ffeb3b; font-weight: bold; font-size: 1.2rem; }
+        .score-tag { color: #00e676; font-weight: bold; }
+        .time-tag { color: #00d2ff; font-weight: bold; }
 
         .lives-container {
             display: flex;
-            gap: 3px;
+            gap: 4px;
         }
         .life-pip {
             width: 20px;
@@ -129,23 +140,24 @@
             display: flex;
             justify-content: center;
             width: 100%;
+            margin-top: 5px;
         }
         
         .target-word {
             display: flex;
-            gap: 4px;
-            flex-wrap: wrap; /* Handle very long words like CONSTITUTION CLUB */
+            gap: 3px;
+            flex-wrap: wrap; 
             justify-content: center;
         }
 
         .letter-slot {
-            width: 28px;
-            height: 38px;
-            border-bottom: 3px solid rgba(0, 210, 255, 0.5);
+            width: 26px;
+            height: 36px;
+            border-bottom: 2px solid rgba(0, 210, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-family: monospace;
             font-weight: bold;
             color: #00d2ff;
@@ -154,37 +166,40 @@
         }
         .letter-slot.filled {
             background: rgba(0, 210, 255, 0.2);
-            text-shadow: 0 0 15px #00d2ff;
-            border-bottom: 3px solid #fff;
+            text-shadow: 0 0 10px #00d2ff;
+            border-bottom: 2px solid #fff;
             color: #fff;
+            transform: scale(1.1);
         }
         .letter-slot.space {
             border: none;
             background: transparent;
-            width: 15px; /* Spacer width */
+            width: 10px;
         }
         
-        /* Volume Toggle */
+        /* Larger Mobile Touch Target for Volume */
         #vol-btn {
             pointer-events: auto;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #777;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid #999;
             color: #fff;
             border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            font-size: 1rem;
+            width: 44px; /* Mobile accessible size */
+            height: 44px;
+            font-size: 1.2rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(5px);
         }
         
-        @media (max-width: 400px) {
-            .letter-slot { width: 20px; height: 28px; font-size: 1rem; border-bottom-width: 2px; }
-            .target-word { gap: 2px; }
-            .stats-row { font-size: 0.9rem; }
+        /* Small Screen Optimizations */
+        @media (max-width: 380px) {
+            .letter-slot { width: 20px; height: 30px; font-size: 1rem; }
+            .hud-row-stats { font-size: 0.9rem; }
+            h1 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -194,13 +209,20 @@
 
 <!-- HUD -->
 <div class="hud-top" id="game-hud" style="display: none;">
-    <div class="stats-row">
+    <!-- Row 1: Key Info & Controls -->
+    <div class="hud-row-top">
         <div class="lives-container" id="lives-display"></div>
         <div class="level-tag" id="level-display">LVL 1</div>
-        <div class="score-tag" id="score-display">PTS: 0</div>
-        <div class="time-tag" id="time-display">00:00</div>
         <button id="vol-btn">🔊</button>
     </div>
+    
+    <!-- Row 2: Secondary Stats -->
+    <div class="hud-row-stats">
+        <div class="score-tag" id="score-display">PTS: 0</div>
+        <div class="time-tag" id="time-display">00:00</div>
+    </div>
+
+    <!-- Row 3: The Objective -->
     <div class="target-word-container">
         <div class="target-word" id="word-display">
             <!-- populated by js -->
@@ -213,21 +235,21 @@
     <div id="start-screen">
         <h1>Sky Force:<br>Ananya</h1>
         <p>10 Levels. One Mission.</p>
-        <p style="color: #ffeb3b; font-size: 1rem; margin-top: 5px;">Complete words to advance.</p>
-        <button class="btn" id="start-btn">LAUNCH</button>
+        <p style="color: #ffeb3b; margin-top: 15px; font-size: 0.9rem;">DRAG TO MOVE • AUTO-FIRE</p>
+        <button class="btn" id="start-btn">ENGAGE</button>
     </div>
     
     <div id="end-screen" style="display: none;">
         <h1 id="end-title">MISSION COMPLETE</h1>
         <p id="end-subtitle">ALL TARGETS SECURED</p>
-        <p id="final-score" style="color: #00e676; margin-top: 10px;"></p>
+        <p id="final-score" style="color: #00e676; margin-top: 10px; font-size: 1.5rem; font-weight: bold;"></p>
         <button class="btn" id="restart-btn">REPLAY</button>
     </div>
     
     <!-- Level Transition Overlay -->
     <div id="level-screen" style="display: none;">
-        <h1 id="level-title" style="font-size: 2.5rem; color: #ffeb3b;">LEVEL 2</h1>
-        <p id="level-subtitle">SHANDILYA</p>
+        <h1 id="level-title" style="font-size: 3rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255, 235, 59, 0.5);">LEVEL 2</h1>
+        <p id="level-subtitle" style="font-size: 1.5rem; letter-spacing: 5px;">SHANDILYA</p>
     </div>
 </div>
 
@@ -438,7 +460,9 @@ const input = {
     y: 0, 
     active: false,
     offsetX: 0,
-    offsetY: 0
+    offsetY: 0,
+    rawX: 0, // For visual touch indicator
+    rawY: 0
 };
 
 /**
@@ -468,37 +492,46 @@ function vibrate(ms) {
 }
 
 // Input Handling
-canvas.addEventListener('mousedown', e => {
+function handleInputStart(x, y) {
     input.active = true;
-    input.x = e.clientX;
-    input.y = e.clientY - 60; 
+    input.rawX = x;
+    input.rawY = y;
+    input.offsetX = player.x - x;
+    input.offsetY = player.y - y;
+    input.x = player.x; 
+    input.y = player.y;
     AudioSys.resume();
+}
+
+function handleInputMove(x, y) {
+    if(!input.active) return;
+    input.rawX = x;
+    input.rawY = y;
+    input.x = x + input.offsetX;
+    input.y = y + input.offsetY;
+}
+
+canvas.addEventListener('mousedown', e => {
+    // Mouse behaves like touch (relative offset) for consistency, 
+    // or we can keep it direct. Let's make it direct but with the offset logic 
+    // so it doesn't snap if you click far away.
+    handleInputStart(e.clientX, e.clientY);
 });
 canvas.addEventListener('mousemove', e => {
-    if(input.active) {
-        input.x = e.clientX;
-        input.y = e.clientY - 60;
-    }
+    handleInputMove(e.clientX, e.clientY);
 });
 canvas.addEventListener('mouseup', () => input.active = false);
 
 canvas.addEventListener('touchstart', e => {
     e.preventDefault();
     const t = e.touches[0];
-    input.active = true;
-    input.offsetX = player.x - t.clientX;
-    input.offsetY = player.y - t.clientY;
-    input.x = player.x; 
-    input.y = player.y;
-    AudioSys.resume();
+    handleInputStart(t.clientX, t.clientY);
 }, { passive: false });
 
 canvas.addEventListener('touchmove', e => {
     e.preventDefault();
-    if(!input.active) return;
     const t = e.touches[0];
-    input.x = t.clientX + input.offsetX;
-    input.y = t.clientY + input.offsetY;
+    handleInputMove(t.clientX, t.clientY);
 }, { passive: false });
 
 canvas.addEventListener('touchend', (e) => {
@@ -748,9 +781,11 @@ function loop() {
     ctx.globalAlpha = 1;
 
     // 2. PLAYER LOGIC
+    // Smooth lerp
     player.x += (input.x - player.x) * 0.2; 
     player.y += (input.y - player.y) * 0.2;
     
+    // Clamp
     if(player.x < 25) { player.x = 25; input.x = 25; } 
     if(player.x > width-25) { player.x = width-25; input.x = width-25; }
     if(player.y < 25) { player.y = 25; input.y = 25; }
@@ -762,6 +797,23 @@ function loop() {
     }
     
     if(player.invulnerable > 0) player.invulnerable--;
+    
+    // VISUAL: Draw Touch Indicator (Where your finger is)
+    if(input.active) {
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(input.rawX, input.rawY, 30, 0, Math.PI*2);
+        ctx.stroke();
+        
+        // Connection line to ship
+        ctx.beginPath();
+        ctx.moveTo(input.rawX, input.rawY);
+        ctx.lineTo(player.x, player.y);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.stroke();
+    }
 
     // 3. SPAWN ENEMIES
     if(!levelTransitioning && frameCount % 35 === 0) spawnEnemy();
