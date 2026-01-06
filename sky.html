@@ -680,6 +680,9 @@ function startGame() {
 }
 
 function nextLevel() {
+    // Reset the win timeout lock for the next level logic
+    winTimeout = null;
+    
     currentLevelIndex++;
     levelTransitioning = true;
     
@@ -910,7 +913,7 @@ function loop() {
                     enemies.splice(j,1);
                     
                     // CHECK WIN LEVEL
-                    if(foundLetters.every(x=>x)) {
+                    if(foundLetters.every(x=>x) && !winTimeout && !levelTransitioning) {
                         winTimeout = setTimeout(nextLevel, 1000);
                     }
                 }
