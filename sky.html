@@ -349,7 +349,7 @@ const AudioSys = {
     ctx: null,
     masterGain: null,
     bgmOscillators: [],
-    audioCache: {},
+    audioBuffers: {}, // Store decoded audio data here
     isMuted: false,
     beatInterval: null,
     baseTempo: 500,
@@ -360,28 +360,32 @@ const AudioSys = {
             if (AudioContext) {
                 this.ctx = new AudioContext();
                 this.masterGain = this.ctx.createGain();
-                this.masterGain.gain.value = 0.5; // Increased Master Volume
+                this.masterGain.gain.value = 0.5; 
                 this.masterGain.connect(this.ctx.destination);
             }
         }
-        // Preload external audio
-        this.preloadAudio();
+        // Start loading sounds immediately
+        this.preloadAllSounds();
         this.resume();
-    },
-    
-    preloadAudio: function() {
-        for (const [key, url] of Object.entries(AUDIO_URLS)) {
-            if (!this.audioCache[key]) {
-                const audio = new Audio(url);
-                audio.volume = 0.9;
-                this.audioCache[key] = audio;
-            }
-        }
     },
 
     resume: function() {
         if (this.ctx && this.ctx.state === 'suspended') {
             this.ctx.resume().catch(e => console.log(e));
+        }
+    },
+    
+    preloadAllSounds: function() {
+        // Fetch and decode all MP3s
+        for (const [key, url] of Object.entries(AUDIO_URLS)) {
+            fetch(url)
+                .then(response => response.arrayBuffer())
+                .then(arrayBuffer => this.ctx.decodeAudioData(arrayBuffer))
+                .then(audioBuffer => {
+                    this.audioBuffers[key] = audioBuffer;
+                    console.log(`Loaded ${key}`);
+                })
+                .catch(e => console.warn(`Failed to load ${key}`, e));
         }
     },
 
@@ -404,18 +408,24 @@ const AudioSys = {
         window.speechSynthesis.speak(utterance);
     },
     
-    playCached: function(key) {
-        if (this.isMuted || !this.audioCache[key]) return;
-        // Clone or reset to allow overlapping/re-play
-        const sound = this.audioCache[key];
-        sound.currentTime = 0;
-        sound.play().catch(e => console.log("Play failed", e));
+    // Play using Web Audio API Buffers (Robust for games)
+    playBuffer: function(key) {
+        if (this.isMuted || !this.ctx || !this.audioBuffers[key]) return;
+        try {
+            const source = this.ctx.createBufferSource();
+            source.buffer = this.audioBuffers[key];
+            source.connect(this.masterGain);
+            source.start(0);
+        } catch(e) {
+            console.warn("Buffer play error", e);
+        }
     },
 
-    playBossEntry: function() { this.playCached('entry'); },
-    playBossLaugh: function(isFinal) { this.playCached(isFinal ? 'laugh2' : 'laugh1'); },
-    playBossScream: function(isFinal) { this.playCached(isFinal ? 'scream2' : 'scream1'); },
+    playBossEntry: function() { this.playBuffer('entry'); },
+    playBossLaugh: function(isFinal) { this.playBuffer(isFinal ? 'laugh2' : 'laugh1'); },
+    playBossScream: function(isFinal) { this.playBuffer(isFinal ? 'scream2' : 'scream1'); },
 
+    // Procedural Sounds
     playShoot: function() {
         if (!this.ctx || this.isMuted) return;
         const osc = this.ctx.createOscillator();
@@ -939,13 +949,6 @@ function initBackground() {
             rotation: Math.random() * Math.PI * 2
         });
     }
-}
-
-function clearGameTimeouts() {
-    if(winTimeout) clearTimeout(winTimeout);
-    if(levelTimeout) clearTimeout(levelTimeout);
-    if(slowMoTimeout) clearTimeout(slowMoTimeout);
-    winTimeout = null; levelTimeout = null; slowMoTimeout = null;
 }
 
 function startGame() {
