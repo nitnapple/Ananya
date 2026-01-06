@@ -103,6 +103,8 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
+            flex-wrap: wrap; /* Allows long words to wrap */
+            justify-content: center;
             gap: 15px;
             z-index: 10;
             background: var(--glass);
@@ -110,6 +112,8 @@
             border-radius: 50px;
             backdrop-filter: blur(5px);
             box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+            width: auto;
+            max-width: 90%; /* Prevent overflow */
         }
 
         .letter-slot {
@@ -200,6 +204,8 @@
             margin-bottom: 10px;
             color: white;
             text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 0 10px;
         }
 
         .screen p {
@@ -276,12 +282,13 @@
             .stat-value { font-size: 1.1rem; }
             #lives-display { font-size: 1.1rem; letter-spacing: 1px; }
 
-            .letter-slot { width: 35px; height: 45px; font-size: 1.5rem; }
+            /* Smaller slots for long words on mobile */
+            .letter-slot { width: 25px; height: 35px; font-size: 1.2rem; border-bottom-width: 2px; }
             
             /* Bigger touch targets */
             .game-letter { width: 65px; height: 65px; font-size: 1.6rem; }
             
-            h2 { font-size: 2.2rem !important; }
+            h2 { font-size: 2rem !important; }
             #target-display { top: 18%; width: 95%; gap: 6px; padding: 10px 15px; }
             
             .toggle-sound { bottom: 15px; right: 15px; font-size: 0.8rem; }
@@ -318,8 +325,8 @@
         <!-- Screens -->
         <div id="start-screen" class="screen">
             <h2>Sky Weaver</h2>
-            <p>Catch the floating letters to weave the name <b>ANANYA</b>.</p>
-            <p style="font-size: 1rem; opacity: 0.8; margin-top: -10px;">Be quick! It gets 25% tougher every 2 seconds.</p>
+            <p>Catch the floating letters to weave your dreams.</p>
+            <p style="font-size: 1rem; opacity: 0.8; margin-top: -10px;">Be quick! It gets 10% tougher every 3 seconds.</p>
             <button class="btn" onclick="startGame()">Start Dreaming</button>
         </div>
 
@@ -542,7 +549,18 @@
          * GAME LOGIC
          */
         const GAME_CONFIG = {
-            targetWord: "ANANYA",
+            levels: [
+                "ANANYA",
+                "SHANDILYA",
+                "BLUE LAGOON",
+                "CONSTITUTION CLUB",
+                "JANPATH",
+                "PHILOSOPHY",
+                "HER MAJESTY",
+                "SWIMMING",
+                "TOKYO",
+                "JUJUTSU KAISEN"
+            ],
             maxLevels: 10
         };
 
@@ -553,10 +571,11 @@
             currentIndex: 0,
             isPlaying: false,
             letters: [],
+            targetWord: "", // Holds the current word (stripped of spaces)
             spawnTimer: null,
             rampTimer: null,
             gameLoopId: null,
-            difficultyFactor: 0 // New variable to track "Toughness"
+            difficultyFactor: 0 
         };
 
         const container = document.getElementById('game-container');
@@ -577,7 +596,15 @@
         function showLevelScreen() {
             gameState.isPlaying = false;
             clearLetters();
+            
+            // Safety check for level index
+            const levelIdx = Math.min(gameState.level - 1, GAME_CONFIG.levels.length - 1);
+            const levelName = GAME_CONFIG.levels[levelIdx];
+            
             document.getElementById('level-title').textContent = `Level ${gameState.level}`;
+            // Optional: show the word they need to spell on the splash screen
+            // document.getElementById('level-screen').querySelector('p').textContent = `Spell: ${levelName}`;
+            
             document.getElementById('level-screen').classList.remove('hidden');
         }
 
@@ -586,22 +613,27 @@
             gameState.isPlaying = true;
             gameState.currentIndex = 0;
             gameState.letters = [];
-            gameState.difficultyFactor = 0; // Reset toughness for the level
+            gameState.difficultyFactor = 0; 
             
+            // Set Target Word based on Level
+            const levelIdx = Math.min(gameState.level - 1, GAME_CONFIG.levels.length - 1);
+            const rawWord = GAME_CONFIG.levels[levelIdx].toUpperCase();
+            
+            // We use the word with spaces removed for logic, but keep raw length for logic if needed? 
+            // Actually simpler: Strip spaces for GAMEPLAY logic.
+            gameState.targetWord = rawWord.replace(/[^A-Z]/g, '');
+
             buildTargetWordUI();
             
-            // DIFFICULTY RAMP: Every 2 seconds, increase difficulty factor by 0.25 (25%)
+            // DIFFICULTY RAMP: Every 3 seconds, increase difficulty factor by 0.10 (10%)
             gameState.rampTimer = setInterval(() => {
-                gameState.difficultyFactor += 0.25; 
-            }, 2000);
+                gameState.difficultyFactor += 0.10; 
+            }, 3000);
 
-            // Start recursive spawn loop
             startSpawning();
-            
             gameLoop();
         }
 
-        // Recursive spawning to handle changing spawn rates
         function startSpawning() {
             const spawnNext = () => {
                 if (!gameState.isPlaying) return;
@@ -609,12 +641,8 @@
                 spawnLetter();
 
                 // Base spawn rate depends on level
-                const baseRate = Math.max(250, 1000 - (gameState.level * 80));
+                const baseRate = Math.max(250, 1000 - (gameState.level * 60)); // Slightly less aggressive base ramp since levels get longer
                 
-                // Effective rate decreases (gets faster) as difficultyFactor increases
-                // At factor 0 (start): rate / 1
-                // At factor 0.25 (2s): rate / 1.25
-                // At factor 1.0 (8s): rate / 2 (Double speed)
                 const currentRate = baseRate / (1 + gameState.difficultyFactor);
 
                 gameState.spawnTimer = setTimeout(spawnNext, currentRate);
@@ -624,7 +652,8 @@
 
         function buildTargetWordUI() {
             targetDisplay.innerHTML = '';
-            for (let i = 0; i < GAME_CONFIG.targetWord.length; i++) {
+            // We build the UI based on the clean target word (no spaces) to match logic
+            for (let i = 0; i < gameState.targetWord.length; i++) {
                 const slot = document.createElement('div');
                 slot.className = 'letter-slot';
                 targetDisplay.appendChild(slot);
@@ -647,8 +676,9 @@
             letterEl.className = 'game-letter';
             
             // Logic: Is this the one we need?
-            const neededChar = GAME_CONFIG.targetWord[gameState.currentIndex];
+            const neededChar = gameState.targetWord[gameState.currentIndex];
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            
             // 35% chance to spawn the correct letter
             const isTarget = Math.random() < 0.35; 
             const char = isTarget ? neededChar : chars[Math.floor(Math.random() * chars.length)];
@@ -659,8 +689,7 @@
             letterEl.style.left = `${x}px`;
             letterEl.style.top = '-80px';
             
-            // Store BASE speed. Actual speed will be calculated in gameLoop based on toughness.
-            const baseSpeed = 2 + (gameState.level * 0.7) + (Math.random() * 2); 
+            const baseSpeed = 2 + (gameState.level * 0.5) + (Math.random() * 2); 
             
             letterEl.dataset.baseSpeed = baseSpeed;
             letterEl.dataset.char = char;
@@ -684,9 +713,8 @@
             if (!gameState.isPlaying || el.dataset.clicked) return;
             
             const char = el.dataset.char;
-            const neededChar = GAME_CONFIG.targetWord[gameState.currentIndex];
+            const neededChar = gameState.targetWord[gameState.currentIndex];
             
-            // Visual feedback
             const rect = el.getBoundingClientRect();
             createRipple(rect.left, rect.top);
             
@@ -696,20 +724,20 @@
 
             if (char === neededChar) {
                 // Correct
-                Haptics.vibrate(20); // Short tick
+                Haptics.vibrate(20); 
                 AudioSys.playChime('good');
                 fillSlot(gameState.currentIndex, char);
                 gameState.currentIndex++;
                 gameState.score += 100 * gameState.level;
                 
-                if (gameState.currentIndex >= GAME_CONFIG.targetWord.length) {
+                if (gameState.currentIndex >= gameState.targetWord.length) {
                     completeLevel();
                 } else {
                     highlightNextSlot();
                 }
             } else {
                 // Wrong
-                Haptics.vibrate([40, 30, 40]); // Buzz-Buzz
+                Haptics.vibrate([40, 30, 40]); 
                 AudioSys.playChime('bad');
                 loseLife();
             }
@@ -718,7 +746,6 @@
 
         function loseLife() {
             gameState.lives--;
-            // Shake effect
             container.style.transform = `translateX(${Math.random()*10 - 5}px)`;
             setTimeout(() => container.style.transform = 'none', 50);
             
@@ -747,17 +774,12 @@
             if (!gameState.isPlaying) return;
 
             const height = window.innerHeight;
-            
-            // Calculate Global Speed Multiplier
-            // Starts at 1.0, increases by 0.25 every 2 seconds.
             const globalSpeedMult = 1 + gameState.difficultyFactor;
 
-            // Reverse loop for removal
             for (let i = gameState.letters.length - 1; i >= 0; i--) {
                 const el = gameState.letters[i];
                 let y = parseFloat(el.dataset.y);
                 
-                // Calculate current speed dynamically
                 const baseSpeed = parseFloat(el.dataset.baseSpeed);
                 const currentSpeed = baseSpeed * globalSpeedMult;
                 
@@ -777,7 +799,6 @@
             gameState.letters.forEach(l => l.remove());
             gameState.letters = [];
             
-            // Clear all timers
             if (gameState.spawnTimer) clearTimeout(gameState.spawnTimer);
             if (gameState.rampTimer) clearInterval(gameState.rampTimer);
             if (gameState.gameLoopId) cancelAnimationFrame(gameState.gameLoopId);
@@ -785,7 +806,7 @@
 
         function completeLevel() {
             gameState.isPlaying = false;
-            Haptics.vibrate([10, 50, 10, 50]); // Success vibration
+            Haptics.vibrate([10, 50, 10, 50]); 
             AudioSys.playChime('level');
             clearLetters();
 
@@ -804,7 +825,7 @@
 
         function gameOver() {
             gameState.isPlaying = false;
-            Haptics.vibrate(500); // Long vibration for fail
+            Haptics.vibrate(500); 
             clearLetters();
             document.getElementById('final-score').textContent = gameState.score;
             document.getElementById('game-over-screen').classList.remove('hidden');
