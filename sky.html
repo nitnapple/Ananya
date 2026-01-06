@@ -33,15 +33,26 @@
             text-align: center;
             z-index: 10;
         }
-        /* Animated Boss Element (Overlay) */
-        #boss-entity {
+        
+        /* Animated Entities (Overlay) */
+        .game-entity {
             position: absolute;
-            display: none; /* Hidden by default */
+            display: none;
             transform: translate(-50%, -50%);
-            z-index: 4; /* Below HUD, Above Canvas */
             pointer-events: none;
-            /* Filter drop-shadow for visibility against space */
+        }
+        #boss-entity {
+            z-index: 4; 
             filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
+            width: 150px;
+            height: auto;
+        }
+        #player-entity {
+            z-index: 5;
+            width: 80px; 
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.5));
+            transition: opacity 0.1s;
         }
         
         h1 {
@@ -102,7 +113,7 @@
             flex-direction: column;
             gap: 4px;
             pointer-events: none;
-            z-index: 20; /* High Z-index to stay above boss */
+            z-index: 20; 
             background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 80%, transparent 100%);
         }
 
@@ -230,8 +241,9 @@
 </head>
 <body>
 
-<!-- Animated Boss IMG in DOM -->
-<img id="boss-entity" src="" alt="Boss">
+<!-- Animated Images in DOM -->
+<img id="boss-entity" class="game-entity" src="" alt="Boss">
+<img id="player-entity" class="game-entity" src="https://ugokawaii.com/wp-content/uploads/2023/12/rocket.gif" alt="Player">
 
 <canvas id="gameCanvas"></canvas>
 
@@ -319,6 +331,15 @@ const BOSS_URLS = {
     level10: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873024427-EP9L5HL8TDC44G9BBD7N/UFO-shocked.gif"
 };
 
+// External Audio URLs
+const AUDIO_URLS = {
+    entry: "https://raw.githubusercontent.com/nitnapple/src/main/entry1.mp3",
+    laugh1: "https://raw.githubusercontent.com/nitnapple/src/main/laugh1.mp3",
+    laugh2: "https://raw.githubusercontent.com/nitnapple/src/main/laugh-2.mp3",
+    scream1: "https://raw.githubusercontent.com/nitnapple/src/main/screaming-1.mp3",
+    scream2: "https://raw.githubusercontent.com/nitnapple/src/main/screaming-2.mp3"
+};
+
 /**
  * ------------------------------------------------------------------
  * AUDIO SYSTEM
@@ -328,6 +349,7 @@ const AudioSys = {
     ctx: null,
     masterGain: null,
     bgmOscillators: [],
+    audioCache: {},
     isMuted: false,
     beatInterval: null,
     baseTempo: 500,
@@ -338,11 +360,23 @@ const AudioSys = {
             if (AudioContext) {
                 this.ctx = new AudioContext();
                 this.masterGain = this.ctx.createGain();
-                this.masterGain.gain.value = 0.3; 
+                this.masterGain.gain.value = 0.5; // Increased Master Volume
                 this.masterGain.connect(this.ctx.destination);
             }
         }
+        // Preload external audio
+        this.preloadAudio();
         this.resume();
+    },
+    
+    preloadAudio: function() {
+        for (const [key, url] of Object.entries(AUDIO_URLS)) {
+            if (!this.audioCache[key]) {
+                const audio = new Audio(url);
+                audio.volume = 0.9;
+                this.audioCache[key] = audio;
+            }
+        }
     },
 
     resume: function() {
@@ -356,7 +390,7 @@ const AudioSys = {
         if(this.masterGain && this.ctx) {
             const currentTime = this.ctx.currentTime;
             this.masterGain.gain.cancelScheduledValues(currentTime);
-            this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.3, currentTime, 0.1);
+            this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.5, currentTime, 0.1);
         }
         return this.isMuted;
     },
@@ -366,9 +400,21 @@ const AudioSys = {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 1.1;
         utterance.pitch = 1.0;
-        utterance.volume = 0.5;
+        utterance.volume = 1.0;
         window.speechSynthesis.speak(utterance);
     },
+    
+    playCached: function(key) {
+        if (this.isMuted || !this.audioCache[key]) return;
+        // Clone or reset to allow overlapping/re-play
+        const sound = this.audioCache[key];
+        sound.currentTime = 0;
+        sound.play().catch(e => console.log("Play failed", e));
+    },
+
+    playBossEntry: function() { this.playCached('entry'); },
+    playBossLaugh: function(isFinal) { this.playCached(isFinal ? 'laugh2' : 'laugh1'); },
+    playBossScream: function(isFinal) { this.playCached(isFinal ? 'scream2' : 'scream1'); },
 
     playShoot: function() {
         if (!this.ctx || this.isMuted) return;
@@ -377,7 +423,7 @@ const AudioSys = {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(800, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
         osc.connect(gain);
         gain.connect(this.masterGain);
@@ -394,7 +440,7 @@ const AudioSys = {
         const endFreq = isGood ? 1200 : 50;
         osc.frequency.setValueAtTime(startFreq, this.ctx.currentTime);
         osc.frequency.linearRampToValueAtTime(endFreq, this.ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.2);
         osc.connect(gain);
         gain.connect(this.masterGain);
@@ -409,7 +455,7 @@ const AudioSys = {
         osc.type = 'square';
         osc.frequency.setValueAtTime(300, this.ctx.currentTime);
         osc.frequency.linearRampToValueAtTime(800, this.ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
         osc.connect(gain);
         gain.connect(this.masterGain);
@@ -424,7 +470,7 @@ const AudioSys = {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(100, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(10, this.ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
         osc.connect(gain);
         gain.connect(this.masterGain);
@@ -440,7 +486,7 @@ const AudioSys = {
         osc1.type = 'sawtooth';
         osc1.frequency.value = 55;
         const gain1 = this.ctx.createGain();
-        gain1.gain.value = 0.08;
+        gain1.gain.value = 0.15; // Boosted BGM Volume
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.value = 400;
@@ -457,7 +503,7 @@ const AudioSys = {
             const kGain = this.ctx.createGain();
             kOsc.frequency.setValueAtTime(150, this.ctx.currentTime);
             kOsc.frequency.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
-            kGain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+            kGain.gain.setValueAtTime(0.35, this.ctx.currentTime);
             kGain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
             kOsc.connect(kGain);
             kGain.connect(this.masterGain);
@@ -487,6 +533,7 @@ const levelScreen = document.getElementById('level-screen');
 const pauseScreen = document.getElementById('pause-screen');
 const hud = document.getElementById('game-hud');
 const bossImgEl = document.getElementById('boss-entity');
+const playerImgEl = document.getElementById('player-entity');
 
 // HUD Elements
 const livesContainer = document.getElementById('lives-display');
@@ -512,7 +559,7 @@ let boss = null;
 
 // Game State
 let gameRunning = false;
-let animFrameId = null; // Store requestAnimationFrame ID
+let animFrameId = null; 
 window.isPaused = false; 
 let frameCount = 0;
 let lives = 5;
@@ -527,6 +574,7 @@ let foundLetters = [];
 let currentTarget = "";
 let levelTransitioning = false;
 let screenShake = 0;
+let timeScale = 1.0; 
 
 // Powerup Flags/Timers (Frames)
 const powerupState = {
@@ -540,6 +588,7 @@ const powerupState = {
 // Timers
 let winTimeout = null;
 let levelTimeout = null;
+let slowMoTimeout = null;
 
 // Player
 const player = {
@@ -555,7 +604,7 @@ const input = { x: 0, y: 0, active: false, offsetX: 0, offsetY: 0, rawX: 0, rawY
 
 /**
  * ------------------------------------------------------------------
- * UTILITY & HELPER FUNCTIONS (Defined before usage)
+ * UTILITY & HELPER FUNCTIONS
  * ------------------------------------------------------------------
  */
 
@@ -659,12 +708,53 @@ function updateComboUI() {
     }
 }
 
+function updateLevelHUD() {
+    levelDisplay.innerText = `LVL ${currentLevelIndex + 1}`;
+    wordDisplay.innerHTML = '';
+    foundLetters = [];
+    currentTarget = LEVELS[currentLevelIndex];
+    
+    if(currentTarget.length > 8) wordDisplay.classList.add('compact');
+    else wordDisplay.classList.remove('compact');
+    
+    for(let i=0; i<currentTarget.length; i++) {
+        const char = currentTarget[i];
+        const slot = document.createElement('div');
+        slot.id = `word-slot-${i}`;
+        if (char === ' ') {
+            slot.className = 'letter-slot space';
+            foundLetters.push(true); 
+        } else {
+            slot.className = 'letter-slot';
+            slot.innerText = ''; 
+            slot.dataset.char = char;
+            foundLetters.push(false);
+        }
+        wordDisplay.appendChild(slot);
+    }
+}
+
+function initHUD() {
+    updateLivesUI();
+    updateLevelHUD();
+    combo = 1;
+    updateComboUI();
+}
+
+function clearGameTimeouts() {
+    if(winTimeout) clearTimeout(winTimeout);
+    if(levelTimeout) clearTimeout(levelTimeout);
+    if(slowMoTimeout) clearTimeout(slowMoTimeout);
+    winTimeout = null; levelTimeout = null; slowMoTimeout = null;
+}
+
 function gameOver(win) {
     clearGameTimeouts(); 
     gameRunning = false;
     if(animFrameId) cancelAnimationFrame(animFrameId);
     
     bossImgEl.style.display = 'none';
+    playerImgEl.style.display = 'none'; 
     AudioSys.stopBGM();
     hud.style.display = 'none'; levelScreen.style.display = 'none';
     endScreen.style.display = 'flex';
@@ -754,10 +844,15 @@ function killBoss() {
     screenShake = 30; score += 5000; boss = null;
     bossImgEl.style.display = 'none'; 
     floatingTexts.push({x: width/2, y: height/2, text: "BOSS DEFEATED!", color: 'gold', life: 3.0, vy: -0.5});
-    AudioSys.speak("Boss Defeated");
+    AudioSys.playBossScream(currentLevelIndex === 9);
     
-    if(foundLetters.every(x=>x)) { winTimeout = setTimeout(nextLevel, 2000); } 
-    else { AudioSys.speak("Finish the word!"); }
+    // Slow Motion Effect
+    timeScale = 0.2;
+    slowMoTimeout = setTimeout(() => {
+        timeScale = 1.0;
+        if(foundLetters.every(x=>x)) { winTimeout = setTimeout(nextLevel, 1000); } 
+        else { AudioSys.speak("Finish the word!"); }
+    }, 2000);
 }
 
 /**
@@ -800,6 +895,7 @@ quitBtn.addEventListener('click', () => {
     togglePause(); 
     gameRunning = false;
     bossImgEl.style.display = 'none';
+    playerImgEl.style.display = 'none';
     hud.style.display = 'none';
     pauseScreen.style.display = 'none';
     startScreen.style.display = 'flex';
@@ -845,43 +941,11 @@ function initBackground() {
     }
 }
 
-function updateLevelHUD() {
-    levelDisplay.innerText = `LVL ${currentLevelIndex + 1}`;
-    wordDisplay.innerHTML = '';
-    foundLetters = [];
-    currentTarget = LEVELS[currentLevelIndex];
-    
-    if(currentTarget.length > 8) wordDisplay.classList.add('compact');
-    else wordDisplay.classList.remove('compact');
-    
-    for(let i=0; i<currentTarget.length; i++) {
-        const char = currentTarget[i];
-        const slot = document.createElement('div');
-        slot.id = `word-slot-${i}`;
-        if (char === ' ') {
-            slot.className = 'letter-slot space';
-            foundLetters.push(true); 
-        } else {
-            slot.className = 'letter-slot';
-            slot.innerText = ''; 
-            slot.dataset.char = char;
-            foundLetters.push(false);
-        }
-        wordDisplay.appendChild(slot);
-    }
-}
-
-function initHUD() {
-    updateLivesUI();
-    updateLevelHUD();
-    combo = 1;
-    updateComboUI();
-}
-
 function clearGameTimeouts() {
     if(winTimeout) clearTimeout(winTimeout);
     if(levelTimeout) clearTimeout(levelTimeout);
-    winTimeout = null; levelTimeout = null;
+    if(slowMoTimeout) clearTimeout(slowMoTimeout);
+    winTimeout = null; levelTimeout = null; slowMoTimeout = null;
 }
 
 function startGame() {
@@ -899,11 +963,13 @@ function startGame() {
     levelScreen.style.display = 'none'; pauseScreen.style.display = 'none';
     hud.style.display = 'flex';
     bossImgEl.style.display = 'none';
+    playerImgEl.style.display = 'block'; // Show player GIF
     
     gameRunning = true; window.isPaused = false;
     lives = 5; score = 0; frameCount = 0; currentLevelIndex = 0;
     levelTransitioning = false; boss = null;
     scoreDisplay.innerText = `PTS: 0`;
+    timeScale = 1.0;
     
     resetPowerups();
     
@@ -934,6 +1000,7 @@ function nextLevel() {
     resetPowerups();
     boss = null;
     bossImgEl.style.display = 'none'; 
+    timeScale = 1.0;
     
     if (currentLevelIndex >= LEVELS.length) {
         gameOver(true);
@@ -969,6 +1036,12 @@ function nextLevel() {
 
 function spawnBoss() {
     AudioSys.speak("Warning. Boss Approaching.");
+    AudioSys.playBossEntry();
+    
+    // Check if it's final boss or regular
+    const isFinal = currentLevelIndex === 9;
+    AudioSys.playBossLaugh(isFinal);
+
     let type = 'normal';
     let hp = 100 + (currentLevelIndex * 10);
     // Base size
@@ -988,14 +1061,15 @@ function spawnBoss() {
     boss = {
         x: width/2, 
         y: -150, 
-        targetY: height * 0.35, // Move lower to avoid HUD (35% down)
+        targetY: height * 0.35, 
         w: w, h: h,
         hp: hp, maxHp: hp,
         vx: 2, vy: 1,
         type: type,
         phase: 'enter',
         shootTimer: 0,
-        minionTimer: 0
+        minionTimer: 0,
+        imgSrc: imgSrc // Store for minions
     };
 
     // Show Animated GIF Overlay
@@ -1014,7 +1088,8 @@ function spawnBossMinion() {
             letter: '', isTrap: false, hp: 10,
             vy: 3, rot: 0, rotSpeed: 0,
             scale: 1,
-            isMinion: true 
+            isMinion: true,
+            imgSrc: boss.imgSrc // Inherit look
         });
     }
 }
@@ -1126,11 +1201,10 @@ function loop() {
     frameCount++;
     if(frameCount % 60 === 0) updateTime();
 
-    // 1. BG - With Blur Filter for Depth
+    // 1. BG
     ctx.filter = 'blur(4px)'; 
-    
     backgroundObjects.forEach(p => {
-        p.y += p.speed * (powerupState.freeze > 0 ? 0.2 : 1);
+        p.y += p.speed * (powerupState.freeze > 0 ? 0.2 : 1) * timeScale;
         if(p.y > height + 100) { p.y = -100; p.x = Math.random()*width; }
         
         let img = p.type === 'meteor' ? meteorImg : asteroidImg;
@@ -1144,7 +1218,7 @@ function loop() {
 
     ctx.fillStyle = 'white';
     stars.forEach(s => {
-        s.y += s.speed * (powerupState.freeze > 0 ? 0.2 : 1);
+        s.y += s.speed * (powerupState.freeze > 0 ? 0.2 : 1) * timeScale;
         if(levelTransitioning) s.y += 10; 
         if(s.y > height) { s.y = 0; s.x = Math.random()*width; }
         ctx.globalAlpha = Math.random() * 0.5 + 0.2;
@@ -1154,11 +1228,15 @@ function loop() {
     if(levelTransitioning && frameCount % 2 === 0) createParticles(0,0, '#fff', 2, 'warp');
     ctx.globalAlpha = 1;
 
-    // 2. PLAYER
+    // 2. PLAYER (Rendered via DOM, update pos)
     player.x += (input.x - player.x) * 0.2; 
     player.y += (input.y - player.y) * 0.2;
     player.x = Math.max(25, Math.min(width-25, player.x));
     player.y = Math.max(25, Math.min(height-25, player.y));
+    
+    playerImgEl.style.left = player.x + 'px';
+    playerImgEl.style.top = player.y + 'px';
+    playerImgEl.style.transform = `translate(-50%, -50%) rotate(${ (input.x - player.x) * 0.5 }deg)`; // Tilt
     
     if(frameCount % 3 === 0) createParticles(player.x, player.y + 20, '#00ffff', 1, 'trail');
 
@@ -1216,7 +1294,7 @@ function loop() {
     if(powerupState.beam <= 0) { 
         for(let i = bullets.length-1; i>=0; i--) {
             let b = bullets[i];
-            b.x += b.vx || 0; b.y += b.vy;
+            b.x += (b.vx || 0) * timeScale; b.y += b.vy * timeScale;
             
             ctx.fillStyle = b.color;
             ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h); 
@@ -1241,7 +1319,7 @@ function loop() {
     }
     
     // 5. ENEMIES
-    const moveMult = powerupState.freeze > 0 ? 0.2 : 1;
+    const moveMult = (powerupState.freeze > 0 ? 0.2 : 1) * timeScale;
     ctx.globalCompositeOperation = 'source-over';
     for(let i=enemies.length-1; i>=0; i--) {
         let e = enemies[i];
@@ -1251,7 +1329,11 @@ function loop() {
         ctx.translate(e.x, e.y); ctx.rotate(e.rot);
         
         if (e.isMinion) {
-             if(asteroidImg.complete) ctx.drawImage(asteroidImg, -e.w/2, -e.h/2, e.w, e.h);
+            // Draw minion as smaller version of current boss image
+            // We use the image object corresponding to the current boss type
+            let mImg = new Image(); mImg.src = e.imgSrc;
+            if(mImg.complete) ctx.drawImage(mImg, -e.w/2, -e.h/2, e.w, e.h);
+            else { ctx.fillStyle = 'red'; ctx.fillRect(-e.w/2, -e.h/2, e.w, e.h); }
         } else {
             let img = (e.imgType === 'meteor' && meteorImg.complete) ? meteorImg : asteroidImg;
             if (img.complete && img.naturalWidth !== 0) {
@@ -1291,14 +1373,14 @@ function loop() {
     // 6. BOSS
     if(boss) {
         if(boss.phase === 'enter') {
-            boss.y += 2;
+            boss.y += 2 * timeScale;
             if(boss.y >= boss.targetY) boss.phase = 'fight';
         } else {
             boss.x += Math.sin(frameCount * 0.05) * 3 * moveMult;
             boss.shootTimer++;
             if(boss.shootTimer > 60) {
                 boss.shootTimer = 0;
-                enemies.push({ x: boss.x, y: boss.y + 50, w: 20, h: 20, letter: '!', isTrap: true, hp: 1, vy: 5, rot: 0, rotSpeed: 0.2, scale: 1, isMinion: true });
+                enemies.push({ x: boss.x, y: boss.y + 50, w: 20, h: 20, letter: '!', isTrap: true, hp: 1, vy: 5, rot: 0, rotSpeed: 0.2, scale: 1, isMinion: true, imgSrc: boss.imgSrc });
             }
             if(boss.type === 'big') { 
                  boss.minionTimer++;
@@ -1306,6 +1388,11 @@ function loop() {
                      boss.minionTimer = 0;
                      spawnBossMinion();
                  }
+            }
+            // Boss Fight Extra Spawns (More Powerups/Lives)
+            if(Math.random() < 0.02) { // 2% chance per frame (~1/sec)
+                 if(Math.random() > 0.5) spawnHeart(Math.random()*width, -50);
+                 else spawnPowerup(Math.random()*width, -50);
             }
         }
         
@@ -1329,7 +1416,8 @@ function loop() {
     // 7. POWERUPS & HEARTS
     for (let i = powerups.length - 1; i >= 0; i--) {
         let p = powerups[i];
-        if(powerupState.magnet > 0 && p.type !== 'heart') { p.x += (player.x - p.x) * 0.1; p.y += (player.y - p.y) * 0.1; } else { p.y += p.vy; }
+        if(powerupState.magnet > 0 && p.type !== 'heart') { p.x += (player.x - p.x) * 0.1; p.y += (player.y - p.y) * 0.1; } 
+        else { p.y += p.vy * timeScale; }
         
         ctx.save(); ctx.translate(p.x, p.y);
         
@@ -1355,7 +1443,7 @@ function loop() {
         
         if(Math.sqrt((player.x - p.x)**2 + (player.y - p.y)**2) < (player.w/2 + 15)) {
             if(p.type === 'heart') {
-                lives = Math.min(lives + 1, 5); // Cap at 5
+                lives = Math.min(lives + 1, 9); // Cap raised for boss fights
                 updateLivesUI();
                 AudioSys.playCollect(true);
                 floatingTexts.push({x: player.x, y: player.y - 40, text: "❤️", life: 1.5, vy: -1, color: '#ff3366'});
@@ -1367,18 +1455,14 @@ function loop() {
         if(p.y > height + 50) powerups.splice(i, 1);
     }
 
-    // 8. PLAYER
+    // 8. PLAYER (Visuals only, image is DOM)
     if(player.invulnerable % 10 < 5) { 
         ctx.save(); ctx.translate(player.x, player.y);
         ctx.globalCompositeOperation = 'lighter'; 
-        ctx.shadowBlur = 20; 
         
-        if(powerupState.beam > 0) { ctx.shadowColor = '#ffff00'; ctx.fillStyle = '#ffffaa'; }
-        else { ctx.shadowColor = '#00d2ff'; ctx.fillStyle = '#eee'; }
-        
-        ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(20, 20); ctx.lineTo(0, 10); ctx.lineTo(-20, 20); ctx.closePath(); ctx.fill();
-        
+        // Shield
         if(powerupState.shield) { ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0,0, 40, 0, Math.PI*2); ctx.stroke(); }
+        // Damage
         if(lives <= 2 && Math.random() > 0.5) createParticles(player.x, player.y, '#555', 1, 'smoke');
         
         ctx.restore();
@@ -1391,7 +1475,7 @@ function loop() {
         if(powerupState.magnet > 0 && ft.isLetter) {
              ft.x += (player.x - ft.x) * 0.1; ft.y += (player.y - ft.y) * 0.1;
              if(Math.abs(ft.x - player.x) < 20 && Math.abs(ft.y - player.y) < 20) { floatingTexts.splice(i,1); continue; }
-        } else { ft.y += ft.vy; }
+        } else { ft.y += ft.vy * timeScale; }
         ft.life -= 0.02;
         if(ft.life <= 0) { floatingTexts.splice(i,1); continue; }
         
@@ -1402,7 +1486,7 @@ function loop() {
     
     for(let i=particles.length-1; i>=0; i--) {
         let p = particles[i];
-        p.x += p.vx; p.y += p.vy; p.life -= (p.decay || 0.04);
+        p.x += p.vx * timeScale; p.y += p.vy * timeScale; p.life -= (p.decay || 0.04);
         if(p.life <= 0) { particles.splice(i,1); continue; }
         
         ctx.globalAlpha = p.life; ctx.fillStyle = p.color;
