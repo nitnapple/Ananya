@@ -97,7 +97,6 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 80%, transparent 100%);
         }
 
-        /* Top Bar: Lives Left, Controls Right */
         .hud-row-top {
             display: flex;
             justify-content: space-between;
@@ -112,7 +111,6 @@
             pointer-events: auto;
         }
 
-        /* Stats Bar: Level, Score, Time centered/spaced */
         .hud-row-stats {
             display: flex;
             justify-content: center;
@@ -164,7 +162,6 @@
             justify-content: center;
         }
         
-        /* Default letter slot */
         .letter-slot {
             width: 28px;
             height: 38px;
@@ -180,12 +177,11 @@
             transition: all 0.3s;
         }
 
-        /* Compact mode for very long words on mobile */
         .target-word.compact {
             gap: 2px;
         }
         .target-word.compact .letter-slot {
-            width: 6vw; /* Responsive width */
+            width: 6vw;
             max-width: 24px;
             height: 32px;
             font-size: 0.9rem;
@@ -205,13 +201,12 @@
             width: 8px;
         }
         
-        /* Circular Buttons */
         .circle-btn {
             background: rgba(255,255,255,0.15);
             border: 1px solid rgba(255,255,255,0.4);
             color: #fff;
             border-radius: 50%;
-            width: 44px; /* Accessible Touch Size */
+            width: 44px;
             height: 44px;
             font-size: 1.1rem;
             cursor: pointer;
@@ -227,14 +222,12 @@
             transform: scale(0.95);
         }
         
-        /* Pause Overlay */
         #pause-screen {
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
             z-index: 20;
         }
 
-        /* Small Screen Optimizations */
         @media (max-width: 380px) {
             .hud-row-stats { font-size: 0.8rem; gap: 8px; }
             .btn { padding: 12px 30px; font-size: 1.1rem; }
@@ -249,7 +242,6 @@
 
 <!-- HUD -->
 <div class="hud-top" id="game-hud" style="display: none;">
-    <!-- Row 1: Lives & Controls -->
     <div class="hud-row-top">
         <div class="lives-container" id="lives-display"></div>
         <div class="controls-container">
@@ -258,18 +250,14 @@
         </div>
     </div>
     
-    <!-- Row 2: Stats -->
     <div class="hud-row-stats">
         <div class="level-tag" id="level-display">LVL 1</div>
         <div class="score-tag" id="score-display">PTS: 0</div>
         <div class="time-tag" id="time-display">00:00</div>
     </div>
 
-    <!-- Row 3: Word -->
     <div class="target-word-container">
-        <div class="target-word" id="word-display">
-            <!-- populated by js -->
-        </div>
+        <div class="target-word" id="word-display"></div>
     </div>
 </div>
 
@@ -295,7 +283,6 @@
         <button class="btn" id="restart-btn">REPLAY</button>
     </div>
     
-    <!-- Level Transition Overlay -->
     <div id="level-screen" style="display: none;">
         <h1 id="level-title" style="font-size: 3rem; color: #ffeb3b; text-shadow: 0 0 20px rgba(255, 235, 59, 0.5);">LEVEL 2</h1>
         <p id="level-subtitle" style="font-size: 1.2rem; letter-spacing: 3px; margin-top: 10px;">SHANDILYA</p>
@@ -395,6 +382,21 @@ const AudioSys = {
         osc.stop(this.ctx.currentTime + 0.3);
     },
 
+    playPowerupCollect: function() {
+        if (!this.ctx || this.isMuted) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(800, this.ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.3);
+    },
+
     playExplosion: function() {
         if (!this.ctx || this.isMuted) return;
         const osc = this.ctx.createOscillator();
@@ -437,7 +439,7 @@ const AudioSys = {
         this.bgmOscillators.push(osc1);
 
         this.beatInterval = setInterval(() => {
-            if(this.isMuted || !this.ctx || window.isPaused) return; // Don't play beat if paused
+            if(this.isMuted || !this.ctx || window.isPaused) return; 
             const kOsc = this.ctx.createOscillator();
             const kGain = this.ctx.createGain();
             kOsc.frequency.setValueAtTime(150, this.ctx.currentTime);
@@ -489,16 +491,17 @@ let bullets = [];
 let enemies = [];
 let stars = [];
 let floatingTexts = [];
+let powerups = [];
 
 // Game State
 let gameRunning = false;
-window.isPaused = false; // Exposed for audio system
+window.isPaused = false; 
 let frameCount = 0;
 let lives = 5;
 let currentLevelIndex = 0;
 let score = 0;
 let gameStartTime = 0;
-let pausedTime = 0; // To track time spent in pause
+let pausedTime = 0;
 let pauseStart = 0;
 let currentTimeStr = "00:00";
 let foundLetters = []; 
@@ -515,7 +518,8 @@ const player = {
     w: 50, h: 50,
     lastShot: 0,
     fireRate: 8,
-    invulnerable: 0
+    invulnerable: 0,
+    beamMode: 0 // Timer for beam powerup
 };
 
 // Input
@@ -616,7 +620,7 @@ resumeBtn.addEventListener('click', () => {
 });
 
 quitBtn.addEventListener('click', () => {
-    togglePause(); // Unpause logic state first
+    togglePause(); 
     gameRunning = false;
     hud.style.display = 'none';
     pauseScreen.style.display = 'none';
@@ -631,12 +635,10 @@ function togglePause() {
     if(window.isPaused) {
         pauseScreen.style.display = 'flex';
         pauseStart = Date.now();
-        // Clear input to prevent shooting on resume
         input.active = false; 
     } else {
         pauseScreen.style.display = 'none';
         pausedTime += (Date.now() - pauseStart);
-        // Resume loop
         requestAnimationFrame(loop);
     }
 }
@@ -677,8 +679,6 @@ function updateLevelHUD() {
     foundLetters = [];
     currentTarget = LEVELS[currentLevelIndex];
     
-    // Auto-compact for long words (Mobile UX Fix)
-    // Using simple character count heuristic
     if(currentTarget.length > 8) {
         wordDisplay.classList.add('compact');
     } else {
@@ -744,9 +744,11 @@ function startGame() {
     enemies = [];
     particles = [];
     floatingTexts = [];
+    powerups = [];
     
     player.x = width/2;
     player.y = height - 150;
+    player.beamMode = 0;
     input.x = width/2;
     input.y = height - 150;
     input.active = false; 
@@ -760,6 +762,7 @@ function nextLevel() {
     winTimeout = null;
     currentLevelIndex++;
     levelTransitioning = true;
+    player.beamMode = 0; // Reset beam on level change
     
     if (currentLevelIndex >= LEVELS.length) {
         gameOver(true);
@@ -768,13 +771,12 @@ function nextLevel() {
 
     enemies = [];
     bullets = [];
+    powerups = [];
     
-    // Show Overlay
     levelScreen.style.display = 'flex';
     document.getElementById('level-title').innerText = `LEVEL ${currentLevelIndex + 1}`;
     document.getElementById('level-subtitle').innerText = LEVELS[currentLevelIndex];
     
-    // Award Bonus Points
     score += 500;
     scoreDisplay.innerText = `PTS: ${score}`;
     AudioSys.playCollect();
@@ -814,6 +816,17 @@ function gameOver(win) {
     fScore.innerText = `FINAL SCORE: ${score} | TIME: ${currentTimeStr}`;
 }
 
+function spawnPowerup(x, y) {
+    powerups.push({
+        x: x,
+        y: y,
+        vy: 2,
+        w: 30,
+        h: 30,
+        type: 'beam'
+    });
+}
+
 function spawnEnemy() {
     if (levelTransitioning) return;
     
@@ -836,7 +849,7 @@ function spawnEnemy() {
         w: size,
         h: size,
         letter: char,
-        hp: Math.floor(Math.random() * 3) + 3, // HP: 3 to 5
+        hp: Math.floor(Math.random() * 3) + 3,
         vy: Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2), 
         rot: Math.random() * Math.PI,
         rotSpeed: (Math.random()-0.5) * 0.05
@@ -866,7 +879,6 @@ function createExplosion(x, y, color, amount) {
 
 function updateTime() {
     if (levelTransitioning) return;
-    // Calculate effective time by subtracting paused duration
     const effectiveTime = Date.now() - gameStartTime - pausedTime;
     const elapsed = Math.max(0, Math.floor(effectiveTime / 1000));
     const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
@@ -882,7 +894,7 @@ function updateTime() {
  */
 function loop() {
     if(!gameRunning) return;
-    if(window.isPaused) return; // Stop update loop
+    if(window.isPaused) return; 
 
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#050510';
@@ -910,9 +922,81 @@ function loop() {
     if(player.y < 25) { player.y = 25; input.y = 25; }
     if(player.y > height-25) { player.y = height-25; input.y = height-25; }
     
-    if(input.active && frameCount - player.lastShot > player.fireRate) {
-        spawnBullet();
-        player.lastShot = frameCount;
+    // BEAM or NORMAL FIRE
+    if(player.beamMode > 0) {
+        player.beamMode--;
+        // DRAW BEAM
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        // Pulsating width
+        let beamW = 40 + Math.sin(frameCount * 0.5) * 10;
+        let grad = ctx.createLinearGradient(player.x - beamW/2, player.y, player.x + beamW/2, player.y);
+        grad.addColorStop(0, 'rgba(0, 255, 255, 0)');
+        grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
+        grad.addColorStop(1, 'rgba(0, 255, 255, 0)');
+        
+        ctx.fillStyle = grad;
+        ctx.fillRect(player.x - beamW/2, 0, beamW, player.y);
+        
+        // Secondary outer glow
+        ctx.fillStyle = 'rgba(0, 200, 255, 0.2)';
+        ctx.fillRect(player.x - beamW, 0, beamW*2, player.y);
+        
+        ctx.restore();
+        
+        // BEAM COLLISION (Hit everything in column)
+        // Check every 4 frames to avoid instant 60 damage/sec unless we want that
+        if(frameCount % 4 === 0) {
+             for (let j = enemies.length - 1; j >= 0; j--) {
+                let e = enemies[j];
+                // Simple X check with margin
+                if(Math.abs(e.x - player.x) < (beamW/2 + e.w/2)) {
+                    // HIT
+                    e.hp -= 3; // High damage
+                    createExplosion(e.x, e.y, '#00ffff', 2);
+                    
+                    if (e.hp <= 0) {
+                        AudioSys.playExplosion();
+                        createExplosion(e.x, e.y, '#ffaa00', 10);
+                        
+                        let collected = false;
+                        for(let k=0; k<currentTarget.length; k++) {
+                            if(currentTarget[k] === e.letter && !foundLetters[k]) {
+                                foundLetters[k] = true;
+                                collected = true;
+                                const slot = document.getElementById(`word-slot-${k}`);
+                                if(slot) {
+                                    slot.innerText = e.letter;
+                                    slot.classList.add('filled');
+                                }
+                                score += 100; 
+                                floatingTexts.push({x: e.x, y: e.y, text: e.letter, life: 1.0, vy: -2});
+                                AudioSys.playCollect();
+                                break; 
+                            }
+                        }
+                        if(!collected) score += 10;
+                        scoreDisplay.innerText = `PTS: ${score}`;
+                        
+                        // Spawn Powerup Chance
+                        if(Math.random() < 0.1) spawnPowerup(e.x, e.y);
+                        
+                        enemies.splice(j,1);
+                        
+                        if(foundLetters.every(x=>x) && !winTimeout && !levelTransitioning) {
+                            winTimeout = setTimeout(nextLevel, 1000);
+                        }
+                    }
+                }
+             }
+        }
+        
+    } else {
+        // Normal Fire
+        if(input.active && frameCount - player.lastShot > player.fireRate) {
+            spawnBullet();
+            player.lastShot = frameCount;
+        }
     }
     
     if(player.invulnerable > 0) player.invulnerable--;
@@ -935,67 +1019,104 @@ function loop() {
 
     // 3. SPAWN ENEMIES
     if(!levelTransitioning && frameCount % 35 === 0) spawnEnemy();
-
-    // 4. COLLISIONS & UPDATES
-    ctx.globalCompositeOperation = 'lighter'; 
     
-    // Bullets
-    for(let i = bullets.length-1; i>=0; i--) {
-        let b = bullets[i];
-        b.y += b.vy;
+    // 4. POWERUPS
+    ctx.globalCompositeOperation = 'source-over';
+    for (let i = powerups.length - 1; i >= 0; i--) {
+        let p = powerups[i];
+        p.y += p.vy;
         
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = b.color;
-        ctx.fillStyle = b.color;
-        ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h);
-        ctx.shadowBlur = 0;
+        // Draw
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        // Glow
+        ctx.shadowColor = '#ffff00';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#ffeb3b';
+        ctx.beginPath();
+        ctx.arc(0, 0, 15, 0, Math.PI*2);
+        ctx.fill();
+        // Icon
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText("⚡", 0, 2);
+        ctx.restore();
         
-        if(b.y < -50) { bullets.splice(i,1); continue; }
+        // Collision with player
+        const dist = Math.sqrt((player.x - p.x)**2 + (player.y - p.y)**2);
+        if(dist < (player.w/2 + 15)) {
+            // Collected
+            player.beamMode = 300; // 5 seconds at 60fps
+            AudioSys.playPowerupCollect();
+            floatingTexts.push({x: player.x, y: player.y - 40, text: "BEAM MODE!", life: 1.5, vy: -1});
+            powerups.splice(i, 1);
+            continue;
+        }
         
-        // Check Hit
-        for(let j=enemies.length-1; j>=0; j--) {
-            let e = enemies[j];
-            if(Math.abs(b.x - e.x) < e.w/2 + b.w/2 && Math.abs(b.y - e.y) < e.h/2 + b.h/2) {
-                bullets.splice(i,1);
-                e.hp--;
-                e.y -= 2; 
-                createExplosion(b.x, b.y, '#fff', 2);
-                
-                if(e.hp <= 0) {
-                    AudioSys.playExplosion();
-                    vibrate(15);
-                    createExplosion(e.x, e.y, '#ffaa00', 10);
+        if(p.y > height + 50) powerups.splice(i, 1);
+    }
+
+    // 5. COLLISIONS & UPDATES (Bullets vs Enemies)
+    ctx.globalCompositeOperation = 'lighter'; 
+    if(player.beamMode <= 0) { // Only check bullets if not in beam mode
+        for(let i = bullets.length-1; i>=0; i--) {
+            let b = bullets[i];
+            b.y += b.vy;
+            
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = b.color;
+            ctx.fillStyle = b.color;
+            ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h);
+            ctx.shadowBlur = 0;
+            
+            if(b.y < -50) { bullets.splice(i,1); continue; }
+            
+            // Check Hit
+            for(let j=enemies.length-1; j>=0; j--) {
+                let e = enemies[j];
+                if(Math.abs(b.x - e.x) < e.w/2 + b.w/2 && Math.abs(b.y - e.y) < e.h/2 + b.h/2) {
+                    bullets.splice(i,1);
+                    e.hp--;
+                    e.y -= 2; 
+                    createExplosion(b.x, b.y, '#fff', 2);
                     
-                    // Letter Check
-                    let collected = false;
-                    for(let k=0; k<currentTarget.length; k++) {
-                        if(currentTarget[k] === e.letter && !foundLetters[k]) {
-                            foundLetters[k] = true;
-                            collected = true;
-                            
-                            const slot = document.getElementById(`word-slot-${k}`);
-                            if(slot) {
-                                slot.innerText = e.letter;
-                                slot.classList.add('filled');
+                    if(e.hp <= 0) {
+                        AudioSys.playExplosion();
+                        vibrate(15);
+                        createExplosion(e.x, e.y, '#ffaa00', 10);
+                        
+                        let collected = false;
+                        for(let k=0; k<currentTarget.length; k++) {
+                            if(currentTarget[k] === e.letter && !foundLetters[k]) {
+                                foundLetters[k] = true;
+                                collected = true;
+                                const slot = document.getElementById(`word-slot-${k}`);
+                                if(slot) {
+                                    slot.innerText = e.letter;
+                                    slot.classList.add('filled');
+                                }
+                                score += 100; 
+                                floatingTexts.push({x: e.x, y: e.y, text: e.letter, life: 1.0, vy: -2});
+                                AudioSys.playCollect();
+                                break; 
                             }
-                            
-                            score += 100; 
-                            floatingTexts.push({x: e.x, y: e.y, text: e.letter, life: 1.0, vy: -2});
-                            AudioSys.playCollect();
-                            break; 
+                        }
+                        if(!collected) score += 10;
+                        scoreDisplay.innerText = `PTS: ${score}`;
+                        
+                        // Spawn Powerup Chance (Low in normal mode)
+                        if(Math.random() < 0.05) spawnPowerup(e.x, e.y);
+
+                        enemies.splice(j,1);
+                        
+                        if(foundLetters.every(x=>x) && !winTimeout && !levelTransitioning) {
+                            winTimeout = setTimeout(nextLevel, 1000);
                         }
                     }
-                    if(!collected) score += 10;
-                    scoreDisplay.innerText = `PTS: ${score}`;
-                    
-                    enemies.splice(j,1);
-                    
-                    // CHECK WIN LEVEL
-                    if(foundLetters.every(x=>x) && !winTimeout && !levelTransitioning) {
-                        winTimeout = setTimeout(nextLevel, 1000);
-                    }
+                    break;
                 }
-                break;
             }
         }
     }
@@ -1017,7 +1138,6 @@ function loop() {
             if(currentTarget[k] === e.letter && !foundLetters[k]) isNeeded = true;
         }
 
-        // Draw Image if loaded
         if (asteroidImg.complete && asteroidImg.naturalWidth !== 0) {
             if(isNeeded) {
                 ctx.shadowColor = '#00ff00';
@@ -1026,7 +1146,6 @@ function loop() {
             ctx.drawImage(asteroidImg, -e.w/2, -e.h/2, e.w, e.h);
             ctx.shadowBlur = 0;
         } else {
-            // Fallback polygon
             ctx.fillStyle = '#444';
             if(isNeeded) {
                 ctx.strokeStyle = '#00ff00';
@@ -1051,8 +1170,6 @@ function loop() {
         ctx.font = 'bold 24px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        
-        // Add stroke/shadow to ensure text is visible on top of image
         ctx.shadowColor = '#000';
         ctx.shadowBlur = 4;
         ctx.lineWidth = 3;
@@ -1060,7 +1177,6 @@ function loop() {
         ctx.strokeText(e.letter, 0, 0);
         ctx.shadowBlur = 0;
         ctx.fillText(e.letter, 0, 0);
-        
         ctx.restore();
         
         // Player Crash
@@ -1083,16 +1199,23 @@ function loop() {
         if(e.y > height + 50) enemies.splice(i,1);
     }
     
-    // 5. DRAW PLAYER
+    // 6. DRAW PLAYER
     if(player.invulnerable % 10 < 5) { 
         ctx.save();
         ctx.translate(player.x, player.y);
         
         ctx.globalCompositeOperation = 'lighter';
         ctx.shadowBlur = 20;
-        ctx.shadowColor = '#00d2ff';
         
-        ctx.fillStyle = '#eee';
+        // Change color based on Powerup
+        if(player.beamMode > 0) {
+            ctx.shadowColor = '#ffff00';
+            ctx.fillStyle = '#ffffaa';
+        } else {
+            ctx.shadowColor = '#00d2ff';
+            ctx.fillStyle = '#eee';
+        }
+        
         ctx.beginPath();
         ctx.moveTo(0, -30);
         ctx.lineTo(20, 20);
@@ -1113,7 +1236,7 @@ function loop() {
         ctx.restore();
     }
     
-    // 6. FLOATING TEXTS & PARTICLES
+    // 7. FLOATING TEXTS & PARTICLES
     ctx.globalCompositeOperation = 'lighter';
     for(let i=floatingTexts.length-1; i>=0; i--) {
         let ft = floatingTexts[i];
