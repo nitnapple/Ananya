@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Star Sculptor: Ananya</title>
     <style>
         body {
@@ -11,12 +11,15 @@
             background-color: #050505;
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            touch-action: none; /* Critical for mobile game controls */
+            touch-action: none; /* Critical: Disables browser zooming/scrolling */
             user-select: none;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         canvas {
             display: block;
+            touch-action: none;
         }
         #ui-layer {
             position: absolute;
@@ -33,24 +36,27 @@
             z-index: 10;
         }
         h1 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 8vw, 4rem); /* Responsive font size */
             text-transform: uppercase;
             letter-spacing: 0.2em;
             text-shadow: 0 0 20px #00d2ff, 0 0 40px #00d2ff;
-            margin: 0;
+            margin: 0 0 20px 0;
+            padding: 0 20px;
             opacity: 1;
+            line-height: 1.2;
         }
         p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 4vw, 1.2rem);
             color: #ccc;
             margin-top: 10px;
             text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            padding: 0 20px;
         }
         .btn {
             pointer-events: auto;
             background: linear-gradient(45deg, #ff00cc, #3333ff);
-            border: 2px solid rgba(255,255,255,0.2);
-            padding: 15px 50px;
+            border: 2px solid rgba(255,255,255,0.4);
+            padding: 20px 60px; /* Larger touch target */
             color: white;
             font-size: 1.5rem;
             font-weight: bold;
@@ -58,13 +64,16 @@
             cursor: pointer;
             box-shadow: 0 0 20px rgba(51, 51, 255, 0.6);
             transition: all 0.2s;
-            margin-top: 30px;
+            margin-top: 40px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         .btn:active {
             transform: scale(0.95);
             box-shadow: 0 0 10px rgba(51, 51, 255, 0.8);
+            background: linear-gradient(45deg, #d400aa, #2222dd);
         }
         
         /* HUD */
@@ -73,22 +82,24 @@
             top: 0;
             left: 0;
             width: 100%;
-            padding: 15px;
+            height: 80px; /* Fixed height for touch safety at top */
+            padding: 15px 20px;
+            padding-top: max(15px, env(safe-area-inset-top)); /* Handle Notch */
             box-sizing: border-box;
             display: flex;
             justify-content: space-between;
             align-items: center;
             pointer-events: none;
             z-index: 5;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
         }
         .lives-container {
             display: flex;
             gap: 5px;
         }
         .life-pip {
-            width: 20px;
-            height: 8px;
+            width: 25px; /* Larger pips */
+            height: 10px;
             background: #ff3366;
             box-shadow: 0 0 10px #ff3366;
             transform: skewX(-20deg);
@@ -99,43 +110,48 @@
         }
         .target-word {
             display: flex;
-            gap: 8px;
+            gap: 5px;
         }
         .letter-slot {
-            width: 35px;
-            height: 45px;
+            width: 30px;
+            height: 40px;
             border-bottom: 3px solid rgba(0, 210, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-family: monospace;
             font-weight: bold;
             color: #00d2ff;
             background: rgba(0, 210, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s;
         }
         .letter-slot.filled {
             background: rgba(0, 210, 255, 0.2);
-            text-shadow: 0 0 15px #00d2ff, 0 0 30px #ffffff;
+            text-shadow: 0 0 15px #00d2ff;
             border-bottom: 3px solid #fff;
-            transform: scale(1.1);
         }
         
         /* Volume Toggle */
         #vol-btn {
             pointer-events: auto;
             background: rgba(0,0,0,0.5);
-            border: 1px solid #555;
+            border: 2px solid #555;
             color: #fff;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
+            width: 50px; /* Larger hit area */
+            height: 50px;
+            font-size: 1.5rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        @media (max-width: 600px) {
+            .letter-slot { width: 25px; height: 35px; font-size: 1.2rem; }
+            .target-word { gap: 3px; }
         }
     </style>
 </head>
@@ -158,9 +174,9 @@
 <div id="ui-layer">
     <div id="start-screen">
         <h1>Sky Force:<br>Ananya</h1>
-        <p>Target: Collect letters <strong>A-N-A-N-Y-A</strong></p>
-        <p>Control: Drag to move & shoot</p>
-        <button class="btn" id="start-btn">ENGAGE</button>
+        <p>Touch & Drag to Pilot</p>
+        <p>Collect: <strong>A-N-A-N-Y-A</strong></p>
+        <button class="btn" id="start-btn">LAUNCH</button>
     </div>
     
     <div id="end-screen" style="display: none;">
@@ -185,20 +201,28 @@ const AudioSys = {
     init: function() {
         if (!this.ctx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
-            this.ctx = new AudioContext();
-            this.masterGain = this.ctx.createGain();
-            this.masterGain.gain.value = 0.3; // Main volume
-            this.masterGain.connect(this.ctx.destination);
+            if (AudioContext) {
+                this.ctx = new AudioContext();
+                this.masterGain = this.ctx.createGain();
+                this.masterGain.gain.value = 0.3; 
+                this.masterGain.connect(this.ctx.destination);
+            }
         }
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
+        this.resume();
+    },
+
+    resume: function() {
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(e => console.log(e));
         }
     },
 
     toggleMute: function() {
         this.isMuted = !this.isMuted;
-        if(this.masterGain) {
-            this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.3, this.ctx.currentTime, 0.1);
+        if(this.masterGain && this.ctx) {
+            const currentTime = this.ctx.currentTime;
+            this.masterGain.gain.cancelScheduledValues(currentTime);
+            this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.3, currentTime, 0.1);
         }
         return this.isMuted;
     },
@@ -210,7 +234,7 @@ const AudioSys = {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(800, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
         
         osc.connect(gain);
@@ -237,14 +261,12 @@ const AudioSys = {
 
     playExplosion: function() {
         if (!this.ctx || this.isMuted) return;
-        // Simple noise burst approximation using erratic oscillator
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(100, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(10, this.ctx.currentTime + 0.3);
         
-        // Tremolo for roughness
         const lfo = this.ctx.createOscillator();
         lfo.frequency.value = 50;
         const lfoGain = this.ctx.createGain();
@@ -254,7 +276,7 @@ const AudioSys = {
         lfo.start();
         lfo.stop(this.ctx.currentTime + 0.3);
 
-        gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
         
         osc.connect(gain);
@@ -265,16 +287,14 @@ const AudioSys = {
 
     startBGM: function() {
         if (!this.ctx) return;
-        this.stopBGM(); // clear old
+        this.stopBGM();
 
-        // Bassline drone
         const osc1 = this.ctx.createOscillator();
         osc1.type = 'sawtooth';
         osc1.frequency.value = 55; // A1
         const gain1 = this.ctx.createGain();
         gain1.gain.value = 0.1;
         
-        // Filter for that muffled synthwave bass
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.value = 400;
@@ -284,21 +304,19 @@ const AudioSys = {
         osc1.start();
         this.bgmOscillators.push(osc1);
 
-        // Simple beat (simulated with an interval for simplicity)
         this.beatInterval = setInterval(() => {
-            if(this.isMuted) return;
-            // Kick
+            if(this.isMuted || !this.ctx) return;
             const kOsc = this.ctx.createOscillator();
             const kGain = this.ctx.createGain();
             kOsc.frequency.setValueAtTime(150, this.ctx.currentTime);
             kOsc.frequency.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
-            kGain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+            kGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
             kGain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
             kOsc.connect(kGain);
             kGain.connect(this.masterGain);
             kOsc.start();
             kOsc.stop(this.ctx.currentTime + 0.2);
-        }, 500); // 120 BPM
+        }, 500); 
     },
 
     stopBGM: function() {
@@ -314,7 +332,7 @@ const AudioSys = {
  * ------------------------------------------------------------------
  */
 const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d', { alpha: false }); // Optimize
+const ctx = canvas.getContext('2d', { alpha: false }); 
 const uiLayer = document.getElementById('ui-layer');
 const startScreen = document.getElementById('start-screen');
 const endScreen = document.getElementById('end-screen');
@@ -335,7 +353,7 @@ let gameRunning = false;
 let frameCount = 0;
 let lives = 5;
 const targetName = "ANANYA";
-let foundLetters = []; // Boolean array
+let foundLetters = []; 
 let score = 0;
 
 // Player
@@ -344,12 +362,18 @@ const player = {
     w: 50, h: 50,
     lastShot: 0,
     fireRate: 8,
-    invulnerable: 0,
-    trail: []
+    invulnerable: 0
 };
 
 // Input
-const input = { x: 0, y: 0, active: false };
+const input = { 
+    x: 0, 
+    y: 0, 
+    active: false,
+    // Relative touch tracking
+    offsetX: 0,
+    offsetY: 0
+};
 
 /**
  * ------------------------------------------------------------------
@@ -359,52 +383,72 @@ const input = { x: 0, y: 0, active: false };
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-    // Keep player on screen if resized
-    player.x = width/2;
-    player.y = height - 100;
+    
+    // Only reset player if game isn't running to avoid gameplay jumps
+    if (!gameRunning) {
+        player.x = width/2;
+        player.y = height - 150;
+        input.x = width/2;
+        input.y = height - 150;
+    } else {
+        // Keep inside bounds
+        player.x = Math.max(25, Math.min(width-25, player.x));
+        player.y = Math.max(25, Math.min(height-25, player.y));
+    }
 }
 window.addEventListener('resize', resize);
 resize();
 
-// Haptics
 function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
 }
 
-// Input Handling (Touch & Mouse)
-function handleInput(x, y) {
-    // Relative movement logic: 
-    // We don't snap the ship to the finger immediately if it's far, 
-    // but in this game, 1:1 follow with an offset is usually best for arcade shooters.
-    
-    // Y-Offset allows user to see the ship above their finger
-    const yOffset = 80; 
-    
-    input.x = x;
-    input.y = y - yOffset;
-    input.active = true;
-}
+// ------------------------------------
+// MOBILE OPTIMIZED INPUT HANDLING
+// ------------------------------------
 
+// Mouse: Direct Follow (Classic Arcade)
+// We use a fixed offset Y so cursor doesn't cover ship
 canvas.addEventListener('mousedown', e => {
     input.active = true;
-    handleInput(e.clientX, e.clientY);
-    // On desktop, snap immediately on click? Or smooth.
+    input.x = e.clientX;
+    input.y = e.clientY - 60; // Offset above cursor
+    AudioSys.resume();
 });
 canvas.addEventListener('mousemove', e => {
-    if(input.active) handleInput(e.clientX, e.clientY);
+    if(input.active) {
+        input.x = e.clientX;
+        input.y = e.clientY - 60;
+    }
 });
 canvas.addEventListener('mouseup', () => input.active = false);
 
-// Touch: Prevent default to stop scrolling
+// Touch: Relative Movement (Virtual Joystick style)
+// This allows player to touch ANYWHERE to move ship, preventing finger occlusion
 canvas.addEventListener('touchstart', e => {
     e.preventDefault();
+    const t = e.touches[0];
     input.active = true;
-    handleInput(e.touches[0].clientX, e.touches[0].clientY);
+    
+    // Lock the difference between touch and current ship position
+    input.offsetX = player.x - t.clientX;
+    input.offsetY = player.y - t.clientY;
+    
+    // Update input target immediately so no initial jump
+    input.x = player.x; 
+    input.y = player.y;
+
+    AudioSys.resume();
 }, { passive: false });
 
 canvas.addEventListener('touchmove', e => {
-    e.preventDefault(); // Stop scroll
-    handleInput(e.touches[0].clientX, e.touches[0].clientY);
+    e.preventDefault();
+    if(!input.active) return;
+    const t = e.touches[0];
+    
+    // Apply the locked offset to current touch
+    input.x = t.clientX + input.offsetX;
+    input.y = t.clientY + input.offsetY;
 }, { passive: false });
 
 canvas.addEventListener('touchend', (e) => {
@@ -453,8 +497,6 @@ function initHUD() {
         foundLetters.push(false);
         const slot = document.createElement('div');
         slot.className = 'letter-slot';
-        slot.innerText = targetName[i]; // Show letter but dimmed?
-        // Actually, let's hide it and only show when found, or show empty placeholder
         slot.innerText = ''; 
         slot.dataset.char = targetName[i];
         slot.id = `word-slot-${i}`;
@@ -486,10 +528,12 @@ function startGame() {
     particles = [];
     floatingTexts = [];
     
+    // Reset pos
     player.x = width/2;
-    player.y = height - 100;
+    player.y = height - 150;
     input.x = width/2;
-    input.y = height - 100;
+    input.y = height - 150;
+    input.active = false; // Reset input state to prevent jump
     
     initStars();
     initHUD();
@@ -520,17 +564,14 @@ function gameOver(win) {
 function spawnEnemy() {
     const size = 30 + Math.random() * 20;
     
-    // Letter Logic:
-    // 30% chance to drop a letter we actually need
+    // Smart Spawning: 35% chance to drop a NEEDED letter
     let char = '';
     const neededIndices = foundLetters.map((found, idx) => found ? -1 : idx).filter(i => i !== -1);
     
     if (Math.random() < 0.35 && neededIndices.length > 0) {
-        // Drop needed letter
         const targetIdx = neededIndices[Math.floor(Math.random() * neededIndices.length)];
         char = targetName[targetIdx];
     } else {
-        // Random junk letter
         const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         char = alpha[Math.floor(Math.random() * alpha.length)];
     }
@@ -550,12 +591,9 @@ function spawnEnemy() {
 
 function spawnBullet() {
     AudioSys.playShoot();
-    // Left Gun
     bullets.push({x: player.x - 15, y: player.y, w: 4, h: 20, vy: -18, color: '#00ffff'});
-    // Right Gun
     bullets.push({x: player.x + 15, y: player.y, w: 4, h: 20, vy: -18, color: '#00ffff'});
-    
-    vibrate(5); // Slight tick
+    vibrate(5);
 }
 
 function createExplosion(x, y, color, amount) {
@@ -579,7 +617,6 @@ function createExplosion(x, y, color, amount) {
 function loop() {
     if(!gameRunning) return;
     
-    // Background Clear
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#050510';
     ctx.fillRect(0, 0, width, height);
@@ -597,17 +634,17 @@ function loop() {
     ctx.globalAlpha = 1;
 
     // 2. PLAYER LOGIC
-    // Smooth follow
-    player.x += (input.x - player.x) * 0.15;
-    player.y += (input.y - player.y) * 0.15;
+    // Use Lerp for smooth movement
+    player.x += (input.x - player.x) * 0.2; // Slightly faster lerp for tighter control
+    player.y += (input.y - player.y) * 0.2;
     
-    // Clamp
-    if(player.x < 25) player.x = 25;
-    if(player.x > width-25) player.x = width-25;
-    if(player.y < 25) player.y = 25;
-    if(player.y > height-25) player.y = height-25;
+    // Clamp to screen
+    if(player.x < 25) { player.x = 25; input.x = 25; } // Keep input synced at edge
+    if(player.x > width-25) { player.x = width-25; input.x = width-25; }
+    if(player.y < 25) { player.y = 25; input.y = 25; }
+    if(player.y > height-25) { player.y = height-25; input.y = height-25; }
     
-    // Auto-fire
+    // Auto-fire only when input is active (finger down)
     if(input.active && frameCount - player.lastShot > player.fireRate) {
         spawnBullet();
         player.lastShot = frameCount;
@@ -618,10 +655,10 @@ function loop() {
     // 3. SPAWN ENEMIES
     if(frameCount % 35 === 0) spawnEnemy();
 
-    // 4. UPDATES & COLLISIONS
+    // 4. COLLISIONS & UPDATES
+    ctx.globalCompositeOperation = 'lighter'; 
     
     // Bullets
-    ctx.globalCompositeOperation = 'lighter'; // GLOW
     for(let i = bullets.length-1; i>=0; i--) {
         let b = bullets[i];
         b.y += b.vy;
@@ -638,10 +675,9 @@ function loop() {
         for(let j=enemies.length-1; j>=0; j--) {
             let e = enemies[j];
             if(Math.abs(b.x - e.x) < e.w/2 + b.w/2 && Math.abs(b.y - e.y) < e.h/2 + b.h/2) {
-                // Hit
                 bullets.splice(i,1);
                 e.hp--;
-                e.y -= 2; // Impact shake
+                e.y -= 2; 
                 createExplosion(b.x, b.y, '#fff', 2);
                 
                 if(e.hp <= 0) {
@@ -649,36 +685,26 @@ function loop() {
                     vibrate(15);
                     createExplosion(e.x, e.y, '#ffaa00', 10);
                     
-                    // Letter Logic
+                    // Letter Check
                     let collected = false;
                     for(let k=0; k<targetName.length; k++) {
                         if(targetName[k] === e.letter && !foundLetters[k]) {
                             foundLetters[k] = true;
                             collected = true;
                             
-                            // Update UI
                             const slot = document.getElementById(`word-slot-${k}`);
                             slot.innerText = e.letter;
                             slot.classList.add('filled');
                             
-                            // Visual Feedback
                             floatingTexts.push({x: e.x, y: e.y, text: e.letter, life: 1.0, vy: -2});
                             AudioSys.playCollect();
-                            break; // Only collect one instance per rock
+                            break; 
                         }
                     }
-                    
-                    if(!collected) {
-                        // Just points
-                        score += 10;
-                    }
-                    
+                    if(!collected) score += 10;
                     enemies.splice(j,1);
                     
-                    // Check Win
-                    if(foundLetters.every(x=>x)) {
-                        setTimeout(() => gameOver(true), 1500);
-                    }
+                    if(foundLetters.every(x=>x)) setTimeout(() => gameOver(true), 1500);
                 }
                 break;
             }
@@ -696,9 +722,7 @@ function loop() {
         ctx.translate(e.x, e.y);
         ctx.rotate(e.rot);
         
-        // Draw Rock
         ctx.fillStyle = '#444';
-        // Highlight rocks we need
         let isNeeded = false;
         for(let k=0; k<targetName.length; k++) {
             if(targetName[k] === e.letter && !foundLetters[k]) isNeeded = true;
@@ -711,7 +735,6 @@ function loop() {
             ctx.lineWidth = 1;
         }
         
-        // Hexagon-ish shape
         ctx.beginPath();
         for(let s=0; s<6; s++) {
             const angle = s * Math.PI/3;
@@ -721,8 +744,7 @@ function loop() {
         ctx.fill();
         ctx.stroke();
         
-        // Letter
-        ctx.rotate(-e.rot); // Keep letter upright
+        ctx.rotate(-e.rot); 
         ctx.fillStyle = isNeeded ? '#00ff00' : '#aaa';
         ctx.font = 'bold 24px monospace';
         ctx.textAlign = 'center';
@@ -736,10 +758,9 @@ function loop() {
             const dx = player.x - e.x;
             const dy = player.y - e.y;
             if(Math.sqrt(dx*dx + dy*dy) < (player.w/2 + e.w/2)) {
-                // Crash
                 lives--;
                 updateLivesUI();
-                player.invulnerable = 100; // frames
+                player.invulnerable = 100; 
                 createExplosion(player.x, player.y, '#ff3366', 20);
                 AudioSys.playExplosion();
                 vibrate(200);
@@ -753,16 +774,14 @@ function loop() {
     }
     
     // 5. DRAW PLAYER
-    if(player.invulnerable % 10 < 5) { // Flicker if invuln
+    if(player.invulnerable % 10 < 5) { 
         ctx.save();
         ctx.translate(player.x, player.y);
         
-        // Glow effect
         ctx.globalCompositeOperation = 'lighter';
         ctx.shadowBlur = 20;
         ctx.shadowColor = '#00d2ff';
         
-        // Ship Body
         ctx.fillStyle = '#eee';
         ctx.beginPath();
         ctx.moveTo(0, -30);
@@ -772,7 +791,6 @@ function loop() {
         ctx.closePath();
         ctx.fill();
         
-        // Engine
         ctx.shadowBlur = 30;
         ctx.shadowColor = '#ff00cc';
         ctx.fillStyle = '#ff00cc';
@@ -787,8 +805,6 @@ function loop() {
     
     // 6. FLOATING TEXTS & PARTICLES
     ctx.globalCompositeOperation = 'lighter';
-    
-    // Text
     for(let i=floatingTexts.length-1; i>=0; i--) {
         let ft = floatingTexts[i];
         ft.y += ft.vy;
@@ -803,7 +819,6 @@ function loop() {
         ctx.fillText(ft.text, ft.x, ft.y);
     }
     
-    // Particles
     for(let i=particles.length-1; i>=0; i--) {
         let p = particles[i];
         p.x += p.vx;
