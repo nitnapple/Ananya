@@ -319,7 +319,7 @@
         <div id="start-screen" class="screen">
             <h2>Sky Weaver</h2>
             <p>Catch the floating letters to weave the name <b>ANANYA</b>.</p>
-            <p style="font-size: 1rem; opacity: 0.8; margin-top: -10px;">Be quick! Don't catch the wrong ones.</p>
+            <p style="font-size: 1rem; opacity: 0.8; margin-top: -10px;">Be quick! It gets 25% tougher every 2 seconds.</p>
             <button class="btn" onclick="startGame()">Start Dreaming</button>
         </div>
 
@@ -554,7 +554,9 @@
             isPlaying: false,
             letters: [],
             spawnTimer: null,
-            gameLoopId: null
+            rampTimer: null,
+            gameLoopId: null,
+            difficultyFactor: 0 // New variable to track "Toughness"
         };
 
         const container = document.getElementById('game-container');
@@ -584,13 +586,40 @@
             gameState.isPlaying = true;
             gameState.currentIndex = 0;
             gameState.letters = [];
+            gameState.difficultyFactor = 0; // Reset toughness for the level
             
             buildTargetWordUI();
             
-            // Speed adjustments
-            const spawnRate = Math.max(250, 1000 - (gameState.level * 80));
-            gameState.spawnTimer = setInterval(spawnLetter, spawnRate);
+            // DIFFICULTY RAMP: Every 2 seconds, increase difficulty factor by 0.25 (25%)
+            gameState.rampTimer = setInterval(() => {
+                gameState.difficultyFactor += 0.25; 
+            }, 2000);
+
+            // Start recursive spawn loop
+            startSpawning();
+            
             gameLoop();
+        }
+
+        // Recursive spawning to handle changing spawn rates
+        function startSpawning() {
+            const spawnNext = () => {
+                if (!gameState.isPlaying) return;
+                
+                spawnLetter();
+
+                // Base spawn rate depends on level
+                const baseRate = Math.max(250, 1000 - (gameState.level * 80));
+                
+                // Effective rate decreases (gets faster) as difficultyFactor increases
+                // At factor 0 (start): rate / 1
+                // At factor 0.25 (2s): rate / 1.25
+                // At factor 1.0 (8s): rate / 2 (Double speed)
+                const currentRate = baseRate / (1 + gameState.difficultyFactor);
+
+                gameState.spawnTimer = setTimeout(spawnNext, currentRate);
+            };
+            spawnNext();
         }
 
         function buildTargetWordUI() {
@@ -630,13 +659,10 @@
             letterEl.style.left = `${x}px`;
             letterEl.style.top = '-80px';
             
-            // FASTER FALL SPEED Logic
-            // Base speed increases with level significantly
-            const baseSpeed = 2 + (gameState.level * 0.7); 
-            // Add variance
-            const speed = baseSpeed + (Math.random() * 2); 
+            // Store BASE speed. Actual speed will be calculated in gameLoop based on toughness.
+            const baseSpeed = 2 + (gameState.level * 0.7) + (Math.random() * 2); 
             
-            letterEl.dataset.speed = speed;
+            letterEl.dataset.baseSpeed = baseSpeed;
             letterEl.dataset.char = char;
             letterEl.dataset.y = -80;
             letterEl.dataset.x = x;
@@ -722,13 +748,20 @@
 
             const height = window.innerHeight;
             
+            // Calculate Global Speed Multiplier
+            // Starts at 1.0, increases by 0.25 every 2 seconds.
+            const globalSpeedMult = 1 + gameState.difficultyFactor;
+
             // Reverse loop for removal
             for (let i = gameState.letters.length - 1; i >= 0; i--) {
                 const el = gameState.letters[i];
                 let y = parseFloat(el.dataset.y);
-                const speed = parseFloat(el.dataset.speed);
                 
-                y += speed;
+                // Calculate current speed dynamically
+                const baseSpeed = parseFloat(el.dataset.baseSpeed);
+                const currentSpeed = baseSpeed * globalSpeedMult;
+                
+                y += currentSpeed;
                 el.style.top = `${y}px`;
                 el.dataset.y = y;
 
@@ -743,8 +776,11 @@
         function clearLetters() {
             gameState.letters.forEach(l => l.remove());
             gameState.letters = [];
-            clearInterval(gameState.spawnTimer);
-            cancelAnimationFrame(gameState.gameLoopId);
+            
+            // Clear all timers
+            if (gameState.spawnTimer) clearTimeout(gameState.spawnTimer);
+            if (gameState.rampTimer) clearInterval(gameState.rampTimer);
+            if (gameState.gameLoopId) cancelAnimationFrame(gameState.gameLoopId);
         }
 
         function completeLevel() {
