@@ -127,11 +127,47 @@
         .level-tag { color: #ffeb3b; font-weight: bold; }
         .score-tag { color: #00e676; font-weight: bold; }
         .time-tag { color: #00d2ff; font-weight: bold; }
-        .combo-tag { color: #ff3366; font-weight: bold; display: none; } /* Hidden unless active */
+        .combo-tag { color: #ff3366; font-weight: bold; display: none; }
 
-        .lives-container { display: flex; gap: 3px; align-items: center; }
-        .life-pip { width: 18px; height: 8px; background: #ff3366; box-shadow: 0 0 5px #ff3366; transform: skewX(-20deg); }
-        .life-pip.lost { background: #444; box-shadow: none; }
+        /* LIVES AS HEARTS */
+        .lives-container { display: flex; gap: 8px; align-items: center; margin-left: 5px; }
+        
+        .life-pip {
+            width: 12px;
+            height: 12px;
+            background-color: #ff3366;
+            display: inline-block;
+            transform: rotate(-45deg);
+            position: relative;
+            box-shadow: none; /* Reset */
+            animation: beat 1s infinite alternate;
+        }
+        
+        .life-pip::before,
+        .life-pip::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background-color: #ff3366;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .life-pip::before { top: -6px; left: 0; }
+        .life-pip::after { top: 0; left: 6px; }
+        
+        .life-pip.lost {
+            background-color: #444;
+            animation: none;
+        }
+        .life-pip.lost::before,
+        .life-pip.lost::after {
+            background-color: #444;
+        }
+
+        @keyframes beat {
+            to { transform: rotate(-45deg) scale(1.1); }
+        }
         
         .target-word-container {
             display: flex;
@@ -226,7 +262,7 @@
 <div id="ui-layer">
     <div id="start-screen">
         <h1>Sky Force:<br>Ananya</h1>
-        <p>10 Levels • Boss Battles • Powerups</p>
+        <p>10 Levels • Massive Bosses • Powerups</p>
         <p style="color: #ffeb3b; font-weight: bold; font-size: 0.9rem; margin-top: 15px;">DRAG TO MOVE • AUTO-FIRE</p>
         <button class="btn" id="start-btn">ENGAGE</button>
     </div>
@@ -272,6 +308,14 @@ const LEVELS = [
 const asteroidImg = new Image();
 asteroidImg.crossOrigin = "Anonymous";
 asteroidImg.src = "https://cdn.creazilla.com/cliparts/4310/asteroid-clipart-xl.png";
+
+const meteorImg = new Image();
+meteorImg.crossOrigin = "Anonymous";
+meteorImg.src = "https://pngimg.com/uploads/meteor/meteor_PNG9.png";
+
+const bossImg = new Image();
+bossImg.crossOrigin = "Anonymous";
+bossImg.src = "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023292-F42MK2JVX2T2XGE6H77U/UFO-dancing.gif";
 
 /**
  * ------------------------------------------------------------------
@@ -457,8 +501,8 @@ let width, height;
 let particles = [];
 let bullets = [];
 let enemies = [];
-let stars = []; // Layer 1
-let planets = []; // Layer 2 (Parallax)
+let stars = []; 
+let backgroundObjects = []; 
 let floatingTexts = [];
 let powerups = [];
 let boss = null;
@@ -590,15 +634,17 @@ function initBackground() {
     stars = [];
     for(let i=0; i<80; i++) stars.push({ x: Math.random()*width, y: Math.random()*height, size: Math.random()*2+0.5, speed: Math.random()*4+1 });
     
-    planets = [];
-    for(let i=0; i<3; i++) {
-        planets.push({
+    backgroundObjects = [];
+    // Only 4 background objects for performance - now only meteors/asteroids
+    for(let i=0; i<4; i++) {
+        backgroundObjects.push({
             x: Math.random()*width,
             y: Math.random()*height,
-            size: 50 + Math.random()*100,
-            speed: 0.5 + Math.random()*0.5,
+            size: 40 + Math.random()*100,
+            speed: 0.2 + Math.random()*0.5,
             hue: Math.random()*360,
-            type: Math.random() > 0.5 ? 'planet' : 'cloud'
+            type: Math.random() > 0.5 ? 'asteroid' : 'meteor',
+            rotation: Math.random() * Math.PI * 2
         });
     }
 }
@@ -729,7 +775,8 @@ function nextLevel() {
         updateLevelHUD();
         enemies = []; bullets = [];
         
-        if(currentLevelIndex === 4 || currentLevelIndex === 9) {
+        // Spawn Boss Check
+        if ([1, 3, 4, 5, 7, 9].includes(currentLevelIndex)) {
             spawnBoss();
         }
     }, 2000);
@@ -761,11 +808,22 @@ function gameOver(win) {
 
 function spawnBoss() {
     AudioSys.speak("Warning. Boss Approaching.");
+    let type = 'normal';
+    let hp = 100 + (currentLevelIndex * 10);
+    // Base size for normal boss
+    let w = 120;
+    let h = 80; // Default somewhat flattened aspect ratio for vector fallback, but we'll adapt for image
+    
+    // Size overrides
+    if (currentLevelIndex === 4) { type = 'big'; hp = 300; w = 200; h = 130; }
+    if (currentLevelIndex === 9) { type = 'final'; hp = 1000; w = 280; h = 180; }
+
     boss = {
-        x: width/2, y: -100, w: 120, h: 100,
-        hp: 50 + (currentLevelIndex * 5),
-        maxHp: 50 + (currentLevelIndex * 5),
+        x: width/2, y: -150, 
+        w: w, h: h,
+        hp: hp, maxHp: hp,
         vx: 2, vy: 1,
+        type: type,
         phase: 'enter',
         shootTimer: 0
     };
@@ -780,7 +838,14 @@ function spawnPowerup(x, y) {
 function spawnEnemy() {
     if (levelTransitioning || boss) return;
     
-    const size = 30 + Math.random() * 20;
+    // Scale Logic
+    let scale = 1;
+    const r = Math.random();
+    if(r < 0.1) scale = 3; // 10% Huge
+    else if(r < 0.25) scale = 2; // 15% Big
+    
+    const baseSize = 30 + Math.random() * 20;
+    const size = baseSize * scale;
     
     let char = '';
     let isTrap = false;
@@ -800,16 +865,29 @@ function spawnEnemy() {
         char = alpha[Math.floor(Math.random() * alpha.length)];
     }
 
+    // Increased Durability for big rocks
+    // Base 3-5 + Level Scaling
+    // Multiplier: Scale * 1.5 to make them tanky
+    let hp = (Math.floor(Math.random() * 3) + 3) * scale * 1.5;
+
+    // Meteor variant chance
+    const isMeteor = Math.random() < 0.3;
+    const imgType = isMeteor ? 'meteor' : 'asteroid';
+    const speedMult = isMeteor ? 1.5 : 1;
+
     enemies.push({
         x: Math.random() * (width - size*2) + size,
-        y: -50,
+        y: -50 - size,
         w: size, h: size,
         letter: char,
         isTrap: isTrap,
-        hp: Math.floor(Math.random() * 3) + 3,
-        vy: (Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2)),
+        hp: hp,
+        imgType: imgType,
+        // Bigger rocks move slower, meteors faster
+        vy: (Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2)) / scale * speedMult,
         rot: Math.random() * Math.PI,
-        rotSpeed: (Math.random()-0.5) * 0.05
+        rotSpeed: ((Math.random()-0.5) * 0.05) / scale,
+        scale: scale
     });
 }
 
@@ -826,24 +904,28 @@ function spawnBullet(offset = 0, angle = 0) {
 }
 
 function createParticles(x, y, color, amount, type = 'spark') {
-    for(let i=0; i<amount; i++) {
+    // Reduced particle counts for performance
+    let actualAmount = Math.min(amount, 8); 
+    if(type === 'smoke') actualAmount = Math.min(amount, 4);
+
+    for(let i=0; i<actualAmount; i++) {
         let p = { x: x, y: y, life: 1.0, color: color, type: type };
         
         if (type === 'spark') {
-            p.vx = (Math.random() - 0.5) * 12;
-            p.vy = (Math.random() - 0.5) * 12;
+            p.vx = (Math.random() - 0.5) * 10;
+            p.vy = (Math.random() - 0.5) * 10;
             p.size = Math.random() * 3 + 1;
-            p.decay = 0.02 + Math.random() * 0.03;
+            p.decay = 0.05; 
         } else if (type === 'smoke') {
             p.vx = (Math.random() - 0.5) * 2;
             p.vy = (Math.random() - 0.5) * 2;
-            p.size = Math.random() * 10 + 5;
-            p.decay = 0.01 + Math.random() * 0.01;
+            p.size = Math.random() * 8 + 4;
+            p.decay = 0.03;
         } else if (type === 'trail') {
             p.vx = (Math.random() - 0.5) * 2;
             p.vy = 5 + Math.random() * 5; 
-            p.size = Math.random() * 4 + 1;
-            p.decay = 0.05 + Math.random() * 0.05;
+            p.size = Math.random() * 3 + 1;
+            p.decay = 0.1;
         } else if (type === 'warp') {
             p.x = Math.random() * width; p.y = Math.random() * height;
             p.vx = 0; p.vy = 20 + Math.random()*20;
@@ -893,27 +975,35 @@ function loop() {
     frameCount++;
     if(frameCount % 60 === 0) updateTime();
 
-    // 1. BG
+    // 1. BG - With Blur Filter for Depth
+    ctx.filter = 'blur(4px)'; 
+    
+    // Background Objects (Asteroids/Meteors instead of circles)
+    backgroundObjects.forEach(p => {
+        p.y += p.speed * (powerupState.freeze > 0 ? 0.2 : 1);
+        if(p.y > height + 100) { p.y = -100; p.x = Math.random()*width; }
+        
+        // Draw dark background image
+        let img = p.type === 'meteor' ? meteorImg : asteroidImg;
+        if (img.complete && img.naturalWidth !== 0) {
+            ctx.globalAlpha = 0.3; // Make them fade into background
+            ctx.drawImage(img, p.x, p.y, p.size, p.size);
+            ctx.globalAlpha = 1;
+        }
+    });
+    ctx.filter = 'none'; // Reset filter immediately
+
+    // Stars (No blur for crisp stars)
     ctx.fillStyle = 'white';
     stars.forEach(s => {
         s.y += s.speed * (powerupState.freeze > 0 ? 0.2 : 1);
-        if(levelTransitioning) s.y += 10; // Warp speed
+        if(levelTransitioning) s.y += 10; 
         if(s.y > height) { s.y = 0; s.x = Math.random()*width; }
         ctx.globalAlpha = Math.random() * 0.5 + 0.2;
         ctx.fillRect(s.x, s.y, s.size, s.size);
     });
     
     if(levelTransitioning && frameCount % 2 === 0) createParticles(0,0, '#fff', 2, 'warp');
-
-    planets.forEach(p => {
-        p.y += p.speed * (powerupState.freeze > 0 ? 0.2 : 1);
-        if(p.y > height + 100) { p.y = -100; p.x = Math.random()*width; }
-        ctx.globalAlpha = 0.3;
-        ctx.fillStyle = `hsl(${p.hue}, 50%, 50%)`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-        ctx.fill();
-    });
     ctx.globalAlpha = 1;
 
     // 2. PLAYER
@@ -922,7 +1012,6 @@ function loop() {
     player.x = Math.max(25, Math.min(width-25, player.x));
     player.y = Math.max(25, Math.min(height-25, player.y));
     
-    // Engine Trails
     if(frameCount % 3 === 0) createParticles(player.x, player.y + 20, '#00ffff', 1, 'trail');
 
     // Timers
@@ -960,7 +1049,7 @@ function loop() {
     } else {
         if(input.active && frameCount - player.lastShot > player.fireRate) {
             spawnBullet(-15); spawnBullet(15);
-            createParticles(player.x - 15, player.y - 20, '#00ffff', 1, 'spark'); // Muzzle flash
+            createParticles(player.x - 15, player.y - 20, '#00ffff', 1, 'spark'); 
             createParticles(player.x + 15, player.y - 20, '#00ffff', 1, 'spark');
             if(powerupState.spread > 0) {
                 spawnBullet(0, -0.2); spawnBullet(0, 0.2); spawnBullet(0);
@@ -980,8 +1069,11 @@ function loop() {
         for(let i = bullets.length-1; i>=0; i--) {
             let b = bullets[i];
             b.x += b.vx || 0; b.y += b.vy;
-            ctx.shadowBlur = 10; ctx.shadowColor = b.color; ctx.fillStyle = b.color;
-            ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h); ctx.shadowBlur = 0;
+            
+            // LAG FIX: NO SHADOWS
+            ctx.fillStyle = b.color;
+            ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h); 
+            
             if(b.y < -50) { bullets.splice(i,1); continue; }
             
             for(let j=enemies.length-1; j>=0; j--) {
@@ -1011,11 +1103,11 @@ function loop() {
         ctx.save();
         ctx.translate(e.x, e.y); ctx.rotate(e.rot);
         
-        if (asteroidImg.complete && asteroidImg.naturalWidth !== 0) {
-            if(e.isTrap) { ctx.shadowColor = 'red'; ctx.shadowBlur = 10; }
-            else if(isLetterNeeded(e.letter)) { ctx.shadowColor = '#00ff00'; ctx.shadowBlur = 15; }
-            ctx.drawImage(asteroidImg, -e.w/2, -e.h/2, e.w, e.h);
-            ctx.shadowBlur = 0;
+        let img = (e.imgType === 'meteor' && meteorImg.complete) ? meteorImg : asteroidImg;
+
+        if (img.complete && img.naturalWidth !== 0) {
+            // LAG FIX: Removed Shadows
+            ctx.drawImage(img, -e.w/2, -e.h/2, e.w, e.h);
         } else {
             ctx.fillStyle = e.isTrap ? '#500' : '#444';
             ctx.beginPath();
@@ -1028,8 +1120,11 @@ function loop() {
         
         ctx.rotate(-e.rot); 
         ctx.fillStyle = e.isTrap ? '#ff0000' : (isLetterNeeded(e.letter) ? '#00ff00' : '#fff');
-        ctx.font = 'bold 24px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.shadowColor = 'black'; ctx.shadowBlur = 4; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+        ctx.font = `bold ${24 + (e.scale-1)*10}px monospace`; // Scale text
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        
+        // Simple outline for performance
+        ctx.strokeStyle = 'rgba(0,0,0,0.8)'; ctx.lineWidth = 3;
         ctx.strokeText(e.letter, 0, 0); ctx.fillText(e.letter, 0, 0);
         ctx.restore();
         
@@ -1038,7 +1133,7 @@ function loop() {
             if(Math.sqrt(dx*dx + dy*dy) < (player.w/2 + e.w/2)) {
                 if(powerupState.shield) {
                     powerupState.shield = false; player.invulnerable = 60;
-                    createParticles(player.x, player.y, '#00ffff', 20, 'ring');
+                    createParticles(player.x, player.y, '#00ffff', 10, 'spark');
                     AudioSys.playPowerupCollect(); 
                     enemies.splice(i,1);
                 } else {
@@ -1047,7 +1142,7 @@ function loop() {
                 }
             }
         }
-        if(e.y > height + 50) enemies.splice(i,1);
+        if(e.y > height + 100) enemies.splice(i,1);
     }
     
     // 6. BOSS
@@ -1060,13 +1155,22 @@ function loop() {
             boss.shootTimer++;
             if(boss.shootTimer > 60) {
                 boss.shootTimer = 0;
-                enemies.push({ x: boss.x, y: boss.y + 50, w: 20, h: 20, letter: '!', isTrap: true, hp: 1, vy: 5, rot: 0, rotSpeed: 0.2 });
+                enemies.push({ x: boss.x, y: boss.y + 50, w: 20, h: 20, letter: '!', isTrap: true, hp: 1, vy: 5, rot: 0, rotSpeed: 0.2, scale: 1 });
             }
         }
         
         ctx.save(); ctx.translate(boss.x, boss.y);
-        ctx.fillStyle = '#ff3300'; ctx.shadowBlur = 20; ctx.shadowColor = 'red';
-        ctx.beginPath(); ctx.moveTo(0, 50); ctx.lineTo(60, -30); ctx.lineTo(0, -50); ctx.lineTo(-60, -30); ctx.fill();
+        // KEEP Boss Shadow (Important target)
+        // Draw boss image if loaded, otherwise fallback
+        if(bossImg.complete && bossImg.naturalWidth !== 0) {
+            ctx.shadowBlur = 20; ctx.shadowColor = 'red';
+            ctx.drawImage(bossImg, -boss.w/2, -boss.h/2, boss.w, boss.h);
+            ctx.shadowBlur = 0;
+        } else {
+            ctx.fillStyle = '#ff3300'; ctx.shadowBlur = 20; ctx.shadowColor = 'red';
+            ctx.beginPath(); ctx.moveTo(0, 50); ctx.lineTo(60, -30); ctx.lineTo(0, -50); ctx.lineTo(-60, -30); ctx.fill();
+        }
+        
         ctx.fillStyle = '#fff'; ctx.font = 'bold 20px Arial'; ctx.textAlign='center';
         ctx.fillText("HP: " + boss.hp, 0, 0);
         ctx.restore();
@@ -1082,7 +1186,7 @@ function loop() {
         if(powerupState.magnet > 0) { p.x += (player.x - p.x) * 0.1; p.y += (player.y - p.y) * 0.1; } else { p.y += p.vy; }
         
         ctx.save(); ctx.translate(p.x, p.y);
-        ctx.shadowColor = '#ffff00'; ctx.shadowBlur = 10; ctx.fillStyle = '#ffeb3b';
+        ctx.fillStyle = '#ffeb3b';
         ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
         ctx.fillStyle = '#000'; ctx.font = 'bold 16px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         let icon = "⚡";
@@ -1099,7 +1203,8 @@ function loop() {
     // 8. PLAYER
     if(player.invulnerable % 10 < 5) { 
         ctx.save(); ctx.translate(player.x, player.y);
-        ctx.globalCompositeOperation = 'lighter'; ctx.shadowBlur = 20;
+        ctx.globalCompositeOperation = 'lighter'; 
+        ctx.shadowBlur = 20; 
         
         if(powerupState.beam > 0) { ctx.shadowColor = '#ffff00'; ctx.fillStyle = '#ffffaa'; }
         else { ctx.shadowColor = '#00d2ff'; ctx.fillStyle = '#eee'; }
@@ -1122,8 +1227,9 @@ function loop() {
         } else { ft.y += ft.vy; }
         ft.life -= 0.02;
         if(ft.life <= 0) { floatingTexts.splice(i,1); continue; }
+        
         ctx.globalAlpha = ft.life; ctx.font = 'bold 30px Arial';
-        ctx.fillStyle = ft.color || '#00ffcc'; ctx.shadowBlur = 10; ctx.shadowColor = ft.color || '#00ffcc';
+        ctx.fillStyle = ft.color || '#00ffcc'; 
         ctx.fillText(ft.text, ft.x, ft.y);
     }
     
@@ -1151,15 +1257,21 @@ function hitEnemy(e, index, damage) {
         if(e.isTrap) {
             score = Math.max(0, score - 200); combo = 1; updateComboUI();
             screenShake = 10; vibrate(50);
-            createParticles(e.x, e.y, 'red', 15, 'smoke');
+            createParticles(e.x, e.y, 'red', 10, 'smoke');
             floatingTexts.push({x: e.x, y: e.y, text: "TRAP!", color: 'red', life: 1.0, vy: -1});
             enemies.splice(index, 1); scoreDisplay.innerText = `PTS: ${score}`;
             return;
         }
 
-        AudioSys.playExplosion(); vibrate(15);
-        createParticles(e.x, e.y, '#ffaa00', 10, 'smoke');
-        createParticles(e.x, e.y, '#ffcc00', 10, 'spark');
+        AudioSys.playExplosion(); 
+        
+        // HAPTIC FEEDBACK (Harder for bigger rocks)
+        if(e.scale >= 3) vibrate([50, 20, 50]); // Triple thump
+        else if(e.scale >= 2) vibrate(30); 
+        else vibrate(15);
+
+        createParticles(e.x, e.y, '#ffaa00', 8, 'smoke');
+        createParticles(e.x, e.y, '#ffcc00', 8, 'spark');
         
         let collected = false;
         
@@ -1183,8 +1295,10 @@ function hitEnemy(e, index, damage) {
         if(Math.random() < 0.08) spawnPowerup(e.x, e.y);
         enemies.splice(index, 1);
         
+        // LEVEL ADVANCEMENT
+        // Ensure boss is dead AND letters are found
         if(foundLetters.every(x=>x) && !winTimeout && !levelTransitioning && !boss) {
-            if(currentLevelIndex !== 4 && currentLevelIndex !== 9) { winTimeout = setTimeout(nextLevel, 1000); }
+            winTimeout = setTimeout(nextLevel, 1000);
         }
     }
 }
@@ -1192,7 +1306,7 @@ function hitEnemy(e, index, damage) {
 function takeDamage() {
     lives--; combo = 1; updateComboUI(); updateLivesUI();
     player.invulnerable = 100; screenShake = 20; 
-    createParticles(player.x, player.y, '#ff3366', 30, 'smoke');
+    createParticles(player.x, player.y, '#ff3366', 20, 'smoke');
     AudioSys.playExplosion(); vibrate(200);
     if(lives <= 0) gameOver(false);
 }
@@ -1208,12 +1322,13 @@ function activatePowerup(type) {
 }
 
 function killBoss() {
-    createParticles(boss.x, boss.y, '#ffaa00', 50, 'smoke');
-    createParticles(boss.x, boss.y, '#fff', 30, 'spark');
+    createParticles(boss.x, boss.y, '#ffaa00', 30, 'smoke');
+    createParticles(boss.x, boss.y, '#fff', 20, 'spark');
     screenShake = 30; score += 5000; boss = null;
     floatingTexts.push({x: width/2, y: height/2, text: "BOSS DEFEATED!", color: 'gold', life: 3.0, vy: -0.5});
     AudioSys.speak("Boss Defeated");
     
+    // Check if word is also done to advance
     if(foundLetters.every(x=>x)) { winTimeout = setTimeout(nextLevel, 2000); } 
     else { AudioSys.speak("Finish the word!"); }
 }
