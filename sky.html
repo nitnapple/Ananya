@@ -11,7 +11,7 @@
             background-color: #050505;
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            touch-action: none; /* Critical: Disables browser zooming/scrolling */
+            touch-action: none;
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -36,7 +36,7 @@
             z-index: 10;
         }
         h1 {
-            font-size: clamp(2rem, 8vw, 4rem); /* Responsive font size */
+            font-size: clamp(2rem, 8vw, 4rem);
             text-transform: uppercase;
             letter-spacing: 0.2em;
             text-shadow: 0 0 20px #00d2ff, 0 0 40px #00d2ff;
@@ -56,7 +56,7 @@
             pointer-events: auto;
             background: linear-gradient(45deg, #ff00cc, #3333ff);
             border: 2px solid rgba(255,255,255,0.4);
-            padding: 20px 60px; /* Larger touch target */
+            padding: 20px 60px;
             color: white;
             font-size: 1.5rem;
             font-weight: bold;
@@ -76,50 +76,76 @@
             background: linear-gradient(45deg, #d400aa, #2222dd);
         }
         
-        /* HUD */
+        /* HUD UPDATED */
         .hud-top {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 80px; /* Fixed height for touch safety at top */
-            padding: 15px 20px;
-            padding-top: max(15px, env(safe-area-inset-top)); /* Handle Notch */
+            height: auto;
+            min-height: 100px;
+            padding: 10px 15px;
+            padding-top: max(15px, env(safe-area-inset-top));
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            z-index: 5;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
+        }
+
+        .stats-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            pointer-events: none;
-            z-index: 5;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            width: 100%;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px black;
         }
+
+        .level-tag { color: #ffeb3b; font-weight: bold; }
+        .score-tag { color: #00e676; }
+        .time-tag { color: #00d2ff; }
+
         .lives-container {
             display: flex;
-            gap: 5px;
+            gap: 3px;
         }
         .life-pip {
-            width: 25px; /* Larger pips */
-            height: 10px;
+            width: 20px;
+            height: 8px;
             background: #ff3366;
-            box-shadow: 0 0 10px #ff3366;
+            box-shadow: 0 0 5px #ff3366;
             transform: skewX(-20deg);
         }
         .life-pip.lost {
-            background: #333;
+            background: #444;
             box-shadow: none;
         }
+        
+        .target-word-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
         .target-word {
             display: flex;
-            gap: 5px;
+            gap: 4px;
+            flex-wrap: wrap; /* Handle very long words like CONSTITUTION CLUB */
+            justify-content: center;
         }
+
         .letter-slot {
-            width: 30px;
-            height: 40px;
+            width: 28px;
+            height: 38px;
             border-bottom: 3px solid rgba(0, 210, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-family: monospace;
             font-weight: bold;
             color: #00d2ff;
@@ -130,18 +156,24 @@
             background: rgba(0, 210, 255, 0.2);
             text-shadow: 0 0 15px #00d2ff;
             border-bottom: 3px solid #fff;
+            color: #fff;
+        }
+        .letter-slot.space {
+            border: none;
+            background: transparent;
+            width: 15px; /* Spacer width */
         }
         
         /* Volume Toggle */
         #vol-btn {
             pointer-events: auto;
-            background: rgba(0,0,0,0.5);
-            border: 2px solid #555;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #777;
             color: #fff;
             border-radius: 50%;
-            width: 50px; /* Larger hit area */
-            height: 50px;
-            font-size: 1.5rem;
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -149,9 +181,10 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        @media (max-width: 600px) {
-            .letter-slot { width: 25px; height: 35px; font-size: 1.2rem; }
-            .target-word { gap: 3px; }
+        @media (max-width: 400px) {
+            .letter-slot { width: 20px; height: 28px; font-size: 1rem; border-bottom-width: 2px; }
+            .target-word { gap: 2px; }
+            .stats-row { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -161,35 +194,65 @@
 
 <!-- HUD -->
 <div class="hud-top" id="game-hud" style="display: none;">
-    <div class="lives-container" id="lives-display">
-        <!-- populated by js -->
+    <div class="stats-row">
+        <div class="lives-container" id="lives-display"></div>
+        <div class="level-tag" id="level-display">LVL 1</div>
+        <div class="score-tag" id="score-display">PTS: 0</div>
+        <div class="time-tag" id="time-display">00:00</div>
+        <button id="vol-btn">🔊</button>
     </div>
-    <div class="target-word" id="word-display">
-        <!-- populated by js -->
+    <div class="target-word-container">
+        <div class="target-word" id="word-display">
+            <!-- populated by js -->
+        </div>
     </div>
-    <button id="vol-btn">🔊</button>
 </div>
 
 <!-- SCREENS -->
 <div id="ui-layer">
     <div id="start-screen">
         <h1>Sky Force:<br>Ananya</h1>
-        <p>Touch & Drag to Pilot</p>
-        <p>Collect: <strong>A-N-A-N-Y-A</strong></p>
+        <p>10 Levels. One Mission.</p>
+        <p style="color: #ffeb3b; font-size: 1rem; margin-top: 5px;">Complete words to advance.</p>
         <button class="btn" id="start-btn">LAUNCH</button>
     </div>
     
     <div id="end-screen" style="display: none;">
         <h1 id="end-title">MISSION COMPLETE</h1>
-        <p id="end-subtitle">ANANYA FORMED</p>
+        <p id="end-subtitle">ALL TARGETS SECURED</p>
+        <p id="final-score" style="color: #00e676; margin-top: 10px;"></p>
         <button class="btn" id="restart-btn">REPLAY</button>
+    </div>
+    
+    <!-- Level Transition Overlay -->
+    <div id="level-screen" style="display: none;">
+        <h1 id="level-title" style="font-size: 2.5rem; color: #ffeb3b;">LEVEL 2</h1>
+        <p id="level-subtitle">SHANDILYA</p>
     </div>
 </div>
 
 <script>
 /**
  * ------------------------------------------------------------------
- * AUDIO SYSTEM (Web Audio API - No external files)
+ * GAME DATA
+ * ------------------------------------------------------------------
+ */
+const LEVELS = [
+    "ANANYA",
+    "SHANDILYA",
+    "BLUE LAGOON",
+    "CONSTITUTION CLUB",
+    "JANPATH",
+    "PHILOSOPHY",
+    "HER MAJESTY",
+    "SWIMMING",
+    "TOKYO",
+    "JUJUTSU KAISEN"
+];
+
+/**
+ * ------------------------------------------------------------------
+ * AUDIO SYSTEM
  * ------------------------------------------------------------------
  */
 const AudioSys = {
@@ -236,7 +299,6 @@ const AudioSys = {
         osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.1);
         gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-        
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start();
@@ -252,7 +314,6 @@ const AudioSys = {
         osc.frequency.linearRampToValueAtTime(1200, this.ctx.currentTime + 0.1);
         gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
-        
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start();
@@ -278,7 +339,6 @@ const AudioSys = {
 
         gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
-        
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start();
@@ -288,17 +348,14 @@ const AudioSys = {
     startBGM: function() {
         if (!this.ctx) return;
         this.stopBGM();
-
         const osc1 = this.ctx.createOscillator();
         osc1.type = 'sawtooth';
         osc1.frequency.value = 55; // A1
         const gain1 = this.ctx.createGain();
         gain1.gain.value = 0.1;
-        
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.value = 400;
-
         osc1.connect(filter);
         filter.connect(this.masterGain);
         osc1.start();
@@ -336,9 +393,15 @@ const ctx = canvas.getContext('2d', { alpha: false });
 const uiLayer = document.getElementById('ui-layer');
 const startScreen = document.getElementById('start-screen');
 const endScreen = document.getElementById('end-screen');
+const levelScreen = document.getElementById('level-screen');
 const hud = document.getElementById('game-hud');
+
+// HUD Elements
 const livesContainer = document.getElementById('lives-display');
 const wordDisplay = document.getElementById('word-display');
+const levelDisplay = document.getElementById('level-display');
+const scoreDisplay = document.getElementById('score-display');
+const timeDisplay = document.getElementById('time-display');
 const volBtn = document.getElementById('vol-btn');
 
 let width, height;
@@ -352,9 +415,13 @@ let floatingTexts = [];
 let gameRunning = false;
 let frameCount = 0;
 let lives = 5;
-const targetName = "ANANYA";
-let foundLetters = []; 
+let currentLevelIndex = 0;
 let score = 0;
+let gameStartTime = 0;
+let currentTimeStr = "00:00";
+let foundLetters = []; 
+let currentTarget = "";
+let levelTransitioning = false;
 
 // Player
 const player = {
@@ -370,7 +437,6 @@ const input = {
     x: 0, 
     y: 0, 
     active: false,
-    // Relative touch tracking
     offsetX: 0,
     offsetY: 0
 };
@@ -384,14 +450,12 @@ function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     
-    // Only reset player if game isn't running to avoid gameplay jumps
     if (!gameRunning) {
         player.x = width/2;
         player.y = height - 150;
         input.x = width/2;
         input.y = height - 150;
     } else {
-        // Keep inside bounds
         player.x = Math.max(25, Math.min(width-25, player.x));
         player.y = Math.max(25, Math.min(height-25, player.y));
     }
@@ -403,16 +467,11 @@ function vibrate(ms) {
     if (navigator.vibrate) navigator.vibrate(ms);
 }
 
-// ------------------------------------
-// MOBILE OPTIMIZED INPUT HANDLING
-// ------------------------------------
-
-// Mouse: Direct Follow (Classic Arcade)
-// We use a fixed offset Y so cursor doesn't cover ship
+// Input Handling
 canvas.addEventListener('mousedown', e => {
     input.active = true;
     input.x = e.clientX;
-    input.y = e.clientY - 60; // Offset above cursor
+    input.y = e.clientY - 60; 
     AudioSys.resume();
 });
 canvas.addEventListener('mousemove', e => {
@@ -423,21 +482,14 @@ canvas.addEventListener('mousemove', e => {
 });
 canvas.addEventListener('mouseup', () => input.active = false);
 
-// Touch: Relative Movement (Virtual Joystick style)
-// This allows player to touch ANYWHERE to move ship, preventing finger occlusion
 canvas.addEventListener('touchstart', e => {
     e.preventDefault();
     const t = e.touches[0];
     input.active = true;
-    
-    // Lock the difference between touch and current ship position
     input.offsetX = player.x - t.clientX;
     input.offsetY = player.y - t.clientY;
-    
-    // Update input target immediately so no initial jump
     input.x = player.x; 
     input.y = player.y;
-
     AudioSys.resume();
 }, { passive: false });
 
@@ -445,8 +497,6 @@ canvas.addEventListener('touchmove', e => {
     e.preventDefault();
     if(!input.active) return;
     const t = e.touches[0];
-    
-    // Apply the locked offset to current touch
     input.x = t.clientX + input.offsetX;
     input.y = t.clientY + input.offsetY;
 }, { passive: false });
@@ -456,7 +506,6 @@ canvas.addEventListener('touchend', (e) => {
     if(e.touches.length === 0) input.active = false;
 });
 
-// Sound Toggle
 volBtn.addEventListener('click', () => {
     const isMuted = AudioSys.toggleMute();
     volBtn.innerText = isMuted ? '🔇' : '🔊';
@@ -489,17 +538,32 @@ function initHUD() {
         pip.id = `life-${i}`;
         livesContainer.appendChild(pip);
     }
+    updateLevelHUD();
+}
+
+function updateLevelHUD() {
+    levelDisplay.innerText = `LVL ${currentLevelIndex + 1}`;
     
-    // Word
+    // Set up word slots
     wordDisplay.innerHTML = '';
     foundLetters = [];
-    for(let i=0; i<targetName.length; i++) {
-        foundLetters.push(false);
+    currentTarget = LEVELS[currentLevelIndex];
+    
+    for(let i=0; i<currentTarget.length; i++) {
+        const char = currentTarget[i];
         const slot = document.createElement('div');
-        slot.className = 'letter-slot';
-        slot.innerText = ''; 
-        slot.dataset.char = targetName[i];
         slot.id = `word-slot-${i}`;
+        
+        if (char === ' ') {
+            // Space handling
+            slot.className = 'letter-slot space';
+            foundLetters.push(true); // Space is already found
+        } else {
+            slot.className = 'letter-slot';
+            slot.innerText = ''; 
+            slot.dataset.char = char;
+            foundLetters.push(false);
+        }
         wordDisplay.appendChild(slot);
     }
 }
@@ -522,7 +586,11 @@ function startGame() {
     
     gameRunning = true;
     lives = 5;
+    score = 0;
     frameCount = 0;
+    currentLevelIndex = 0;
+    gameStartTime = Date.now();
+    
     bullets = [];
     enemies = [];
     particles = [];
@@ -533,44 +601,79 @@ function startGame() {
     player.y = height - 150;
     input.x = width/2;
     input.y = height - 150;
-    input.active = false; // Reset input state to prevent jump
+    input.active = false; 
     
     initStars();
     initHUD();
     requestAnimationFrame(loop);
 }
 
+function nextLevel() {
+    currentLevelIndex++;
+    levelTransitioning = true;
+    
+    if (currentLevelIndex >= LEVELS.length) {
+        gameOver(true);
+        return;
+    }
+
+    // Clear enemies
+    enemies = [];
+    bullets = [];
+    
+    // Show Overlay
+    levelScreen.style.display = 'flex';
+    document.getElementById('level-title').innerText = `LEVEL ${currentLevelIndex + 1}`;
+    document.getElementById('level-subtitle').innerText = LEVELS[currentLevelIndex];
+    
+    // Award Bonus Points
+    score += 500;
+    scoreDisplay.innerText = `PTS: ${score}`;
+    AudioSys.playCollect();
+
+    setTimeout(() => {
+        levelScreen.style.display = 'none';
+        levelTransitioning = false;
+        updateLevelHUD();
+    }, 2000);
+}
+
 function gameOver(win) {
     gameRunning = false;
     AudioSys.stopBGM();
     hud.style.display = 'none';
+    levelScreen.style.display = 'none';
     endScreen.style.display = 'flex';
     
     const title = document.getElementById('end-title');
     const sub = document.getElementById('end-subtitle');
+    const fScore = document.getElementById('final-score');
     
     if(win) {
         title.innerText = "MISSION ACCOMPLISHED";
         title.style.color = "#00ffcc";
-        sub.innerText = "NAME SEQUENCE COMPLETED";
+        sub.innerText = "ALL LEVELS CLEARED";
         AudioSys.playCollect();
     } else {
         title.innerText = "CRITICAL FAILURE";
         title.style.color = "#ff3366";
-        sub.innerText = "HULL INTEGRITY ZERO";
+        sub.innerText = "SHIP DESTROYED";
     }
+    fScore.innerText = `FINAL SCORE: ${score} | TIME: ${currentTimeStr}`;
 }
 
 function spawnEnemy() {
+    if (levelTransitioning) return;
+    
     const size = 30 + Math.random() * 20;
     
-    // Smart Spawning: 35% chance to drop a NEEDED letter
+    // Drop logic: High chance for needed letters
     let char = '';
     const neededIndices = foundLetters.map((found, idx) => found ? -1 : idx).filter(i => i !== -1);
     
-    if (Math.random() < 0.35 && neededIndices.length > 0) {
+    if (Math.random() < 0.4 && neededIndices.length > 0) {
         const targetIdx = neededIndices[Math.floor(Math.random() * neededIndices.length)];
-        char = targetName[targetIdx];
+        char = currentTarget[targetIdx];
     } else {
         const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         char = alpha[Math.floor(Math.random() * alpha.length)];
@@ -583,13 +686,14 @@ function spawnEnemy() {
         h: size,
         letter: char,
         hp: 2,
-        vy: Math.random() * 2 + 1.5,
+        vy: Math.random() * 2 + 1.5 + (currentLevelIndex * 0.2), // Get faster each level
         rot: Math.random() * Math.PI,
         rotSpeed: (Math.random()-0.5) * 0.05
     });
 }
 
 function spawnBullet() {
+    if (levelTransitioning) return;
     AudioSys.playShoot();
     bullets.push({x: player.x - 15, y: player.y, w: 4, h: 20, vy: -18, color: '#00ffff'});
     bullets.push({x: player.x + 15, y: player.y, w: 4, h: 20, vy: -18, color: '#00ffff'});
@@ -609,6 +713,15 @@ function createExplosion(x, y, color, amount) {
     }
 }
 
+function updateTime() {
+    if (levelTransitioning) return;
+    const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+    const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+    const s = (elapsed % 60).toString().padStart(2, '0');
+    currentTimeStr = `${m}:${s}`;
+    timeDisplay.innerText = currentTimeStr;
+}
+
 /**
  * ------------------------------------------------------------------
  * MAIN LOOP
@@ -622,6 +735,7 @@ function loop() {
     ctx.fillRect(0, 0, width, height);
     
     frameCount++;
+    if(frameCount % 60 === 0) updateTime();
 
     // 1. STARS
     ctx.fillStyle = 'white';
@@ -634,17 +748,14 @@ function loop() {
     ctx.globalAlpha = 1;
 
     // 2. PLAYER LOGIC
-    // Use Lerp for smooth movement
-    player.x += (input.x - player.x) * 0.2; // Slightly faster lerp for tighter control
+    player.x += (input.x - player.x) * 0.2; 
     player.y += (input.y - player.y) * 0.2;
     
-    // Clamp to screen
-    if(player.x < 25) { player.x = 25; input.x = 25; } // Keep input synced at edge
+    if(player.x < 25) { player.x = 25; input.x = 25; } 
     if(player.x > width-25) { player.x = width-25; input.x = width-25; }
     if(player.y < 25) { player.y = 25; input.y = 25; }
     if(player.y > height-25) { player.y = height-25; input.y = height-25; }
     
-    // Auto-fire only when input is active (finger down)
     if(input.active && frameCount - player.lastShot > player.fireRate) {
         spawnBullet();
         player.lastShot = frameCount;
@@ -653,7 +764,7 @@ function loop() {
     if(player.invulnerable > 0) player.invulnerable--;
 
     // 3. SPAWN ENEMIES
-    if(frameCount % 35 === 0) spawnEnemy();
+    if(!levelTransitioning && frameCount % 35 === 0) spawnEnemy();
 
     // 4. COLLISIONS & UPDATES
     ctx.globalCompositeOperation = 'lighter'; 
@@ -687,8 +798,8 @@ function loop() {
                     
                     // Letter Check
                     let collected = false;
-                    for(let k=0; k<targetName.length; k++) {
-                        if(targetName[k] === e.letter && !foundLetters[k]) {
+                    for(let k=0; k<currentTarget.length; k++) {
+                        if(currentTarget[k] === e.letter && !foundLetters[k]) {
                             foundLetters[k] = true;
                             collected = true;
                             
@@ -696,15 +807,21 @@ function loop() {
                             slot.innerText = e.letter;
                             slot.classList.add('filled');
                             
+                            score += 100; // Big points for letter
                             floatingTexts.push({x: e.x, y: e.y, text: e.letter, life: 1.0, vy: -2});
                             AudioSys.playCollect();
                             break; 
                         }
                     }
-                    if(!collected) score += 10;
+                    if(!collected) score += 10; // Small points for rocks
+                    scoreDisplay.innerText = `PTS: ${score}`;
+                    
                     enemies.splice(j,1);
                     
-                    if(foundLetters.every(x=>x)) setTimeout(() => gameOver(true), 1500);
+                    // CHECK WIN LEVEL
+                    if(foundLetters.every(x=>x)) {
+                        setTimeout(nextLevel, 1000);
+                    }
                 }
                 break;
             }
@@ -724,9 +841,11 @@ function loop() {
         
         ctx.fillStyle = '#444';
         let isNeeded = false;
-        for(let k=0; k<targetName.length; k++) {
-            if(targetName[k] === e.letter && !foundLetters[k]) isNeeded = true;
+        // Check if letter is needed in current level
+        for(let k=0; k<currentTarget.length; k++) {
+            if(currentTarget[k] === e.letter && !foundLetters[k]) isNeeded = true;
         }
+
         if(isNeeded) {
             ctx.strokeStyle = '#00ff00';
             ctx.lineWidth = 2;
