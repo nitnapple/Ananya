@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You - IAS</title>
+    <title>Thank You - Royal IAS</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Cinzel for Royal headings, Playfair for elegance -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
     
     <style>
         body {
-            background-color: #0f172a;
+            background-color: #050505;
             color: white;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Prevent scroll on mobile during tilt */
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
             perspective: 1000px;
         }
 
-        /* Animated Background */
+        /* Royal Animated Background */
         .bg-gradient-animate {
-            background: linear-gradient(-45deg, #0f172a, #1e293b, #312e81, #0f172a);
+            background: linear-gradient(-45deg, #000000, #1a0524, #240505, #0a0a0a);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             position: absolute;
@@ -37,11 +37,12 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Floating particles */
+        /* Gold Particles */
         .particle {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 215, 0, 0.3); /* Gold tint */
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
             animation: float 20s infinite linear;
             z-index: 0;
         }
@@ -61,12 +62,14 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            box-sizing: border-box;
         }
 
         .card {
             width: 100%;
-            max-width: 400px;
-            aspect-ratio: 3/4;
+            max-width: 420px;
+            /* Changed from fixed aspect ratio to min-height to prevent text clipping */
+            min-height: 600px; 
             position: relative;
             transform-style: preserve-3d;
             transform: rotateX(0deg) rotateY(0deg);
@@ -75,82 +78,111 @@
             cursor: pointer;
         }
 
-        /* The Glass Card Body */
+        /* Royal Glass Card Body */
         .card-face {
             position: absolute;
             inset: 0;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 12px;
+            /* Gold Border */
+            border: 2px solid rgba(255, 215, 0, 0.4); 
             box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+                0 30px 60px -12px rgba(0, 0, 0, 0.8),
+                inset 0 0 30px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(255, 215, 0, 0.1);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
             transform-style: preserve-3d;
-            overflow: hidden;
+            /* Removed overflow:hidden to allow text to breathe if needed, though sizing fits now */
+        }
+
+        /* Ornate Corner borders */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 215, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+        .tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .card:hover .corner {
+            width: 50px;
+            height: 50px;
         }
 
         /* 3D Depth Elements */
         .card-content {
-            transform: translateZ(60px); /* Lifts text off the card */
+            transform: translateZ(50px);
             z-index: 10;
-        }
-
-        .decorative-ring {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border: 2px solid rgba(255, 215, 0, 0.1);
-            border-radius: 50%;
-            transform: translateZ(20px);
-            pointer-events: none;
-        }
-
-        .decorative-ring.inner {
-            width: 200px;
-            height: 200px;
-            border-color: rgba(255, 255, 255, 0.05);
-            transform: translateZ(30px);
+            width: 100%;
         }
 
         /* Typography */
         h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            line-height: 1.2;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: clamp(2rem, 5vw, 3rem); /* Responsive font size */
+            line-height: 1.3;
             margin-bottom: 1.5rem;
-            background: linear-gradient(to right, #ffffff, #e2e8f0);
+            /* Metallic Gold Gradient */
+            background: linear-gradient(to bottom, #cfc09f 0%, #ffecb3 40%, #b3a070 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: #e2e8f0;
+            opacity: 0.9;
+            display: block;
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+            font-weight: 400;
         }
 
         p.ias-text {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 300;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            color: #cbd5e1;
-            margin-top: 1rem;
-            position: relative;
-            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #e2e8f0;
+            margin-top: 2rem;
+            text-transform: uppercase;
         }
 
         .highlight-ias {
-            font-weight: 700;
-            color: #fbbf24; /* Amber-400 */
-            text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
-            font-size: 1.3em;
+            font-family: 'Cinzel', serif;
+            font-weight: 800;
+            font-size: 3rem;
             display: block;
             margin-top: 0.5rem;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+            animation: shimmer 3s infinite linear;
+            background-size: 200%;
+        }
+
+        @keyframes shimmer {
+            0% {background-position: 0% 50%;}
+            100% {background-position: 200% 50%;}
         }
 
         /* Shine Effect */
@@ -162,36 +194,42 @@
             bottom: 0;
             background: radial-gradient(
                 circle at var(--mouse-x) var(--mouse-y), 
-                rgba(255,255,255,0.2) 0%, 
-                transparent 60%
+                rgba(255, 236, 179, 0.15) 0%, 
+                transparent 50%
             );
-            border-radius: 20px;
+            border-radius: 12px;
             pointer-events: none;
-            mix-blend-mode: overlay;
+            mix-blend-mode: soft-light;
             transform: translateZ(1px);
         }
 
-        /* IAS Emblem Placeholder Styling */
+        /* Crown/Emblem */
         .emblem {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
             color: #fbbf24;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transform: translateZ(40px);
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
         }
 
-        /* Mobile Adjustments */
+        .divider {
+            height: 2px;
+            width: 60px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 20px auto;
+            transform: translateZ(30px);
+        }
+
         @media (max-width: 640px) {
-            h1 { font-size: 2rem; }
-            .card { max-width: 90%; }
+            .card { min-height: 500px; padding: 0 10px; }
+            .card-face { padding: 1.5rem; }
+            .highlight-ias { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-gradient-animate"></div>
-    
-    <!-- Generated Particles -->
     <div id="particles"></div>
 
     <div class="scene">
@@ -199,21 +237,23 @@
             <div class="card-face">
                 <div class="shine"></div>
                 
-                <!-- Decorative Elements for Depth -->
-                <div class="decorative-ring"></div>
-                <div class="decorative-ring inner"></div>
+                <!-- Ornate Corners -->
+                <div class="corner tl"></div>
+                <div class="corner tr"></div>
+                <div class="corner bl"></div>
+                <div class="corner br"></div>
 
                 <div class="card-content">
                     <div class="emblem">
-                        <!-- Simple abstract Star/Laurel icon using pure CSS/HTML text -->
-                        ★
+                        ♔
                     </div>
+                    
                     <h1>
-                        Thank You<br>
-                        <span class="text-xl italic opacity-80 font-light block mt-2">for your Existence</span>
+                        Thank You
+                        <span class="subtitle">for your Existence</span>
                     </h1>
                     
-                    <div class="w-16 h-1 bg-amber-400 mx-auto rounded-full mb-6 shadow-[0_0_10px_rgba(251,191,36,0.5)]"></div>
+                    <div class="divider"></div>
 
                     <p class="ias-text">
                         Which makes me
@@ -227,11 +267,12 @@
     <script>
         // Particle Generation
         const particleContainer = document.getElementById('particles');
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             const p = document.createElement('div');
             p.classList.add('particle');
-            p.style.width = Math.random() * 4 + 'px';
-            p.style.height = p.style.width;
+            const size = Math.random() * 3;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
             p.style.left = Math.random() * 100 + 'vw';
             p.style.top = Math.random() * 100 + 'vh';
             p.style.animationDuration = (Math.random() * 20 + 10) + 's';
@@ -242,44 +283,33 @@
         // 3D Tilt Logic
         const card = document.getElementById('tiltCard');
         const scene = document.querySelector('.scene');
-        const shine = document.querySelector('.shine');
-
+        
         let bounds;
         
         function rotateToMouse(e) {
             bounds = card.getBoundingClientRect();
             
-            // Handle both touch and mouse events
             const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
             const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
-            const mouseX = clientX;
-            const mouseY = clientY;
-            const leftX = mouseX - bounds.x;
-            const topY = mouseY - bounds.y;
+            const leftX = clientX - bounds.x;
+            const topY = clientY - bounds.y;
             
-            // Center of the card
             const center = {
                 x: leftX - bounds.width / 2,
                 y: topY - bounds.height / 2
             }
             
-            // Distance from center to scaling factor
-            const distance = Math.sqrt(center.x**2 + center.y**2);
-
-            // Rotation logic
-            // Max rotation 15 degrees
-            const rotateX = ((center.y / bounds.height) * -30).toFixed(2); 
-            const rotateY = ((center.x / bounds.width) * 30).toFixed(2);
+            // Smoother rotation
+            const rotateX = ((center.y / bounds.height) * -20).toFixed(2); 
+            const rotateY = ((center.x / bounds.width) * 20).toFixed(2);
 
             card.style.transform = `
                 rotateX(${rotateX}deg)
                 rotateY(${rotateY}deg)
-                scale3d(1.05, 1.05, 1.05)
+                scale3d(1.02, 1.02, 1.02)
             `;
 
-            // Shine effect position
-            // We map the mouse position relative to the card 0-100%
             const shineX = (leftX / bounds.width) * 100;
             const shineY = (topY / bounds.height) * 100;
 
@@ -295,19 +325,17 @@
             `;
         }
 
-        // Event Listeners
         scene.addEventListener('mousemove', rotateToMouse);
         scene.addEventListener('mouseleave', stopRotate);
 
-        // Touch support for mobile
         scene.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Prevent scrolling while interacting with card
+            e.preventDefault(); 
             rotateToMouse(e);
         }, { passive: false });
         
         scene.addEventListener('touchend', stopRotate);
 
-        // Initial gyro-like subtle animation if no interaction
+        // Gentle auto-sway
         let autoAnimate = true;
         scene.addEventListener('mouseenter', () => autoAnimate = false);
         scene.addEventListener('touchstart', () => autoAnimate = false);
@@ -315,9 +343,9 @@
         let t = 0;
         function idleAnimation() {
             if (autoAnimate) {
-                t += 0.02;
-                const rotateX = Math.sin(t) * 5;
-                const rotateY = Math.cos(t) * 5;
+                t += 0.015;
+                const rotateX = Math.sin(t) * 3;
+                const rotateY = Math.cos(t) * 3;
                 card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             }
             requestAnimationFrame(idleAnimation);
