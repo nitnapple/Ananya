@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday, Ananya!</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/cake.ico">  
+  <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/nitnapple/src/refs/heads/main/cake.ico">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     body {
       background: linear-gradient(120deg, #ffe0f7 0%, #fffbe6 50%, #e0e7ff 100%);
@@ -36,7 +38,6 @@
     }
     .balloon::after {
       content: '';
-      display: block;
       position: absolute;
       left: 50%;
       top: 100%;
@@ -63,8 +64,62 @@
       70% { transform: scale(1.1);}
       to { opacity: 1; transform: scale(1);}
     }
+
+    /* GAME CTA */
+    .game-btn { position: relative; }
+    .game-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #f43f5e;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+      animation: pulseBadge 1.6s infinite;
+    }
+    @keyframes pulseBadge {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    .game-preview {
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      border-radius: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 50;
+    }
+    .game-btn:hover .game-preview { opacity: 1; }
+
+    /* MOBILE OVERLAY */
+    .mobile-preview-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .mobile-preview-overlay video {
+      width: 90%;
+      max-width: 360px;
+      border-radius: 18px;
+    }
   </style>
 
+<audio id="birthdayMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2025/03/20/audio_1488679301.mp3?filename=happy-birthday-to-you-background-music-for-the-holiday-jazz-version-316322.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <!-- CLARITY (all preserved) -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -105,60 +160,58 @@
       smartlook('init', '57105488529284db8da5c3da75c04faf28af654a', { region: 'eu' });
   </script>
 
+
 </head>
-<body class="min-h-screen flex items-center justify-center relative px-4 pb-24">
 
-  <div class="sparkle" style="top:10%; left:15%; width:18px; height:18px; background:radial-gradient(circle,#fff 60%,#fbbf24 100%);"></div>
-  <div class="sparkle" style="top:20%; left:80%; width:12px; height:12px; background:radial-gradient(circle,#fff 60%,#f472b6 100%); animation-delay:1s"></div>
-  <div class="sparkle" style="top:60%; left:25%; width:10px; height:10px; background:radial-gradient(circle,#fff 60%,#a78bfa 100%); animation-delay:0.7s"></div>
-  <div class="sparkle" style="top:75%; left:70%; width:16px; height:16px; background:radial-gradient(circle,#fff 60%,#facc15 100%); animation-delay:1.4s"></div>
+<body class="min-h-screen flex items-center justify-center relative px-4 pb-28">
 
-  <div class="absolute top-0 left-1/2 transform -translate-x-1/2 flex gap-6 z-10 pt-4">
-    <div class="balloon w-8 h-16 sm:w-12 sm:h-24 bg-pink-400 rounded-full shadow-lg border-2 border-pink-200"></div>
-    <div class="balloon w-8 h-16 sm:w-12 sm:h-24 bg-purple-400 rounded-full shadow-lg border-2 border-purple-200"></div>
-    <div class="balloon w-8 h-16 sm:w-12 sm:h-24 bg-yellow-300 rounded-full shadow-lg border-2 border-yellow-100"></div>
-    <div class="balloon w-8 h-16 sm:w-12 sm:h-24 bg-blue-300 rounded-full shadow-lg border-2 border-blue-100"></div>
-  </div>
-
-  <div class="text-center p-6 sm:p-10 bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl w-full max-w-md card-animate z-20 border-2 border-pink-200">
-    <div class="flex justify-center mb-4 cake-animate">
-      <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-        <ellipse cx="40" cy="66" rx="24" ry="8" fill="#fcd34d"/>
-        <rect x="16" y="36" width="48" height="30" rx="12" fill="#fff" stroke="#fbbf24" stroke-width="2"/>
-        <rect x="20" y="40" width="40" height="22" rx="8" fill="#f472b6"/>
-        <ellipse cx="40" cy="40" rx="20" ry="8" fill="#fff"/>
-        <rect x="36" y="22" width="8" height="18" rx="4" fill="#fbbf24"/>
-        <ellipse cx="40" cy="22" rx="4" ry="2" fill="#fbbf24"/>
-        <ellipse cx="40" cy="20" rx="2" ry="2" fill="#f87171"/>
-      </svg>
-    </div>
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-pink-600 mb-2 drop-shadow-lg animate-pulse">
+  <!-- Card -->
+  <div class="text-center p-8 bg-white/80 rounded-3xl shadow-2xl w-full max-w-md card-animate z-20">
+    <h1 class="text-4xl font-extrabold text-pink-600 mb-6 animate-pulse">
       🎉 Happy Birthday, <span class="text-yellow-500">Ananya!</span>
     </h1>
-    <p class="text-base sm:text-lg md:text-xl text-gray-700 mb-6" id="wish-text">
-       
-    </p>
-    <button onclick="launchConfetti()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-8 rounded-full shadow-lg glow transition duration-300 ease-in-out text-lg tracking-wide focus:outline-none focus:ring-4 focus:ring-pink-200 animate-bounce">
+
+    <button onclick="launchConfetti()" class="bg-pink-500 text-white py-2 px-8 rounded-full glow animate-bounce">
       Celebrate 🎈
     </button>
-    <button onclick="showSurprise()" class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-pink-800 font-bold py-2 px-8 rounded-full shadow-lg transition duration-300 ease-in-out text-lg tracking-wide focus:outline-none focus:ring-4 focus:ring-yellow-200">
+
+    <button onclick="showSurprise()" class="mt-4 bg-yellow-400 text-pink-800 py-2 px-8 rounded-full">
       Surprise! 🎁
     </button>
+
     <div id="surprise-message" class="mt-4 text-lg text-purple-600 font-semibold hidden"></div>
   </div>
 
+  <!-- FOOTER -->
+  <footer class="absolute bottom-0 left-0 w-full flex justify-center gap-4 py-6 z-30">
+    <a href="https://nitnapple.github.io/Ananya/home"><button class="bg-pink-500 text-white px-6 py-2 rounded-full">🏠 Home</button></a>
+    <a href="https://nitnapple.github.io/Ananya/Archive"><button class="bg-pink-500 text-white px-6 py-2 rounded-full">📚 View Archive</button></a>
+
+    <a href="https://nitnapple.github.io/Ananya/Savegalaxy" class="game-btn" id="gameLink">
+      <video class="game-preview hidden sm:block"
+        src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
+        muted autoplay loop playsinline></video>
+
+      <button id="gameBtn" type="button"
+        class="bg-purple-500 text-white px-6 py-2 rounded-full animate-pulse relative">
+        🎮 Try out our New Game
+        <span class="game-badge">NEW</span>
+      </button>
+    </a>
+  </footer>
+
+  <div id="mobilePreview" class="mobile-preview-overlay">
+    <video src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
+      muted autoplay loop playsinline></video>
+  </div>
+
   <audio id="birthdayMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2025/03/20/audio_1488679301.mp3?filename=happy-birthday-to-you-background-music-for-the-holiday-jazz-version-316322.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
+    <source src="https://cdn.pixabay.com/audio/2023/03/20/audio_1488679301.mp3" type="audio/mpeg">
   </audio>
 
   <script>
     function launchConfetti() {
-      confetti({
-        particleCount: 180,
-        spread: 90,
-        origin: { y: 0.6 }
-      });
+      confetti({ particleCount: 180, spread: 90, origin: { y: 0.6 } });
       document.getElementById('birthdayMusic').play();
     }
 
@@ -339,40 +392,33 @@
         "🍯 You are honey in human form—pure, golden, and sweet.",
         "🎂 Happy Birthday to the monarch of magic—Ananya!"
       ];
+
       const msg = messages[Math.floor(Math.random() * messages.length)];
-      const surpriseDiv = document.getElementById('surprise-message');
-      surpriseDiv.textContent = msg;
-      surpriseDiv.classList.remove('hidden');
-      confetti({
-        particleCount: 120,
-        spread: 120,
-        origin: { y: 0.5 }
-      });
+      const el = document.getElementById('surprise-message');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+
+      confetti({ particleCount: 120, spread: 120, origin: { y: 0.5 } });
     }
 
-    window.onload = function() {
-      setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.5 }
-        });
-      }, 600);
-    };
-  </script>
+    /* MOBILE PREVIEW LOGIC */
+    (function () {
+      const isMobile = window.matchMedia('(hover: none)').matches;
+      if (!isMobile) return;
 
-  <footer class="w-full flex justify-center items-center gap-4 py-6 mt-10 text-sm text-gray-700 z-30 absolute bottom-0 left-0 bg-transparent">
-    <a href="https://nitnapple.github.io/Ananya/home">
-      <button class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-300">
-        🏠 Home
-      </button>
-    </a>
-    <a href="https://nitnapple.github.io/Ananya/Archive">
-      <button class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-300">
-        📚 View Archive
-      </button>
-    </a>
-  </footer>
+      const btn = document.getElementById('gameBtn');
+      const overlay = document.getElementById('mobilePreview');
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        overlay.style.display = 'flex';
+      });
+
+      overlay.addEventListener('click', function () {
+        overlay.style.display = 'none';
+      });
+    })();
+  </script>
 
 </body>
 </html>
