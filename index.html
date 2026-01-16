@@ -14,6 +14,7 @@
       background: linear-gradient(120deg, #ffe0f7 0%, #fffbe6 50%, #e0e7ff 100%);
       overflow-x: hidden;
     }
+
     .sparkle {
       position: absolute;
       pointer-events: none;
@@ -21,21 +22,25 @@
       animation: sparkle 2s infinite linear;
       opacity: 0.7;
     }
+
     @keyframes sparkle {
       0% { transform: scale(1) translateY(0);}
       50% { transform: scale(1.2) translateY(-15px);}
       100% { transform: scale(1) translateY(0);}
     }
+
     @keyframes float {
       0% { transform: translateY(0);}
       50% { transform: translateY(-30px);}
       100% { transform: translateY(0);}
     }
+
     .balloon {
       animation: float 4s ease-in-out infinite;
       position: relative;
       z-index: 2;
     }
+
     .balloon::after {
       content: '';
       position: absolute;
@@ -46,44 +51,42 @@
       background: linear-gradient(to bottom, #aaa 30%, transparent 100%);
       transform: translateX(-50%);
     }
+
     .card-animate {
       animation: fadeInUp 1.2s cubic-bezier(.42,0,.58,1) both;
     }
+
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(40px);}
       to { opacity: 1; transform: translateY(0);}
     }
+
     .glow {
-      box-shadow: 0 0 18px 4px #f472b6, 0 0 40px 10px #fff2, 0 4px 24px 2px #f0abfc;
-    }
-    .cake-animate {
-      animation: cakePop 1.5s cubic-bezier(.42,0,.58,1) both;
-    }
-    @keyframes cakePop {
-      from { opacity: 0; transform: scale(0.7);}
-      70% { transform: scale(1.1);}
-      to { opacity: 1; transform: scale(1);}
+      box-shadow: 0 0 18px 4px #f472b6, 0 0 40px 10px #fff2;
     }
 
     /* GAME CTA */
     .game-btn { position: relative; }
+
     .game-badge {
       position: absolute;
-      top: -8px;
-      right: -8px;
+      top: -6px;
+      right: -6px;
       background: #f43f5e;
-      color: white;
+      color: #fff;
       font-size: 10px;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 999px;
       animation: pulseBadge 1.6s infinite;
     }
+
     @keyframes pulseBadge {
       0% { transform: scale(1); }
       50% { transform: scale(1.15); }
       100% { transform: scale(1); }
     }
+
     .game-preview {
       position: absolute;
       bottom: 115%;
@@ -93,12 +96,15 @@
       border-radius: 14px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.25s ease;
       z-index: 50;
     }
-    .game-btn:hover .game-preview { opacity: 1; }
 
-    /* MOBILE OVERLAY */
+    .game-btn:hover .game-preview {
+      opacity: 1;
+    }
+
+    /* MOBILE PREVIEW */
     .mobile-preview-overlay {
       position: fixed;
       inset: 0;
@@ -108,6 +114,7 @@
       justify-content: center;
       z-index: 999;
     }
+
     .mobile-preview-overlay video {
       width: 90%;
       max-width: 360px;
@@ -115,7 +122,7 @@
     }
   </style>
 
-<audio id="birthdayMusic" loop>
+  <audio id="birthdayMusic" loop>
     <source src="https://cdn.pixabay.com/download/audio/2025/03/20/audio_1488679301.mp3?filename=happy-birthday-to-you-background-music-for-the-holiday-jazz-version-316322.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
@@ -165,41 +172,65 @@
 
 <body class="min-h-screen flex items-center justify-center relative px-4 pb-28">
 
-  <!-- Card -->
+  <!-- CARD -->
   <div class="text-center p-8 bg-white/80 rounded-3xl shadow-2xl w-full max-w-md card-animate z-20">
     <h1 class="text-4xl font-extrabold text-pink-600 mb-6 animate-pulse">
       🎉 Happy Birthday, <span class="text-yellow-500">Ananya!</span>
     </h1>
 
-    <button onclick="launchConfetti()" class="bg-pink-500 text-white py-2 px-8 rounded-full glow animate-bounce">
+    <button onclick="launchConfetti()"
+      class="bg-pink-500 hover:bg-pink-600 text-white text-sm sm:text-base
+             px-6 py-2 rounded-full glow animate-bounce">
       Celebrate 🎈
     </button>
 
-    <button onclick="showSurprise()" class="mt-4 bg-yellow-400 text-pink-800 py-2 px-8 rounded-full">
+    <button onclick="showSurprise()"
+      class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-pink-800
+             text-sm sm:text-base px-6 py-2 rounded-full">
       Surprise! 🎁
     </button>
 
-    <div id="surprise-message" class="mt-4 text-lg text-purple-600 font-semibold hidden"></div>
+    <div id="surprise-message"
+      class="mt-4 text-base text-purple-600 font-semibold hidden"></div>
   </div>
 
   <!-- FOOTER -->
-  <footer class="absolute bottom-0 left-0 w-full flex justify-center gap-4 py-6 z-30">
-    <a href="https://nitnapple.github.io/Ananya/home"><button class="bg-pink-500 text-white px-6 py-2 rounded-full">🏠 Home</button></a>
-    <a href="https://nitnapple.github.io/Ananya/Archive"><button class="bg-pink-500 text-white px-6 py-2 rounded-full">📚 View Archive</button></a>
+  <footer class="absolute bottom-0 left-0 w-full flex justify-center gap-2 sm:gap-4 py-4 z-30">
 
-    <a href="https://nitnapple.github.io/Ananya/Savegalaxy" class="game-btn" id="gameLink">
+    <a href="https://nitnapple.github.io/Ananya/home">
+      <button class="bg-pink-500 hover:bg-pink-600 text-white
+        text-xs sm:text-sm px-4 sm:px-6 py-2 rounded-full">
+        🏠 Home
+      </button>
+    </a>
+
+    <a href="https://nitnapple.github.io/Ananya/Archive">
+      <button class="bg-pink-500 hover:bg-pink-600 text-white
+        text-xs sm:text-sm px-4 sm:px-6 py-2 rounded-full">
+        📚 Archive
+      </button>
+    </a>
+
+    <a href="https://nitnapple.github.io/Ananya/Savegalaxy"
+       class="game-btn"
+       id="gameLink">
+
+      <!-- Desktop preview -->
       <video class="game-preview hidden sm:block"
         src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
         muted autoplay loop playsinline></video>
 
       <button id="gameBtn" type="button"
-        class="bg-purple-500 text-white px-6 py-2 rounded-full animate-pulse relative">
-        🎮 Try out our New Game
+        class="bg-purple-500 hover:bg-purple-600 text-white
+               text-xs sm:text-sm px-4 sm:px-6 py-2 rounded-full relative animate-pulse">
+        🎮 New Game
         <span class="game-badge">NEW</span>
       </button>
     </a>
+
   </footer>
 
+  <!-- MOBILE PREVIEW -->
   <div id="mobilePreview" class="mobile-preview-overlay">
     <video src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
       muted autoplay loop playsinline></video>
@@ -401,17 +432,25 @@
       confetti({ particleCount: 120, spread: 120, origin: { y: 0.5 } });
     }
 
-    /* MOBILE PREVIEW LOGIC */
+    /* MOBILE PREVIEW + NAVIGATION FIX */
     (function () {
       const isMobile = window.matchMedia('(hover: none)').matches;
       if (!isMobile) return;
 
+      const link = document.getElementById('gameLink');
       const btn = document.getElementById('gameBtn');
       const overlay = document.getElementById('mobilePreview');
 
+      let previewShown = false;
+
       btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        overlay.style.display = 'flex';
+        if (!previewShown) {
+          e.preventDefault();
+          overlay.style.display = 'flex';
+          previewShown = true;
+        } else {
+          window.location.href = link.href;
+        }
       });
 
       overlay.addEventListener('click', function () {
