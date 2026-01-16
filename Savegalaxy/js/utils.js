@@ -20,7 +20,7 @@ heartImg.crossOrigin = "Anonymous";
 heartImg.src = "https://cliply.co/wp-content/uploads/2019/07/391907100_HEART_400px.gif";
 
 // GAME DATA
-const LEVELS = ["ANANYA", "SHANDILYA", "PHOTOGRAPHY", "CONSTITUTION CLUB", "JANPATH", "PHILOSOPHY", "HER MAJESTY", "SWIMMING", "TOKYO", "JUJUTSU KAISEN"];
+const LEVELS = ["ANANYA", "SHANDILYA", "PHOTOGRAPHY", "ONE PIECE", "JANPATH", "PHILOSOPHY", "HER MAJESTY", "SWIMMING", "TOKYO", "JUJUTSU KAISEN"];
 const BOSS_URLS = {
     generic: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023292-F42MK2JVX2T2XGE6H77U/UFO-dancing.gif",
     level5: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023819-209B50XVZI4AHLMRVJ89/UFO-kissy.gif",
