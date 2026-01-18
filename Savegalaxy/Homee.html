@@ -183,9 +183,9 @@
                     <!-- Default Home -->
                     <div v-else>
                         <!-- Spotlight Banner (Strict Vertical) -->
-                        <section class="mb-10 px-4 overflow-x-auto scrollbar-hide flex gap-5">
-                            <div v-for="game in gamesData.slice(0, 3)" :key="'feat-'+game.id" 
-                                 class="flex-shrink-0 w-44 bg-white rounded-2xl overflow-hidden google-shadow cursor-pointer transition-transform active:scale-95"
+                        <section class="mb-16 px-4 overflow-x-auto scrollbar-hide flex gap-5">
+                            <div v-for="game in gamesData" :key="'feat-'+game.id" 
+                                 class="flex-shrink-0 w-48 bg-white rounded-2xl overflow-hidden google-shadow cursor-pointer transition-transform active:scale-95"
                                  @click="selectGame(game)">
                                 <img :src="game.gif" class="w-full aspect-[9/16] object-cover">
                                 <div class="p-3 bg-white">
@@ -194,29 +194,6 @@
                                 </div>
                             </div>
                         </section>
-
-                        <div class="px-5 flex justify-between items-center mb-6">
-                            <h3 class="text-xl font-bold brand-font text-gray-800 tracking-tight">Essential Games</h3>
-                            <div class="text-[#01875f] hover:bg-green-50 px-3 py-1 rounded-md transition cursor-pointer">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                            </div>
-                        </div>
-
-                        <!-- Professional Grid -->
-                        <div class="px-5 grid grid-cols-3 gap-y-8 gap-x-5 mb-12">
-                            <div v-for="game in gamesData" :key="game.id" class="flex flex-col cursor-pointer group" @click="selectGame(game)">
-                                <div class="aspect-square mb-3 relative overflow-hidden play-icon-mask">
-                                    <img :src="game.icon" class="w-full h-full object-cover border border-gray-100 shadow-sm group-hover:scale-105 transition duration-300">
-                                    <div class="absolute inset-0 bg-black/0 group-active:bg-black/10 transition"></div>
-                                </div>
-                                <h4 class="text-sm font-medium text-gray-800 leading-tight line-clamp-2 mb-1">{{ game.title }}</h4>
-                                <div class="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
-                                    <span>{{ game.rating }}★</span>
-                                    <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                    <span>{{ game.size }}</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -354,6 +331,36 @@
             </footer>
         </nav>
 
+        <!-- Google Play Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-bottom z-[60] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
+            <div class="max-w-2xl mx-auto flex justify-around py-3">
+                <div @click="resetView" class="flex flex-col items-center gap-1 cursor-pointer group" :class="activePage === 'list' ? 'text-[#01875f]' : 'text-gray-400'">
+                    <div :class="activePage === 'list' ? 'bg-green-100/60 px-6 rounded-full' : ''" class="py-1.5 transition-all group-active:scale-90">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l-1 1-9 9h3v10h14v-10h3l-10-10z"/></svg>
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Games</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 text-gray-400 opacity-40 cursor-not-allowed">
+                    <div class="py-1.5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Apps</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 text-gray-400 opacity-40 cursor-not-allowed">
+                    <div class="py-1.5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4"/></svg>
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Movies</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 text-gray-400 opacity-40 cursor-not-allowed">
+                    <div class="py-1.5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Store</span>
+                </div>
+            </div>
+        </nav>
+
         <!-- Notification Toast -->
         <transition name="fade">
             <div v-if="notification" class="fixed bottom-28 left-5 right-5 md:left-auto md:right-8 md:w-80 bg-[#202124] text-white px-5 py-3.5 rounded-xl shadow-2xl z-[100] flex items-center justify-between text-[13px] border border-gray-700">
@@ -413,60 +420,6 @@
                             "https://picsum.photos/id/31/500/888",
                             "https://picsum.photos/id/32/500/888"
                         ]
-                    },
-                    {
-                        id: 3,
-                        title: "Pixel Command",
-                        subtitle: "8-bit strategy",
-                        category: "Editor's Choice",
-                        developer: "Nanhu Interactive",
-                        rating: 4.5,
-                        size: "12 MB",
-                        description: "Lead your pixelated army to victory in this turn-based strategic masterpiece. Command, conquer, and upgrade your fleet to protect the sector from void invaders.",
-                        icon: "https://picsum.photos/id/50/512/512",
-                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
-                        screenshots: [
-                            "https://picsum.photos/id/51/500/888"
-                        ]
-                    },
-                    {
-                        id: 4,
-                        title: "Hexa Conquest",
-                        subtitle: "Geometric puzzle",
-                        category: "Top Casual",
-                        developer: "Nanhu Interactive",
-                        rating: 4.2,
-                        size: "25 MB",
-                        description: "Conquer tiles and build defenses in this fast-paced geometric challenge. Optimized for desktop browsers and tablet touch interfaces.",
-                        icon: "https://picsum.photos/id/70/512/512",
-                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGfN5Z3G0fW6k/giphy.gif",
-                        screenshots: ["https://picsum.photos/id/71/500/888"]
-                    },
-                    {
-                        id: 5,
-                        title: "Void Runner",
-                        subtitle: "Reflex challenge",
-                        category: "Action",
-                        developer: "Nanhu Labs",
-                        rating: 4.7,
-                        size: "30 MB",
-                        description: "Dash through the void in this rhythmic action runner. Every level is synchronized with a bespoke electronic soundtrack.",
-                        icon: "https://picsum.photos/id/80/512/512",
-                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
-                        screenshots: ["https://picsum.photos/id/81/500/888"]
-                    },
-                    {
-                        id: 6,
-                        title: "Chef Master",
-                        subtitle: "Cooking Sim",
-                        category: "Simulation",
-                        developer: "Nanhu Labs",
-                        rating: 4.4,
-                        size: "55 MB",
-                        description: "Build your culinary empire from a food truck to a 5-star restaurant. Features deep management systems and unique mini-games.",
-                        icon: "https://picsum.photos/id/90/512/512",
-                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
-                        screenshots: ["https://picsum.photos/id/91/500/888"]
                     }
                 ];
 
