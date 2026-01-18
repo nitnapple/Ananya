@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play | Game Portfolio</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+            color: #202124;
+        }
+        .google-shadow {
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15);
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .play-icon-mask {
+            border-radius: 20%;
+        }
+        
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.25s ease;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+
+        .btn-install {
+            background-color: #01875f;
+            color: #ffffff;
+            font-weight: 500;
+            padding: 8px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-install:active {
+            background-color: #006b4b;
+        }
+
+        .category-tab-active {
+            color: #01875f;
+            border-bottom: 3px solid #01875f;
+        }
+
+        [v-cloak] { display: none; }
+    </style>
+</head>
+<body class="selection:bg-green-100">
+    <div id="app" v-cloak>
+        
+        <!-- Google Play Header / Search Bar -->
+        <header class="sticky top-0 z-50 bg-white border-b border-gray-100">
+            <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+                <!-- Back Button in Detail View -->
+                <div v-if="activePage === 'detail'" @click="activePage = 'list'" class="p-2 -ml-2 cursor-pointer">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                
+                <!-- Search Bar -->
+                <div v-if="activePage === 'list'" class="flex-1 bg-gray-100 rounded-full px-4 py-2 flex items-center gap-3 transition-all focus-within:bg-white focus-within:google-shadow">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input 
+                        type="text" 
+                        v-model="searchQuery" 
+                        placeholder="Search for apps & games" 
+                        class="bg-transparent border-none outline-none text-sm w-full text-gray-700"
+                    >
+                    <!-- Clear Search Button -->
+                    <svg 
+                        v-if="searchQuery" 
+                        @click="searchQuery = ''" 
+                        class="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-800" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    <svg v-else class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                </div>
+
+                <!-- Profile/Notifs -->
+                <div v-if="activePage === 'list'" class="flex items-center gap-4">
+                    <div class="relative hidden sm:block">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=01875f&color=fff" class="w-8 h-8 rounded-full">
+                </div>
+            </div>
+
+            <!-- Sub-tabs (Hidden when searching to show results more clearly) -->
+            <div v-if="activePage === 'list' && !searchQuery" class="max-w-2xl mx-auto flex justify-around text-sm font-medium text-gray-500">
+                <button class="py-2.5 px-4 category-tab-active">For you</button>
+                <button class="py-2.5 px-4">Top charts</button>
+                <button class="py-2.5 px-4">Events</button>
+                <button class="py-2.5 px-4">Premium</button>
+            </div>
+        </header>
+
+        <main class="max-w-2xl mx-auto pb-24">
+            
+            <transition name="fade" mode="out-in">
+                <!-- Dashboard / For You View -->
+                <div v-if="activePage === 'list'" class="pt-4" :key="'list-' + searchQuery">
+                    
+                    <!-- Search Results View -->
+                    <div v-if="searchQuery">
+                        <div class="px-4 mb-4 flex items-center justify-between">
+                            <h3 class="text-gray-500 text-sm font-medium">Results for "{{ searchQuery }}"</h3>
+                            <button @click="searchQuery = ''" class="text-[#01875f] text-sm font-medium">Clear</button>
+                        </div>
+                        
+                        <div v-if="filteredGames.length > 0" class="divide-y divide-gray-100">
+                            <div 
+                                v-for="game in filteredGames" 
+                                :key="game.id" 
+                                class="px-4 py-4 flex gap-4 items-center cursor-pointer active:bg-gray-50" 
+                                @click="selectGame(game)"
+                            >
+                                <img :src="game.icon" class="w-14 h-14 play-icon-mask border border-gray-100 shadow-sm">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-sm font-medium text-gray-900 truncate">{{ game.title }}</h4>
+                                    <p class="text-xs text-gray-500">{{ game.developer }}</p>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">{{ game.rating }}★</span>
+                                        <span class="text-[10px] text-gray-400">{{ game.size }}</span>
+                                    </div>
+                                </div>
+                                <button class="border border-gray-300 rounded px-4 py-1 text-xs font-medium text-[#01875f]">Install</button>
+                            </div>
+                        </div>
+                        
+                        <!-- No Results -->
+                        <div v-else class="px-4 py-20 text-center">
+                            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">No results found</h3>
+                            <p class="text-sm text-gray-500 mt-1">Try searching for something else or check your spelling.</p>
+                        </div>
+                    </div>
+
+                    <!-- Default Dashboard View -->
+                    <div v-else>
+                        <!-- Spotlight Carousel -->
+                        <section class="mb-8 px-4 overflow-x-auto scrollbar-hide flex gap-4">
+                            <div v-for="game in gamesData.slice(0, 2)" :key="'feat-'+game.id" 
+                                 class="flex-shrink-0 w-[300px] bg-white rounded-2xl overflow-hidden google-shadow cursor-pointer"
+                                 @click="selectGame(game)">
+                                <img :src="game.gif" class="w-full h-40 object-cover">
+                                <div class="p-4 flex gap-3 items-center">
+                                    <img :src="game.icon" class="w-10 h-10 play-icon-mask">
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-medium text-sm truncate">{{ game.title }}</h3>
+                                        <p class="text-xs text-gray-500 truncate">{{ game.category }} • {{ game.rating }}★</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section Header -->
+                        <div class="px-4 flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium">Recommended for you</h3>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+
+                        <!-- App Grid -->
+                        <div class="px-4 grid grid-cols-3 gap-y-6 gap-x-4 mb-10">
+                            <div v-for="game in gamesData" :key="game.id" class="flex flex-col cursor-pointer active:scale-95 transition" @click="selectGame(game)">
+                                <div class="aspect-square mb-2 relative">
+                                    <img :src="game.icon" class="w-full h-full play-icon-mask border border-gray-100 shadow-sm">
+                                </div>
+                                <h4 class="text-xs font-normal text-gray-700 leading-tight line-clamp-2 mb-1">{{ game.title }}</h4>
+                                <div class="flex items-center gap-1 text-[10px] text-gray-500">
+                                    <span>{{ game.rating }} ★</span>
+                                    <span>{{ game.size }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App Detail Page -->
+                <div v-else class="pt-6" :key="'detail-' + activeGame.id">
+                    <!-- Hero Section -->
+                    <section class="px-4 flex gap-6 items-start mb-6">
+                        <img :src="activeGame.icon" class="w-24 h-24 play-icon-mask google-shadow flex-shrink-0">
+                        <div class="flex-1">
+                            <h1 class="text-2xl font-medium leading-tight mb-1">{{ activeGame.title }}</h1>
+                            <p class="text-[#01875f] font-medium text-sm mb-1">{{ activeGame.developer }}</p>
+                            <p class="text-gray-500 text-xs mb-4">Contains ads · In-app purchases</p>
+                        </div>
+                    </section>
+
+                    <!-- Metrics Row -->
+                    <div class="flex justify-between items-center px-4 mb-8 py-2 border-y border-gray-100">
+                        <div class="text-center px-2">
+                            <p class="text-sm font-medium flex items-center justify-center gap-0.5">{{ activeGame.rating }} <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></p>
+                            <p class="text-[10px] text-gray-500 mt-1">12K reviews</p>
+                        </div>
+                        <div class="w-[1px] bg-gray-200 h-8"></div>
+                        <div class="text-center px-2">
+                            <p class="text-sm font-medium">500K+</p>
+                            <p class="text-[10px] text-gray-500 mt-1">Downloads</p>
+                        </div>
+                        <div class="w-[1px] bg-gray-200 h-8"></div>
+                        <div class="text-center px-2">
+                            <div class="mx-auto w-4 h-4 border border-black text-[9px] font-bold flex items-center justify-center leading-none">E</div>
+                            <p class="text-[10px] text-gray-500 mt-1">Everyone</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="px-4 flex gap-3 mb-8">
+                        <button @click="installGame" class="flex-1 btn-install">Install</button>
+                        <button class="px-6 py-2 border border-gray-300 rounded-lg text-[#01875f] font-medium text-sm active:bg-gray-50">Wishlist</button>
+                    </div>
+
+                    <!-- Media Carousel -->
+                    <section class="mb-10 overflow-x-auto scrollbar-hide flex gap-3 px-4">
+                        <div class="flex-shrink-0 w-72 h-40 bg-black rounded-xl overflow-hidden relative group" @click="playVideo">
+                            <img :src="activeGame.gif" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition">
+                                <div class="w-12 h-12 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M4.5 3.5a.5.5 0 00-.75.433v12.134a.5.5 0 00.75.433l11.5-6.067a.5.5 0 000-.866L4.5 3.5z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <img v-for="src in activeGame.screenshots" :src="src" class="flex-shrink-0 h-40 w-auto rounded-xl border border-gray-100">
+                    </section>
+
+                    <!-- About this game -->
+                    <section class="px-4 mb-10">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-800">About this game</h3>
+                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            {{ activeGame.description }}
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2 mt-6">
+                            <span v-for="tag in ['Racing', 'Stylized', 'Offline']" class="px-3 py-1 border border-gray-300 rounded-full text-xs text-gray-600 font-medium">
+                                {{ tag }}
+                            </span>
+                        </div>
+                    </section>
+                </div>
+            </transition>
+        </main>
+
+        <!-- Google Play Bottom Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-bottom z-[60]">
+            <div class="max-w-2xl mx-auto flex justify-around py-2.5">
+                <div @click="activePage = 'list'; searchQuery = ''" class="flex flex-col items-center gap-1 cursor-pointer" :class="activePage === 'list' ? 'text-[#01875f]' : 'text-gray-500'">
+                    <div :class="activePage === 'list' ? 'bg-green-100 px-5 rounded-full' : ''" class="py-1 transition-all">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l-1 1-9 9h3v10h14v-10h3l-10-10z"/></svg>
+                    </div>
+                    <span class="text-[11px] font-medium">Games</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 text-gray-500 opacity-60">
+                    <div class="py-1">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </div>
+                    <span class="text-[11px] font-medium">Apps</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 text-gray-500 opacity-60">
+                    <div class="py-1">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4"/></svg>
+                    </div>
+                    <span class="text-[11px] font-medium">Movies</span>
+                </div>
+                <div class="flex flex-col items-center gap-1 text-gray-500 opacity-60">
+                    <div class="py-1">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </div>
+                    <span class="text-[11px] font-medium">Books</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Material Notification -->
+        <transition name="fade">
+            <div v-if="notification" class="fixed bottom-24 left-4 right-4 md:left-auto md:right-8 md:w-80 bg-[#323232] text-white px-4 py-3 rounded-lg shadow-xl z-[100] flex items-center justify-between text-sm">
+                <span>{{ notification }}</span>
+                <button class="text-[#01875f] font-bold uppercase text-xs" @click="notification = null">Undo</button>
+            </div>
+        </transition>
+
+    </div>
+
+    <script>
+        const { createApp, ref, computed } = Vue;
+
+        createApp({
+            setup() {
+                const activePage = ref('list');
+                const searchQuery = ref('');
+                const notification = ref(null);
+
+                const gamesData = [
+                    {
+                        id: 1,
+                        title: "Neon Drift: Ultra",
+                        subtitle: "Retro arcade racing",
+                        category: "Must-Play Racing",
+                        developer: "Nanhu Interactive",
+                        rating: 4.8,
+                        size: "42 MB",
+                        description: "Experience ultra-fast 120fps racing in the heart of a neon-soaked metropolis. Master the art of the drift and compete against players worldwide in real-time HTML5 showdowns. Join the cyber-revolution today.",
+                        icon: "https://picsum.photos/id/10/512/512",
+                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/M90mJvC88A2N7G58M9/giphy.gif",
+                        screenshots: [
+                            "https://picsum.photos/id/11/800/500",
+                            "https://picsum.photos/id/12/800/500"
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "Zen Garden Quest",
+                        subtitle: "Procedural puzzles",
+                        category: "Indie Spotlight",
+                        developer: "Nanhu Labs",
+                        rating: 4.9,
+                        size: "18 MB",
+                        description: "A meditative journey where every pebble placement matters. Relax your mind with soft acoustics and satisfying particle effects.",
+                        icon: "https://picsum.photos/id/30/512/512",
+                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
+                        screenshots: [
+                            "https://picsum.photos/id/31/800/500",
+                            "https://picsum.photos/id/32/800/500"
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: "Pixel Command",
+                        subtitle: "8-bit strategy",
+                        category: "Editor's Choice",
+                        developer: "Nanhu Interactive",
+                        rating: 4.5,
+                        size: "12 MB",
+                        description: "Lead your pixelated army to victory in this turn-based strategic masterpiece. Command, conquer, and upgrade.",
+                        icon: "https://picsum.photos/id/50/512/512",
+                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
+                        screenshots: [
+                            "https://picsum.photos/id/51/800/500"
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: "Hexa Conquest",
+                        subtitle: "Geometric puzzle",
+                        category: "Top Casual",
+                        developer: "Nanhu Interactive",
+                        rating: 4.2,
+                        size: "25 MB",
+                        description: "Conquer tiles and build defenses in this fast-paced geometric challenge.",
+                        icon: "https://picsum.photos/id/70/512/512",
+                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGfN5Z3G0fW6k/giphy.gif",
+                        screenshots: ["https://picsum.photos/id/71/800/500"]
+                    },
+                    {
+                        id: 5,
+                        title: "Void Runner",
+                        subtitle: "Reflex challenge",
+                        category: "Action",
+                        developer: "Nanhu Labs",
+                        rating: 4.7,
+                        size: "30 MB",
+                        description: "Dash through the void in this rhythmic action runner.",
+                        icon: "https://picsum.photos/id/80/512/512",
+                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
+                        screenshots: ["https://picsum.photos/id/81/800/500"]
+                    },
+                    {
+                        id: 6,
+                        title: "Chef Master",
+                        subtitle: "Cooking Sim",
+                        category: "Simulation",
+                        developer: "Nanhu Labs",
+                        rating: 4.4,
+                        size: "55 MB",
+                        description: "Build your culinary empire from a food truck to a 5-star restaurant.",
+                        icon: "https://picsum.photos/id/90/512/512",
+                        gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
+                        screenshots: ["https://picsum.photos/id/91/800/500"]
+                    }
+                ];
+
+                const activeGame = ref(gamesData[0]);
+
+                // SEARCH LOGIC
+                const filteredGames = computed(() => {
+                    if (!searchQuery.value) return gamesData;
+                    const query = searchQuery.value.toLowerCase().trim();
+                    return gamesData.filter(game => 
+                        game.title.toLowerCase().includes(query) || 
+                        game.developer.toLowerCase().includes(query) ||
+                        game.category.toLowerCase().includes(query)
+                    );
+                });
+
+                const selectGame = (game) => {
+                    activeGame.value = game;
+                    activePage.value = 'detail';
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                };
+
+                const notify = (msg) => {
+                    notification.value = msg;
+                    setTimeout(() => notification.value = null, 4000);
+                };
+
+                const installGame = () => notify("Waiting for download...");
+                const playVideo = () => notify("Opening gameplay trailer...");
+
+                return {
+                    activePage,
+                    searchQuery,
+                    gamesData,
+                    activeGame,
+                    filteredGames,
+                    selectGame,
+                    notification,
+                    installGame,
+                    playVideo
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
