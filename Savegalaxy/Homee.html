@@ -127,10 +127,7 @@
 
             <!-- Dashboard Tabs -->
             <div v-if="activePage === 'list' && !searchQuery" class="max-w-2xl mx-auto flex justify-around text-sm font-medium text-gray-500 overflow-x-auto scrollbar-hide">
-                <button class="py-3 px-6 category-tab-active whitespace-nowrap">Featured</button>
-                <button class="py-3 px-6 whitespace-nowrap">HTML5 Games</button>
-                <button class="py-3 px-6 whitespace-nowrap">Mobile Web</button>
-                <button class="py-3 px-6 whitespace-nowrap">Editor's Choice</button>
+                <button class="py-3 px-6 category-tab-active whitespace-nowrap">For You</button>
             </div>
         </header>
 
@@ -163,7 +160,7 @@
                                         <span class="text-[11px] text-gray-400">{{ game.size }}</span>
                                     </div>
                                 </div>
-                                <button class="border border-gray-300 rounded-md px-5 py-1.5 text-xs font-bold text-[#01875f] hover:bg-green-50 transition">VIEW</button>
+                                <button class="border border-gray-300 rounded-md px-5 py-1.5 text-xs font-bold text-[#01875f] hover:bg-green-50 transition uppercase">PLAY</button>
                             </div>
                         </div>
                         
@@ -173,7 +170,7 @@
                                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </div>
                             <h3 class="text-xl font-bold text-gray-800">No matches found</h3>
-                            <p class="text-sm text-gray-500 mt-2 max-w-xs mx-auto">Try a different keyword or explore our latest releases in the Featured tab.</p>
+                            <p class="text-sm text-gray-500 mt-2 max-w-xs mx-auto">Try a different keyword or explore our latest releases in the For You tab.</p>
                         </div>
                     </div>
 
@@ -251,23 +248,28 @@
 
                     <!-- CTA Bar -->
                     <div class="px-5 flex gap-4 mb-10">
-                        <button @click="installGame" class="flex-1 btn-install shadow-lg shadow-green-200 uppercase tracking-wide">Install Game</button>
+                        <button @click="playGameAction" class="flex-1 btn-install shadow-lg shadow-green-200 uppercase tracking-wide">Play Game</button>
                         <button class="px-4 py-2 border border-gray-200 rounded-lg text-gray-500 hover:text-green-700 transition active:bg-gray-50">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
                         </button>
                     </div>
 
-                    <!-- Visual Gallery -->
+                    <!-- Visual Gallery (9:16 Aspect Ratio) -->
                     <section class="mb-12 overflow-x-auto scrollbar-hide flex gap-4 px-5">
-                        <div class="flex-shrink-0 w-[300px] h-[168px] bg-black rounded-2xl overflow-hidden relative group cursor-pointer" @click="playVideo">
-                            <img :src="activeGame.gif" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition">
-                                <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-2xl">
-                                    <svg class="w-7 h-7 text-white drop-shadow" fill="currentColor" viewBox="0 0 20 20"><path d="M4.5 3.5a.5.5 0 00-.75.433v12.134a.5.5 0 00.75.433l11.5-6.067a.5.5 0 000-.866L4.5 3.5z"></path></svg>
+                        <!-- Show Video if available -->
+                        <div v-if="activeGame.video" class="flex-shrink-0 w-44 aspect-[9/16] bg-black rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                            <video :src="activeGame.video" class="w-full h-full object-cover" controls autoplay muted loop></video>
+                        </div>
+                        <!-- Else show interactive GIF (Portrait) -->
+                        <div v-else class="flex-shrink-0 w-44 aspect-[9/16] bg-black rounded-2xl overflow-hidden relative group cursor-pointer" @click="playVideo">
+                            <img :src="activeGame.gif" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition">
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition">
+                                <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-2xl">
+                                    <svg class="w-6 h-6 text-white drop-shadow" fill="currentColor" viewBox="0 0 20 20"><path d="M4.5 3.5a.5.5 0 00-.75.433v12.134a.5.5 0 00.75.433l11.5-6.067a.5.5 0 000-.866L4.5 3.5z"></path></svg>
                                 </div>
                             </div>
                         </div>
-                        <img v-for="src in activeGame.screenshots" :src="src" class="flex-shrink-0 h-[168px] w-auto rounded-2xl border border-gray-100 shadow-sm">
+                        <img v-for="src in activeGame.screenshots" :src="src" class="flex-shrink-0 w-44 aspect-[9/16] object-cover rounded-2xl border border-gray-100 shadow-sm">
                     </section>
 
                     <!-- Game Overview -->
@@ -330,7 +332,6 @@
                     <!-- Bottom Bar -->
                     <div class="flex flex-col md:flex-row items-center justify-between gap-6 py-8 border-t border-gray-200">
                         <div class="flex items-center gap-6">
-                            <!-- Social Icons (Placeholder SVGs) -->
                             <a href="#" class="text-gray-400 hover:text-[#01875f] transition">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
                             </a>
@@ -404,18 +405,21 @@
                 const gamesData = [
                     {
                         id: 1,
-                        title: "Neon Drift: Ultra",
-                        subtitle: "Retro arcade racing",
-                        category: "Must-Play Racing",
+                        title: "Save The Galaxy: Ultimate Edition",
+                        subtitle: "Epic space combat experience",
+                        category: "Must-Play Action",
                         developer: "Nanhu Interactive",
-                        rating: 4.8,
-                        size: "42 MB",
-                        description: "Experience ultra-fast 120fps racing in the heart of a neon-soaked metropolis. Master the art of the drift and compete against players worldwide in real-time HTML5 showdowns. Built with our proprietary high-performance web engine.",
+                        rating: 4.9,
+                        size: "124 MB",
+                        description: "Defend the known universe against an overwhelming alien fleet in the most ambitious HTML5 space combat simulator ever created. Featuring high-fidelity visuals, real-time physics, and a gripping campaign mode. Optimized for high refresh rate displays.",
                         icon: "https://picsum.photos/id/10/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/M90mJvC88A2N7G58M9/giphy.gif",
+                        video: "https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4",
+                        gameUrl: "https://nitnapple.github.io/Ananya/Savegalaxy/",
                         screenshots: [
-                            "https://picsum.photos/id/11/800/500",
-                            "https://picsum.photos/id/12/800/500"
+                            "https://picsum.photos/id/11/500/800",
+                            "https://picsum.photos/id/12/500/800",
+                            "https://picsum.photos/id/13/500/800"
                         ]
                     },
                     {
@@ -430,8 +434,8 @@
                         icon: "https://picsum.photos/id/30/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
                         screenshots: [
-                            "https://picsum.photos/id/31/800/500",
-                            "https://picsum.photos/id/32/800/500"
+                            "https://picsum.photos/id/31/500/800",
+                            "https://picsum.photos/id/32/500/800"
                         ]
                     },
                     {
@@ -446,7 +450,7 @@
                         icon: "https://picsum.photos/id/50/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
                         screenshots: [
-                            "https://picsum.photos/id/51/800/500"
+                            "https://picsum.photos/id/51/500/800"
                         ]
                     },
                     {
@@ -460,7 +464,7 @@
                         description: "Conquer tiles and build defenses in this fast-paced geometric challenge. Optimized for desktop browsers and tablet touch interfaces.",
                         icon: "https://picsum.photos/id/70/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGfN5Z3G0fW6k/giphy.gif",
-                        screenshots: ["https://picsum.photos/id/71/800/500"]
+                        screenshots: ["https://picsum.photos/id/71/500/800"]
                     },
                     {
                         id: 5,
@@ -473,7 +477,7 @@
                         description: "Dash through the void in this rhythmic action runner. Every level is synchronized with a bespoke electronic soundtrack.",
                         icon: "https://picsum.photos/id/80/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
-                        screenshots: ["https://picsum.photos/id/81/800/500"]
+                        screenshots: ["https://picsum.photos/id/81/500/800"]
                     },
                     {
                         id: 6,
@@ -486,7 +490,7 @@
                         description: "Build your culinary empire from a food truck to a 5-star restaurant. Features deep management systems and unique mini-games.",
                         icon: "https://picsum.photos/id/90/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
-                        screenshots: ["https://picsum.photos/id/91/800/500"]
+                        screenshots: ["https://picsum.photos/id/91/500/800"]
                     }
                 ];
 
@@ -519,7 +523,14 @@
                     setTimeout(() => notification.value = null, 4000);
                 };
 
-                const installGame = () => notify("Initializing game download...");
+                const playGameAction = () => {
+                    if (activeGame.value.gameUrl) {
+                        window.open(activeGame.value.gameUrl, "_blank");
+                    } else {
+                        notify("Starting game session...");
+                    }
+                };
+
                 const playVideo = () => notify("Streaming gameplay preview...");
 
                 return {
@@ -531,7 +542,7 @@
                     selectGame,
                     resetView,
                     notification,
-                    installGame,
+                    playGameAction,
                     playVideo
                 };
             }
