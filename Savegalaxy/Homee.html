@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Play | Game Portfolio</title>
+    <title>Nanhu Interactive | Games</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Roboto', 'Google Sans', sans-serif;
             background-color: #ffffff;
             -webkit-tap-highlight-color: transparent;
             color: #202124;
@@ -25,7 +25,7 @@
         }
         
         .fade-enter-active, .fade-leave-active {
-            transition: opacity 0.25s ease;
+            transition: opacity 0.2s ease;
         }
         .fade-enter-from, .fade-leave-to {
             opacity: 0;
@@ -35,14 +35,20 @@
             background-color: #01875f;
             color: #ffffff;
             font-weight: 500;
-            padding: 8px 24px;
+            padding: 10px 24px;
             border-radius: 8px;
             font-size: 14px;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
         
+        .btn-install:hover {
+            background-color: #016d4d;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
         .btn-install:active {
-            background-color: #006b4b;
+            background-color: #005a3f;
+            transform: scale(0.98);
         }
 
         .category-tab-active {
@@ -50,137 +56,163 @@
             border-bottom: 3px solid #01875f;
         }
 
+        .search-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         [v-cloak] { display: none; }
+
+        .brand-font {
+            font-family: 'Google Sans', sans-serif;
+        }
+        
+        .footer-link {
+            transition: color 0.2s;
+        }
+        .footer-link:hover {
+            color: #01875f;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body class="selection:bg-green-100">
     <div id="app" v-cloak>
         
-        <!-- Google Play Header / Search Bar -->
-        <header class="sticky top-0 z-50 bg-white border-b border-gray-100">
-            <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-                <!-- Back Button in Detail View -->
-                <div v-if="activePage === 'detail'" @click="activePage = 'list'" class="p-2 -ml-2 cursor-pointer">
-                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <!-- Nanhu Interactive Header / Search Bar -->
+        <header class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+            <div class="max-w-2xl mx-auto px-4 py-3 flex flex-col gap-3">
+                <div class="flex items-center justify-between gap-4">
+                    <!-- Back Button in Detail View -->
+                    <div v-if="activePage === 'detail'" @click="activePage = 'list'" class="p-2 -ml-2 cursor-pointer hover:bg-gray-100 rounded-full transition">
+                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    </div>
+
+                    <!-- Brand Logo / Name -->
+                    <div v-if="activePage === 'list'" class="flex items-center gap-2 cursor-pointer" @click="resetView">
+                        <div class="w-8 h-8 bg-[#01875f] rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">N</div>
+                        <h1 class="brand-font font-bold text-xl tracking-tight text-gray-800">Nanhu <span class="text-[#01875f]">Interactive</span></h1>
+                    </div>
+                    
+                    <div v-if="activePage === 'list'" class="flex items-center gap-4">
+                        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition relative">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                            <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                        </button>
+                        <img src="https://ui-avatars.com/api/?name=Nanhu+User&background=01875f&color=fff" class="w-8 h-8 rounded-full border border-gray-200">
+                    </div>
                 </div>
-                
-                <!-- Search Bar -->
-                <div v-if="activePage === 'list'" class="flex-1 bg-gray-100 rounded-full px-4 py-2 flex items-center gap-3 transition-all focus-within:bg-white focus-within:google-shadow">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+
+                <!-- Functional Search Bar -->
+                <div v-if="activePage === 'list'" class="search-container bg-gray-100 rounded-xl px-4 py-2.5 flex items-center gap-3 transition-all focus-within:bg-white focus-within:google-shadow border border-transparent focus-within:border-gray-200">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     <input 
                         type="text" 
                         v-model="searchQuery" 
-                        placeholder="Search for apps & games" 
-                        class="bg-transparent border-none outline-none text-sm w-full text-gray-700"
+                        placeholder="Search our catalog..." 
+                        class="bg-transparent border-none outline-none text-[15px] w-full text-gray-700 placeholder:text-gray-400"
                     >
-                    <!-- Clear Search Button -->
                     <svg 
                         v-if="searchQuery" 
                         @click="searchQuery = ''" 
-                        class="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-800" 
+                        class="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-800" 
                         fill="none" 
                         stroke="currentColor" 
                         viewBox="0 0 24 24"
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
-                    <svg v-else class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-                </div>
-
-                <!-- Profile/Notifs -->
-                <div v-if="activePage === 'list'" class="flex items-center gap-4">
-                    <div class="relative hidden sm:block">
-                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                    </div>
-                    <img src="https://ui-avatars.com/api/?name=User&background=01875f&color=fff" class="w-8 h-8 rounded-full">
+                    <svg v-else class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
                 </div>
             </div>
 
-            <!-- Sub-tabs (Hidden when searching to show results more clearly) -->
-            <div v-if="activePage === 'list' && !searchQuery" class="max-w-2xl mx-auto flex justify-around text-sm font-medium text-gray-500">
-                <button class="py-2.5 px-4 category-tab-active">For you</button>
-                <button class="py-2.5 px-4">Top charts</button>
-                <button class="py-2.5 px-4">Events</button>
-                <button class="py-2.5 px-4">Premium</button>
+            <!-- Dashboard Tabs -->
+            <div v-if="activePage === 'list' && !searchQuery" class="max-w-2xl mx-auto flex justify-around text-sm font-medium text-gray-500 overflow-x-auto scrollbar-hide">
+                <button class="py-3 px-6 category-tab-active whitespace-nowrap">Featured</button>
+                <button class="py-3 px-6 whitespace-nowrap">HTML5 Games</button>
+                <button class="py-3 px-6 whitespace-nowrap">Mobile Web</button>
+                <button class="py-3 px-6 whitespace-nowrap">Editor's Choice</button>
             </div>
         </header>
 
-        <main class="max-w-2xl mx-auto pb-24">
+        <main class="max-w-2xl mx-auto">
             
             <transition name="fade" mode="out-in">
-                <!-- Dashboard / For You View -->
-                <div v-if="activePage === 'list'" class="pt-4" :key="'list-' + searchQuery">
+                <!-- List View -->
+                <div v-if="activePage === 'list'" class="pt-6" :key="'list-' + searchQuery">
                     
-                    <!-- Search Results View -->
+                    <!-- Search Results -->
                     <div v-if="searchQuery">
-                        <div class="px-4 mb-4 flex items-center justify-between">
-                            <h3 class="text-gray-500 text-sm font-medium">Results for "{{ searchQuery }}"</h3>
-                            <button @click="searchQuery = ''" class="text-[#01875f] text-sm font-medium">Clear</button>
+                        <div class="px-5 mb-4 flex items-center justify-between">
+                            <h3 class="text-gray-500 text-sm font-medium">Matching our collection: "{{ searchQuery }}"</h3>
+                            <button @click="searchQuery = ''" class="text-[#01875f] text-sm font-bold">CLEAR</button>
                         </div>
                         
-                        <div v-if="filteredGames.length > 0" class="divide-y divide-gray-100">
+                        <div v-if="filteredGames.length > 0" class="divide-y divide-gray-100 border-t border-gray-50">
                             <div 
                                 v-for="game in filteredGames" 
                                 :key="game.id" 
-                                class="px-4 py-4 flex gap-4 items-center cursor-pointer active:bg-gray-50" 
+                                class="px-5 py-5 flex gap-5 items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition" 
                                 @click="selectGame(game)"
                             >
-                                <img :src="game.icon" class="w-14 h-14 play-icon-mask border border-gray-100 shadow-sm">
+                                <img :src="game.icon" class="w-16 h-16 play-icon-mask border border-gray-100 shadow-sm flex-shrink-0">
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="text-sm font-medium text-gray-900 truncate">{{ game.title }}</h4>
-                                    <p class="text-xs text-gray-500">{{ game.developer }}</p>
-                                    <div class="flex items-center gap-2 mt-1">
-                                        <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">{{ game.rating }}★</span>
-                                        <span class="text-[10px] text-gray-400">{{ game.size }}</span>
+                                    <h4 class="text-base font-medium text-gray-900 truncate">{{ game.title }}</h4>
+                                    <p class="text-xs text-gray-500 mb-1">{{ game.developer }}</p>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-[11px] font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded">{{ game.rating }}★</span>
+                                        <span class="text-[11px] text-gray-400">{{ game.size }}</span>
                                     </div>
                                 </div>
-                                <button class="border border-gray-300 rounded px-4 py-1 text-xs font-medium text-[#01875f]">Install</button>
+                                <button class="border border-gray-300 rounded-md px-5 py-1.5 text-xs font-bold text-[#01875f] hover:bg-green-50 transition">VIEW</button>
                             </div>
                         </div>
                         
-                        <!-- No Results -->
-                        <div v-else class="px-4 py-20 text-center">
-                            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
-                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <!-- Empty State -->
+                        <div v-else class="px-5 py-24 text-center">
+                            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900">No results found</h3>
-                            <p class="text-sm text-gray-500 mt-1">Try searching for something else or check your spelling.</p>
+                            <h3 class="text-xl font-bold text-gray-800">No matches found</h3>
+                            <p class="text-sm text-gray-500 mt-2 max-w-xs mx-auto">Try a different keyword or explore our latest releases in the Featured tab.</p>
                         </div>
                     </div>
 
-                    <!-- Default Dashboard View -->
+                    <!-- Default Home -->
                     <div v-else>
-                        <!-- Spotlight Carousel -->
-                        <section class="mb-8 px-4 overflow-x-auto scrollbar-hide flex gap-4">
+                        <!-- Spotlight Banner -->
+                        <section class="mb-10 px-4 overflow-x-auto scrollbar-hide flex gap-5">
                             <div v-for="game in gamesData.slice(0, 2)" :key="'feat-'+game.id" 
-                                 class="flex-shrink-0 w-[300px] bg-white rounded-2xl overflow-hidden google-shadow cursor-pointer"
+                                 class="flex-shrink-0 w-[310px] bg-white rounded-2xl overflow-hidden google-shadow cursor-pointer transition-transform active:scale-95"
                                  @click="selectGame(game)">
-                                <img :src="game.gif" class="w-full h-40 object-cover">
-                                <div class="p-4 flex gap-3 items-center">
-                                    <img :src="game.icon" class="w-10 h-10 play-icon-mask">
+                                <img :src="game.gif" class="w-full h-44 object-cover">
+                                <div class="p-5 flex gap-4 items-center bg-white">
+                                    <img :src="game.icon" class="w-12 h-12 play-icon-mask flex-shrink-0">
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="font-medium text-sm truncate">{{ game.title }}</h3>
-                                        <p class="text-xs text-gray-500 truncate">{{ game.category }} • {{ game.rating }}★</p>
+                                        <h3 class="font-bold text-[15px] truncate text-gray-800">{{ game.title }}</h3>
+                                        <p class="text-xs text-gray-500 font-medium truncate">{{ game.category }} • {{ game.rating }}★</p>
                                     </div>
                                 </div>
                             </div>
                         </section>
 
-                        <!-- Section Header -->
-                        <div class="px-4 flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-medium">Recommended for you</h3>
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <div class="px-5 flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold brand-font text-gray-800 tracking-tight">Essential Games</h3>
+                            <div class="text-[#01875f] hover:bg-green-50 px-3 py-1 rounded-md transition cursor-pointer">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </div>
                         </div>
 
-                        <!-- App Grid -->
-                        <div class="px-4 grid grid-cols-3 gap-y-6 gap-x-4 mb-10">
-                            <div v-for="game in gamesData" :key="game.id" class="flex flex-col cursor-pointer active:scale-95 transition" @click="selectGame(game)">
-                                <div class="aspect-square mb-2 relative">
-                                    <img :src="game.icon" class="w-full h-full play-icon-mask border border-gray-100 shadow-sm">
+                        <!-- Professional Grid -->
+                        <div class="px-5 grid grid-cols-3 gap-y-8 gap-x-5 mb-12">
+                            <div v-for="game in gamesData" :key="game.id" class="flex flex-col cursor-pointer group" @click="selectGame(game)">
+                                <div class="aspect-square mb-3 relative overflow-hidden play-icon-mask">
+                                    <img :src="game.icon" class="w-full h-full object-cover border border-gray-100 shadow-sm group-hover:scale-105 transition duration-300">
+                                    <div class="absolute inset-0 bg-black/0 group-active:bg-black/10 transition"></div>
                                 </div>
-                                <h4 class="text-xs font-normal text-gray-700 leading-tight line-clamp-2 mb-1">{{ game.title }}</h4>
-                                <div class="flex items-center gap-1 text-[10px] text-gray-500">
-                                    <span>{{ game.rating }} ★</span>
+                                <h4 class="text-sm font-medium text-gray-800 leading-tight line-clamp-2 mb-1">{{ game.title }}</h4>
+                                <div class="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
+                                    <span>{{ game.rating }}★</span>
+                                    <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                                     <span>{{ game.size }}</span>
                                 </div>
                             </div>
@@ -188,110 +220,173 @@
                     </div>
                 </div>
 
-                <!-- App Detail Page -->
-                <div v-else class="pt-6" :key="'detail-' + activeGame.id">
-                    <!-- Hero Section -->
-                    <section class="px-4 flex gap-6 items-start mb-6">
-                        <img :src="activeGame.icon" class="w-24 h-24 play-icon-mask google-shadow flex-shrink-0">
+                <!-- Product Page -->
+                <div v-else class="pt-8" :key="'detail-' + activeGame.id">
+                    <section class="px-5 flex gap-6 items-start mb-8">
+                        <img :src="activeGame.icon" class="w-28 h-28 play-icon-mask google-shadow flex-shrink-0 border border-gray-50">
                         <div class="flex-1">
-                            <h1 class="text-2xl font-medium leading-tight mb-1">{{ activeGame.title }}</h1>
-                            <p class="text-[#01875f] font-medium text-sm mb-1">{{ activeGame.developer }}</p>
-                            <p class="text-gray-500 text-xs mb-4">Contains ads · In-app purchases</p>
+                            <h1 class="text-3xl font-bold leading-tight mb-1 text-gray-900">{{ activeGame.title }}</h1>
+                            <p class="text-[#01875f] font-bold text-[15px] mb-1 tracking-wide">{{ activeGame.developer }}</p>
+                            <p class="text-gray-400 text-xs font-medium">Verified by Nanhu Interactive Lab</p>
                         </div>
                     </section>
 
-                    <!-- Metrics Row -->
-                    <div class="flex justify-between items-center px-4 mb-8 py-2 border-y border-gray-100">
-                        <div class="text-center px-2">
-                            <p class="text-sm font-medium flex items-center justify-center gap-0.5">{{ activeGame.rating }} <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></p>
-                            <p class="text-[10px] text-gray-500 mt-1">12K reviews</p>
+                    <!-- Professional Metrics -->
+                    <div class="flex justify-between items-center px-6 mb-10 py-4 border-y border-gray-100 bg-gray-50/50">
+                        <div class="text-center">
+                            <p class="text-base font-bold flex items-center justify-center gap-1">{{ activeGame.rating }} <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></p>
+                            <p class="text-[11px] text-gray-500 font-medium uppercase tracking-wider mt-1">12K reviews</p>
                         </div>
-                        <div class="w-[1px] bg-gray-200 h-8"></div>
-                        <div class="text-center px-2">
-                            <p class="text-sm font-medium">500K+</p>
-                            <p class="text-[10px] text-gray-500 mt-1">Downloads</p>
+                        <div class="w-[1px] bg-gray-200 h-10"></div>
+                        <div class="text-center">
+                            <p class="text-base font-bold">500K+</p>
+                            <p class="text-[11px] text-gray-500 font-medium uppercase tracking-wider mt-1">Downloads</p>
                         </div>
-                        <div class="w-[1px] bg-gray-200 h-8"></div>
-                        <div class="text-center px-2">
-                            <div class="mx-auto w-4 h-4 border border-black text-[9px] font-bold flex items-center justify-center leading-none">E</div>
-                            <p class="text-[10px] text-gray-500 mt-1">Everyone</p>
+                        <div class="w-[1px] bg-gray-200 h-10"></div>
+                        <div class="text-center">
+                            <div class="mx-auto w-5 h-5 border-2 border-gray-700 text-[10px] font-black flex items-center justify-center leading-none rounded-sm">E</div>
+                            <p class="text-[11px] text-gray-500 font-medium uppercase tracking-wider mt-1">Everyone</p>
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="px-4 flex gap-3 mb-8">
-                        <button @click="installGame" class="flex-1 btn-install">Install</button>
-                        <button class="px-6 py-2 border border-gray-300 rounded-lg text-[#01875f] font-medium text-sm active:bg-gray-50">Wishlist</button>
+                    <!-- CTA Bar -->
+                    <div class="px-5 flex gap-4 mb-10">
+                        <button @click="installGame" class="flex-1 btn-install shadow-lg shadow-green-200 uppercase tracking-wide">Install Game</button>
+                        <button class="px-4 py-2 border border-gray-200 rounded-lg text-gray-500 hover:text-green-700 transition active:bg-gray-50">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                        </button>
                     </div>
 
-                    <!-- Media Carousel -->
-                    <section class="mb-10 overflow-x-auto scrollbar-hide flex gap-3 px-4">
-                        <div class="flex-shrink-0 w-72 h-40 bg-black rounded-xl overflow-hidden relative group" @click="playVideo">
+                    <!-- Visual Gallery -->
+                    <section class="mb-12 overflow-x-auto scrollbar-hide flex gap-4 px-5">
+                        <div class="flex-shrink-0 w-[300px] h-[168px] bg-black rounded-2xl overflow-hidden relative group cursor-pointer" @click="playVideo">
                             <img :src="activeGame.gif" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition">
-                                <div class="w-12 h-12 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M4.5 3.5a.5.5 0 00-.75.433v12.134a.5.5 0 00.75.433l11.5-6.067a.5.5 0 000-.866L4.5 3.5z"></path></svg>
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition">
+                                <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-2xl">
+                                    <svg class="w-7 h-7 text-white drop-shadow" fill="currentColor" viewBox="0 0 20 20"><path d="M4.5 3.5a.5.5 0 00-.75.433v12.134a.5.5 0 00.75.433l11.5-6.067a.5.5 0 000-.866L4.5 3.5z"></path></svg>
                                 </div>
                             </div>
                         </div>
-                        <img v-for="src in activeGame.screenshots" :src="src" class="flex-shrink-0 h-40 w-auto rounded-xl border border-gray-100">
+                        <img v-for="src in activeGame.screenshots" :src="src" class="flex-shrink-0 h-[168px] w-auto rounded-2xl border border-gray-100 shadow-sm">
                     </section>
 
-                    <!-- About this game -->
-                    <section class="px-4 mb-10">
+                    <!-- Game Overview -->
+                    <section class="px-5 mb-16">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-medium text-gray-800">About this game</h3>
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            <h3 class="text-xl font-bold text-gray-900 brand-font">Product Details</h3>
+                            <svg class="w-6 h-6 text-[#01875f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </div>
-                        <p class="text-gray-600 leading-relaxed text-sm">
+                        <p class="text-gray-600 leading-relaxed text-[15px]">
                             {{ activeGame.description }}
                         </p>
                         
-                        <div class="flex flex-wrap gap-2 mt-6">
-                            <span v-for="tag in ['Racing', 'Stylized', 'Offline']" class="px-3 py-1 border border-gray-300 rounded-full text-xs text-gray-600 font-medium">
+                        <div class="flex flex-wrap gap-2.5 mt-8">
+                            <span v-for="tag in ['Racing', 'Stylized', 'HTML5', 'Nanhu Exclusive']" class="px-4 py-1.5 border border-gray-200 rounded-full text-xs text-gray-500 font-bold uppercase tracking-wider">
                                 {{ tag }}
                             </span>
                         </div>
                     </section>
                 </div>
             </transition>
+
+            <!-- FOOTER SECTION -->
+            <footer class="bg-gray-50 border-t border-gray-100 pt-12 pb-32 mt-12">
+                <div class="px-5">
+                    <div class="flex flex-col md:flex-row justify-between gap-10 mb-12">
+                        <!-- Brand Info -->
+                        <div class="max-w-xs">
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-6 h-6 bg-[#01875f] rounded flex items-center justify-center text-white font-bold text-xs">N</div>
+                                <h4 class="brand-font font-bold text-lg text-gray-800 tracking-tight">Nanhu Interactive</h4>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                Pioneering the future of browser-based entertainment. We build high-performance HTML5 games that run seamlessly on any device.
+                            </p>
+                        </div>
+
+                        <!-- Quick Links -->
+                        <div class="grid grid-cols-2 gap-12">
+                            <div>
+                                <h5 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Company</h5>
+                                <ul class="space-y-2 text-sm font-medium text-gray-600">
+                                    <li><a href="#" class="footer-link">About Us</a></li>
+                                    <li><a href="#" class="footer-link">Careers</a></li>
+                                    <li><a href="#" class="footer-link">Press Kit</a></li>
+                                    <li><a href="#" class="footer-link">Contact</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Support</h5>
+                                <ul class="space-y-2 text-sm font-medium text-gray-600">
+                                    <li><a href="#" class="footer-link">Help Center</a></li>
+                                    <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                                    <li><a href="#" class="footer-link">Terms of Service</a></li>
+                                    <li><a href="#" class="footer-link">Parent's Guide</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Bar -->
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6 py-8 border-t border-gray-200">
+                        <div class="flex items-center gap-6">
+                            <!-- Social Icons (Placeholder SVGs) -->
+                            <a href="#" class="text-gray-400 hover:text-[#01875f] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-[#01875f] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.584.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-[#01875f] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                            </a>
+                        </div>
+                        <p class="text-xs font-medium text-gray-400">
+                            &copy; 2026 Nanhu Interactive. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </main>
 
         <!-- Google Play Bottom Navigation -->
-        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-bottom z-[60]">
-            <div class="max-w-2xl mx-auto flex justify-around py-2.5">
-                <div @click="activePage = 'list'; searchQuery = ''" class="flex flex-col items-center gap-1 cursor-pointer" :class="activePage === 'list' ? 'text-[#01875f]' : 'text-gray-500'">
-                    <div :class="activePage === 'list' ? 'bg-green-100 px-5 rounded-full' : ''" class="py-1 transition-all">
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-bottom z-[60] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
+            <div class="max-w-2xl mx-auto flex justify-around py-3">
+                <div @click="resetView" class="flex flex-col items-center gap-1 cursor-pointer group" :class="activePage === 'list' ? 'text-[#01875f]' : 'text-gray-400'">
+                    <div :class="activePage === 'list' ? 'bg-green-100/60 px-6 rounded-full' : ''" class="py-1.5 transition-all group-active:scale-90">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l-1 1-9 9h3v10h14v-10h3l-10-10z"/></svg>
                     </div>
-                    <span class="text-[11px] font-medium">Games</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Games</span>
                 </div>
-                <div class="flex flex-col items-center gap-1 text-gray-500 opacity-60">
-                    <div class="py-1">
+                <div class="flex flex-col items-center gap-1 text-gray-400 opacity-40 cursor-not-allowed">
+                    <div class="py-1.5">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </div>
-                    <span class="text-[11px] font-medium">Apps</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Apps</span>
                 </div>
-                <div class="flex flex-col items-center gap-1 text-gray-500 opacity-60">
-                    <div class="py-1">
+                <div class="flex flex-col items-center gap-1 text-gray-400 opacity-40 cursor-not-allowed">
+                    <div class="py-1.5">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4"/></svg>
                     </div>
-                    <span class="text-[11px] font-medium">Movies</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Movies</span>
                 </div>
-                <div class="flex flex-col items-center gap-1 text-gray-500 opacity-60">
-                    <div class="py-1">
+                <div class="flex flex-col items-center gap-1 text-gray-400 opacity-40 cursor-not-allowed">
+                    <div class="py-1.5">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                     </div>
-                    <span class="text-[11px] font-medium">Books</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Store</span>
                 </div>
             </div>
         </nav>
 
-        <!-- Material Notification -->
+        <!-- Notification Toast -->
         <transition name="fade">
-            <div v-if="notification" class="fixed bottom-24 left-4 right-4 md:left-auto md:right-8 md:w-80 bg-[#323232] text-white px-4 py-3 rounded-lg shadow-xl z-[100] flex items-center justify-between text-sm">
-                <span>{{ notification }}</span>
-                <button class="text-[#01875f] font-bold uppercase text-xs" @click="notification = null">Undo</button>
+            <div v-if="notification" class="fixed bottom-28 left-5 right-5 md:left-auto md:right-8 md:w-80 bg-[#202124] text-white px-5 py-3.5 rounded-xl shadow-2xl z-[100] flex items-center justify-between text-[13px] border border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 bg-[#01875f] rounded-full animate-pulse"></div>
+                    <span>{{ notification }}</span>
+                </div>
+                <button class="text-[#34a853] font-black uppercase text-[11px] tracking-widest" @click="notification = null">DISMISS</button>
             </div>
         </transition>
 
@@ -315,7 +410,7 @@
                         developer: "Nanhu Interactive",
                         rating: 4.8,
                         size: "42 MB",
-                        description: "Experience ultra-fast 120fps racing in the heart of a neon-soaked metropolis. Master the art of the drift and compete against players worldwide in real-time HTML5 showdowns. Join the cyber-revolution today.",
+                        description: "Experience ultra-fast 120fps racing in the heart of a neon-soaked metropolis. Master the art of the drift and compete against players worldwide in real-time HTML5 showdowns. Built with our proprietary high-performance web engine.",
                         icon: "https://picsum.photos/id/10/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/M90mJvC88A2N7G58M9/giphy.gif",
                         screenshots: [
@@ -331,7 +426,7 @@
                         developer: "Nanhu Labs",
                         rating: 4.9,
                         size: "18 MB",
-                        description: "A meditative journey where every pebble placement matters. Relax your mind with soft acoustics and satisfying particle effects.",
+                        description: "A meditative journey where every pebble placement matters. Relax your mind with soft acoustics and satisfying particle effects. Winner of the 2025 Web Design Excellence Award.",
                         icon: "https://picsum.photos/id/30/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
                         screenshots: [
@@ -347,7 +442,7 @@
                         developer: "Nanhu Interactive",
                         rating: 4.5,
                         size: "12 MB",
-                        description: "Lead your pixelated army to victory in this turn-based strategic masterpiece. Command, conquer, and upgrade.",
+                        description: "Lead your pixelated army to victory in this turn-based strategic masterpiece. Command, conquer, and upgrade your fleet to protect the sector from void invaders.",
                         icon: "https://picsum.photos/id/50/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
                         screenshots: [
@@ -362,7 +457,7 @@
                         developer: "Nanhu Interactive",
                         rating: 4.2,
                         size: "25 MB",
-                        description: "Conquer tiles and build defenses in this fast-paced geometric challenge.",
+                        description: "Conquer tiles and build defenses in this fast-paced geometric challenge. Optimized for desktop browsers and tablet touch interfaces.",
                         icon: "https://picsum.photos/id/70/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmh3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGfN5Z3G0fW6k/giphy.gif",
                         screenshots: ["https://picsum.photos/id/71/800/500"]
@@ -375,7 +470,7 @@
                         developer: "Nanhu Labs",
                         rating: 4.7,
                         size: "30 MB",
-                        description: "Dash through the void in this rhythmic action runner.",
+                        description: "Dash through the void in this rhythmic action runner. Every level is synchronized with a bespoke electronic soundtrack.",
                         icon: "https://picsum.photos/id/80/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGY5M2J1eHp6Nmh1N29sNmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
                         screenshots: ["https://picsum.photos/id/81/800/500"]
@@ -388,7 +483,7 @@
                         developer: "Nanhu Labs",
                         rating: 4.4,
                         size: "55 MB",
-                        description: "Build your culinary empire from a food truck to a 5-star restaurant.",
+                        description: "Build your culinary empire from a food truck to a 5-star restaurant. Features deep management systems and unique mini-games.",
                         icon: "https://picsum.photos/id/90/512/512",
                         gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3NmJ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTjJ9NqQW3U8tG/giphy.gif",
                         screenshots: ["https://picsum.photos/id/91/800/500"]
@@ -397,7 +492,6 @@
 
                 const activeGame = ref(gamesData[0]);
 
-                // SEARCH LOGIC
                 const filteredGames = computed(() => {
                     if (!searchQuery.value) return gamesData;
                     const query = searchQuery.value.toLowerCase().trim();
@@ -414,13 +508,19 @@
                     window.scrollTo({ top: 0, behavior: 'instant' });
                 };
 
+                const resetView = () => {
+                    activePage.value = 'list';
+                    searchQuery.value = '';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
                 const notify = (msg) => {
                     notification.value = msg;
                     setTimeout(() => notification.value = null, 4000);
                 };
 
-                const installGame = () => notify("Waiting for download...");
-                const playVideo = () => notify("Opening gameplay trailer...");
+                const installGame = () => notify("Initializing game download...");
+                const playVideo = () => notify("Streaming gameplay preview...");
 
                 return {
                     activePage,
@@ -429,6 +529,7 @@
                     activeGame,
                     filteredGames,
                     selectGame,
+                    resetView,
                     notification,
                     installGame,
                     playVideo
