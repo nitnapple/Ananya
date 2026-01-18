@@ -108,7 +108,7 @@
     .mobile-preview-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.85);
       display: none;
       align-items: center;
       justify-content: center;
@@ -116,17 +116,14 @@
     }
 
     .mobile-preview-overlay video {
-      width: 90%;
-      max-width: 360px;
+      width: 85%;
+      max-width: 320px;
       border-radius: 18px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
     }
   </style>
 
-  <audio id="birthdayMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2025/03/20/audio_1488679301.mp3?filename=happy-birthday-to-you-background-music-for-the-holiday-jazz-version-316322.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-  <!-- CLARITY (all preserved) -->
+  <!-- CLARITY & ANALYTICS PRESERVED -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -166,87 +163,121 @@
       })(document);
       smartlook('init', '57105488529284db8da5c3da75c04faf28af654a', { region: 'eu' });
   </script>
-
-
 </head>
 
-<body class="min-h-screen flex items-center justify-center relative px-4 pb-28">
+<body class="min-h-screen flex items-center justify-center relative px-4 pb-48 overflow-y-auto">
 
-  <!-- CARD -->
-  <div class="text-center p-8 bg-white/80 rounded-3xl shadow-2xl w-full max-w-md card-animate z-20">
+  <!-- BIRTHDAY CARD -->
+  <div class="text-center p-8 bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl w-full max-w-md card-animate z-20 my-10">
     <h1 class="text-4xl font-extrabold text-pink-600 mb-6 animate-pulse">
       🎉 Happy Birthday, <span class="text-yellow-500">Ananya!</span>
     </h1>
 
-    <button onclick="launchConfetti()"
-      class="bg-pink-500 hover:bg-pink-600 text-white text-sm sm:text-base
-             px-6 py-2 rounded-full glow animate-bounce">
-      Celebrate 🎈
-    </button>
+    <div class="space-y-4">
+      <button onclick="launchConfetti()"
+        class="bg-pink-500 hover:bg-pink-600 text-white text-base
+               px-8 py-3 rounded-full glow animate-bounce w-full sm:w-auto">
+        Celebrate 🎈
+      </button>
 
-    <button onclick="showSurprise()"
-      class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-pink-800
-             text-sm sm:text-base px-6 py-2 rounded-full">
-      Surprise! 🎁
-    </button>
+      <button onclick="showSurprise()"
+        class="bg-yellow-400 hover:bg-yellow-500 text-pink-800
+               text-base px-8 py-3 rounded-full w-full sm:w-auto">
+        Surprise! 🎁
+      </button>
+    </div>
 
     <div id="surprise-message"
-      class="mt-4 text-base text-purple-600 font-semibold hidden"></div>
+      class="mt-6 text-base text-purple-600 font-semibold hidden italic"></div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="absolute bottom-0 left-0 w-full flex justify-center gap-2 sm:gap-4 py-4 z-30">
-
-    <a href="https://nitnapple.github.io/Ananya/home">
+  <!-- FIXED FLOATING NAVIGATION -->
+  <footer class="fixed bottom-12 left-0 w-full flex justify-center items-center gap-3 px-4 py-4 z-30 flex-wrap">
+    <a href="https://nitnapple.github.io/Ananya/home" class="transition-transform active:scale-95">
       <button class="bg-pink-500 hover:bg-pink-600 text-white
-        text-xs sm:text-sm px-4 sm:px-6 py-2 rounded-full">
+        text-xs sm:text-sm px-4 sm:px-6 py-2.5 rounded-full shadow-lg border border-white/20">
         🏠 Home
       </button>
     </a>
 
-    <a href="https://nitnapple.github.io/Ananya/Archive">
+    <a href="https://nitnapple.github.io/Ananya/Archive" class="transition-transform active:scale-95">
       <button class="bg-pink-500 hover:bg-pink-600 text-white
-        text-xs sm:text-sm px-4 sm:px-6 py-2 rounded-full">
+        text-xs sm:text-sm px-4 sm:px-6 py-2.5 rounded-full shadow-lg border border-white/20">
         📚 Archive
       </button>
     </a>
 
     <a href="https://nitnapple.github.io/Ananya/Savegalaxy"
-       class="game-btn"
+       class="game-btn transition-transform active:scale-95"
        id="gameLink">
-
-      <!-- Desktop preview -->
-      <video class="game-preview hidden sm:block"
+      <video class="game-preview hidden sm:block shadow-2xl border-4 border-pink-200"
         src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
         muted autoplay loop playsinline></video>
-
       <button id="gameBtn" type="button"
-        class="bg-purple-500 hover:bg-purple-600 text-white
-               text-xs sm:text-sm px-4 sm:px-6 py-2 rounded-full relative animate-pulse">
+        class="bg-purple-600 hover:bg-purple-700 text-white
+               text-xs sm:text-sm px-4 sm:px-6 py-2.5 rounded-full relative animate-pulse shadow-lg border border-white/20">
         🎮 New Game
         <span class="game-badge">NEW</span>
       </button>
     </a>
-
   </footer>
 
-  <!-- MOBILE PREVIEW -->
+  <!-- MOBILE PREVIEW OVERLAY -->
   <div id="mobilePreview" class="mobile-preview-overlay">
-    <video src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
-      muted autoplay loop playsinline></video>
+    <div class="text-center">
+      <video src="https://nitnapple.github.io/Ananya/Savegalaxy/preview.mp4"
+        muted autoplay loop playsinline></video>
+      <p class="text-white mt-4 font-bold text-lg animate-bounce">Tap anywhere to close</p>
+    </div>
   </div>
 
-  <audio id="birthdayMusic" loop>
-    <source src="https://cdn.pixabay.com/audio/2023/03/20/audio_1488679301.mp3" type="audio/mpeg">
+  <!-- AUDIO ELEMENT -->
+  <audio id="birthdayMusic" loop preload="auto">
+    <source src="https://cdn.pixabay.com/audio/2025/06/17/audio_818a10a653.mp3" type="audio/mpeg">
+    Your browser does not support audio.
   </audio>
 
   <script>
+    let musicPlaying = false;
+
+    function startMusic() {
+      const music = document.getElementById('birthdayMusic');
+      if (!musicPlaying) {
+        music.play().then(() => {
+          musicPlaying = true;
+        }).catch(e => console.log("Waiting for user interaction for audio."));
+      }
+    }
+
     function launchConfetti() {
-      confetti({ particleCount: 180, spread: 90, origin: { y: 0.6 } });
-      document.getElementById('birthdayMusic').play();
+      startMusic();
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#ec4899', '#eab308', '#a855f7']
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#ec4899', '#eab308', '#a855f7']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
     }
 
     function showSurprise() {
+      startMusic();
       const messages = [
         "🌟 Ananya, your laughter is sunshine made audible.",
         "🎂 You’re elegance wrapped in confidence and warmth.",
@@ -429,14 +460,17 @@
       el.textContent = msg;
       el.classList.remove('hidden');
 
-      confetti({ particleCount: 120, spread: 120, origin: { y: 0.5 } });
+      confetti({ 
+        particleCount: 150, 
+        spread: 70, 
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff']
+      });
     }
 
-    /* MOBILE PREVIEW + NAVIGATION FIX */
+    /* MOBILE PREVIEW + NAVIGATION LOGIC */
     (function () {
       const isMobile = window.matchMedia('(hover: none)').matches;
-      if (!isMobile) return;
-
       const link = document.getElementById('gameLink');
       const btn = document.getElementById('gameBtn');
       const overlay = document.getElementById('mobilePreview');
@@ -444,8 +478,9 @@
       let previewShown = false;
 
       btn.addEventListener('click', function (e) {
-        if (!previewShown) {
+        if (isMobile && !previewShown) {
           e.preventDefault();
+          e.stopPropagation();
           overlay.style.display = 'flex';
           previewShown = true;
         } else {
