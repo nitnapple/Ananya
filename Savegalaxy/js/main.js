@@ -123,6 +123,11 @@ document.getElementById('vol-btn').addEventListener('click', () => {
 function loop() {
     if(!Game.gameRunning || Game.isPaused) return;
 
+    // Inside main.js -> function loop()
+    if (typeof Game.updateGhostShip === 'function') {
+    Game.updateGhostShip();
+}
+
     ctx.save();
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#050510';
