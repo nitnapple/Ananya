@@ -1,8 +1,8 @@
-// --- UPDATED MAIN LOOP WITH DOUBLE-TAP SUPERPOWER & HEART UI ---
+// --- UPDATED MAIN LOOP WITH DOUBLE-TAP & HEART UI ---
 
 let animFrameId = null;
 let backgroundObjects = []; let stars = [];
-let lastTapTime = 0; // For double-tap detection
+let lastTapTime = 0; 
 
 function resize() {
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -20,7 +20,7 @@ function initBackground() {
     }
 }
 
-// Updated with Heart PNG URL
+// heart png health ui implementation
 function updateLivesUI() {
     const cont = document.getElementById('lives-display'); cont.innerHTML = '';
     const heartURL = "https://nitnapple.github.io/Ananya/Savegalaxy/Heart.png";
@@ -49,7 +49,7 @@ function updateTime() {
     document.getElementById('time-display').innerText = `${m}:${s}`;
 }
 
-// Double-Tap Detection
+// double-tap logic
 function handleInputStart(x, y) {
     if(Game.isPaused) return;
     
@@ -104,7 +104,6 @@ function loop() {
     Game.frameCount++; if(Game.frameCount % 30 === 0) updateTime();
     if(Game.superAttackCooldown > 0) Game.superAttackCooldown--;
 
-    // Background
     backgroundObjects.forEach(p => {
         p.y += p.speed * (Game.powerupState.freeze > 0 ? 0.2 : 1) * Game.timeScale;
         if(p.y > canvas.height + 100) { p.y = -100; p.x = Math.random()*canvas.width; }
@@ -121,7 +120,6 @@ function loop() {
     if (typeof Game.handlePlayerShooting === 'function') Game.handlePlayerShooting();
     if(!Game.levelTransitioning && !Game.boss && Game.frameCount % 35 === 0) Game.spawnEnemy();
 
-    // Bullets
     ctx.globalCompositeOperation = 'lighter';
     for(let i = Game.bullets.length-1; i>=0; i--) {
         let b = Game.bullets[i]; b.x += (b.vx || 0) * Game.timeScale; b.y += b.vy * Game.timeScale;
@@ -137,7 +135,6 @@ function loop() {
         }
     }
 
-    // Enemy & Mini-Boss Wave Movement
     const moveMult = (Game.powerupState.freeze > 0 ? 0.2 : 1) * Game.timeScale;
     ctx.globalCompositeOperation = 'source-over';
     for(let i=Game.enemies.length-1; i>=0; i--) {
@@ -169,7 +166,6 @@ function loop() {
 
     if(Game.boss) { Game.updateBoss(moveMult); Game.drawBossHealth(); Game.checkBossCollisions(); }
 
-    // Powerups
     for (let i = Game.powerups.length - 1; i >= 0; i--) {
         let p = Game.powerups[i]; p.y += p.vy * Game.timeScale;
         ctx.save(); ctx.translate(p.x, p.y); if (p.type === 'heart') {
@@ -186,7 +182,6 @@ function loop() {
         }
     }
     
-    // UI Effects
     ctx.globalCompositeOperation = 'lighter';
     for(let i=floatingTexts.length-1; i>=0; i--) {
         let ft = floatingTexts[i]; ft.y += ft.vy * Game.timeScale; ft.life -= 0.02;
