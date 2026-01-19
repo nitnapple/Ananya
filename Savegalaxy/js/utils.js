@@ -24,7 +24,7 @@ const LEVELS = ["ANANYA", "SHANDILYA", "PHOTOGRAPHY", "ONE PIECE", "JANPATH", "P
 const BOSS_URLS = {
     generic: "https://nitnapple.github.io/Ananya/Savegalaxy/BossGen.png",
     level5: "https://nitnapple.github.io/Ananya/Savegalaxy/Boss5.png",
-    level10: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873024427-EP9L5HL8TDC44G9BBD7N/UFO-shocked.gif"
+    level10: "https://nitnapple.github.io/Ananya/Savegalaxy/Boss10.png"
 };
 
 // HELPER ARRAYS
