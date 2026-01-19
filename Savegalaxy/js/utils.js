@@ -8,11 +8,11 @@ const input = { x: 0, y: 0, active: false, offsetX: 0, offsetY: 0, rawX: 0, rawY
 // GLOBAL IMAGES
 const asteroidImg = new Image();
 asteroidImg.crossOrigin = "Anonymous";
-asteroidImg.src = "https://cdn.creazilla.com/cliparts/4310/asteroid-clipart-xl.png";
+asteroidImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/asteroid.png";
 
 const meteorImg = new Image();
 meteorImg.crossOrigin = "Anonymous";
-meteorImg.src = "https://pngimg.com/uploads/meteor/meteor_PNG9.png";
+meteorImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/asteroid.png";
 
 // *** NEW HEART IMAGE ***
 const heartImg = new Image();
