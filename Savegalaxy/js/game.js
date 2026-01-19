@@ -101,7 +101,7 @@ const Game = {
                 // 20% Chance for Powerup, 5% Chance for Heart from Minions
                 if (Math.random() < 0.20) { 
                     this.spawnPowerup(e.x, e.y);
-                } else if (Math.random() < 0.05) { 
+                } else if (Math.random() < 0.5) { 
                     this.spawnHeart(e.x, e.y);
                 }
                 
