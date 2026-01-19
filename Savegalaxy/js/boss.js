@@ -7,6 +7,9 @@ Game.spawnBoss = function() {
     const isMid = this.currentLevelIndex === 4;   // Level 5
     AudioSys.playBossLaugh(isFinal);
 
+    // Inside boss.js -> Game.spawnBoss
+this.spawnPartner();
+
     let type = 'normal';
     let hp = 300 + (this.currentLevelIndex * 50);
     let w = 140; let h = 100;
@@ -194,6 +197,10 @@ Game.killBoss = function() {
     floatingTexts.push({x: canvas.width/2, y: canvas.height/2, text: "BOSS DEFEATED!", color: 'gold', life: 3.0, vy: -0.5});
     AudioSys.playBossScream(this.currentLevelIndex === 9);
     
+    // Inside boss.js -> Game.killBoss
+this.partner.active = false;
+this.partnerBullets = []; // Clear any remaining hearts
+
     this.timeScale = 0.2;
     this.slowMoTimeout = setTimeout(() => {
         this.timeScale = 1.0;
