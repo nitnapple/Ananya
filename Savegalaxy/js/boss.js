@@ -12,16 +12,16 @@ Game.spawnBoss = function() {
     let w = 140; let h = 100;
     let imgSrc = BOSS_URLS.generic;
     
-    // Level 5 & 10 Difficulty Scaling
+    // Level 5 & 10 Scaling
     if (isMid) { 
         type = 'big'; 
-        hp = 1000; // Buffed HP for Level 5
+        hp = 1000; // Increased challenge for Level 5
         w = 220; h = 150; 
         imgSrc = BOSS_URLS.level5;
     }
     if (isFinal) { 
         type = 'final'; 
-        hp = 3000; // Buffed HP for Level 10
+        hp = 3000; // Increased challenge for Level 10
         w = 300; h = 200; 
         imgSrc = BOSS_URLS.level10;
     }
@@ -30,9 +30,8 @@ Game.spawnBoss = function() {
         x: canvas.width/2, y: -150, targetY: canvas.height * 0.25,
         w: w, h: h, hp: hp, maxHp: hp, vx: 0, vy: 1,
         type: type, phase: 'enter', imgSrc: imgSrc,
-        // Drop configuration
-        dropThresholds: [0.75, 0.50, 0.25], 
-        lootTimer: 0, 
+        dropThresholds: [0.75, 0.50, 0.25],
+        lootTimer: 0,
         attackTimer: 0,
         currentAttack: 'idle'
     };
@@ -90,10 +89,9 @@ Game.updateBoss = function(moveMult) {
     }
 
     if(boss.phase === 'fight') {
-        // --- POWER UP SPAWNING LOGIC ---
+        // --- RECURRING POWERUPS IN BOSS LEVELS ---
         boss.lootTimer++;
-        // Periodic drop every 7 seconds
-        if (boss.lootTimer % 420 === 0) {
+        if (boss.lootTimer % 400 === 0) { // Approx every 6.5 seconds
             this.spawnPowerup(Math.random() * (canvas.width - 100) + 50, -50);
             if(Math.random() > 0.6) this.spawnHeart(Math.random() * (canvas.width - 100) + 50, -50);
         }
