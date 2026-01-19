@@ -6,30 +6,26 @@ const Game = {
     gameRunning: false, isPaused: false, frameCount: 0, lives: 5,
     superAttackCooldown: 0,
 
-    // *** MASSIVE IMPACT SUPERPOWER ***
     executeSuperAttack: function() {
         if (this.superAttackCooldown > 0 || !this.gameRunning) return;
 
-        this.superAttackCooldown = 400; // ~6.5 second cooldown
-        this.screenShake = 45; // Massive shake effect
+        this.superAttackCooldown = 400; // recharge time
+        this.screenShake = 55;
         AudioSys.speak("Massive Impact!");
         AudioSys.playExplosion();
 
-        // Visual Pulse at player location
         createParticles(this.player.x, this.player.y, '#fff', 40, 'smoke');
-        createParticles(this.player.x, this.player.y, '#00ffff', 35, 'spark');
+        createParticles(this.player.x, this.player.y, '#00ffff', 40, 'spark');
 
-        // Massive Damage to All Enemies on screen
         for (let i = this.enemies.length - 1; i >= 0; i--) {
             let e = this.enemies[i];
-            this.hitEnemy(e, i, 50); // Deals high damage to clear mobs
+            this.hitEnemy(e, i, 65);
         }
 
-        // Double Damage to Boss
         if (this.boss) {
-            const massiveDamage = 600; // Significant boss health reduction
+            const massiveDamage = 800; 
             this.boss.hp -= massiveDamage; 
-            createParticles(this.boss.x, this.boss.y, '#ff0033', 25, 'spark');
+            createParticles(this.boss.x, this.boss.y, '#ff0033', 30, 'spark');
             floatingTexts.push({x: this.boss.x, y: this.boss.y, text: "-DOUBLE IMPACT", color: 'red', life: 1.5, vy: -1});
             if (this.boss.hp <= 0) this.killBoss();
         }
