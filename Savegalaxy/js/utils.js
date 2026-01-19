@@ -12,7 +12,7 @@ asteroidImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/asteroid.png";
 
 const meteorImg = new Image();
 meteorImg.crossOrigin = "Anonymous";
-meteorImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/asteroid.png";
+meteorImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/meteor.png";
 
 // *** NEW HEART IMAGE ***
 const heartImg = new Image();
