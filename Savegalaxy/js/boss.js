@@ -15,13 +15,13 @@ Game.spawnBoss = function() {
     // Level 5 & 10 Difficulty Scaling
     if (isMid) { 
         type = 'big'; 
-        hp = 800; // Increased HP for Level 5
+        hp = 1000; // Buffed HP for Level 5
         w = 220; h = 150; 
         imgSrc = BOSS_URLS.level5;
     }
     if (isFinal) { 
         type = 'final'; 
-        hp = 2500; // Increased HP for Level 10
+        hp = 3000; // Buffed HP for Level 10
         w = 300; h = 200; 
         imgSrc = BOSS_URLS.level10;
     }
@@ -30,8 +30,9 @@ Game.spawnBoss = function() {
         x: canvas.width/2, y: -150, targetY: canvas.height * 0.25,
         w: w, h: h, hp: hp, maxHp: hp, vx: 0, vy: 1,
         type: type, phase: 'enter', imgSrc: imgSrc,
-        dropThresholds: [0.75, 0.50, 0.25],
-        lootTimer: 0,
+        // Drop configuration
+        dropThresholds: [0.75, 0.50, 0.25], 
+        lootTimer: 0, 
         attackTimer: 0,
         currentAttack: 'idle'
     };
@@ -44,43 +45,31 @@ Game.spawnBoss = function() {
 
 Game.spawnBossMinion = function(formation = 'V') {
     const isHard = this.currentLevelIndex === 4 || this.currentLevelIndex === 9;
-    const count = isHard ? 8 : 5; // More minions for hard levels
+    const count = isHard ? 8 : 5; 
     const spacing = 60;
     
     for(let i = 0; i < count; i++) {
-        let offX = 0;
-        let offY = 0;
-        let pType = 'normal';
+        let offX = 0; let offY = 0; let pType = 'normal';
         const mid = (count - 1) / 2;
         const relIdx = i - mid;
 
-        // Formation Logic
         if (formation === 'V') {
-            offX = relIdx * spacing;
-            offY = Math.abs(relIdx) * 40;
+            offX = relIdx * spacing; offY = Math.abs(relIdx) * 40;
         } else if (formation === 'DELTA') {
-            offX = relIdx * spacing;
-            offY = i % 2 === 0 ? 0 : 50;
+            offX = relIdx * spacing; offY = i % 2 === 0 ? 0 : 50;
         } else if (formation === 'CROSS') {
             if (i < count/2) { offX = (i - count/4) * spacing; offY = 0; }
             else { offX = 0; offY = (i - 3*count/4) * spacing; }
         } else if (formation === 'SIN' || formation === 'COS') {
-            offX = relIdx * spacing;
-            pType = formation.toLowerCase();
+            offX = relIdx * spacing; pType = formation.toLowerCase();
         }
 
         this.enemies.push({
-            x: this.boss.x + offX, 
-            y: this.boss.y + 50 + offY,
+            x: this.boss.x + offX, y: this.boss.y + 50 + offY,
             w: isHard ? 60 : 45, h: isHard ? 45 : 35, 
-            hp: isHard ? 30 : 12, // Increased minion tankiness
-            vy: isHard ? 4 : 2.5, 
-            vx: 0, 
-            pathType: pType,
-            originX: this.boss.x + offX,
-            isMinion: true, 
-            imgSrc: this.boss.imgSrc,
-            rot: 0, rotSpeed: 0.05
+            hp: isHard ? 35 : 12, vy: isHard ? 4 : 2.5, 
+            vx: 0, pathType: pType, originX: this.boss.x + offX,
+            isMinion: true, imgSrc: this.boss.imgSrc, rot: 0, rotSpeed: 0.05
         });
     }
 };
@@ -91,26 +80,40 @@ Game.updateBoss = function(moveMult) {
     const isLevel5 = this.currentLevelIndex === 4;
     const isLevel10 = this.currentLevelIndex === 9;
 
-    // Aggressive Movement for Level 10
     if(boss.phase === 'enter') {
         boss.y += 2 * this.timeScale;
         if(boss.y >= boss.targetY) boss.phase = 'fight';
     } else {
-        let speed = (isLevel10) ? 4 : 2;
+        let speed = (isLevel10) ? 4.5 : 2;
         boss.x += Math.sin(this.frameCount * 0.03) * speed * moveMult;
         boss.x = Math.max(boss.w/2, Math.min(canvas.width - boss.w/2, boss.x));
     }
 
     if(boss.phase === 'fight') {
+        // --- POWER UP SPAWNING LOGIC ---
+        boss.lootTimer++;
+        // Periodic drop every 7 seconds
+        if (boss.lootTimer % 420 === 0) {
+            this.spawnPowerup(Math.random() * (canvas.width - 100) + 50, -50);
+            if(Math.random() > 0.6) this.spawnHeart(Math.random() * (canvas.width - 100) + 50, -50);
+        }
+
+        // HP Threshold drops
+        const hpPct = boss.hp / boss.maxHp;
+        if (boss.dropThresholds.length > 0 && hpPct < boss.dropThresholds[0]) {
+            boss.dropThresholds.shift();
+            this.spawnPowerup(boss.x, boss.y + 50);
+            this.spawnHeart(boss.x + 30, boss.y + 50);
+        }
+
         boss.attackTimer++;
-        // Faster attack cycles for Level 5 and 10
-        const threshold = (isLevel5 || isLevel10) ? 45 : 75;
+        const threshold = (isLevel5 || isLevel10) ? 40 : 70;
 
         if(boss.currentAttack === 'idle' && boss.attackTimer > threshold) {
             boss.attackTimer = 0;
             const r = Math.random();
-            if(r < 0.4) boss.currentAttack = 'formation';
-            else if(r < 0.7) boss.currentAttack = 'rapid';
+            if(r < 0.45) boss.currentAttack = 'formation';
+            else if(r < 0.75) boss.currentAttack = 'rapid';
             else boss.currentAttack = 'laser';
         }
 
@@ -121,22 +124,22 @@ Game.updateBoss = function(moveMult) {
         }
 
         if(boss.currentAttack === 'rapid') {
-            if(boss.attackTimer % (isLevel10 ? 6 : 10) === 0) {
+            if(boss.attackTimer % (isLevel10 ? 5 : 10) === 0) {
                 const angle = Math.atan2(this.player.y - boss.y, this.player.x - boss.x);
-                this.spawnBossBullet(boss.x, boss.y + 50, angle, isLevel10 ? 12 : 8);
-                if(isLevel5) this.spawnBossBullet(boss.x, boss.y + 50, angle + 0.2, 8); // Double shot for Lv 5
+                this.spawnBossBullet(boss.x - 20, boss.y + 50, angle, isLevel10 ? 13 : 8);
+                this.spawnBossBullet(boss.x + 20, boss.y + 50, angle, isLevel10 ? 13 : 8);
             }
             if(boss.attackTimer > 100) boss.currentAttack = 'idle';
         }
 
         if(boss.currentAttack === 'laser') {
-            const charge = isLevel10 ? 30 : 60; // Faster charge on final boss
+            const charge = isLevel10 ? 25 : 60;
             if(boss.attackTimer < charge) {
                 ctx.strokeStyle = `rgba(255, 0, 0, ${boss.attackTimer/charge})`;
-                ctx.lineWidth = 2; ctx.beginPath();
+                ctx.lineWidth = isLevel10 ? 4 : 2; ctx.beginPath();
                 ctx.moveTo(boss.x, boss.y + 50); ctx.lineTo(boss.x, canvas.height); ctx.stroke();
-            } else if (boss.attackTimer < charge + 120) {
-                const lW = (isLevel10 ? 90 : 50) + Math.sin(this.frameCount * 0.5) * 10;
+            } else if (boss.attackTimer < charge + 110) {
+                const lW = (isLevel10 ? 100 : 50) + Math.sin(this.frameCount * 0.5) * 10;
                 ctx.fillStyle = isLevel10 ? '#ff00ff' : '#ff0033';
                 ctx.fillRect(boss.x - lW/2, boss.y + 50, lW, canvas.height);
                 if(Math.abs(this.player.x - boss.x) < (lW/2 + this.player.w/3) && this.player.invulnerable === 0) {
@@ -151,10 +154,8 @@ Game.updateBoss = function(moveMult) {
 
 Game.spawnBossBullet = function(x, y, angle, speed) {
     this.enemies.push({
-        x: x, y: y, w: 20, h: 20, letter: '', isTrap: true, hp: 1, 
-        isBossBullet: true, 
-        vy: Math.sin(angle) * speed, 
-        vx: Math.cos(angle) * speed,
+        x: x, y: y, w: 22, h: 22, letter: '', isTrap: true, hp: 1, 
+        isBossBullet: true, vy: Math.sin(angle) * speed, vx: Math.cos(angle) * speed,
         rot: 0, rotSpeed: 0.1, scale: 1, isMinion: false
     });
 };
@@ -193,7 +194,6 @@ Game.killBoss = function() {
     this.bossImgEl.style.display = 'none';
     floatingTexts.push({x: canvas.width/2, y: canvas.height/2, text: "BOSS DEFEATED!", color: 'gold', life: 3.0, vy: -0.5});
     AudioSys.playBossScream(this.currentLevelIndex === 9);
-    
     this.timeScale = 0.2;
     this.slowMoTimeout = setTimeout(() => {
         this.timeScale = 1.0;
