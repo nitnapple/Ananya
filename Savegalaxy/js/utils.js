@@ -23,7 +23,7 @@ heartImg.src = "https://cliply.co/wp-content/uploads/2019/07/391907100_HEART_400
 const LEVELS = ["ANANYA", "SHANDILYA", "PHOTOGRAPHY", "ONE PIECE", "JANPATH", "PHILOSOPHY", "HER MAJESTY", "SWIMMING", "TOKYO", "JUJUTSU KAISEN"];
 const BOSS_URLS = {
     generic: "https://nitnapple.github.io/Ananya/Savegalaxy/BossGen.png",
-    level5: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873023819-209B50XVZI4AHLMRVJ89/UFO-kissy.gif",
+    level5: "https://nitnapple.github.io/Ananya/Savegalaxy/Boss5.png",
     level10: "https://images.squarespace-cdn.com/content/v1/5bcfdf91e8ba4404c104e52e/1541873024427-EP9L5HL8TDC44G9BBD7N/UFO-shocked.gif"
 };
 
