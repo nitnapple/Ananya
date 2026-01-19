@@ -17,7 +17,7 @@ meteorImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/asteroid.png";
 // *** NEW HEART IMAGE ***
 const heartImg = new Image();
 heartImg.crossOrigin = "Anonymous";
-heartImg.src = "https://cliply.co/wp-content/uploads/2019/07/391907100_HEART_400px.gif";
+heartImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/Heart.png";
 
 // GAME DATA
 const LEVELS = ["ANANYA", "SHANDILYA", "PHOTOGRAPHY", "ONE PIECE", "JANPATH", "PHILOSOPHY", "HER MAJESTY", "SWIMMING", "TOKYO", "JUJUTSU KAISEN"];
