@@ -1,20 +1,17 @@
 // --- CLEAN MAIN LOOP ---
 
-// Note: 'input' object is defined in utils.js and acts as global state
 let animFrameId = null;
 let backgroundObjects = [];
 let stars = [];
 
-// --- Init & Helper Functions ---
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     if (!Game.gameRunning) {
-        // Reset positions on resize if game isn't running
-        Game.player.x = canvas.width/2; 
+        Game.player.x = canvas.width/2;
         Game.player.y = canvas.height - 150;
         if(typeof input !== 'undefined') {
-            input.x = canvas.width/2; 
+            input.x = canvas.width/2;
             input.y = canvas.height - 150;
         }
     }
@@ -66,10 +63,10 @@ function updateTime() {
     document.getElementById('time-display').innerText = `${m}:${s}`;
 }
 
-// --- Input Listeners ---
+// Input Handlers
 function handleInputStart(x, y) {
     if(Game.isPaused) return;
-    input.active = true; // Enables shooting
+    input.active = true;
     input.rawX = x; input.rawY = y;
     input.offsetX = Game.player.x - x;
     input.offsetY = Game.player.y - y;
@@ -84,28 +81,25 @@ function handleInputMove(x, y) {
     input.y = y + input.offsetY;
 }
 
-// Mouse Events
 canvas.addEventListener('mousedown', e => handleInputStart(e.clientX, e.clientY));
 canvas.addEventListener('mousemove', e => handleInputMove(e.clientX, e.clientY));
 canvas.addEventListener('mouseup', () => input.active = false);
 
-// Touch Events
 canvas.addEventListener('touchstart', e => { 
     e.preventDefault(); 
-    handleInputStart(e.touches[0].clientX, e.touches[0].clientY); 
+    handleInputStart(e.touches[0].clientX, e.touches[0].clientY);
 }, { passive: false });
 
 canvas.addEventListener('touchmove', e => { 
     e.preventDefault(); 
-    handleInputMove(e.touches[0].clientX, e.touches[0].clientY); 
+    handleInputMove(e.touches[0].clientX, e.touches[0].clientY);
 }, { passive: false });
 
 canvas.addEventListener('touchend', e => { 
     e.preventDefault(); 
-    if(e.touches.length === 0) input.active = false; 
+    if(e.touches.length === 0) input.active = false;
 });
 
-// UI Buttons
 document.getElementById('start-btn').addEventListener('click', () => window.triggerStartGame(false));
 document.getElementById('pause-btn').addEventListener('click', () => {
     if(!Game.gameRunning) return;
@@ -126,16 +120,14 @@ document.getElementById('vol-btn').addEventListener('click', () => {
     document.getElementById('vol-btn').innerText = isMuted ? '🔇' : '🔊';
 });
 
-// --- MAIN LOOP ---
 function loop() {
     if(!Game.gameRunning || Game.isPaused) return;
 
-    ctx.save(); 
+    ctx.save();
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#050510';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Screen Shake
     if (Game.screenShake > 0) {
         const dx = (Math.random() - 0.5) * Game.screenShake;
         const dy = (Math.random() - 0.5) * Game.screenShake;
@@ -146,8 +138,8 @@ function loop() {
     Game.frameCount++;
     if(Game.frameCount % 30 === 0) updateTime();
 
-    // 1. Draw Background
-    ctx.filter = 'blur(4px)'; 
+    // 1. Background
+    ctx.filter = 'blur(4px)';
     backgroundObjects.forEach(p => {
         p.y += p.speed * (Game.powerupState.freeze > 0 ? 0.2 : 1) * Game.timeScale;
         if(p.y > canvas.height + 100) { p.y = -100; p.x = Math.random()*canvas.width; }
@@ -156,11 +148,11 @@ function loop() {
             ctx.globalAlpha = 0.3; ctx.drawImage(img, p.x, p.y, p.size, p.size); ctx.globalAlpha = 1;
         }
     });
-    ctx.filter = 'none'; 
+    ctx.filter = 'none';
     ctx.fillStyle = 'white';
     stars.forEach(s => {
         s.y += s.speed * (Game.powerupState.freeze > 0 ? 0.2 : 1) * Game.timeScale;
-        if(Game.levelTransitioning) s.y += 10; 
+        if(Game.levelTransitioning) s.y += 10;
         if(s.y > canvas.height) { s.y = 0; s.x = Math.random()*canvas.width; }
         ctx.globalAlpha = Math.random() * 0.5 + 0.2;
         ctx.fillRect(s.x, s.y, s.size, s.size);
@@ -168,35 +160,28 @@ function loop() {
     if(Game.levelTransitioning && Game.frameCount % 2 === 0) createParticles(0,0, '#fff', 2, 'warp');
     ctx.globalAlpha = 1;
 
-    // 2. Update Player (Visuals + Shield Drawing)
     if (typeof Game.updatePlayer === 'function') Game.updatePlayer();
-
-    // 3. Handle Shooting & Powerups
     if (typeof Game.handlePlayerShooting === 'function') Game.handlePlayerShooting();
 
-    // 4. Enemy Spawning
     if(!Game.levelTransitioning && !Game.boss && Game.frameCount % 35 === 0) Game.spawnEnemy();
 
-    // 5. Bullets Logic
-    ctx.globalCompositeOperation = 'lighter'; 
+    // 5. Bullets
+    ctx.globalCompositeOperation = 'lighter';
     if(Game.powerupState.beam <= 0) { 
         for(let i = Game.bullets.length-1; i>=0; i--) {
             let b = Game.bullets[i];
             b.x += (b.vx || 0) * Game.timeScale; b.y += b.vy * Game.timeScale;
-            ctx.fillStyle = b.color; ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h); 
+            ctx.fillStyle = b.color; ctx.fillRect(b.x - b.w/2, b.y, b.w, b.h);
             if(b.y < -50) { Game.bullets.splice(i,1); continue; }
             
-            // Bullet Collision
             for(let j=Game.enemies.length-1; j>=0; j--) {
                 let e = Game.enemies[j];
                 if(Math.abs(b.x - e.x) < e.w/2 + b.w/2 && Math.abs(b.y - e.y) < e.h/2 + b.h/2) {
-                    Game.bullets.splice(i,1); 
-                    // *** CRITICAL FIX: CALL Game.hitEnemy ***
-                    Game.hitEnemy(e, j, 1); 
+                    Game.bullets.splice(i,1);
+                    Game.hitEnemy(e, j, 1);
                     break;
                 }
             }
-            // Boss Collision
             if(Game.boss && Math.abs(b.x - Game.boss.x) < Game.boss.w/2 && Math.abs(b.y - Game.boss.y) < Game.boss.h/2) {
                 Game.bullets.splice(i,1); Game.boss.hp--;
                 createParticles(b.x, b.y, '#fff', 3, 'spark');
@@ -205,16 +190,26 @@ function loop() {
         }
     }
 
-    // 6. Enemies Logic
+    // 6. Enemy Logic (Updated with Formation Wave Movement)
     const moveMult = (Game.powerupState.freeze > 0 ? 0.2 : 1) * Game.timeScale;
     ctx.globalCompositeOperation = 'source-over';
     for(let i=Game.enemies.length-1; i>=0; i--) {
         let e = Game.enemies[i];
-        e.y += e.vy * moveMult; e.x += (e.vx || 0) * moveMult; e.rot += e.rotSpeed * moveMult;
+        
+        // Oscillation Movement for Sin/Cos paths
+        if (e.pathType === 'sin') {
+            e.x = e.originX + Math.sin(e.y * 0.02) * 80;
+        } else if (e.pathType === 'cos') {
+            e.x = e.originX + Math.cos(e.y * 0.02) * 80;
+        } else {
+            e.x += (e.vx || 0) * moveMult;
+        }
+
+        e.y += e.vy * moveMult;
+        e.rot += e.rotSpeed * moveMult;
         
         ctx.save(); ctx.translate(e.x, e.y); ctx.rotate(e.rot);
         
-        // Draw Enemy
         if (e.isMinion) {
             let mImg = new Image(); mImg.src = e.imgSrc;
             if(mImg.complete) ctx.drawImage(mImg, -e.w/2, -e.h/2, e.w, e.h);
@@ -224,64 +219,54 @@ function loop() {
              ctx.beginPath(); ctx.arc(0,0, e.w/2, 0, Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
         } else {
             let img = (e.imgType === 'meteor' && meteorImg.complete) ? meteorImg : asteroidImg;
-            if (img.complete && img.naturalWidth !== 0) { ctx.drawImage(img, -e.w/2, -e.h/2, e.w, e.h); } 
+            if (img.complete && img.naturalWidth !== 0) { ctx.drawImage(img, -e.w/2, -e.h/2, e.w, e.h); }
             else { ctx.fillStyle = '#444'; ctx.beginPath(); ctx.arc(0,0, e.w/2, 0, Math.PI*2); ctx.fill(); }
-            ctx.rotate(-e.rot); 
+            ctx.rotate(-e.rot);
             ctx.fillStyle = e.isTrap ? '#ff0000' : (e.letter && Game.currentTarget.indexOf(e.letter) > -1 && !Game.foundLetters[Game.currentTarget.indexOf(e.letter)] ? '#00ff00' : '#fff');
             ctx.font = `bold ${24 + (e.scale-1)*10}px monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.strokeStyle = 'rgba(0,0,0,0.8)'; ctx.lineWidth = 3; ctx.strokeText(e.letter, 0, 0); ctx.fillText(e.letter, 0, 0);
         }
         ctx.restore();
 
-        // Player Collision
         if(Game.player.invulnerable === 0) {
             const dx = Game.player.x - e.x; const dy = Game.player.y - e.y;
             if(Math.sqrt(dx*dx + dy*dy) < (Game.player.w/2 + e.w/2)) {
-                // *** SHIELD CHECK: > 0 means active ***
                 if(Game.powerupState.shield > 0) {
-                    Game.powerupState.shield = 0; // Break shield
+                    Game.powerupState.shield = 0;
                     Game.player.invulnerable = 60;
                     createParticles(Game.player.x, Game.player.y, '#00ffff', 10, 'spark');
-                    Game.activatePowerup('shield_break'); // Optional feedback
                     Game.enemies.splice(i,1);
                 } else { 
-                    Game.takeDamage(); 
-                    Game.enemies.splice(i,1); 
+                    Game.takeDamage();
+                    Game.enemies.splice(i,1);
                 }
             }
         }
         if(e.y > canvas.height + 100 || e.x < -50 || e.x > canvas.width + 50) Game.enemies.splice(i,1);
     }
 
-    // 7. Boss Logic
     if(Game.boss) {
         Game.updateBoss(moveMult);
         Game.drawBossHealth();
         Game.checkBossCollisions();
     }
 
-// ... (Previous code remains unchanged until the Powerups Loop) ...
-
-    // 8. Powerups & Floating Text
+    // 8. Powerups
     for (let i = Game.powerups.length - 1; i >= 0; i--) {
         let p = Game.powerups[i];
-        if(Game.powerupState.magnet > 0 && p.type !== 'heart') { p.x += (Game.player.x - p.x) * 0.1; p.y += (Game.player.y - p.y) * 0.1; } 
+        if(Game.powerupState.magnet > 0 && p.type !== 'heart') { p.x += (Game.player.x - p.x) * 0.1; p.y += (Game.player.y - p.y) * 0.1; }
         else { p.y += p.vy * Game.timeScale; }
         
         ctx.save(); ctx.translate(p.x, p.y);
         
         if (p.type === 'heart') {
-            // *** UPDATED: Use Heart GIF ***
-            // Draw slightly larger to look good (40x40)
             if(heartImg.complete && heartImg.naturalWidth !== 0) {
                  ctx.drawImage(heartImg, -20, -20, 40, 40);
             } else {
-                 // Fallback if image fails to load
                  ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
                  ctx.fillStyle = '#fff'; ctx.fillText("♥", 0, 2);
             }
         } else {
-            // Standard Powerup
             ctx.fillStyle = '#ffeb3b'; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#000'; ctx.font = 'bold 16px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             let icon = "⚡"; if(p.type === 'shield') icon = "🛡️"; if(p.type === 'spread') icon = "🚀"; if(p.type === 'magnet') icon = "🧲"; if(p.type === 'freeze') icon = "❄️";
@@ -291,31 +276,27 @@ function loop() {
         
         if(Math.sqrt((Game.player.x - p.x)**2 + (Game.player.y - p.y)**2) < (Game.player.w/2 + 15)) {
             if(p.type === 'heart') { 
-                Game.lives = Math.min(Game.lives + 1, 9); 
-                updateLivesUI(); 
-                AudioSys.playCollect(true); 
-                // Changed text to heart icon
-                floatingTexts.push({x: Game.player.x, y: Game.player.y - 40, text: "❤️", life: 1.5, vy: -1, color: '#ff3366'}); 
+                Game.lives = Math.min(Game.lives + 1, 9);
+                updateLivesUI();
+                AudioSys.playCollect(true);
+                floatingTexts.push({x: Game.player.x, y: Game.player.y - 40, text: "❤️", life: 1.5, vy: -1, color: '#ff3366'});
             } 
             else { Game.activatePowerup(p.type); }
             Game.powerups.splice(i, 1); continue;
         }
         if(p.y > canvas.height + 50) Game.powerups.splice(i, 1);
     }
-
-// ... (Rest of code remains unchanged) ...
     
-    // Floating Text
+    // 9. Floating Text & Particles
     ctx.globalCompositeOperation = 'lighter';
     for(let i=floatingTexts.length-1; i>=0; i--) {
         let ft = floatingTexts[i];
-        if(Game.powerupState.magnet > 0 && ft.isLetter) { ft.x += (Game.player.x - ft.x) * 0.1; ft.y += (Game.player.y - ft.y) * 0.1; if(Math.abs(ft.x - Game.player.x) < 20 && Math.abs(ft.y - Game.player.y) < 20) { floatingTexts.splice(i,1); continue; } } 
+        if(Game.powerupState.magnet > 0 && ft.isLetter) { ft.x += (Game.player.x - ft.x) * 0.1; ft.y += (Game.player.y - ft.y) * 0.1; if(Math.abs(ft.x - Game.player.x) < 20 && Math.abs(ft.y - Game.player.y) < 20) { floatingTexts.splice(i,1); continue; } }
         else { ft.y += ft.vy * Game.timeScale; }
         ft.life -= 0.02; if(ft.life <= 0) { floatingTexts.splice(i,1); continue; }
         ctx.globalAlpha = ft.life; ctx.font = 'bold 30px Arial'; ctx.fillStyle = ft.color || '#00ffcc'; ctx.fillText(ft.text, ft.x, ft.y);
     }
     
-    // Particles
     for(let i=particles.length-1; i>=0; i--) {
         let p = particles[i]; p.x += p.vx * Game.timeScale; p.y += p.vy * Game.timeScale; p.life -= (p.decay || 0.04);
         if(p.life <= 0) { particles.splice(i,1); continue; }
@@ -324,5 +305,5 @@ function loop() {
     
     ctx.globalAlpha = 1; ctx.shadowBlur = 0;
     animFrameId = requestAnimationFrame(loop);
-    ctx.restore(); 
+    ctx.restore();
 }
