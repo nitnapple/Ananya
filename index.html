@@ -121,9 +121,13 @@
       border-radius: 18px;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
     }
+
+    #live-clock {
+      transition: all 0.3s ease;
+    }
   </style>
 
-  <!-- CLARITY & ANALYTICS PRESERVED -->
+    <!-- CLARITY & ANALYTICS PRESERVED -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -166,6 +170,17 @@
 </head>
 
 <body class="min-h-screen flex items-center justify-center relative px-4 pb-48 overflow-y-auto">
+
+  <!-- SMALLER TOP CENTER CLOCK -->
+  <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+    <div id="live-clock" class="bg-white/30 backdrop-blur-md border border-white/40 px-4 py-1 rounded-full shadow-md flex flex-col items-center justify-center min-w-[120px]">
+      <div class="flex items-baseline gap-1">
+        <span id="clock-time" class="text-pink-600 font-bold text-base tracking-tight">00:00:00</span>
+        <span id="clock-ampm" class="text-pink-500 font-bold text-[10px] uppercase">AM</span>
+      </div>
+      <span id="clock-date" class="text-purple-500 font-medium text-[8px] uppercase tracking-widest leading-none">Loading...</span>
+    </div>
+  </div>
 
   <!-- BIRTHDAY CARD -->
   <div class="text-center p-8 bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl w-full max-w-md card-animate z-20 my-10">
@@ -238,6 +253,28 @@
   </audio>
 
   <script>
+    /* COMPACT 12H CLOCK LOGIC */
+    function updateClock() {
+      const now = new Date();
+      
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      const strHours = String(hours).padStart(2, '0');
+
+      document.getElementById('clock-time').textContent = `${strHours}:${minutes}:${seconds}`;
+      document.getElementById('clock-ampm').textContent = ampm;
+      
+      const options = { weekday: 'short', month: 'short', day: 'numeric' };
+      document.getElementById('clock-date').textContent = now.toLocaleDateString('en-US', options);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
     let musicPlaying = false;
 
     function startMusic() {
@@ -452,7 +489,7 @@
         "📸 Even the camera blushes when you smile.",
         "🫅 The world is your kingdom, and today, your coronation!",
         "🍯 You are honey in human form—pure, golden, and sweet.",
-        "🎂 Happy Birthday to the monarch of magic—Ananya!"
+        "🍭 Life’s sweeter just because you exist."
       ];
 
       const msg = messages[Math.floor(Math.random() * messages.length)];
