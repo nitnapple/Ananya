@@ -33,13 +33,19 @@ function initBackground() {
     }
 }
 
+// *** UPDATED: Using Heart.png for Lives UI ***
 function updateLivesUI() {
     const cont = document.getElementById('lives-display');
     cont.innerHTML = '';
-    for(let i=0; i<5; i++) {
-        const pip = document.createElement('div');
-        pip.className = i < Game.lives ? 'life-pip' : 'life-pip lost';
-        cont.appendChild(pip);
+    const heartURL = "https://nitnapple.github.io/Ananya/Savegalaxy/Heart.png";
+    for(let i=0; i<Game.lives; i++) {
+        const img = document.createElement('img');
+        img.src = heartURL;
+        img.style.width = "24px";
+        img.style.height = "24px";
+        img.style.marginRight = "4px";
+        img.style.filter = "drop-shadow(0 0 5px rgba(255, 51, 102, 0.5))";
+        cont.appendChild(img);
     }
 }
 
@@ -63,7 +69,6 @@ function updateTime() {
     document.getElementById('time-display').innerText = `${m}:${s}`;
 }
 
-// Input Handlers
 function handleInputStart(x, y) {
     if(Game.isPaused) return;
     input.active = true;
@@ -177,8 +182,7 @@ function loop() {
             for(let j=Game.enemies.length-1; j>=0; j--) {
                 let e = Game.enemies[j];
                 if(Math.abs(b.x - e.x) < e.w/2 + b.w/2 && Math.abs(b.y - e.y) < e.h/2 + b.h/2) {
-                    Game.bullets.splice(i,1);
-                    Game.hitEnemy(e, j, 1);
+                    Game.bullets.splice(i,1); Game.hitEnemy(e, j, 1);
                     break;
                 }
             }
@@ -190,36 +194,28 @@ function loop() {
         }
     }
 
-    // 6. Enemy Logic (Updated with Formation Wave Movement)
+    // 6. Enemy Logic
     const moveMult = (Game.powerupState.freeze > 0 ? 0.2 : 1) * Game.timeScale;
     ctx.globalCompositeOperation = 'source-over';
     for(let i=Game.enemies.length-1; i>=0; i--) {
         let e = Game.enemies[i];
-        
-        // Oscillation Movement for Sin/Cos paths
-        if (e.pathType === 'sin') {
-            e.x = e.originX + Math.sin(e.y * 0.02) * 80;
-        } else if (e.pathType === 'cos') {
-            e.x = e.originX + Math.cos(e.y * 0.02) * 80;
-        } else {
-            e.x += (e.vx || 0) * moveMult;
-        }
+        if (e.pathType === 'sin') { e.x = e.originX + Math.sin(e.y * 0.02) * 80; } 
+        else if (e.pathType === 'cos') { e.x = e.originX + Math.cos(e.y * 0.02) * 80; } 
+        else { e.x += (e.vx || 0) * moveMult; }
 
         e.y += e.vy * moveMult;
         e.rot += e.rotSpeed * moveMult;
         
         ctx.save(); ctx.translate(e.x, e.y); ctx.rotate(e.rot);
-        
         if (e.isMinion) {
             let mImg = new Image(); mImg.src = e.imgSrc;
             if(mImg.complete) ctx.drawImage(mImg, -e.w/2, -e.h/2, e.w, e.h);
             else { ctx.fillStyle = 'red'; ctx.fillRect(-e.w/2, -e.h/2, e.w, e.h); }
         } else if (e.isBossBullet) {
-             ctx.fillStyle = '#ff3366'; ctx.shadowBlur = 10; ctx.shadowColor = 'red';
-             ctx.beginPath(); ctx.arc(0,0, e.w/2, 0, Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+             ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.arc(0,0, e.w/2, 0, Math.PI*2); ctx.fill();
         } else {
             let img = (e.imgType === 'meteor' && meteorImg.complete) ? meteorImg : asteroidImg;
-            if (img.complete && img.naturalWidth !== 0) { ctx.drawImage(img, -e.w/2, -e.h/2, e.w, e.h); }
+            if (img.complete && img.naturalWidth !== 0) { ctx.drawImage(img, -e.w/2, -e.h/2, e.w, e.h); } 
             else { ctx.fillStyle = '#444'; ctx.beginPath(); ctx.arc(0,0, e.w/2, 0, Math.PI*2); ctx.fill(); }
             ctx.rotate(-e.rot);
             ctx.fillStyle = e.isTrap ? '#ff0000' : (e.letter && Game.currentTarget.indexOf(e.letter) > -1 && !Game.foundLetters[Game.currentTarget.indexOf(e.letter)] ? '#00ff00' : '#fff');
@@ -232,14 +228,10 @@ function loop() {
             const dx = Game.player.x - e.x; const dy = Game.player.y - e.y;
             if(Math.sqrt(dx*dx + dy*dy) < (Game.player.w/2 + e.w/2)) {
                 if(Game.powerupState.shield > 0) {
-                    Game.powerupState.shield = 0;
-                    Game.player.invulnerable = 60;
+                    Game.powerupState.shield = 0; Game.player.invulnerable = 60;
                     createParticles(Game.player.x, Game.player.y, '#00ffff', 10, 'spark');
                     Game.enemies.splice(i,1);
-                } else { 
-                    Game.takeDamage();
-                    Game.enemies.splice(i,1);
-                }
+                } else { Game.takeDamage(); Game.enemies.splice(i,1); }
             }
         }
         if(e.y > canvas.height + 100 || e.x < -50 || e.x > canvas.width + 50) Game.enemies.splice(i,1);
@@ -258,14 +250,9 @@ function loop() {
         else { p.y += p.vy * Game.timeScale; }
         
         ctx.save(); ctx.translate(p.x, p.y);
-        
         if (p.type === 'heart') {
-            if(heartImg.complete && heartImg.naturalWidth !== 0) {
-                 ctx.drawImage(heartImg, -20, -20, 40, 40);
-            } else {
-                 ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
-                 ctx.fillStyle = '#fff'; ctx.fillText("♥", 0, 2);
-            }
+            if(heartImg.complete) { ctx.drawImage(heartImg, -20, -20, 40, 40); }
+            else { ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill(); }
         } else {
             ctx.fillStyle = '#ffeb3b'; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#000'; ctx.font = 'bold 16px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -276,8 +263,7 @@ function loop() {
         
         if(Math.sqrt((Game.player.x - p.x)**2 + (Game.player.y - p.y)**2) < (Game.player.w/2 + 15)) {
             if(p.type === 'heart') { 
-                Game.lives = Math.min(Game.lives + 1, 9);
-                updateLivesUI();
+                Game.lives = Math.min(Game.lives + 1, 9); updateLivesUI();
                 AudioSys.playCollect(true);
                 floatingTexts.push({x: Game.player.x, y: Game.player.y - 40, text: "❤️", life: 1.5, vy: -1, color: '#ff3366'});
             } 
@@ -287,13 +273,11 @@ function loop() {
         if(p.y > canvas.height + 50) Game.powerups.splice(i, 1);
     }
     
-    // 9. Floating Text & Particles
+    // 9. Particles
     ctx.globalCompositeOperation = 'lighter';
     for(let i=floatingTexts.length-1; i>=0; i--) {
         let ft = floatingTexts[i];
-        if(Game.powerupState.magnet > 0 && ft.isLetter) { ft.x += (Game.player.x - ft.x) * 0.1; ft.y += (Game.player.y - ft.y) * 0.1; if(Math.abs(ft.x - Game.player.x) < 20 && Math.abs(ft.y - Game.player.y) < 20) { floatingTexts.splice(i,1); continue; } }
-        else { ft.y += ft.vy * Game.timeScale; }
-        ft.life -= 0.02; if(ft.life <= 0) { floatingTexts.splice(i,1); continue; }
+        ft.y += ft.vy * Game.timeScale; ft.life -= 0.02; if(ft.life <= 0) { floatingTexts.splice(i,1); continue; }
         ctx.globalAlpha = ft.life; ctx.font = 'bold 30px Arial'; ctx.fillStyle = ft.color || '#00ffcc'; ctx.fillText(ft.text, ft.x, ft.y);
     }
     
