@@ -1,4 +1,4 @@
-// --- ENHANCED BOSS, FORMATIONS & CHALLENGES ---
+// --- ENHANCED BOSS & FORMATION LOGIC ---
 
 Game.spawnBoss = function() {
     AudioSys.speak("Warning. Boss Approaching.");
@@ -12,7 +12,7 @@ Game.spawnBoss = function() {
     let w = 140; let h = 100;
     let imgSrc = BOSS_URLS.generic;
     
-    // Scaling for Challenges
+    // scaling challenges for level 5 and 10
     if (isLevel5) { 
         type = 'big'; hp = 1000; w = 220; h = 150; 
         imgSrc = BOSS_URLS.level5;
@@ -37,14 +37,14 @@ Game.spawnBoss = function() {
 
 Game.spawnBossMinion = function(formation = 'V') {
     const isHard = this.currentLevelIndex === 4 || this.currentLevelIndex === 9;
-    const count = isHard ? 8 : 5; // Level 5/10 get more mini-bosses
+    const count = isHard ? 8 : 5; 
     const spacing = 60;
     
     for(let i = 0; i < count; i++) {
         let offX = 0; let offY = 0; let pType = 'normal';
         const mid = (count - 1) / 2; const relIdx = i - mid;
 
-        // Formation Logic
+        // formation positioning logic
         if (formation === 'V') { offX = relIdx * spacing; offY = Math.abs(relIdx) * 40; }
         else if (formation === 'DELTA') { offX = relIdx * spacing; offY = i % 2 === 0 ? 0 : 50; }
         else if (formation === 'CROSS') {
@@ -70,26 +70,27 @@ Game.updateBoss = function(moveMult) {
     if(boss.phase === 'enter') {
         boss.y += 2 * this.timeScale; if(boss.y >= boss.targetY) boss.phase = 'fight';
     } else {
-        let speed = (this.currentLevelIndex === 9) ? 4.5 : 2; // Level 10 moves faster
+        let speed = (this.currentLevelIndex === 9) ? 4.5 : 2; 
         boss.x += Math.sin(this.frameCount * 0.03) * speed * moveMult;
         boss.x = Math.max(boss.w/2, Math.min(canvas.width - boss.w/2, boss.x));
     }
 
     if(boss.phase === 'fight') {
-        // Fix: Periodic Loot Drops during Boss fight
+        // recurring powerup drops in boss fights
         boss.lootTimer++;
-        if (boss.lootTimer % 420 === 0) { // Every 7 seconds
+        if (boss.lootTimer % 400 === 0) { 
             this.spawnPowerup(Math.random() * (canvas.width - 100) + 50, -50);
             if(Math.random() > 0.6) this.spawnHeart(Math.random() * (canvas.width - 100) + 50, -50);
         }
 
-        // Fix: HP Threshold Drops
+        // hp threshold drops
         if (boss.dropThresholds.length > 0 && (boss.hp / boss.maxHp) < boss.dropThresholds[0]) {
-            boss.dropThresholds.shift(); this.spawnPowerup(boss.x, boss.y + 50); this.spawnHeart(boss.x + 30, boss.y + 50);
+            boss.dropThresholds.shift();
+            this.spawnPowerup(boss.x, boss.y + 50); this.spawnHeart(boss.x + 30, boss.y + 50);
         }
 
         boss.attackTimer++;
-        const threshold = isHard ? 40 : 70; // Hard levels attack faster
+        const threshold = isHard ? 40 : 70; 
 
         if(boss.currentAttack === 'idle' && boss.attackTimer > threshold) {
             boss.attackTimer = 0; const r = Math.random();
@@ -100,7 +101,8 @@ Game.updateBoss = function(moveMult) {
 
         if(boss.currentAttack === 'formation') {
             const forms = ['V', 'DELTA', 'CROSS', 'SIN', 'COS'];
-            this.spawnBossMinion(forms[Math.floor(Math.random()*forms.length)]); boss.currentAttack = 'idle';
+            this.spawnBossMinion(forms[Math.floor(Math.random()*forms.length)]); 
+            boss.currentAttack = 'idle';
         }
 
         if(boss.currentAttack === 'rapid') {
@@ -120,7 +122,7 @@ Game.updateBoss = function(moveMult) {
                 ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(boss.x, boss.y + 50); ctx.lineTo(boss.x, canvas.height); ctx.stroke();
             } else if (boss.attackTimer < charge + 120) {
                 const lW = (this.currentLevelIndex === 9 ? 100 : 50) + Math.sin(this.frameCount * 0.5) * 10;
-                ctx.fillStyle = this.currentLevelIndex === 9 ? '#ff00ff' : '#ff0033'; // Final boss has purple laser
+                ctx.fillStyle = this.currentLevelIndex === 9 ? '#ff00ff' : '#ff0033'; 
                 ctx.fillRect(boss.x - lW/2, boss.y + 50, lW, canvas.height);
                 if(Math.abs(this.player.x - boss.x) < (lW/2 + this.player.w/3) && this.player.invulnerable === 0) this.takeDamage();
             } else { boss.currentAttack = 'idle'; boss.attackTimer = 0; }
