@@ -64,8 +64,24 @@ function updateTime() {
 }
 
 // Input Handlers
+let lastTapTime = 0;
+
 function handleInputStart(x, y) {
     if(Game.isPaused) return;
+
+    // --- DOUBLE TAP DETECTION ---
+    const now = Date.now();
+    const timeDiff = now - lastTapTime;
+    
+    // If tapped within 300ms, it's a double tap
+    if (timeDiff < 300 && timeDiff > 0) {
+        if (typeof Game.triggerSonicBoom === 'function') {
+            Game.triggerSonicBoom();
+        }
+    }
+    lastTapTime = now;
+    // ----------------------------
+
     input.active = true;
     input.rawX = x; input.rawY = y;
     input.offsetX = Game.player.x - x;
@@ -167,6 +183,31 @@ function loop() {
 
     if (typeof Game.updatePlayer === 'function') Game.updatePlayer();
     if (typeof Game.handlePlayerShooting === 'function') Game.handlePlayerShooting();
+
+    // Update Cooldown logic
+    if (typeof Game.updateSpecialCooldown === 'function') Game.updateSpecialCooldown();
+
+    // DRAW SONIC BOOM VISUALS
+    if (Game.sonicBoomActive > 0) {
+        Game.sonicBoomActive--;
+        const maxRadius = canvas.height;
+        const radius = (40 - Game.sonicBoomActive) * (maxRadius / 40) * 1.5; // Expanding speed
+        
+        ctx.save();
+        ctx.translate(Game.player.x, Game.player.y);
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        
+        // Glowing Ring
+        ctx.lineWidth = 20;
+        ctx.strokeStyle = `rgba(0, 255, 255, ${Game.sonicBoomActive / 40})`;
+        ctx.stroke();
+        
+        // Inner Shockwave
+        ctx.fillStyle = `rgba(255, 255, 255, ${Game.sonicBoomActive / 100})`;
+        ctx.fill();
+        ctx.restore();
+    }
 
     if(!Game.levelTransitioning && !Game.boss && Game.frameCount % 35 === 0) Game.spawnEnemy();
 
