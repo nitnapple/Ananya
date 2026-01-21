@@ -4,6 +4,11 @@ Game.reset = function(restartLevel = false) {
     if(this.winTimeout) clearTimeout(this.winTimeout);
     if(this.levelTimeout) clearTimeout(this.levelTimeout);
     if(this.slowMoTimeout) clearTimeout(this.slowMoTimeout);
+    
+    // --- ADD THESE TWO LINES ---
+    this.specialCooldown = 0; 
+    this.sonicBoomActive = 0; 
+    // ---------------------------
 
     if (!restartLevel) {
         // FULL RESTART
