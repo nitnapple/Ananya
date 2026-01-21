@@ -24,7 +24,7 @@ this.spawnPartner();
     }
     if (isFinal) { 
         type = 'final'; 
-        hp = 2500; // Increased HP for Level 10
+        hp = 1500; // Increased HP for Level 10
         w = 300; h = 200; 
         imgSrc = BOSS_URLS.level10;
     }
