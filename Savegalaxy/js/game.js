@@ -24,6 +24,83 @@ const Game = {
     bossImgEl: document.getElementById('boss-entity'),
     playerImgEl: document.getElementById('player-entity'),
 
+
+    // --- SPECIAL MOVE STATE ---
+    specialCooldown: 0,
+    sonicBoomActive: 0, // Used for visual animation duration
+
+    // --- SONIC BOOM LOGIC ---
+    triggerSonicBoom: function() {
+        // Only active if Boss exists, Partner is alive, and Cooldown is ready
+        if (!this.boss || (typeof Partner !== 'undefined' && !Partner.active) || this.specialCooldown > 0) return;
+
+        // 1. Activate Cooldown (5 seconds * 60 frames)
+        this.specialCooldown = 300; 
+        this.sonicBoomActive = 40; // Animation lasts 40 frames
+
+        // 2. Visuals & Audio
+        this.screenShake = 50;
+        AudioSys.playExplosion();
+        AudioSys.speak("Sonic Boom!");
+        
+        // 3. EFFECT: Destroy all Minions instantly
+        // Filter out minions, keep boss/bullets
+        this.enemies = this.enemies.filter(e => {
+            if (e.isMinion) {
+                createParticles(e.x, e.y, 'orange', 15, 'smoke');
+                return false; // Remove minion
+            }
+            return true; // Keep others
+        });
+
+        // 4. EFFECT: Massive Damage to Boss
+        if (this.boss) {
+            const dmg = 200; // Massive damage
+            this.boss.hp -= dmg;
+            createParticles(this.boss.x, this.boss.y, '#00ffff', 50, 'shockwave');
+            
+            floatingTexts.push({
+                x: this.boss.x, 
+                y: this.boss.y - 50, 
+                text: `CRITICAL -${dmg}`, 
+                color: "#00ffff", 
+                life: 2.0, 
+                vy: -2
+            });
+
+            if (this.boss.hp <= 0) this.killBoss();
+        }
+    },
+
+    updateSpecialCooldown: function() {
+        if (!this.boss) return;
+
+        if (this.specialCooldown > 0) {
+            this.specialCooldown--;
+            
+            // Just became ready?
+            if (this.specialCooldown === 0) {
+                AudioSys.playPowerupCollect();
+                floatingTexts.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    text: "Ananya's Ship Gives You Special Power",
+                    color: "#ff80ab",
+                    life: 3.0,
+                    vy: -0.5
+                });
+                floatingTexts.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2 + 40,
+                    text: "(DOUBLE TAP TO ACTIVATE)",
+                    color: "#fff",
+                    life: 3.0,
+                    vy: -0.5
+                });
+            }
+        }
+    },
+
     // --- STANDARD SPAWNING ---
     spawnBullet: function(offset = 0, angle = 0) {
         AudioSys.playShoot();
@@ -99,7 +176,7 @@ const Game = {
             // --- UPDATED MINION LOGIC ---
             if(e.isMinion) { 
                 // 20% Chance for Powerup, 5% Chance for Heart from Minions
-                if (Math.random() < 0.5) { 
+                if (Math.random() < 0.20) { 
                     this.spawnPowerup(e.x, e.y);
                 } else if (Math.random() < 0.5) { 
                     this.spawnHeart(e.x, e.y);
