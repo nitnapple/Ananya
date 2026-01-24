@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Word Snake.io 3D</title>
+    
+    <!-- Babylon.js Core and GUI -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    
+    <!-- Tailwind CSS for UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            touch-action: none;
+            font-family: 'Montserrat', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glassmorphism UI */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #4ade80, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .interactive {
+            pointer-events: auto;
+        }
+
+        .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        @keyframes levelPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .level-animate {
+            animation: levelPop 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="renderCanvas"></canvas>
+
+    <!-- HUD -->
+    <div id="gameUI" class="absolute top-0 left-0 w-full p-4 pointer-events-none z-20 hidden transition-opacity duration-300">
+        <div class="flex justify-between items-start max-w-5xl mx-auto space-x-2 md:space-x-4">
+            
+            <!-- Level Badge -->
+            <div class="glass-panel px-4 py-2 md:px-6 md:py-3 rounded-2xl flex flex-col items-center min-w-[80px] md:min-w-[100px]">
+                <span class="text-[10px] md:text-xs text-yellow-300 font-bold tracking-wider uppercase">Level</span>
+                <span id="levelValue" class="text-2xl md:text-3xl font-black text-white fun-font">1</span>
+            </div>
+
+            <!-- Score Badge -->
+            <div class="glass-panel px-4 py-2 md:px-6 md:py-3 rounded-2xl flex flex-col items-center min-w-[80px] md:min-w-[100px]">
+                <span class="text-[10px] md:text-xs text-blue-300 font-bold tracking-wider uppercase">Score</span>
+                <span id="scoreValue" class="text-2xl md:text-3xl font-black text-white fun-font">0</span>
+            </div>
+            
+            <!-- Target Badge -->
+            <div class="glass-panel px-4 py-2 md:px-8 md:py-3 rounded-2xl flex flex-col items-center flex-grow">
+                <span class="text-[10px] md:text-xs text-green-300 font-bold tracking-wider uppercase">Target</span>
+                <span id="targetWordUI" class="text-2xl md:text-3xl font-black text-white fun-font tracking-wide break-all text-center leading-tight">...</span>
+            </div>
+        </div>
+
+        <!-- Level Up Notification Overlay -->
+        <div id="levelUpOverlay" class="absolute top-32 left-0 w-full flex justify-center hidden">
+            <div class="level-animate bg-yellow-400/90 text-slate-900 px-8 py-4 rounded-3xl shadow-2xl border-4 border-white transform rotate-[-2deg]">
+                <h2 class="text-4xl font-black fun-font">LEVEL UP!</h2>
+                <p class="text-center font-bold text-sm uppercase tracking-widest mt-1">Speed Increased</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="ui-layer interactive bg-slate-900/90 backdrop-blur-md z-30">
+        <div class="text-center relative px-4">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+
+            <h1 class="text-6xl md:text-8xl font-black mb-2 gradient-text fun-font drop-shadow-2xl">SNAKE.IO</h1>
+            <h2 class="text-xl md:text-2xl text-white mb-8 font-light tracking-widest opacity-90">WORD HUNTER</h2>
+            
+            <div class="mb-8 flex justify-center gap-4 text-gray-300 text-sm">
+                <span class="bg-white/10 px-3 py-1 rounded-full border border-white/10">10 Levels</span>
+                <span class="bg-white/10 px-3 py-1 rounded-full border border-white/10">Small Map</span>
+            </div>
+
+            <button id="startBtn" class="group relative inline-flex items-center justify-center px-12 py-5 font-bold text-white transition-all duration-200 bg-gradient-to-r from-green-500 to-blue-600 rounded-full hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 active:scale-95 text-xl tracking-wide">
+                START GAME
+            </button>
+            <p class="mt-6 text-gray-400 text-sm">Use Mouse or Touch to Steer</p>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="ui-layer interactive bg-slate-900/95 backdrop-blur-lg z-30 hidden">
+        <div class="text-center p-8 md:p-12 rounded-3xl glass-panel max-w-md mx-4 border border-white/10 relative overflow-hidden w-full">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-purple-500 to-blue-500"></div>
+            
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-2 fun-font">CRASHED!</h2>
+            
+            <div class="grid grid-cols-2 gap-4 my-6">
+                <div class="bg-white/5 rounded-xl p-3">
+                    <span class="text-xs text-gray-500 uppercase tracking-widest block">Level</span>
+                    <span id="finalLevel" class="text-3xl font-black text-yellow-400 fun-font">1</span>
+                </div>
+                <div class="bg-white/5 rounded-xl p-3">
+                    <span class="text-xs text-gray-500 uppercase tracking-widest block">Score</span>
+                    <span id="finalScore" class="text-3xl font-black text-white fun-font">0</span>
+                </div>
+            </div>
+            
+            <div class="mb-8 bg-black/20 rounded-xl p-4">
+                <p class="text-xs text-gray-400 uppercase tracking-widest mb-3">Collection</p>
+                <div id="eatenWordsList" class="flex flex-wrap justify-center gap-2 max-h-32 overflow-y-auto"></div>
+            </div>
+
+            <button id="restartBtn" class="w-full px-8 py-4 font-bold text-white bg-blue-600 rounded-2xl hover:bg-blue-500 hover:shadow-xl hover:shadow-blue-500/20 transition-all hover:-translate-y-1 active:scale-95 text-lg">
+                PLAY AGAIN
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const PARTICLE_TEXTURE_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMC8yOS8xMiKqq3kAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBTSzY2snrQAAABKklEQVRYhcWXy3LCMAxF7fL/f1p2Qgwk2ZZlO3OmQ3fIkyXrSCLF8/l86i/q7+i7sgHOQAf4/fr+VEAl51yCq/p7Cq/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8FW9A3wL4Ff1BvgWwK/qF+gF8F39/Xw+X/oB029f0M68Ly4AAAAASUVORK5CYII=";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            const CONFIG = {
+                mapSize: 45, // Reduced from 80 for "smaller canvas" feel
+                startSpeed: 0.25, // Slower start
+                speedIncrement: 0.04, // Speed added per level
+                turnSpeed: 0.12,
+                bodySpacing: 4,
+                startLength: 8,
+                wordsPerLevel: 3, // How many words to eat to level up
+                maxLevels: 10,
+                colors: {
+                    snake: new BABYLON.Color3.FromHexString("#0ea5e9"),
+                    snakeHead: new BABYLON.Color3.FromHexString("#38bdf8"),
+                    food: new BABYLON.Color3.FromHexString("#f43f5e"),
+                    ground: new BABYLON.Color3.FromHexString("#0f172a"),
+                    wall: new BABYLON.Color3.FromHexString("#ef4444")
+                }
+            };
+
+            const WORDS = [
+                "GROW", "FAST", "EPIC", "COOL", "NEON", "GLOW", "TECH", "CODE",
+                "LIFE", "PURE", "ZAP", "BYTE", "DATA", "FLOW", "MIND", "SOUL",
+                "VIBE", "PLAY", "WIN", "BOLD", "IDEA", "SKY", "STAR", "MOON",
+                "SUN", "HOPE", "LOVE", "ART", "ZEN", "JOY", "CALM", "WISE"
+            ];
+
+            let state = {
+                isPlaying: false,
+                isPaused: false, // For level up animation
+                score: 0,
+                level: 1,
+                wordsEatenInLevel: 0,
+                currentSpeed: CONFIG.startSpeed,
+                snakeParts: [],
+                pathHistory: [],
+                currentWord: "",
+                collectedWords: [],
+                foodMesh: null
+            };
+
+            const canvas = document.getElementById("renderCanvas");
+            const engine = new BABYLON.Engine(canvas, true);
+
+            // Create Scene
+            const createScene = () => {
+                const scene = new BABYLON.Scene(engine);
+                scene.clearColor = new BABYLON.Color4(0.06, 0.09, 0.16, 1);
+                
+                scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+                scene.fogDensity = 0.02; // Denser fog for smaller map
+                scene.fogColor = new BABYLON.Color3(0.06, 0.09, 0.16);
+
+                const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/2, Math.PI/4, 40, BABYLON.Vector3.Zero(), scene);
+                
+                const hemi = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+                hemi.intensity = 0.8;
+                
+                const dir = new BABYLON.DirectionalLight("dir", new BABYLON.Vector3(0, -1, 1), scene);
+                dir.intensity = 0.5;
+
+                // Materials
+                const snakeMat = new BABYLON.StandardMaterial("snakeMat", scene);
+                snakeMat.diffuseColor = CONFIG.colors.snake;
+                snakeMat.specularColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+                snakeMat.emissiveColor = CONFIG.colors.snake.scale(0.3);
+
+                const foodMat = new BABYLON.StandardMaterial("foodMat", scene);
+                foodMat.diffuseColor = CONFIG.colors.food;
+                foodMat.emissiveColor = CONFIG.colors.food.scale(0.6);
+
+                // --- Ground & Arena ---
+                const groundSize = CONFIG.mapSize * 2.5;
+                const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: groundSize, height: groundSize}, scene);
+                const gridMat = new BABYLON.StandardMaterial("gridMat", scene);
+                
+                const gridSize = 1024;
+                const gridTexture = new BABYLON.DynamicTexture("gridTex", gridSize, scene, true);
+                const ctx = gridTexture.getContext();
+                ctx.fillStyle = "#0f172a";
+                ctx.fillRect(0, 0, gridSize, gridSize);
+                ctx.strokeStyle = "#1e293b";
+                ctx.lineWidth = 4;
+                
+                // Draw grid
+                const step = gridSize / 20;
+                ctx.beginPath();
+                for(let i=0; i<=gridSize; i+=step) {
+                    ctx.moveTo(i, 0); ctx.lineTo(i, gridSize);
+                    ctx.moveTo(0, i); ctx.lineTo(gridSize, i);
+                }
+                ctx.stroke();
+                
+                // Draw Border
+                ctx.strokeStyle = "#ef4444"; 
+                ctx.lineWidth = 20;
+                ctx.strokeRect(0,0, gridSize, gridSize);
+
+                gridTexture.update();
+                
+                gridMat.diffuseTexture = gridTexture;
+                gridMat.diffuseTexture.uScale = 6;
+                gridMat.diffuseTexture.vScale = 6;
+                gridMat.specularColor = BABYLON.Color3.Black();
+                ground.material = gridMat;
+
+                // --- Create Glowing Walls ---
+                const wallMat = new BABYLON.StandardMaterial("wallMat", scene);
+                wallMat.diffuseColor = CONFIG.colors.wall;
+                wallMat.emissiveColor = CONFIG.colors.wall;
+                wallMat.alpha = 0.3;
+                
+                const wallHeight = 4;
+                const wallThick = 2;
+                const arenaSize = CONFIG.mapSize * 2;
+                
+                const createWall = (name, w, d, x, z) => {
+                    const wall = BABYLON.MeshBuilder.CreateBox(name, {width: w, height: wallHeight, depth: d}, scene);
+                    wall.position = new BABYLON.Vector3(x, wallHeight/2, z);
+                    wall.material = wallMat;
+                };
+
+                const offset = CONFIG.mapSize + (wallThick/2);
+                createWall("wallTop", arenaSize + wallThick*2, wallThick, 0, offset);
+                createWall("wallBot", arenaSize + wallThick*2, wallThick, 0, -offset);
+                createWall("wallLeft", wallThick, arenaSize, -offset, 0);
+                createWall("wallRight", wallThick, arenaSize, offset, 0);
+
+                const gl = new BABYLON.GlowLayer("glow", scene);
+                gl.intensity = 0.6;
+
+                return { scene, camera, snakeMat, foodMat };
+            };
+
+            const { scene, camera, snakeMat, foodMat } = createScene();
+
+            function createSnakeHead() {
+                const head = BABYLON.MeshBuilder.CreateSphere("head", {diameter: 2.5}, scene);
+                head.material = snakeMat;
+                head.position.y = 1.25;
+
+                const eyeWhiteMat = new BABYLON.StandardMaterial("white", scene);
+                eyeWhiteMat.diffuseColor = BABYLON.Color3.White();
+                const eyeBlackMat = new BABYLON.StandardMaterial("black", scene);
+                eyeBlackMat.diffuseColor = BABYLON.Color3.Black();
+
+                const leftEye = BABYLON.MeshBuilder.CreateSphere("le", {diameter: 1.0}, scene);
+                leftEye.parent = head;
+                leftEye.position = new BABYLON.Vector3(-0.6, 0.6, 0.8);
+                leftEye.material = eyeWhiteMat;
+
+                const leftPupil = BABYLON.MeshBuilder.CreateSphere("lp", {diameter: 0.4}, scene);
+                leftPupil.parent = leftEye;
+                leftPupil.position.z = 0.45;
+                leftPupil.material = eyeBlackMat;
+
+                const rightEye = BABYLON.MeshBuilder.CreateSphere("re", {diameter: 1.0}, scene);
+                rightEye.parent = head;
+                rightEye.position = new BABYLON.Vector3(0.6, 0.6, 0.8);
+                rightEye.material = eyeWhiteMat;
+
+                const rightPupil = BABYLON.MeshBuilder.CreateSphere("rp", {diameter: 0.4}, scene);
+                rightPupil.parent = rightEye;
+                rightPupil.position.z = 0.45;
+                rightPupil.material = eyeBlackMat;
+
+                return head;
+            }
+
+            function createBodySegment() {
+                const body = BABYLON.MeshBuilder.CreateSphere("body", {diameter: 2.0}, scene);
+                body.material = snakeMat;
+                body.position.y = 1.0;
+                return body;
+            }
+
+            function spawnFood() {
+                if (state.foodMesh) state.foodMesh.dispose();
+
+                const padding = 5;
+                const range = CONFIG.mapSize - padding;
+                const x = (Math.random() * range * 2) - range;
+                const z = (Math.random() * range * 2) - range;
+
+                state.currentWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+                document.getElementById('targetWordUI').innerText = state.currentWord;
+
+                const orb = BABYLON.MeshBuilder.CreateSphere("food", {diameter: 2}, scene);
+                orb.position = new BABYLON.Vector3(x, 1, z);
+                orb.material = foodMat;
+
+                const plane = BABYLON.MeshBuilder.CreatePlane("plane", {size: 12}, scene);
+                plane.parent = orb;
+                plane.position.y = 3.0;
+                plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+
+                const advTex = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(plane);
+                const text = new BABYLON.GUI.TextBlock();
+                text.text = state.currentWord;
+                text.color = "white";
+                text.fontSize = 80;
+                text.fontWeight = "bold";
+                text.fontFamily = "Fredoka";
+                text.outlineWidth = 5;
+                text.outlineColor = "#f43f5e";
+                advTex.addControl(text);
+
+                const anim = new BABYLON.Animation("bob", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([{frame: 0, value: 1}, {frame: 30, value: 1.8}, {frame: 60, value: 1}]);
+                orb.animations.push(anim);
+                scene.beginAnimation(orb, 0, 60, true);
+
+                state.foodMesh = orb;
+            }
+
+            function createParticles(position) {
+                const particleSystem = new BABYLON.ParticleSystem("particles", 50, scene);
+                particleSystem.particleTexture = new BABYLON.Texture(PARTICLE_TEXTURE_URL, scene);
+                particleSystem.emitter = position;
+                particleSystem.minSize = 0.5;
+                particleSystem.maxSize = 1.0;
+                particleSystem.color1 = new BABYLON.Color4(1, 0.5, 0, 1.0);
+                particleSystem.color2 = new BABYLON.Color4(1, 0, 0, 1.0);
+                particleSystem.minLifeTime = 0.3;
+                particleSystem.maxLifeTime = 1.0;
+                particleSystem.emitRate = 500;
+                particleSystem.createSphereEmitter(1);
+                particleSystem.targetStopDuration = 0.5;
+                particleSystem.start();
+            }
+
+            function updateUI() {
+                document.getElementById('scoreValue').innerText = state.score;
+                document.getElementById('levelValue').innerText = state.level;
+            }
+
+            function levelUp() {
+                if (state.level >= CONFIG.maxLevels) return;
+
+                state.level++;
+                state.wordsEatenInLevel = 0;
+                state.currentSpeed += CONFIG.speedIncrement;
+                
+                // Show Notification
+                const overlay = document.getElementById('levelUpOverlay');
+                overlay.classList.remove('hidden');
+                
+                // Temporary Pause effect
+                state.isPaused = true;
+
+                // Visual Flair on Snake
+                // (Optional: Change color temporarily)
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    state.isPaused = false;
+                }, 1500);
+
+                updateUI();
+            }
+
+            function startGame() {
+                if (state.snakeParts.length > 0) {
+                    state.snakeParts.forEach(p => p.dispose());
+                }
+                if (state.foodMesh) state.foodMesh.dispose();
+
+                state.score = 0;
+                state.level = 1;
+                state.wordsEatenInLevel = 0;
+                state.currentSpeed = CONFIG.startSpeed;
+                state.collectedWords = [];
+                state.snakeParts = [];
+                state.pathHistory = [];
+                state.isPlaying = true;
+                state.isPaused = false;
+
+                updateUI();
+                document.getElementById('startScreen').classList.add('hidden');
+                document.getElementById('gameOverScreen').classList.add('hidden');
+                document.getElementById('gameUI').classList.remove('hidden');
+
+                const head = createSnakeHead();
+                state.snakeParts.push(head);
+
+                for (let i = 0; i < 200; i++) {
+                    state.pathHistory.push(new BABYLON.Vector3(0, 1.25, -i * 0.1));
+                }
+
+                for (let i = 0; i < CONFIG.startLength; i++) {
+                    state.snakeParts.push(createBodySegment());
+                }
+
+                spawnFood();
+            }
+
+            function gameOver() {
+                state.isPlaying = false;
+                document.getElementById('gameUI').classList.add('hidden');
+                document.getElementById('gameOverScreen').classList.remove('hidden');
+                document.getElementById('finalScore').innerText = state.score;
+                document.getElementById('finalLevel').innerText = state.level;
+                
+                const wordList = document.getElementById('eatenWordsList');
+                wordList.innerHTML = '';
+                state.collectedWords.forEach(word => {
+                    const badge = document.createElement('span');
+                    badge.className = "bg-white/10 px-3 py-1 rounded-full text-xs text-blue-200 border border-white/10";
+                    badge.innerText = word;
+                    wordList.appendChild(badge);
+                });
+            }
+
+            // --- Game Loop ---
+            scene.registerBeforeRender(() => {
+                if (!state.isPlaying || state.isPaused) return;
+
+                const dt = engine.getDeltaTime() / 16.6; 
+                const head = state.snakeParts[0];
+
+                const ray = scene.createPickingRay(scene.pointerX, scene.pointerY, BABYLON.Matrix.Identity(), camera);
+                const plane = BABYLON.Plane.FromPositionAndNormal(new BABYLON.Vector3(0, 0, 0), new BABYLON.Vector3(0, 1, 0));
+                const distance = ray.intersectsPlane(plane);
+
+                if (distance) {
+                    const pickPoint = ray.origin.add(ray.direction.scale(distance));
+                    const diff = pickPoint.subtract(head.position);
+                    const angle = Math.atan2(diff.x, diff.z);
+                    
+                    let rotationDiff = angle - head.rotation.y;
+                    while (rotationDiff > Math.PI) rotationDiff -= Math.PI * 2;
+                    while (rotationDiff < -Math.PI) rotationDiff += Math.PI * 2;
+                    
+                    head.rotation.y += rotationDiff * CONFIG.turnSpeed * dt;
+                }
+
+                const forward = new BABYLON.Vector3(Math.sin(head.rotation.y), 0, Math.cos(head.rotation.y));
+                const moveVec = forward.scale(state.currentSpeed * dt); // Use variable speed
+                head.position.addInPlace(moveVec);
+
+                state.pathHistory.unshift(head.position.clone());
+
+                const requiredHistory = (state.snakeParts.length * CONFIG.bodySpacing) + 20;
+                if (state.pathHistory.length > requiredHistory) {
+                    state.pathHistory.length = requiredHistory; 
+                }
+
+                for (let i = 1; i < state.snakeParts.length; i++) {
+                    const index = i * CONFIG.bodySpacing;
+                    if (index < state.pathHistory.length) {
+                        const pos = state.pathHistory[index];
+                        state.snakeParts[i].position.copyFrom(pos);
+                        state.snakeParts[i].position.y = 1.0; 
+                    } else {
+                        if (state.pathHistory.length > 0) {
+                            state.snakeParts[i].position.copyFrom(state.pathHistory[state.pathHistory.length - 1]);
+                        }
+                    }
+                }
+
+                const targetCamPos = head.position.subtract(forward.scale(18)); // Closer camera for smaller map
+                targetCamPos.y = 25; 
+                camera.position = BABYLON.Vector3.Lerp(camera.position, targetCamPos, 0.08);
+                camera.setTarget(head.position);
+
+                // Collision Walls
+                const limit = CONFIG.mapSize - 1.2;
+                if (Math.abs(head.position.x) > limit || Math.abs(head.position.z) > limit) {
+                    gameOver();
+                }
+
+                // Collision Food
+                if (state.foodMesh) {
+                    const dist = BABYLON.Vector3.Distance(head.position, state.foodMesh.position);
+                    if (dist < 3.5) { 
+                        state.score += 10;
+                        state.wordsEatenInLevel++;
+                        state.collectedWords.push(state.currentWord);
+                        createParticles(state.foodMesh.position.clone());
+                        
+                        updateUI();
+
+                        // Grow
+                        for(let k=0; k<3; k++) { 
+                             const newBody = createBodySegment();
+                             if (state.pathHistory.length > 0) {
+                                 newBody.position.copyFrom(state.pathHistory[state.pathHistory.length - 1]);
+                             }
+                             state.snakeParts.push(newBody);
+                        }
+
+                        // Check Level Up
+                        if (state.wordsEatenInLevel >= CONFIG.wordsPerLevel) {
+                            levelUp();
+                        }
+
+                        spawnFood();
+                    }
+                }
+            });
+
+            document.getElementById('startBtn').addEventListener('click', startGame);
+            document.getElementById('restartBtn').addEventListener('click', startGame);
+
+            window.addEventListener("resize", () => {
+                engine.resize();
+            });
+
+            engine.runRenderLoop(() => {
+                if (scene) {
+                    scene.render();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
