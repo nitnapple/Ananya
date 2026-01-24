@@ -101,9 +101,28 @@ canvas.addEventListener('mousedown', e => handleInputStart(e.clientX, e.clientY)
 canvas.addEventListener('mousemove', e => handleInputMove(e.clientX, e.clientY));
 canvas.addEventListener('mouseup', () => input.active = false);
 
+// In js/main.js
+
 canvas.addEventListener('touchstart', e => { 
     e.preventDefault(); 
-    handleInputStart(e.touches[0].clientX, e.touches[0].clientY);
+    const tx = e.touches[0].clientX;
+    const ty = e.touches[0].clientY;
+    
+    // 1. Standard Input Start
+    handleInputStart(tx, ty);
+
+    // 2. FINGER BLINDNESS FIX
+    // Calculate distance between touch and ship
+    const dist = Math.hypot(tx - Game.player.x, ty - Game.player.y);
+
+    // If the user touches directly ON or very near the ship (within 100px)
+    if (dist < 100) {
+        // Overwrite the natural offset to force the ship 70px ABOVE the finger
+        input.offsetY = -70; 
+        
+        // Optional: Smoothly lerp to this position (handled by player.js smoothing)
+        // This ensures the ship is visible while dragging
+    }
 }, { passive: false });
 
 canvas.addEventListener('touchmove', e => { 
