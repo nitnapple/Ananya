@@ -22,9 +22,9 @@ heartImg.src = "https://nitnapple.github.io/Ananya/Savegalaxy/Heart.png";
 // GAME DATA
 const LEVELS = ["ANANYA", "SHANDILYA", "PHOTOGRAPHY", "ONE PIECE", "JANPATH", "PHILOSOPHY", "HER MAJESTY", "SWIMMING", "TOKYO", "JUJUTSU KAISEN"];
 const BOSS_URLS = {
-    generic: "https://nitnapple.github.io/Ananya/Savegalaxy/BossGen.png",
-    level5: "https://nitnapple.github.io/Ananya/Savegalaxy/Boss5.png",
-    level10: "https://nitnapple.github.io/Ananya/Savegalaxy/Boss10.png"
+    generic: "https://nitnapple.github.io/Ananya/Savegalaxy2/bossgeanim.gif",
+    level5: "https://nitnapple.github.io/Ananya/Savegalaxy2/Boss5anim.gif",
+    level10: "https://nitnapple.github.io/Ananya/Savegalaxy2/boss10ani.gif"
 };
 
 // HELPER ARRAYS
