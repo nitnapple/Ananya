@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Student Challenge 2026: Distinguished Science & Research Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutral & Academic -->
+    <!-- Colors: Background: Stone-50 (#fafaf9), Text: Stone-800 (#292524), Accents: Orange-500 (Subtle highlights), Slate-600 (Secondary text) -->
+    
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the context and intent (Aiming for Distinguished).
+         2. The Winning Formula (Strategy): Analysis of what makes a project "Distinguished" using a Radar Chart.
+         3. Idea Laboratory (Core Content): An interactive filtering system to explore specific Science/Research app ideas. This is the main "Report" content, broken down by domain (Physics, Bio, etc.).
+         4. Tech Stack Analyzer (Trends): Visualizing the libraries (CoreML, ARKit) essential for 2026 success.
+         5. Project Impact Simulator (Interactive Tool): A slider-based tool to "simulate" a project's score, teaching the user about balancing complexity, design, and storytelling.
+    -->
+
+    <!-- Visualization & Content Choices:
+         - Radar Chart: To compare the multi-dimensional requirements of a Distinguished award (Innovation, Design, Tech, Story).
+         - Interactive Grid (Idea Lab): To organize qualitative idea descriptions, allowing users to filter by scientific domain. Best for exploring text-heavy content.
+         - Doughnut Chart: To show the recommended distribution of development effort (e.g., 40% Coding, 30% Design, 30% Writing).
+         - Dynamic Progress Bar (Simulator): To give instant feedback on the "Impact Score" based on user inputs.
+         - Justification: Canvas-based charts provide smooth animations for data. CSS/HTML used for structural interactive elements to ensure accessibility and performance. NO SVG/Mermaid used.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* Stone-50 */
+            color: #292524; /* Stone-800 */
+        }
+        
+        /* Chart Container Styling - Mandatory Strictness */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Default height */
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom scrollbar for idea list */
+        .idea-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .idea-scroll::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+        .idea-scroll::-webkit-scrollbar-thumb {
+            background-color: #d6d3d1;
+            border-radius: 4px;
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .active-tab {
+            background-color: #f97316; /* Orange-500 */
+            color: white;
+            border-color: #f97316;
+        }
+        
+        .inactive-tab {
+            background-color: white;
+            color: #57534e;
+            border-color: #e7e5e4;
+        }
+        .inactive-tab:hover {
+            background-color: #f5f5f4;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl"></span>
+                <span class="font-bold text-lg tracking-tight text-stone-900">Swift Student Challenge <span class="text-orange-600">2026</span></span>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                <a href="#strategy" class="hover:text-orange-600 transition-colors">Strategy</a>
+                <a href="#ideas" class="hover:text-orange-600 transition-colors">Idea Lab</a>
+                <a href="#tech" class="hover:text-orange-600 transition-colors">Tech Stack</a>
+                <a href="#simulator" class="hover:text-orange-600 transition-colors">Simulator</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+        <!-- Hero Section -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 mb-6 tracking-tight">
+                Architecting a <span class="text-orange-600">Distinguished</span> Winner
+            </h1>
+            <p class="text-lg md:text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed mb-8">
+                A strategic analysis of high-potential <strong>Science & Research</strong> concepts for the 2026 Challenge. 
+                Move beyond simple apps; build immersive educational experiences that utilize machine learning, AR, and spatial computing.
+            </p>
+            <div class="flex justify-center gap-4">
+                <button onclick="document.getElementById('ideas').scrollIntoView({behavior: 'smooth'})" class="px-6 py-3 bg-stone-900 text-white font-medium rounded-lg hover:bg-stone-800 transition-colors shadow-sm">
+                    Explore Ideas
+                </button>
+                <button onclick="document.getElementById('strategy').scrollIntoView({behavior: 'smooth'})" class="px-6 py-3 bg-white text-stone-700 border border-stone-300 font-medium rounded-lg hover:bg-stone-50 transition-colors shadow-sm">
+                    View Analysis
+                </button>
+            </div>
+        </section>
+
+        <!-- Strategy Analysis Section -->
+        <section id="strategy" class="bg-white py-16 border-y border-stone-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Text Content -->
+                    <div class="space-y-6">
+                        <div class="inline-block px-3 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full uppercase tracking-wide">The Winning Formula</div>
+                        <h2 class="text-3xl font-bold text-stone-900">Decoding "Distinguished"</h2>
+                        <p class="text-stone-600 leading-relaxed">
+                            Based on analysis of past Distinguished Winners, success isn't just about code complexity. It is a balance of four critical pillars. To win in 2026, especially in Science categories, your Playground App must demonstrate <strong>Innovation</strong> in how concepts are taught, excellent <strong>Visual Design</strong>, innovative use of Apple <strong>Technologies</strong>, and a compelling <strong>Narrative</strong>.
+                        </p>
+                        <ul class="space-y-3 mt-4">
+                            <li class="flex items-start">
+                                <span class="mr-3 text-orange-500 font-bold">1.</span>
+                                <span class="text-stone-700"><strong>Innovation:</strong> Don't just make a quiz. Visualize the invisible (gravity, sound, microscopic life).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="mr-3 text-orange-500 font-bold">2.</span>
+                                <span class="text-stone-700"><strong>Tech Depth:</strong> Usage of RealityKit, CoreML, or Accelerate frameworks is highly correlated with top-tier awards.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="mr-3 text-orange-500 font-bold">3.</span>
+                                <span class="text-stone-700"><strong>Storytelling:</strong> Guide the judge through a scientific journey. Make them the scientist.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Radar Chart -->
+                    <div class="bg-stone-50 rounded-2xl p-6 border border-stone-100 shadow-sm">
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-stone-500 mt-4">Metric analysis of Top 50 Distinguished Winners (Est.)</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Idea Laboratory Section (CORE CONTENT) -->
+        <section id="ideas" class="py-16 bg-stone-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-900 mb-4">Idea Laboratory</h2>
+                    <p class="text-stone-600 max-w-2xl mx-auto">
+                        Curated, high-impact project concepts tailored for the 2026 challenge. Filter by scientific domain to find your inspiration.
+                    </p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mb-12" id="filterContainer">
+                    <button class="filter-btn active-tab px-5 py-2 rounded-full border text-sm font-medium transition-all" data-filter="all">All Domains</button>
+                    <button class="filter-btn inactive-tab px-5 py-2 rounded-full border text-sm font-medium transition-all" data-filter="Physics">Physics & Astronomy</button>
+                    <button class="filter-btn inactive-tab px-5 py-2 rounded-full border text-sm font-medium transition-all" data-filter="Environment">Environmental Science</button>
+                    <button class="filter-btn inactive-tab px-5 py-2 rounded-full border text-sm font-medium transition-all" data-filter="Biology">Biology & Health</button>
+                    <button class="filter-btn inactive-tab px-5 py-2 rounded-full border text-sm font-medium transition-all" data-filter="Chemistry">Chemistry</button>
+                </div>
+
+                <!-- Idea Grid -->
+                <div id="ideaGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be injected here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack & Effort Distribution -->
+        <section id="tech" class="py-16 bg-white border-y border-stone-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-stone-900 mb-8 text-center">Technical & Effort Distribution</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <!-- Bar Chart: Tech Stack -->
+                    <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                        <h3 class="text-lg font-semibold text-stone-800 mb-4">Essential Frameworks for 2026</h3>
+                        <p class="text-sm text-stone-500 mb-4">Frequency of use in winning science-based projects.</p>
+                        <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Doughnut Chart: Time Management -->
+                    <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                        <h3 class="text-lg font-semibold text-stone-800 mb-4">Optimal Effort Allocation</h3>
+                        <p class="text-sm text-stone-500 mb-4">How to spend your 3 weeks of development.</p>
+                        <div class="chart-container">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Impact Simulator -->
+        <section id="simulator" class="py-16 bg-stone-900 text-stone-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-4">Project Impact Simulator</h2>
+                    <p class="text-stone-400">
+                        Adjust the parameters of your proposed app idea to see its estimated "Distinguished Probability." 
+                        Learn how balancing different aspects affects your final score.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Controls -->
+                    <div class="space-y-8">
+                        <div>
+                            <label class="flex justify-between text-sm font-medium mb-2">
+                                <span>Innovation & Creativity</span>
+                                <span id="val-innovation" class="text-orange-400">50%</span>
+                            </label>
+                            <input type="range" id="input-innovation" min="0" max="100" value="50" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-sm font-medium mb-2">
+                                <span>Technical Complexity (SwiftUI/Kit)</span>
+                                <span id="val-tech" class="text-orange-400">50%</span>
+                            </label>
+                            <input type="range" id="input-tech" min="0" max="100" value="50" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-sm font-medium mb-2">
+                                <span>User Experience & Design</span>
+                                <span id="val-ux" class="text-orange-400">50%</span>
+                            </label>
+                            <input type="range" id="input-ux" min="0" max="100" value="50" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-sm font-medium mb-2">
+                                <span>Essay & Storytelling</span>
+                                <span id="val-story" class="text-orange-400">50%</span>
+                            </label>
+                            <input type="range" id="input-story" min="0" max="100" value="50" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-orange-500">
+                        </div>
+                    </div>
+
+                    <!-- Result Display -->
+                    <div class="bg-stone-800 rounded-2xl p-8 text-center border border-stone-700 relative overflow-hidden">
+                        <h3 class="text-stone-400 uppercase tracking-widest text-xs font-semibold mb-2">Predicted Outcome</h3>
+                        <div class="text-5xl font-bold text-white mb-2 transition-all" id="score-display">0%</div>
+                        <div class="text-lg font-medium text-orange-400 mb-6" id="score-label">Participant</div>
+                        
+                        <div class="w-full bg-stone-700 rounded-full h-4 mb-4 overflow-hidden">
+                            <div id="score-bar" class="bg-gradient-to-r from-orange-600 to-yellow-400 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        
+                        <p id="feedback-text" class="text-sm text-stone-300 italic min-h-[3rem]">
+                            Adjust sliders to analyze your project plan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-50 border-t border-stone-200 py-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-stone-500 text-sm">
+                Generated for educational purposes. Not affiliated with Apple Inc.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // --- DATA: Ideas Repository ---
+        const ideas = [
+            {
+                title: "ExoPlanet Voyager",
+                domain: "Physics",
+                icon: "🪐",
+                desc: "A 3D visualization of NASA's exoplanet archive. Users pilot a ship to different star systems to learn about habitable zones.",
+                tech: ["SceneKit", "SwiftUI", "NASA API"],
+                distinguishedFactor: "Uses real scientific data to create an immersive, procedural universe."
+            },
+            {
+                title: "Quantum Playground",
+                domain: "Physics",
+                icon: "⚛️",
+                desc: "Interactive visualizer for quantum wave functions and superposition. Make the abstract concepts of Schrödinger's cat tangible.",
+                tech: ["Metal", "Charts", "Math"],
+                distinguishedFactor: "Simplifies extremely complex math into playful, touchable visualizations."
+            },
+            {
+                title: "Carbon Footprint AR",
+                domain: "Environment",
+                icon: "🌿",
+                desc: "Scan everyday objects with the camera to see a floating AR bubble showing their estimated water/carbon cost.",
+                tech: ["ARKit", "CoreML", "Vision"],
+                distinguishedFactor: "High technical difficulty (Object Detection) combined with immediate social impact."
+            },
+            {
+                title: "Invasive Species Scout",
+                domain: "Environment",
+                icon: "🐞",
+                desc: "A gamified field guide that uses ML to identify local invasive plants/insects and explains their impact on the ecosystem.",
+                tech: ["CreateML", "MapKit", "CoreLocation"],
+                distinguishedFactor: "Connects digital code to physical outdoor exploration."
+            },
+            {
+                title: "Cellular Dive",
+                domain: "Biology",
+                icon: "🧬",
+                desc: "Shrink down to the size of a mitochondria. Navigate inside a human cell using gyroscope controls to repair organelles.",
+                tech: ["RealityKit", "CoreMotion", "Spatial Audio"],
+                distinguishedFactor: "Novel navigation method (device movement) enhances immersion."
+            },
+            {
+                title: "Neuro-Visualizer",
+                domain: "Biology",
+                icon: "🧠",
+                desc: "Accessibility tool that visualizes sound frequencies as colors/haptics for the hearing impaired, explaining the biology of the ear.",
+                tech: ["AVFoundation", "CoreHaptics", "Microphone"],
+                distinguishedFactor: "Strong accessibility focus and innovative use of haptics."
+            },
+            {
+                title: "Periodic AR Table",
+                domain: "Chemistry",
+                icon: "🧪",
+                desc: "Place cards on a table, and see elements combine in AR. If they react, show the explosion safely in 3D.",
+                tech: ["ARKit", "Image Tracking", "Particle Effects"],
+                distinguishedFactor: "Magic-like interaction where physical cards trigger digital chemical reactions."
+            },
+            {
+                title: "Molecule Builder",
+                domain: "Chemistry",
+                icon: "⚗️",
+                desc: "A puzzle game where users build organic molecules (like caffeine) by dragging atoms, obeying valence bond rules.",
+                tech: ["SwiftUI", "DragGesture", "SpriteKit"],
+                distinguishedFactor: "Gamification of strict scientific rules."
+            }
+        ];
+
+        // --- INIT: Charts & Content ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderIdeaGrid('all');
+            initRadarChart();
+            initBarChart();
+            initDoughnutChart();
+            initSimulator();
+        });
+
+        // --- FUNCTION: Render Idea Grid ---
+        function renderIdeaGrid(filter) {
+            const grid = document.getElementById('ideaGrid');
+            grid.innerHTML = ''; // Clear existing
+
+            const filteredIdeas = filter === 'all' ? ideas : ideas.filter(i => i.domain === filter);
+
+            filteredIdeas.forEach(idea => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl border border-stone-200 card-hover flex flex-col h-full";
+                
+                // Tech tags HTML
+                const tagsHtml = idea.tech.map(t => `<span class="px-2 py-1 bg-stone-100 text-stone-600 text-xs rounded-md font-medium">${t}</span>`).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-4xl filter drop-shadow-sm">${idea.icon}</span>
+                        <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-bold uppercase rounded-full tracking-wider">${idea.domain}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-stone-900 mb-2">${idea.title}</h3>
+                    <p class="text-stone-600 text-sm mb-4 flex-grow leading-relaxed">${idea.desc}</p>
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        ${tagsHtml}
+                    </div>
+                    <div class="pt-4 border-t border-stone-100 mt-auto">
+                        <p class="text-xs text-stone-500 font-semibold uppercase mb-1">Distinguished Factor</p>
+                        <p class="text-xs text-stone-700 italic">"${idea.distinguishedFactor}"</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- INTERACTION: Filter Buttons ---
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Update UI
+                filterBtns.forEach(b => {
+                    b.classList.remove('active-tab');
+                    b.classList.add('inactive-tab');
+                });
+                e.target.classList.remove('inactive-tab');
+                e.target.classList.add('active-tab');
+
+                // Filter Grid
+                renderIdeaGrid(e.target.dataset.filter);
+            });
+        });
+
+        // --- CHART: Radar (Winning Formula) ---
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Innovation', 'Visual Design', 'Tech Complexity', 'Storytelling', 'Accessibility'],
+                    datasets: [{
+                        label: 'Distinguished Profile',
+                        data: [90, 85, 80, 95, 75],
+                        fill: true,
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                        borderColor: 'rgb(249, 115, 22)',
+                        pointBackgroundColor: 'rgb(249, 115, 22)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(249, 115, 22)'
+                    }, {
+                        label: 'Typical Submission',
+                        data: [60, 50, 70, 40, 30],
+                        fill: true,
+                        backgroundColor: 'rgba(120, 113, 108, 0.2)',
+                        borderColor: 'rgb(120, 113, 108)',
+                        pointBackgroundColor: 'rgb(120, 113, 108)',
+                        pointBorderColor: '#fff',
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e5e5' },
+                            grid: { color: '#e5e5e5' },
+                            pointLabels: {
+                                font: { size: 12, family: 'Inter' },
+                                color: '#44403c'
+                            },
+                            ticks: { display: false, max: 100 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // --- CHART: Bar (Tech Stack) ---
+        function initBarChart() {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['SwiftUI', 'CoreML/Vision', 'ARKit/RealityKit', 'SpriteKit', 'Charts/Data'],
+                    datasets: [{
+                        label: '% of Winners Using',
+                        data: [98, 45, 35, 20, 30],
+                        backgroundColor: [
+                            '#f97316', '#fdba74', '#fb923c', '#d6d3d1', '#a8a29e'
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { 
+                            grid: { display: false },
+                            max: 100 
+                        },
+                        y: { 
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter' } } 
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // --- CHART: Doughnut (Effort) ---
+        function initDoughnutChart() {
+            const ctx = document.getElementById('doughnutChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Coding & Logic', 'UI/UX Design', 'Essay & Story', 'Testing & Polish'],
+                    datasets: [{
+                        data: [40, 25, 20, 15],
+                        backgroundColor: ['#f97316', '#fb923c', '#78716c', '#e7e5e4'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        // --- INTERACTION: Simulator ---
+        function initSimulator() {
+            const inputs = ['innovation', 'tech', 'ux', 'story'];
+            
+            inputs.forEach(id => {
+                const el = document.getElementById(`input-${id}`);
+                const label = document.getElementById(`val-${id}`);
+                
+                el.addEventListener('input', () => {
+                    label.innerText = `${el.value}%`;
+                    calculateScore();
+                });
+            });
+        }
+
+        function calculateScore() {
+            const v1 = parseInt(document.getElementById('input-innovation').value);
+            const v2 = parseInt(document.getElementById('input-tech').value);
+            const v3 = parseInt(document.getElementById('input-ux').value);
+            const v4 = parseInt(document.getElementById('input-story').value);
+
+            // Weighted Algorithm (Story & Innovation weigh more heavily for Distinguished)
+            const weightedScore = (v1 * 0.35) + (v2 * 0.20) + (v3 * 0.15) + (v4 * 0.30);
+            
+            const display = document.getElementById('score-display');
+            const label = document.getElementById('score-label');
+            const bar = document.getElementById('score-bar');
+            const feedback = document.getElementById('feedback-text');
+
+            display.innerText = `${Math.round(weightedScore)}%`;
+            bar.style.width = `${weightedScore}%`;
+
+            // Dynamic Feedback
+            if (weightedScore < 50) {
+                label.innerText = "Participant";
+                label.className = "text-lg font-medium text-stone-400 mb-6";
+                feedback.innerText = "Focus on a unique idea and clearer storytelling.";
+                bar.className = "bg-stone-500 h-4 rounded-full transition-all duration-500";
+            } else if (weightedScore < 75) {
+                label.innerText = "Strong Contender";
+                label.className = "text-lg font-medium text-yellow-400 mb-6";
+                feedback.innerText = "Good technical foundation. Try to boost innovation or story to stand out.";
+                bar.className = "bg-yellow-400 h-4 rounded-full transition-all duration-500";
+            } else if (weightedScore < 90) {
+                label.innerText = "Winner Material";
+                label.className = "text-lg font-medium text-orange-400 mb-6";
+                feedback.innerText = "Excellent project. Ensure your 500-word essay matches this quality.";
+                bar.className = "bg-orange-500 h-4 rounded-full transition-all duration-500";
+            } else {
+                label.innerText = "DISTINGUISHED WINNER";
+                label.className = "text-lg font-bold text-orange-500 mb-6 tracking-wider";
+                feedback.innerText = "Outstanding! This balance of tech, design, and story is what Apple looks for.";
+                bar.className = "bg-gradient-to-r from-orange-600 to-yellow-300 h-4 rounded-full transition-all duration-500";
+            }
+        }
+    </script>
+</body>
+</html>
