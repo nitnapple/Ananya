@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Scrollbar Hiding */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Gradient Masks */
+.mask-gradient {
+  mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
+}
