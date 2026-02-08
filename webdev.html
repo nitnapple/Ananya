@@ -28,11 +28,16 @@
                         'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
                         'bounce': 'bounce 2s infinite',
                         'blob': 'blob 10s infinite',
+                        'fade-in': 'fadeIn 1.5s ease-out forwards',
                     },
                     keyframes: {
                         fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(20px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                             '0%': { opacity: '0' },
+                             '100%': { opacity: '1' },
                         },
                         blob: {
                             '0%': { transform: 'translate(0px, 0px) scale(1)' },
@@ -127,29 +132,29 @@
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center bg-zinc-950 overflow-hidden pt-20">
         <!-- Living Background Elements -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-0 animate-fade-in">
             <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[120px] animate-blob mix-blend-screen"></div>
             <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-900/10 rounded-full blur-[120px] animate-blob animation-delay-2000 mix-blend-screen"></div>
             <div class="absolute top-[30%] left-[40%] w-[400px] h-[400px] bg-amber-900/5 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-screen"></div>
         </div>
 
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
-            <div class="inline-flex items-center space-x-2 text-zinc-400 text-[10px] md:text-xs uppercase tracking-[0.2em] mb-8 border border-white/10 px-4 py-2 rounded-full backdrop-blur-sm animate-fade-in-up">
+            <div class="inline-flex items-center space-x-2 text-zinc-400 text-[10px] md:text-xs uppercase tracking-[0.2em] mb-8 border border-white/10 px-4 py-2 rounded-full backdrop-blur-sm opacity-0 animate-fade-in-up">
                 <i data-lucide="globe" class="w-3 h-3"></i>
                 <span>USA • UK • Europe • Global</span>
             </div>
             
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-8 leading-[1.1] tracking-tight animate-fade-in-up delay-100">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-8 leading-[1.1] tracking-tight opacity-0 animate-fade-in-up delay-100">
                 Digital Luxury <br />
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-500">Experience Studio</span>
             </h1>
             
-            <p class="max-w-2xl mx-auto text-zinc-400 text-lg md:text-xl font-light leading-relaxed mb-12 animate-fade-in-up delay-200">
+            <p class="max-w-2xl mx-auto text-zinc-400 text-lg md:text-xl font-light leading-relaxed mb-12 opacity-0 animate-fade-in-up delay-200">
                 We design high-converting, modern websites that elevate your brand, 
                 attract customers, and increase bookings.
             </p>
 
-            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 animate-fade-in-up delay-300">
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 opacity-0 animate-fade-in-up delay-300">
                 <button onclick="scrollToSection('services')" class="group relative px-8 py-4 bg-white text-black min-w-[200px] overflow-hidden transition-all duration-300 hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                     <span class="relative z-10 text-xs uppercase tracking-widest font-bold flex items-center justify-center">
                         View Collection <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
