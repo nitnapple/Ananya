@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nitin Kumar — Interactive 3D CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a96e;
+    --gold-light: #e8d5a8;
+    --teal: #5db8b2;
+    --dark-bg: #060a0f;
+    --text: #ddd5c8;
+    --dim: #7a7065;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--dark-bg);
+    font-family: 'Jost', sans-serif;
+    color: var(--text);
+    user-select: none;
+  }
+
+  #canvas-container {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #canvas-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ── CARD OVERLAYS ── */
+  #cards-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .card-overlay {
+    position: absolute;
+    width: 320px;
+    pointer-events: auto;
+    transform-origin: center center;
+    cursor: pointer;
+    transition: none;
+  }
+
+  .card-inner {
+    background: rgba(6, 10, 15, 0.75);
+    border: 1px solid rgba(201, 169, 110, 0.45);
+    border-radius: 12px;
+    padding: 22px 24px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+      0 0 18px rgba(201, 169, 110, 0.18),
+      0 0 50px rgba(201, 169, 110, 0.06),
+      inset 0 0 20px rgba(201, 169, 110, 0.04);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card-overlay.hovered .card-inner,
+  .card-overlay.focused .card-inner {
+    border-color: rgba(201, 169, 110, 0.85);
+    box-shadow:
+      0 0 30px rgba(201, 169, 110, 0.4),
+      0 0 80px rgba(201, 169, 110, 0.15),
+      inset 0 0 30px rgba(201, 169, 110, 0.08);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+
+  .card-subtitle {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .card-preview {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.65;
+    opacity: 0.8;
+  }
+
+  .card-preview p { margin-bottom: 4px; }
+
+  .card-hint {
+    margin-top: 14px;
+    font-size: 10px;
+    font-weight: 200;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .card-number {
+    position: absolute;
+    top: -10px;
+    right: 12px;
+    background: var(--dark-bg);
+    border: 1px solid rgba(201, 169, 110, 0.4);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 200;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── CENTER HEADER OVERLAY ── */
+  #center-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 8;
+    transition: opacity 0.5s;
+  }
+
+  #center-info .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 300;
+    color: var(--gold-light);
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 40px rgba(201, 169, 110, 0.5);
+  }
+
+  #center-info .tagline {
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--teal);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  #center-info .contact-row {
+    margin-top: 14px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  #center-info .contact-item {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  #center-info .contact-item a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  #center-info .contact-item a:hover { color: var(--gold-light); }
+
+  /* ── MODAL ── */
+  #modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 15, 0.88);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  #modal-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #modal-box {
+    background: rgba(8, 14, 20, 0.9);
+    border: 1px solid rgba(201, 169, 110, 0.5);
+    border-radius: 16px;
+    padding: 40px 48px;
+    max-width: 680px;
+    width: 92vw;
+    max-height: 86vh;
+    overflow-y: auto;
+    box-shadow: 0 0 60px rgba(201, 169, 110, 0.2), 0 0 120px rgba(93, 184, 178, 0.08);
+    transform: scale(0.92) translateY(24px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) transparent;
+  }
+
+  #modal-overlay.visible #modal-box {
+    transform: scale(1) translateY(0);
+  }
+
+  #modal-box::-webkit-scrollbar { width: 4px; }
+  #modal-box::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .modal-icon { font-size: 36px; }
+
+  .modal-header-text .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.04em;
+  }
+
+  .modal-header-text .modal-subtitle {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--teal);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .modal-section {
+    margin-bottom: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.12);
+  }
+
+  .modal-section:last-child { border-bottom: none; }
+
+  .modal-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .modal-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+
+  .modal-section p, .modal-detail-item {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 5px;
+  }
+
+  .modal-detail-item strong {
+    font-weight: 400;
+    color: var(--gold-light);
+  }
+
+  .modal-detail-item .detail-meta {
+    font-size: 11px;
+    color: var(--dim);
+    display: block;
+    margin-top: 2px;
+    margin-left: 8px;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+  }
+
+  .skill-tag {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--gold);
+    border: 1px solid rgba(201, 169, 110, 0.45);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  #modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(201, 169, 110, 0.35);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gold);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    line-height: 1;
+  }
+
+  #modal-close:hover {
+    background: rgba(201, 169, 110, 0.15);
+    border-color: var(--gold);
+  }
+
+  /* ── HUD ── */
+  #hud {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  #nav-hints {
+    background: rgba(6, 10, 15, 0.7);
+    border: 1px solid rgba(201, 169, 110, 0.18);
+    border-radius: 10px;
+    padding: 12px 16px;
+    backdrop-filter: blur(8px);
+  }
+
+  .hint-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 200;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+
+  .hint-row:last-child { margin-bottom: 0; }
+
+  .kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(201, 169, 110, 0.12);
+    border: 1px solid rgba(201, 169, 110, 0.3);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+    min-width: 22px;
+  }
+
+  /* ── CARD INDICATOR ── */
+  #card-indicator {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    z-index: 20;
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    background: rgba(6, 10, 15, 0.65);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 20px;
+    padding: 5px 14px;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.3s;
+  }
+
+  /* ── SOUND TOGGLE ── */
+  #sound-toggle {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 20;
+    width: 46px;
+    height: 46px;
+    background: rgba(6, 10, 15, 0.75);
+    border: 1px solid rgba(201, 169, 110, 0.35);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  #sound-toggle:hover {
+    background: rgba(201, 169, 110, 0.1);
+    border-color: var(--gold);
+  }
+
+  .sound-bar {
+    width: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: height 0.3s;
+  }
+
+  #sound-toggle.active .sound-bar:nth-child(1) { animation: bar 0.8s ease-in-out infinite alternate; height: 8px; }
+  #sound-toggle.active .sound-bar:nth-child(2) { animation: bar 0.8s ease-in-out 0.15s infinite alternate; height: 14px; }
+  #sound-toggle.active .sound-bar:nth-child(3) { animation: bar 0.8s ease-in-out 0.3s infinite alternate; height: 10px; }
+  #sound-toggle:not(.active) .sound-bar { height: 4px; }
+
+  @keyframes bar {
+    from { height: 4px; }
+    to { height: 18px; }
+  }
+
+  /* ── TOP HEADER ── */
+  #top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    z-index: 15;
+    background: linear-gradient(to bottom, rgba(6,10,15,0.85) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  #top-bar .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ── LOADING SCREEN ── */
+  #loading {
+    position: fixed;
+    inset: 0;
+    background: var(--dark-bg);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    transition: opacity 0.8s ease;
+  }
+
+  #loading.hidden { opacity: 0; pointer-events: none; }
+
+  .loading-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--gold-light);
+    letter-spacing: 0.2em;
+  }
+
+  .loading-bar-wrap {
+    width: 200px;
+    height: 2px;
+    background: rgba(201, 169, 110, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .loading-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--teal));
+    width: 0%;
+    transition: width 1.2s ease;
+    border-radius: 2px;
+  }
+
+  .loading-text {
+    font-size: 11px;
+    font-weight: 200;
+    color: var(--dim);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div id="loading">
+  <div class="loading-name">Nitin Kumar</div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+  <div class="loading-text">Initializing 3D Space…</div>
+</div>
+
+<!-- Three.js canvas -->
+<div id="canvas-container"></div>
+
+<!-- Top bar -->
+<div id="top-bar">
+  <div class="brand">Nitin Kumar · Interactive CV</div>
+</div>
+
+<!-- Center info -->
+<div id="center-info">
+  <div class="name">Nitin Kumar</div>
+  <div class="tagline">Political Science · Research · Strategy</div>
+  <div class="contact-row">
+    <span class="contact-item">📞 +91 9971721097</span>
+    <span class="contact-item">✉️ <a href="mailto:nitinkumar@example.com">nitinkumar@example.com</a></span>
+    <span class="contact-item">📍 New Delhi, India</span>
+  </div>
+</div>
+
+<!-- Card overlays container -->
+<div id="cards-overlay"></div>
+
+<!-- Card indicator -->
+<div id="card-indicator">— / 6</div>
+
+<!-- HUD -->
+<div id="hud">
+  <div id="nav-hints">
+    <div class="hint-row"><span class="kbd">⬅ ➡</span> Cycle cards</div>
+    <div class="hint-row"><span class="kbd">1–6</span> Jump to card</div>
+    <div class="hint-row"><span class="kbd">↵</span> Expand · <span class="kbd">Esc</span> Close</div>
+    <div class="hint-row"><span class="kbd">Drag</span> Orbit · <span class="kbd">Scroll</span> Zoom</div>
+    <div class="hint-row"><span class="kbd">WASD</span> Pan camera</div>
+  </div>
+</div>
+
+<!-- Sound toggle -->
+<button id="sound-toggle" title="Toggle sound">
+  <div class="sound-bar"></div>
+  <div class="sound-bar"></div>
+  <div class="sound-bar"></div>
+</button>
+
+<!-- Modal -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ──────────────────────────────────────────────
+  //  DATA
+  // ──────────────────────────────────────────────
+  const CARDS_DATA = [
+    {
+      id: 0,
+      icon: '🎓',
+      title: 'Education',
+      subtitle: 'Academic Background',
+      color: 0xc9a96e,
+      glowColor: '#c9a96e',
+      preview: [
+        'BA Programme — Political Science',
+        'University of Delhi, Hindu College',
+        'July 2021 – June 2025 · CGPA: 7.5',
+      ],
+      sections: [
+        {
+          heading: 'BA Programme — Political Science',
+          items: [
+            { strong: 'University of Delhi, Hindu College', meta: 'July 2021 – June 2025 · CGPA: 7.5' },
+            { strong: 'Core Focus:', meta: 'India\'s Foreign Policy · Introduction to International Relations' },
+            { strong: 'Modules:', meta: 'Public Administration · Comparative Politics' },
+          ]
+        },
+        {
+          heading: 'Senior Secondary — Humanities',
+          items: [
+            { strong: 'NIOS Board', meta: 'May 2021 · 50%' },
+          ]
+        },
+        {
+          heading: 'Secondary Schooling',
+          items: [
+            { strong: 'CBSE Board', meta: 'May 2012 · 6.4 CGPA' },
+          ]
+        }
+      ]
+    },
+    {
+      id: 1,
+      icon: '🔬',
+      title: 'Research & Field Work',
+      subtitle: 'Empirical & Qualitative Research',
+      color: 0x5db8b2,
+      glowColor: '#5db8b2',
+      preview: [
+        'Field Researcher — Delhi Election Survey 2025',
+        '1,600+ data samples collected & analysed',
+        'Research Workshop Participant — LSE & JNU',
+      ],
+      sections: [
+        {
+          heading: 'Field Researcher — Delhi Election Survey 2025 (DALES)',
+          items: [
+            { strong: 'Data Action Lab for Emerging Societies', meta: '5 February 2025' },
+            { strong: 'Scope:', meta: 'Conducted on-ground research collecting and analysing over 1,600 data samples' },
+            { strong: 'Impact:', meta: 'Contributed to empirical electoral research and policy insights' },
+          ]
+        },
+        {
+          heading: 'Research Workshop Participant',
+          items: [
+            { strong: 'Societal Psychology Lab, LSE & JNU', meta: '4 September 2023' },
+            { strong: 'Focus:', meta: 'Participated in interdisciplinary research workshop on societal psychology' },
+            { strong: 'Skills Gained:', meta: 'Expertise in qualitative and quantitative research methods' },
+          ]
+        }
+      ]
+    },
+    {
+      id: 2,
+      icon: '🏆',
+      title: 'Leadership & Events',
+      subtitle: 'Organisational Excellence',
+      color: 0xe8d5a8,
+      glowColor: '#e8d5a8',
+      preview: [
+        'Best Class Representative Award — May 2024',
+        'International Yoga Day Organiser, NSS',
+        'Parliamentary Debate Tournament — 300+ participants',
+      ],
+      sections: [
+        {
+          heading: 'Academic Leadership',
+          items: [
+            { strong: 'Best Class Representative Award', meta: 'BA Programme Department · 7 May 2024' },
+            { strong: '', meta: 'Recognised for outstanding leadership and student advocacy' },
+          ]
+        },
+        {
+          heading: 'Event Organisation',
+          items: [
+            { strong: 'International Yoga Day Organiser, NSS', meta: '21 June 2024' },
+            { strong: 'Organising Committee Member — Premchand Parliamentary Debate Tournament (Deb-Soc)', meta: '2024 · 300+ participants · ₹50,000 in sponsorships secured' },
+            { strong: 'Farewell Organiser, BA Programme Department', meta: '25 May 2023 · 100+ attendees' },
+          ]
+        }
+      ]
+    },
+    {
+      id: 3,
+      icon: '⚡',
+      title: 'Skills',
+      subtitle: 'Technical & Creative Proficiency',
+      color: 0xc9a96e,
+      glowColor: '#c9a96e',
+      preview: [
+        'Research & Analysis: Field surveys, Excel',
+        'Technical: MS Office, HTML, Cybersecurity',
+        'Creative: Canva, Public Speaking, Mentoring',
+      ],
+      sections: [
+        {
+          heading: 'Research & Analysis',
+          tags: ['Field Surveys', 'Qualitative Research', 'Electoral Studies', 'Excel', 'Power Query', 'Pivot Tables', 'Index-Match']
+        },
+        {
+          heading: 'Technical Proficiency',
+          tags: ['MS Office', 'Google Workspace', 'HTML', 'Cybersecurity', 'Security Vulnerability Analysis']
+        },
+        {
+          heading: 'Creative & Leadership',
+          tags: ['Canva', 'Adobe Express', 'Public Speaking', 'Digital Storytelling', 'Peer Mentoring']
+        }
+      ]
+    },
+    {
+      id: 4,
+      icon: '🌍',
+      title: 'Interests',
+      subtitle: 'Intellectual Passions',
+      color: 0x5db8b2,
+      glowColor: '#5db8b2',
+      preview: [
+        'Global Security & Conflict Studies',
+        'Foreign Policy Analysis: US, China, India',
+        'Ancient History & Technology & AI',
+      ],
+      sections: [
+        {
+          heading: 'Global Security & Conflict Studies',
+          items: [{ strong: '', meta: 'Counterterrorism · Cyber Warfare · Nuclear Non-Proliferation · Peacekeeping Operations' }]
+        },
+        {
+          heading: 'Foreign Policy Analysis',
+          items: [{ strong: '', meta: 'Evolving foreign relations of the United States, China, and India' }]
+        },
+        {
+          heading: 'Ancient History & Cultural Studies',
+          items: [{ strong: '', meta: 'Historical geopolitics · Civilisational conflicts · Cultural diplomacy' }]
+        },
+        {
+          heading: 'Photography & Visual Arts',
+          items: [{ strong: '', meta: 'Visual storytelling and cultural documentation' }]
+        },
+        {
+          heading: 'Technology & AI',
+          items: [{ strong: '', meta: 'Emerging technologies · Cybersecurity · Digital innovation · Machine learning' }]
+        }
+      ]
+    },
+    {
+      id: 5,
+      icon: '🗣️',
+      title: 'Languages',
+      subtitle: 'Communication Proficiency',
+      color: 0xe8d5a8,
+      glowColor: '#e8d5a8',
+      preview: [
+        'English — Fluent, Professional proficiency',
+        'Hindi — Fluent, Native speaker',
+        'Extensive use in field research & outreach',
+      ],
+      sections: [
+        {
+          heading: 'English',
+          items: [
+            { strong: 'Fluent', meta: 'Professional proficiency in spoken and written English' },
+          ]
+        },
+        {
+          heading: 'Hindi',
+          items: [
+            { strong: 'Fluent · Native', meta: 'Used extensively in field research, public engagement, and community outreach' },
+          ]
+        }
+      ]
+    }
+  ];
+
+  // ──────────────────────────────────────────────
+  //  STATE
+  // ──────────────────────────────────────────────
+  let focusedCard = -1;
+  let soundEnabled = false;
+  let audioCtx = null;
+  let masterGain = null;
+  let reverbNode = null;
+  let droneNodes = [];
+  let modalOpen = false;
+  let lastInteraction = Date.now();
+  const keysHeld = new Set();
+
+  // ──────────────────────────────────────────────
+  //  THREE.JS SCENE SETUP
+  // ──────────────────────────────────────────────
+  const container = document.getElementById('canvas-container');
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x060a0f, 1);
+  container.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 2000);
+  camera.position.set(0, 0, 22);
+  camera.lookAt(0, 0, 0);
+
+  // Camera orbit state
+  const camTarget = new THREE.Vector3(0, 0, 0);
+  let camTheta = Math.PI / 2; // horizontal angle
+  let camPhi = Math.PI * 0.42; // vertical angle
+  let camRadius = 22;
+  let camThetaTarget = camTheta;
+  let camPhiTarget = camPhi;
+  let camRadiusTarget = camRadius;
+  let camPanX = 0, camPanY = 0;
+  let camPanXTarget = 0, camPanYTarget = 0;
+
+  // ──────────────────────────────────────────────
+  //  MOUSE ORBIT CONTROLS
+  // ──────────────────────────────────────────────
+  let isDragging = false;
+  let prevMouse = { x: 0, y: 0 };
+  let mousePos = { x: 0, y: 0 }; // normalized -1..1
+  let hoveredCardIndex = -1;
+
+  renderer.domElement.addEventListener('mousedown', (e) => {
+    if (e.button === 0) {
+      isDragging = true;
+      prevMouse = { x: e.clientX, y: e.clientY };
+      lastInteraction = Date.now();
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    mousePos.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mousePos.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+    if (isDragging) {
+      const dx = (e.clientX - prevMouse.x) * 0.005;
+      const dy = (e.clientY - prevMouse.y) * 0.004;
+      camThetaTarget -= dx;
+      camPhiTarget = Math.max(0.2, Math.min(Math.PI - 0.2, camPhiTarget + dy));
+      prevMouse = { x: e.clientX, y: e.clientY };
+      lastInteraction = Date.now();
+    }
+  });
+
+  window.addEventListener('mouseup', () => { isDragging = false; });
+
+  renderer.domElement.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    camRadiusTarget = Math.max(8, Math.min(45, camRadiusTarget + e.deltaY * 0.02));
+    lastInteraction = Date.now();
+  }, { passive: false });
+
+  // ──────────────────────────────────────────────
+  //  CARD MESHES (glowing planes)
+  // ──────────────────────────────────────────────
+  const CARD_RADIUS = 10;
+  const cardMeshes = [];
+  const cardPositions = [];
+
+  const glowVert = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `;
+
+  const glowFrag = `
+    uniform vec3 uColor;
+    uniform float uTime;
+    uniform float uHover;
+    varying vec2 vUv;
+    void main() {
+      vec2 uv = vUv;
+      // Border glow
+      float bw = 0.04;
+      float b = min(min(uv.x, 1.0 - uv.x), min(uv.y, 1.0 - uv.y));
+      float border = 1.0 - smoothstep(0.0, bw, b);
+      // Inner faint fill
+      float inner = 0.04 + 0.02 * uHover;
+      // Pulse
+      float pulse = 0.5 + 0.5 * sin(uTime * 2.0 + uv.x * 3.14);
+      float glow = border * (0.6 + 0.4 * uHover + 0.15 * pulse);
+      vec3 color = uColor * glow + uColor * inner;
+      float alpha = glow * 0.85 + inner;
+      gl_FragColor = vec4(color, alpha);
+    }
+  `;
+
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2;
+    const x = Math.cos(angle) * CARD_RADIUS;
+    const z = Math.sin(angle) * CARD_RADIUS;
+    const pos = new THREE.Vector3(x, 0, z);
+    cardPositions.push(pos);
+
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: glowVert,
+      fragmentShader: glowFrag,
+      uniforms: {
+        uColor: { value: new THREE.Color(CARDS_DATA[i].color) },
+        uTime: { value: 0 },
+        uHover: { value: 0 },
+      },
+      transparent: true,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+
+    const geo = new THREE.PlaneGeometry(7.2, 5.0);
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.copy(pos);
+    mesh.lookAt(0, 0, 0);
+    mesh.userData.cardIndex = i;
+    scene.add(mesh);
+    cardMeshes.push(mesh);
+  }
+
+  // ──────────────────────────────────────────────
+  //  ENERGY LINES between cards
+  // ──────────────────────────────────────────────
+  const lineVert = `
+    attribute float lineAlpha;
+    varying float vAlpha;
+    void main() {
+      vAlpha = lineAlpha;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `;
+  const lineFrag = `
+    uniform float uTime;
+    varying float vAlpha;
+    void main() {
+      float pulse = 0.4 + 0.3 * sin(uTime * 3.0 + vAlpha * 8.0);
+      gl_FragColor = vec4(0.78, 0.66, 0.43, vAlpha * pulse);
+    }
+  `;
+
+  function buildEnergyLines() {
+    const positions = [];
+    const alphas = [];
+    for (let i = 0; i < 6; i++) {
+      for (let j = i + 1; j < 6; j++) {
+        positions.push(cardPositions[i].x, cardPositions[i].y, cardPositions[i].z);
+        positions.push(cardPositions[j].x, cardPositions[j].y, cardPositions[j].z);
+        alphas.push(0.28, 0.28);
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute('lineAlpha', new THREE.Float32BufferAttribute(alphas, 1));
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: lineVert,
+      fragmentShader: lineFrag,
+      uniforms: { uTime: { value: 0 } },
+      transparent: true,
+      depthWrite: false,
+    });
+    const lines = new THREE.LineSegments(geo, mat);
+    scene.add(lines);
+    return lines;
+  }
+  const energyLines = buildEnergyLines();
+
+  // ──────────────────────────────────────────────
+  //  PARTICLE SYSTEM (1500+ particles)
+  // ──────────────────────────────────────────────
+  const PARTICLE_COUNT = 1600;
+  const pPositions = new Float32Array(PARTICLE_COUNT * 3);
+  const pColors = new Float32Array(PARTICLE_COUNT * 3);
+  const pSizes = new Float32Array(PARTICLE_COUNT);
+  const palette = [
+    new THREE.Color(0xc9a96e),
+    new THREE.Color(0xe8d5a8),
+    new THREE.Color(0x5db8b2),
+    new THREE.Color(0xffffff),
+  ];
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const r = 18 + Math.random() * 60;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    pPositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+    pPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    pPositions[i * 3 + 2] = r * Math.cos(phi);
+    const c = palette[Math.floor(Math.random() * palette.length)];
+    pColors[i * 3]     = c.r;
+    pColors[i * 3 + 1] = c.g;
+    pColors[i * 3 + 2] = c.b;
+    pSizes[i] = 0.4 + Math.random() * 1.2;
+  }
+
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+  pGeo.setAttribute('color', new THREE.BufferAttribute(pColors, 3));
+  pGeo.setAttribute('size', new THREE.BufferAttribute(pSizes, 1));
+
+  const particleVert = `
+    attribute float size;
+    varying vec3 vColor;
+    void main() {
+      vColor = color;
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      gl_PointSize = size * (300.0 / -mv.z);
+      gl_Position = projectionMatrix * mv;
+    }
+  `;
+  const particleFrag = `
+    varying vec3 vColor;
+    void main() {
+      float d = length(gl_PointCoord - 0.5);
+      if (d > 0.5) discard;
+      float a = 1.0 - smoothstep(0.2, 0.5, d);
+      gl_FragColor = vec4(vColor, a * 0.7);
+    }
+  `;
+
+  const pMat = new THREE.ShaderMaterial({
+    vertexShader: particleVert,
+    fragmentShader: particleFrag,
+    vertexColors: true,
+    transparent: true,
+    depthWrite: false,
+  });
+
+  const particles = new THREE.Points(pGeo, pMat);
+  scene.add(particles);
+
+  // ──────────────────────────────────────────────
+  //  NEBULA (large semi-transparent spheres)
+  // ──────────────────────────────────────────────
+  const nebulaVert = `
+    varying vec3 vNormal;
+    varying vec3 vPos;
+    void main() {
+      vNormal = normalize(normalMatrix * normal);
+      vPos = position;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `;
+  const nebulaFrag = `
+    uniform vec3 uColor;
+    uniform float uTime;
+    varying vec3 vNormal;
+    varying vec3 vPos;
+    void main() {
+      float rim = 1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0);
+      float glow = pow(rim, 2.5) * 0.12;
+      gl_FragColor = vec4(uColor, glow);
+    }
+  `;
+
+  const nebulaData = [
+    { pos: [-30, 10, -40], r: 28, color: 0x5db8b2 },
+    { pos: [35, -15, -35], r: 24, color: 0xc9a96e },
+    { pos: [0, 25, -50], r: 32, color: 0x3a6080 },
+  ];
+
+  nebulaData.forEach(({ pos, r, color }) => {
+    const geo = new THREE.SphereGeometry(r, 24, 24);
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: nebulaVert,
+      fragmentShader: nebulaFrag,
+      uniforms: { uColor: { value: new THREE.Color(color) }, uTime: { value: 0 } },
+      transparent: true,
+      side: THREE.BackSide,
+      depthWrite: false,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(...pos);
+    scene.add(mesh);
+  });
+
+  // ──────────────────────────────────────────────
+  //  HTML CARD OVERLAYS
+  // ──────────────────────────────────────────────
+  const overlayContainer = document.getElementById('cards-overlay');
+  const cardOverlayEls = [];
+
+  CARDS_DATA.forEach((card, i) => {
+    const div = document.createElement('div');
+    div.className = 'card-overlay';
+    div.dataset.index = i;
+    div.innerHTML = `
+      <span class="card-number">${i + 1} / 6</span>
+      <div class="card-inner">
+        <span class="card-icon">${card.icon}</span>
+        <div class="card-title">${card.title}</div>
+        <div class="card-subtitle">${card.subtitle}</div>
+        <div class="card-preview">${card.preview.map(p => `<p>${p}</p>`).join('')}</div>
+        <div class="card-hint">Click or press ↵ to expand</div>
+      </div>`;
+
+    div.addEventListener('mouseenter', () => {
+      hoveredCardIndex = i;
+      div.classList.add('hovered');
+      playHoverSound();
+    });
+    div.addEventListener('mouseleave', () => {
+      hoveredCardIndex = -1;
+      div.classList.remove('hovered');
+    });
+    div.addEventListener('click', () => {
+      openModal(i);
+      playClickSound();
+    });
+
+    overlayContainer.appendChild(div);
+    cardOverlayEls.push(div);
+  });
+
+  // ──────────────────────────────────────────────
+  //  RAYCASTER for hover/click
+  // ──────────────────────────────────────────────
+  const raycaster = new THREE.Raycaster();
+
+  // ──────────────────────────────────────────────
+  //  MODAL
+  // ──────────────────────────────────────────────
+  function buildModalContent(index) {
+    const card = CARDS_DATA[index];
+    let html = `
+      <div class="modal-header">
+        <span class="modal-icon">${card.icon}</span>
+        <div class="modal-header-text">
+          <div class="modal-title">${card.title}</div>
+          <div class="modal-subtitle">${card.subtitle}</div>
+        </div>
+      </div>`;
+
+    card.sections.forEach(section => {
+      html += `<div class="modal-section"><div class="modal-section-title">${section.heading}</div>`;
+      if (section.tags) {
+        html += `<div class="skill-tags">${section.tags.map(t => `<span class="skill-tag">${t}</span>`).join('')}</div>`;
+      }
+      if (section.items) {
+        section.items.forEach(item => {
+          html += `<div class="modal-detail-item">`;
+          if (item.strong) html += `<strong>${item.strong}</strong>`;
+          if (item.meta) html += `<span class="detail-meta">${item.meta}</span>`;
+          html += `</div>`;
+        });
+      }
+      html += `</div>`;
+    });
+
+    return html;
+  }
+
+  function openModal(index) {
+    if (modalOpen) closeModal();
+    const overlay = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    content.innerHTML = buildModalContent(index);
+    overlay.classList.add('visible');
+    modalOpen = true;
+    document.getElementById('center-info').style.opacity = '0';
+    // Focus on this card
+    setFocusedCard(index);
+  }
+
+  function closeModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.remove('visible');
+    modalOpen = false;
+    document.getElementById('center-info').style.opacity = '1';
+    playCloseSound();
+  }
+
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  });
+
+  // ──────────────────────────────────────────────
+  //  CAMERA NAVIGATION
+  // ──────────────────────────────────────────────
+  function setFocusedCard(index) {
+    focusedCard = index;
+    document.getElementById('card-indicator').textContent = `${index + 1} / 6`;
+
+    cardOverlayEls.forEach((el, i) => {
+      el.classList.toggle('focused', i === index);
+    });
+
+    // Orbit camera to face this card
+    const angle = (index / 6) * Math.PI * 2;
+    // Camera should be on opposite side to look at card
+    camThetaTarget = angle + Math.PI;
+    camPhiTarget = Math.PI * 0.42;
+    camRadiusTarget = 18;
+    lastInteraction = Date.now();
+  }
+
+  function clearFocus() {
+    focusedCard = -1;
+    document.getElementById('card-indicator').textContent = '— / 6';
+    cardOverlayEls.forEach(el => el.classList.remove('focused'));
+    camRadiusTarget = 22;
+  }
+
+  // ──────────────────────────────────────────────
+  //  KEYBOARD NAVIGATION
+  // ──────────────────────────────────────────────
+  window.addEventListener('keydown', (e) => {
+    keysHeld.add(e.key);
+    lastInteraction = Date.now();
+
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        setFocusedCard(focusedCard < 0 ? 0 : (focusedCard + 1) % 6);
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        setFocusedCard(focusedCard < 0 ? 5 : (focusedCard + 5) % 6);
+        break;
+      case 'Enter':
+        if (focusedCard >= 0) { openModal(focusedCard); playClickSound(); }
+        break;
+      case 'Escape':
+        if (modalOpen) closeModal();
+        else clearFocus();
+        break;
+      case '1': case '2': case '3': case '4': case '5': case '6':
+        setFocusedCard(parseInt(e.key) - 1);
+        break;
+    }
+  });
+
+  window.addEventListener('keyup', (e) => keysHeld.delete(e.key));
+
+  // ──────────────────────────────────────────────
+  //  AUDIO SYSTEM
+  // ──────────────────────────────────────────────
+  function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.12;
+    masterGain.connect(audioCtx.destination);
+
+    // Simple reverb via convolverNode with synthetic impulse
+    reverbNode = audioCtx.createConvolver();
+    const rate = audioCtx.sampleRate;
+    const len = rate * 2.5;
+    const buf = audioCtx.createBuffer(2, len, rate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = buf.getChannelData(ch);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.5);
+    }
+    reverbNode.buffer = buf;
+    reverbNode.connect(masterGain);
+
+    startDrones();
+  }
+
+  function startDrones() {
+    const freqs = [55, 82.41, 110, 146.83, 220];
+    freqs.forEach((f, i) => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      g.gain.value = 0.018;
+      osc.connect(g);
+      g.connect(reverbNode);
+      g.connect(masterGain);
+      osc.start();
+      droneNodes.push({ osc, gain: g });
+    });
+  }
+
+  function stopDrones() {
+    droneNodes.forEach(({ osc, gain }) => {
+      gain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.3);
+      osc.stop(audioCtx.currentTime + 0.5);
+    });
+    droneNodes = [];
+  }
+
+  function playClickSound() {
+    if (!audioCtx || !soundEnabled) return;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(680, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.18);
+    g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.2);
+  }
+
+  function playHoverSound() {
+    if (!audioCtx || !soundEnabled) return;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 880;
+    g.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  }
+
+  function playCloseSound() {
+    if (!audioCtx || !soundEnabled) return;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.25);
+    g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.28);
+  }
+
+  // Sound toggle
+  const soundBtn = document.getElementById('sound-toggle');
+  soundBtn.addEventListener('click', () => {
+    soundEnabled = !soundEnabled;
+    soundBtn.classList.toggle('active', soundEnabled);
+    if (soundEnabled) {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    } else {
+      if (audioCtx) stopDrones();
+    }
+  });
+
+  // ──────────────────────────────────────────────
+  //  RESIZE
+  // ──────────────────────────────────────────────
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // ──────────────────────────────────────────────
+  //  ANIMATION LOOP
+  // ──────────────────────────────────────────────
+  const clock = new THREE.Clock();
+  let floatOffsets = CARDS_DATA.map((_, i) => i * (Math.PI * 2 / 6));
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const elapsed = clock.getElapsedTime();
+
+    // Auto-rotate when idle
+    const idle = Date.now() - lastInteraction > 3500;
+    if (idle && !modalOpen) {
+      camThetaTarget += 0.003;
+    }
+
+    // WASD panning
+    if (keysHeld.has('a') || keysHeld.has('A')) { camPanXTarget -= 0.04; lastInteraction = Date.now(); }
+    if (keysHeld.has('d') || keysHeld.has('D')) { camPanXTarget += 0.04; lastInteraction = Date.now(); }
+    if (keysHeld.has('w') || keysHeld.has('W')) { camPanYTarget += 0.04; lastInteraction = Date.now(); }
+    if (keysHeld.has('s') || keysHeld.has('S')) { camPanYTarget -= 0.04; lastInteraction = Date.now(); }
+
+    // Smooth camera lerp
+    camTheta = lerp(camTheta, camThetaTarget, 0.06);
+    camPhi   = lerp(camPhi, camPhiTarget, 0.06);
+    camRadius = lerp(camRadius, camRadiusTarget, 0.06);
+    camPanX  = lerp(camPanX, camPanXTarget, 0.06);
+    camPanY  = lerp(camPanY, camPanYTarget, 0.06);
+
+    camera.position.x = camRadius * Math.sin(camPhi) * Math.cos(camTheta) + camPanX;
+    camera.position.y = camRadius * Math.cos(camPhi) + camPanY;
+    camera.position.z = camRadius * Math.sin(camPhi) * Math.sin(camTheta);
+    camera.lookAt(camPanX, camPanY, 0);
+
+    // Update card mesh shaders & float animation
+    cardMeshes.forEach((mesh, i) => {
+      const floatY = Math.sin(elapsed * 0.9 + floatOffsets[i]) * 0.22;
+      mesh.position.y = cardPositions[i].y + floatY;
+      mesh.lookAt(camPanX, camPanY, 0);
+
+      const hovered = (hoveredCardIndex === i || focusedCard === i);
+      mesh.material.uniforms.uTime.value = elapsed;
+      mesh.material.uniforms.uHover.value = lerp(mesh.material.uniforms.uHover.value, hovered ? 1 : 0, 0.08);
+
+      // scale on hover
+      const targetScale = hovered ? 1.06 : 1.0;
+      mesh.scale.setScalar(lerp(mesh.scale.x, targetScale, 0.08));
+    });
+
+    // Update energy lines time
+    energyLines.material.uniforms.uTime.value = elapsed;
+
+    // Rotate particles slowly
+    particles.rotation.y = elapsed * 0.018;
+    particles.rotation.x = elapsed * 0.007;
+
+    // ── Project card positions to screen and update HTML overlays ──
+    const tempV = new THREE.Vector3();
+    cardOverlayEls.forEach((el, i) => {
+      const mesh = cardMeshes[i];
+      const worldPos = mesh.position.clone();
+
+      // Project to NDC
+      tempV.copy(worldPos);
+      tempV.project(camera);
+
+      const sx = (tempV.x * 0.5 + 0.5) * window.innerWidth;
+      const sy = (-tempV.y * 0.5 + 0.5) * window.innerHeight;
+
+      // Distance-based scale
+      const distToCam = camera.position.distanceTo(worldPos);
+      const scaleBase = Math.max(0.45, Math.min(1.1, 14 / distToCam));
+
+      // Behind camera check
+      const behindCamera = tempV.z > 1;
+
+      // Angle-to-camera (dot product)
+      const toCard = worldPos.clone().sub(camera.position).normalize();
+      const camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+      const dot = camDir.dot(toCard) * -1;
+      const angleFactor = Math.max(0, Math.min(1, (dot - 0.0) / 0.6));
+
+      const opacity = behindCamera ? 0 : angleFactor * Math.min(1, scaleBase * 1.3);
+      const display = behindCamera ? 'none' : 'block';
+
+      el.style.display = display;
+      el.style.left = `${sx}px`;
+      el.style.top = `${sy}px`;
+      el.style.transform = `translate(-50%, -50%) scale(${scaleBase})`;
+      el.style.opacity = opacity;
+    });
+
+    // Raycaster hover check against card meshes
+    raycaster.setFromCamera(mousePos, camera);
+    const intersects = raycaster.intersectObjects(cardMeshes);
+    if (intersects.length > 0 && !isDragging) {
+      const newHovered = intersects[0].object.userData.cardIndex;
+      if (newHovered !== hoveredCardIndex) {
+        hoveredCardIndex = newHovered;
+        cardOverlayEls[newHovered].classList.add('hovered');
+        playHoverSound();
+      }
+    } else if (!isDragging) {
+      hoveredCardIndex = -1;
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  // ──────────────────────────────────────────────
+  //  LOADING FADE
+  // ──────────────────────────────────────────────
+  const loadingEl = document.getElementById('loading');
+  const loadingBar = document.getElementById('loading-bar');
+
+  setTimeout(() => { loadingBar.style.width = '100%'; }, 100);
+  setTimeout(() => {
+    loadingEl.classList.add('hidden');
+    setTimeout(() => { loadingEl.style.display = 'none'; }, 900);
+  }, 1600);
+
+  animate();
+})();
+</script>
+</body>
+</html>
