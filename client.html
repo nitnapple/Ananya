@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Client Acquisition System | clientgetter.tech</title>
+    <meta name="description" content="A practical system for freelancers and agency owners who want better replies, better conversations, and faster client acquisition.">
+    
+    <style>
+        /* ==========================================================================
+           CSS VARIABLES & RESET
+           ========================================================================== */
+        :root {
+            --font-family: "Times New Roman", Times, serif;
+            
+            /* Color Palette - Warm, minimal, premium */
+            --bg-body: #FBFBF9;
+            --bg-surface: #FFFFFF;
+            --bg-subtle: #F3F3F1;
+            
+            --text-main: #1C1C1C;
+            --text-muted: #5A5A5A;
+            --text-light: #888888;
+            
+            --border-light: #E8E8E6;
+            --border-dark: #D0D0CE;
+            
+            --accent-primary: #1A2238;
+            --accent-hover: #2D3A5C;
+            
+            /* Spacing & Layout */
+            --container-max: 1100px;
+            --container-narrow: 760px;
+            --section-padding: 8rem 2rem;
+            
+            /* UI Elements */
+            --radius-sm: 2px;
+            --radius-md: 4px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.05);
+            
+            /* Transitions */
+            --transition: all 0.25s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==========================================================================
+           TYPOGRAPHY
+           ========================================================================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            letter-spacing: -0.01em;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            color: var(--text-muted);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        /* ==========================================================================
+           UTILITY CLASSES
+           ========================================================================== */
+        .container {
+            width: 100%;
+            max-width: var(--container-max);
+            margin: 0 auto;
+        }
+
+        .container-narrow {
+            width: 100%;
+            max-width: var(--container-narrow);
+            margin: 0 auto;
+        }
+
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mb-4 { margin-bottom: 4rem; }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+        
+        .section-header p {
+            font-size: 1.25rem;
+            max-width: 600px;
+        }
+
+        .section-header.text-center p {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .border-top {
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* ==========================================================================
+           BUTTONS & BADGES
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: #FFFFFF;
+            border: 1px solid var(--accent-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            color: #FFFFFF;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-subtle);
+            border-color: var(--text-main);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-dark);
+            border-radius: 50px;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ==========================================================================
+           ANIMATIONS & TRUST ELEMENTS
+           ========================================================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .trust-banner {
+            padding: 3rem 2rem;
+            text-align: center;
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .trust-banner p {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            opacity: 0.5;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .guarantee-box {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            background-color: var(--bg-body);
+            border: 1px dashed var(--border-dark);
+            text-align: left;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .guarantee-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .guarantee-text h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+        }
+
+        .guarantee-text p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            color: var(--text-muted);
+        }
+
+        .secure-checkout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 1.25rem;
+        }
+
+        /* ==========================================================================
+           1. HEADER & NAVIGATION
+           ========================================================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(251, 251, 249, 0.95);
+            border-bottom: 1px solid transparent;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            border-bottom-color: var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: var(--container-max);
+            margin: 0 auto;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-family: var(--font-family);
+            color: var(--text-main);
+        }
+
+        /* ==========================================================================
+           2. HERO SECTION
+           ========================================================================== */
+        .hero {
+            padding: 12rem 2rem 6rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero p.subtitle {
+            font-size: 1.25rem;
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .trust-line {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* ==========================================================================
+           3. PROBLEM SECTION
+           ========================================================================== */
+        .problem-section {
+            padding: var(--section-padding);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .pain-list {
+            list-style: none;
+        }
+
+        .pain-list li {
+            margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .pain-list li::before {
+            content: "×";
+            color: var(--text-light);
+            font-size: 1.25rem;
+            line-height: 1.2;
+        }
+
+        /* ==========================================================================
+           4. SOLUTION SECTION
+           ========================================================================== */
+        .solution-section {
+            padding: var(--section-padding);
+            background-color: var(--bg-surface);
+        }
+
+        .solution-box {
+            border: 1px solid var(--border-light);
+            padding: 4rem;
+            background-color: var(--bg-body);
+        }
+
+        .solution-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-light);
+            padding-top: 3rem;
+        }
+
+        .feature-item h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           5. WHAT'S INSIDE (GRID)
+           ========================================================================== */
+        .whats-inside-section {
+            padding: var(--section-padding);
+        }
+
+        .inside-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .category-column {
+            border-top: 2px solid var(--text-main);
+            padding-top: 1.5rem;
+        }
+
+        .category-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-list {
+            list-style: none;
+        }
+
+        .module-item {
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .module-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .module-title {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .module-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           6. HOW IT WORKS
+           ========================================================================== */
+        .how-it-works-section {
+            padding: var(--section-padding);
+            background-color: var(--bg-surface);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .step-card {
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            background-color: var(--bg-body);
+        }
+
+        .step-number {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* ==========================================================================
+           7. PROOF / PREVIEW SECTION
+           ========================================================================== */
+        .preview-section {
+            padding: var(--section-padding);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .preview-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            background-color: var(--bg-subtle);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .preview-body {
+            padding: 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .preview-body p {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .preview-body p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .highlight {
+            background-color: rgba(26, 34, 56, 0.05);
+            padding: 0 4px;
+            border-radius: 2px;
+        }
+
+        /* ==========================================================================
+           8. PRICING SECTION
+           ========================================================================== */
+        .pricing-section {
+            padding: var(--section-padding);
+            background-color: var(--bg-surface);
+        }
+
+        .pricing-card {
+            max-width: 420px;
+            margin: 0 auto;
+            border: 1px solid var(--border-dark);
+            padding: 3rem;
+            background-color: var(--bg-body);
+            text-align: center;
+        }
+
+        .price {
+            font-size: 4rem;
+            color: var(--text-main);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2.5rem;
+        }
+
+        .pricing-features li {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--text-main);
+        }
+
+        /* ==========================================================================
+           9. FAQ SECTION
+           ========================================================================== */
+        .faq-section {
+            padding: var(--section-padding);
+        }
+
+        .faq-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 1.5rem 0;
+            font-family: var(--font-family);
+            font-size: 1.125rem;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-icon {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-inner {
+            padding-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* ==========================================================================
+           10. FINAL CTA SECTION
+           ========================================================================== */
+        .cta-section {
+            padding: 6rem 2rem;
+            background-color: var(--accent-primary);
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .cta-section h2, .cta-section p {
+            color: #FFFFFF;
+        }
+        
+        .cta-section p {
+            opacity: 0.8;
+        }
+
+        .cta-section .btn-primary {
+            background-color: #FFFFFF;
+            color: var(--accent-primary);
+            border-color: #FFFFFF;
+        }
+
+        .cta-section .btn-primary:hover {
+            background-color: var(--bg-subtle);
+        }
+
+        /* ==========================================================================
+           11. FOOTER
+           ========================================================================== */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-light);
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4rem;
+            max-width: var(--container-max);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-brand {
+            font-size: 1.125rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+        }
+
+        .footer-links a:hover {
+            color: var(--text-main);
+        }
+
+        .footer-bottom {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-light);
+            padding-top: 2rem;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN (MOBILE FIRST APPROACH HANDLED VIA MEDIA QUERIES DOWN)
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .inside-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --section-padding: 5rem 1.5rem;
+            }
+
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+            
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: rgba(251, 251, 249, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                border-bottom: 1px solid var(--border-light);
+                transform: translateY(-150%);
+                opacity: 0;
+                transition: var(--transition);
+                z-index: -1;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .nav-links .btn {
+                width: 100%;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .solution-box {
+                padding: 2rem;
+            }
+
+            .solution-features {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-top {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .inside-grid {
+                grid-template-columns: 1fr;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            .pricing-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Header / Navigation -->
+    <header id="header">
+        <div class="nav-container">
+            <a href="#" class="brand">clientgetter.tech</a>
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">☰</button>
+            <nav class="nav-links" id="nav-links">
+                <a href="#how-it-works">How it works</a>
+                <a href="#whats-inside">What's inside</a>
+                <a href="#preview">Preview</a>
+                <a href="#faq">FAQ</a>
+                <a href="#pricing" class="btn btn-primary btn-sm">Get Instant Access</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. Hero Section -->
+        <section class="hero" id="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="badge">$29 • Complete System</span>
+                    <h1>Get your next client in 7 days using AI-powered outreach.</h1>
+                    <p class="subtitle">A practical, structured system for freelancers and agency owners who want better replies, better conversations, and faster client acquisition.</p>
+                    
+                    <div class="hero-actions">
+                        <a href="#pricing" class="btn btn-primary">Get Instant Access</a>
+                        <a href="#whats-inside" class="btn btn-secondary">See What's Inside</a>
+                    </div>
+                    
+                    <div class="trust-line">
+                        <span>✓ Instant Delivery</span>
+                        <span>•</span>
+                        <span>✓ One-time payment</span>
+                        <span>•</span>
+                        <span>✓ Lifetime access</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2.5 Trust Banner -->
+        <div class="trust-banner">
+            <div class="container">
+                <p>Trusted by freelancers & agencies working with</p>
+                <div class="trust-logos">
+                    <span>TechFlow</span>
+                    <span>Lumina Design</span>
+                    <span>Apex Media</span>
+                    <span>Velocity SEO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Problem Section -->
+        <section class="problem-section border-top" id="problem">
+            <div class="container">
+                <div class="problem-grid">
+                    <div>
+                        <h2>The old way of finding clients is broken.</h2>
+                        <p>Most freelancers and small agencies rely on hope, random cold emails, or waiting for referrals. You end up wasting hours writing messages that never get a response.</p>
+                    </div>
+                    <div>
+                        <ul class="pain-list">
+                            <li>Outreach feels spammy and unnatural.</li>
+                            <li>Messages get ignored because they lack personalization.</li>
+                            <li>There is no clear, repeatable process for finding leads.</li>
+                            <li>Inconsistent lead generation leads to revenue gaps.</li>
+                            <li>You have no confident follow-up system to close deals.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Solution Section -->
+        <section class="solution-section border-top" id="solution">
+            <div class="container-narrow text-center section-header">
+                <h2>A structured client acquisition system.</h2>
+                <p>This is not a random bundle of ChatGPT prompts. It is a rigorous workflow designed to take you from discovering your ideal client to closing the deal, using AI to do the heavy lifting.</p>
+            </div>
+
+            <div class="container">
+                <div class="solution-box">
+                    <h3>The AI Client Acquisition System</h3>
+                    <p>Designed specifically to help service providers with lead discovery, personalized outreach, intelligent follow-up, offer framing, and closing. Stop guessing and start following a proven architecture.</p>
+                    
+                    <div class="solution-features">
+                        <div class="feature-item">
+                            <h4>Precision Targeting</h4>
+                            <p>Identify exact decision-makers instead of blasting generic inboxes.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>Natural Copy</h4>
+                            <p>Generate outreach that sounds like a human, not a robot.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>Predictable Closing</h4>
+                            <p>Handle objections and present proposals with confidence.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. What's Inside Section -->
+        <section class="whats-inside-section border-top" id="whats-inside">
+            <div class="container-narrow text-center section-header">
+                <h2>Exactly what you get inside.</h2>
+                <p>20 specialized workflows grouped into 4 core phases of the client acquisition lifecycle.</p>
+            </div>
+
+            <div class="container">
+                <div class="inside-grid">
+                    <!-- Category 1 -->
+                    <div class="category-column">
+                        <h3>1. Lead Generation</h3>
+                        <ul class="module-list">
+                            <li class="module-item">
+                                <div class="module-title">Niche Discovery Prompt</div>
+                                <div class="module-desc">Identify highly profitable, underserved markets.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Ideal Client Profile Builder</div>
+                                <div class="module-desc">Map the exact psychology and pain points of buyers.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Lead Finder Prompt</div>
+                                <div class="module-desc">Extract high-intent prospects using advanced parameters.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Lead Qualification Prompt</div>
+                                <div class="module-desc">Filter out time-wasters and low-budget tire kickers.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">List Enrichment Prompt</div>
+                                <div class="module-desc">Gather deep background data for hyper-personalization.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div class="category-column">
+                        <h3>2. Outreach</h3>
+                        <ul class="module-list">
+                            <li class="module-item">
+                                <div class="module-title">Cold Email Generator</div>
+                                <div class="module-desc">Write concise, non-spammy emails that get opened.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Follow-up Sequence</div>
+                                <div class="module-desc">A polite, persistent 3-step sequence to bump replies.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">LinkedIn DM Opener</div>
+                                <div class="module-desc">Start natural conversations without pitching immediately.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Conversation Continuation</div>
+                                <div class="module-desc">Transition smoothly from casual chat to business.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Authority Builder Message</div>
+                                <div class="module-desc">Subtly demonstrate your expertise in the DMs.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div class="category-column">
+                        <h3>3. Offer & Closing</h3>
+                        <ul class="module-list">
+                            <li class="module-item">
+                                <div class="module-title">Irresistible Offer Generator</div>
+                                <div class="module-desc">Package your services so they are impossible to refuse.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Quick Proposal Builder</div>
+                                <div class="module-desc">Draft structured, professional proposals in minutes.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Objection Handling Prompt</div>
+                                <div class="module-desc">Navigate "too expensive" or "bad timing" elegantly.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Closing Message Prompt</div>
+                                <div class="module-desc">Ask for the business confidently and clearly.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Urgency Creator Prompt</div>
+                                <div class="module-desc">Ethically encourage prospects to make a decision now.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category 4 -->
+                    <div class="category-column">
+                        <h3>4. Scaling</h3>
+                        <ul class="module-list">
+                            <li class="module-item">
+                                <div class="module-title">Performance Analyzer</div>
+                                <div class="module-desc">Diagnose why campaigns aren't converting.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Reply Improvement Prompt</div>
+                                <div class="module-desc">Refine your tone based on prospect feedback.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Offer Optimization Prompt</div>
+                                <div class="module-desc">Iterate your pricing and deliverables for higher margins.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Client Retention Prompt</div>
+                                <div class="module-desc">Check-in sequences to keep current clients happy.</div>
+                            </li>
+                            <li class="module-item">
+                                <div class="module-title">Upsell Generator Prompt</div>
+                                <div class="module-desc">Pitch additional services to existing accounts smoothly.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. How It Works Section -->
+        <section class="how-it-works-section border-top" id="how-it-works">
+            <div class="container-narrow text-center section-header">
+                <h2>A simple, repeatable process.</h2>
+                <p>The system is designed to be executed in four straightforward steps, minimizing time spent while maximizing conversion rates.</p>
+            </div>
+
+            <div class="container">
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <span class="step-number">Step 01</span>
+                        <h3>Pick a niche</h3>
+                        <p>Use the targeting framework to identify a specific subset of businesses with a clear, urgent need for your service.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">Step 02</span>
+                        <h3>Generate leads</h3>
+                        <p>Feed the criteria into the AI to extract data, build profiles, and create a highly qualified target list.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">Step 03</span>
+                        <h3>Send outreach</h3>
+                        <p>Deploy the personalized cold email and LinkedIn sequences. The system handles the copy; you just hit send.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">Step 04</span>
+                        <h3>Close & refine</h3>
+                        <p>Use the objection handling and proposal frameworks to turn replies into paying clients, then optimize for the next batch.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Proof / Preview Section -->
+        <section class="preview-section border-top" id="preview">
+            <div class="container-narrow text-center section-header">
+                <h2>See the outputs.</h2>
+                <p>No generic robot text. The system is engineered to produce concise, highly relevant messages that sound strictly human.</p>
+            </div>
+
+            <div class="container">
+                <div class="preview-grid">
+                    
+                    <!-- Preview Card 1 -->
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <span>Sample Cold Email</span>
+                            <span>Open Rate: 68%</span>
+                        </div>
+                        <div class="preview-body">
+                            <p><strong>Subject:</strong> Question about your Q3 design rollout</p>
+                            <p>Hi David,</p>
+                            <p>Noticed your recent post about expanding the e-commerce branch. I imagine keeping the UI consistent across the new product pages is a priority right now.</p>
+                            <p>I help mid-size retail brands streamline their UI components so development doesn't slow down during expansions. Recently did this for [Competitor/Similar Brand], cutting their launch time by two weeks.</p>
+                            <p>Are you open to a brief chat to see if there's a fit? If not, no worries.</p>
+                            <p>Best,<br>Alex</p>
+                        </div>
+                    </div>
+
+                    <!-- Preview Card 2 -->
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <span>Before vs. After (LinkedIn DM)</span>
+                            <span>Response increase: 3x</span>
+                        </div>
+                        <div class="preview-body">
+                            <p><span style="color: #c0392b; font-size: 0.85rem; text-transform: uppercase;">Before (Spammy)</span></p>
+                            <p style="color: var(--text-muted); font-style: italic; margin-bottom: 1.5rem;">"Hey! I run an SEO agency and we guarantee 1st page rankings. Do you want more traffic and sales? Book a call here: [link]"</p>
+                            
+                            <p><span style="color: #27ae60; font-size: 0.85rem; text-transform: uppercase;">After (System Framework)</span></p>
+                            <p>Hey Sarah, loved your recent article on local logistics. Quick question—I noticed your site's technical structure is missing schema markup for your new service areas.</p>
+                            <p>I fix this exact issue for logistics firms. Usually results in a nice bump in local search visibility within a few weeks. Worth a 5-minute chat later this week?</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Pricing Section -->
+        <section class="pricing-section border-top" id="pricing">
+            <div class="container-narrow text-center section-header">
+                <h2>Simple, transparent pricing.</h2>
+            </div>
+
+            <div class="container">
+                <div class="pricing-card">
+                    <h3>AI Client Acquisition System</h3>
+                    <div class="price">$29</div>
+                    <p class="price-desc">A complete system for freelancers and agency owners to book more meetings.</p>
+                    
+                    <ul class="pricing-features">
+                        <li>All 20 AI prompt frameworks</li>
+                        <li>Lead generation & outreach strategy</li>
+                        <li>Proposal & offer templates</li>
+                        <li>Lifetime updates</li>
+                        <li>Instant digital access</li>
+                    </ul>
+
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Get Instant Access</a>
+                    
+                    <div class="secure-checkout">
+                        <span>🔒</span> 256-bit Secure Checkout via Gumroad
+                    </div>
+
+                    <div class="guarantee-box">
+                        <div class="guarantee-icon">🛡️</div>
+                        <div class="guarantee-text">
+                            <h4>14-Day Ironclad Guarantee</h4>
+                            <p>If you implement these frameworks and don't see an improvement in your reply rates, email us within 14 days for a full refund. No questions asked.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. FAQ Section -->
+        <section class="faq-section border-top" id="faq">
+            <div class="container-narrow text-center section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+
+            <div class="container">
+                <div class="faq-container">
+                    
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Who is this for?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                This system is built specifically for US-based freelancers, consultants, and small agency owners offering B2B services (design, development, marketing, consulting) who need a reliable way to get clients.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do I need AI experience?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                Not at all. The system is designed to be plug-and-play. You just copy the frameworks, input your specific details (niche, service), and paste them into ChatGPT, Claude, or any standard AI tool.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How is this different from random prompt packs?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                Random prompt packs give you hundreds of useless variations. This is a sequential system. Every prompt leads to the next step—from finding the lead, to emailing them, to handling their objections, to closing the deal.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Is this a course?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                No. It is an actionable, text-based workflow system. There are no bloated hours of video to watch. It is designed for you to read, copy, paste, and execute within 15 minutes.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Will this work for both freelancers and agencies?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                Yes. The foundational principles of B2B outreach apply whether you are a solo freelancer or a 10-person agency. The system helps you adjust the tone to match your scale.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What do I receive after purchase?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                You will receive instant access to a structured digital document (PDF & Notion template) containing the entire workflow, all 20 frameworks, and instructions on how to use them.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. Final CTA Section -->
+        <section class="cta-section">
+            <div class="container-narrow">
+                <h2>Stop waiting for referrals.</h2>
+                <p style="margin-bottom: 2.5rem; font-size: 1.25rem;">Take control of your pipeline today with a proven, AI-assisted outreach system.</p>
+                <a href="#pricing" class="btn btn-primary">Get Instant Access for $29</a>
+                <p style="font-size: 0.85rem; margin-top: 1rem; margin-bottom: 0;">Instant download immediately after purchase.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 11. Footer -->
+    <footer>
+        <div class="footer-top">
+            <div>
+                <div class="footer-brand">clientgetter.tech</div>
+                <p style="max-width: 300px; font-size: 0.85rem;">Practical systems for serious freelancers and agency owners.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#header">Home</a>
+                <a href="#pricing">Pricing</a>
+                <a href="mailto:support@clientgetter.tech">Support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 clientgetter.tech. All rights reserved.</div>
+            <div>This site is not a part of the Facebook website or Facebook Inc.</div>
+        </div>
+    </footer>
+
+    <!-- Vanilla JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Sticky Header Observer
+            const header = document.getElementById('header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // 2. Mobile Menu Toggle
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navLinks = document.getElementById('nav-links');
+            
+            mobileToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                if(navLinks.classList.contains('active')) {
+                    mobileToggle.innerHTML = '✕';
+                } else {
+                    mobileToggle.innerHTML = '☰';
+                }
+            });
+
+            // Close mobile menu when clicking a link
+            const links = navLinks.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    mobileToggle.innerHTML = '☰';
+                });
+            });
+
+            // 2.5 Scroll Reveal Animations
+            const heroContent = document.querySelector('.hero-content');
+            const revealElements = document.querySelectorAll('.section-header, .problem-grid > div, .solution-box, .category-column, .step-card, .preview-card, .pricing-card, .faq-item, .trust-banner');
+            
+            // Initial Hero Animation
+            if(heroContent) {
+                heroContent.classList.add('reveal');
+                setTimeout(() => heroContent.classList.add('active'), 100);
+            }
+
+            // Scroll animations for the rest
+            revealElements.forEach(el => el.classList.add('reveal'));
+
+            const revealOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Apply a slight stagger for multiple elements entering at once
+                        setTimeout(() => {
+                            entry.target.classList.add('active');
+                        }, index * 50); 
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => revealOnScroll.observe(el));
+
+            // 3. FAQ Accordion Logic
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+
+                    // Close all other open FAQs
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                        }
+                    });
+
+                    // Toggle current FAQ
+                    if (isActive) {
+                        item.classList.remove('active');
+                        answer.style.maxHeight = null;
+                    } else {
+                        item.classList.add('active');
+                        // Calculate exact height needed for smooth animation
+                        answer.style.maxHeight = answer.scrollHeight + "px";
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
