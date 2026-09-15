@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>In Loving Memory of Nitin Kumar | Sunset Sanctuary</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌻</text></svg>">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       SUNSET SANCTUARY - ALL-IN-ONE RESPONSIVE MEMORIAL EXPERIENCE
+       ========================================================================== */
+
+    :root {
+      /* Palette - Golden Sunset */
+      --sky-top: #383652;
+      --sky-mid: #9c533e;
+      --sky-warm: #db7634;
+      --sky-bottom: #f2a848;
+      --sun-core: #fffef5;
+      --sun-glow: rgba(255, 195, 70, 0.7);
+      --sun-flare: rgba(255, 170, 50, 0.28);
+      --god-ray: rgba(255, 215, 120, 0.12);
+      
+      --meadow-dark: #1a2210;
+      --meadow-mid: #38451c;
+      --meadow-gold: #735919;
+      --grass-tint: #242c13;
+
+      /* Stone & Chiseled Gold */
+      --stone-body: #1c1d22;
+      --stone-rim: rgba(255, 210, 130, 0.25);
+      
+      --gold-highlight: #fff2c4;
+      --gold-primary: #e6ca65;
+      --gold-mid: #b8913d;
+      --gold-shadow: #543e12;
+      --gold-glow: rgba(245, 205, 100, 0.35);
+
+      /* Glassmorphism */
+      --glass-bg: rgba(20, 18, 24, 0.68);
+      --glass-border: rgba(255, 220, 150, 0.18);
+      --glass-active: rgba(230, 202, 101, 0.25);
+      --glass-text: #f5eedb;
+      --glass-muted: #b8ad96;
+
+      /* Typography */
+      --font-serif-monument: 'Cinzel', serif;
+      --font-serif-script: 'Cormorant Garamond', Georgia, serif;
+      --font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      
+      --theme-transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+                          filter 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Twilight Theme */
+    body.theme-twilight {
+      --sky-top: #151428;
+      --sky-mid: #362145;
+      --sky-warm: #6a3258;
+      --sky-bottom: #a24b5a;
+      --sun-core: #ffbe85;
+      --sun-glow: rgba(230, 110, 100, 0.45);
+      --sun-flare: rgba(160, 60, 120, 0.2);
+      --god-ray: rgba(220, 140, 180, 0.08);
+
+      --meadow-dark: #121814;
+      --meadow-mid: #1d2520;
+      --meadow-gold: #383025;
+      --grass-tint: #131b14;
+
+      --stone-rim: rgba(210, 160, 210, 0.2);
+      --gold-primary: #d9bf80;
+      --gold-glow: rgba(220, 170, 150, 0.3);
+    }
+
+    /* Night Theme */
+    body.theme-night {
+      --sky-top: #05060d;
+      --sky-mid: #0b0f1d;
+      --sky-warm: #131a30;
+      --sky-bottom: #1c233c;
+      --sun-core: #e6edff;
+      --sun-glow: rgba(180, 210, 255, 0.35);
+      --sun-flare: rgba(100, 140, 220, 0.15);
+      --god-ray: rgba(160, 200, 255, 0.04);
+
+      --meadow-dark: #080d09;
+      --meadow-mid: #0f1811;
+      --meadow-gold: #16201b;
+      --grass-tint: #090e0b;
+
+      --stone-rim: rgba(180, 205, 245, 0.2);
+      --gold-primary: #eed588;
+      --gold-glow: rgba(255, 215, 115, 0.45);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-ui);
+      color: var(--glass-text);
+      background-color: #0b0c10;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    /* ---------------- 3D Deep Viewport Scene ---------------- */
+    .scene-viewport {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1200px;
+      perspective-origin: 50% 50%;
+    }
+
+    /* Deep Sky & Celestial Layer */
+    .sky-container {
+      position: absolute;
+      inset: -5%;
+      width: 110%;
+      height: 110%;
+      z-index: 1;
+      pointer-events: none;
+      transition: var(--theme-transition);
+      will-change: transform;
+    }
+
+    .sky-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        var(--sky-top) 0%,
+        var(--sky-mid) 32%,
+        var(--sky-warm) 62%,
+        var(--sky-bottom) 100%
+      );
+      transition: background 1.5s ease;
+    }
+
+    /* Volumetric Sunbeams / God Rays */
+    .god-rays-layer {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -35deg,
+        transparent 0%,
+        transparent 6%,
+        var(--god-ray) 7%,
+        transparent 11%,
+        transparent 17%,
+        var(--god-ray) 19%,
+        transparent 24%
+      );
+      opacity: 0.85;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      filter: blur(12px);
+      mask-image: radial-gradient(circle at 80% 25%, black 20%, transparent 85%);
+      -webkit-mask-image: radial-gradient(circle at 80% 25%, black 20%, transparent 85%);
+      animation: godRayBreathe 14s infinite alternate ease-in-out;
+    }
+
+    @keyframes godRayBreathe {
+      0% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+      100% { opacity: 0.95; transform: scale(1.04) rotate(1deg); }
+    }
+
+    .clouds-layer {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(255, 220, 160, 0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 30% 25%, rgba(255, 180, 120, 0.2) 0%, transparent 50%);
+      opacity: 0.85;
+      filter: blur(25px);
+      animation: cloudDrift 45s infinite alternate ease-in-out;
+    }
+
+    @keyframes cloudDrift {
+      0% { transform: translateX(-2%) scale(1); }
+      100% { transform: translateX(2%) scale(1.05); }
+    }
+
+    /* Sun Orb */
+    .sun-orb {
+      position: absolute;
+      top: 22%;
+      right: 18%;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      transition: all 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    body.theme-twilight .sun-orb {
+      top: 35%;
+      right: 17%;
+      filter: hue-rotate(-20deg) brightness(0.85);
+    }
+
+    body.theme-night .sun-orb {
+      top: 15%;
+      right: 22%;
+      width: 50px;
+      height: 50px;
+      box-shadow: 0 0 45px rgba(220, 235, 255, 0.6);
+    }
+
+    .sun-core {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff 40%, var(--sun-core) 70%, transparent 100%);
+      box-shadow: 0 0 30px #ffffff, 0 0 70px var(--sun-glow);
+    }
+
+    .sun-glow {
+      position: absolute;
+      top: -140%;
+      left: -140%;
+      width: 380%;
+      height: 380%;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--sun-glow) 0%, var(--sun-flare) 40%, transparent 75%);
+      filter: blur(16px);
+      animation: sunPulse 6s infinite alternate ease-in-out;
+    }
+
+    .sun-flare {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .flare-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 230, 160, 0.22) 0%, transparent 70%);
+      filter: blur(30px);
+    }
+
+    .flare-2 {
+      width: 900px;
+      height: 70px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 220, 140, 0.25) 50%, transparent 100%);
+      transform: translate(-50%, -50%) rotate(-25deg);
+      filter: blur(14px);
+    }
+
+    @keyframes sunPulse {
+      0% { transform: scale(0.96); opacity: 0.85; }
+      100% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .stars-layer {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background-image: 
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 100px 70px, #ffe, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 200px 140px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 300px 80px, #def, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 450px 220px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 600px 90px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 750px 160px, #fdf, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 900px 50px, #fff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 550px 350px;
+      transition: opacity 1.8s ease;
+    }
+
+    body.theme-night .stars-layer {
+      opacity: 0.85;
+    }
+
+    /* ---------------- Depth Layer 1: Distant Hills & Horizon Fog ---------------- */
+    .distant-hills {
+      position: absolute;
+      bottom: 24%;
+      left: -5%;
+      width: 110%;
+      height: 180px;
+      background: radial-gradient(ellipse at 60% 100%, var(--meadow-gold) 0%, var(--meadow-mid) 50%, transparent 100%);
+      filter: blur(16px);
+      opacity: 0.7;
+      z-index: 2;
+      will-change: transform;
+    }
+
+    .horizon-haze {
+      position: absolute;
+      bottom: 22%;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(180deg, transparent 0%, rgba(245, 175, 75, 0.28) 60%, transparent 100%);
+      filter: blur(18px);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* ---------------- Depth Layer 2: Deep Sunflower Meadow Planes ---------------- */
+    .meadow-plane-far {
+      position: absolute;
+      bottom: 8%;
+      left: -8%;
+      width: 116%;
+      height: 280px;
+      z-index: 4;
+      pointer-events: none;
+      filter: blur(5px) saturate(1.1);
+      opacity: 0.85;
+      background: 
+        radial-gradient(circle at 15% 40%, #e6a817 0px, transparent 18px),
+        radial-gradient(circle at 28% 55%, #f5b718 0px, transparent 20px),
+        radial-gradient(circle at 45% 45%, #d99b12 0px, transparent 16px),
+        radial-gradient(circle at 62% 38%, #f5b718 0px, transparent 22px),
+        radial-gradient(circle at 75% 60%, #e6a817 0px, transparent 18px),
+        radial-gradient(circle at 88% 42%, #d99b12 0px, transparent 24px),
+        linear-gradient(180deg, transparent 0%, var(--meadow-dark) 90%);
+      will-change: transform;
+    }
+
+    .meadow-plane-mid {
+      position: absolute;
+      bottom: 0;
+      left: -5%;
+      width: 110%;
+      height: 240px;
+      z-index: 5;
+      pointer-events: none;
+      filter: blur(1.2px) saturate(1.05);
+      background: 
+        radial-gradient(circle at 10% 30%, #f7bc1b 0px, #3a220a 12px, transparent 26px),
+        radial-gradient(circle at 22% 40%, #ffc82a 0px, #42240c 14px, transparent 30px),
+        radial-gradient(circle at 78% 35%, #f5b718 0px, #3a220a 15px, transparent 32px),
+        radial-gradient(circle at 92% 45%, #ffc82a 0px, #42240c 13px, transparent 28px),
+        linear-gradient(180deg, transparent 0%, var(--grass-tint) 70%, #0d120a 100%);
+      will-change: transform;
+    }
+
+    /* ---------------- Particle & Petal Canvas ---------------- */
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* ---------------- Photo Mode Overlay ---------------- */
+    .photo-mode-layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      z-index: 7;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    body.view-photo .photo-mode-layer {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.view-photo .monument-perspective {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96) translateY(20px);
+    }
+
+    body.view-photo .foreground-frame {
+      opacity: 0.15;
+    }
+
+    /* ---------------- Centerpiece: 3D Monument with Ground Shadow ---------------- */
+    .monument-perspective {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform-style: preserve-3d;
+      transition: opacity 0.6s ease;
+      margin-top: -15px;
+      will-change: transform;
+    }
+
+    /* Deep Ambient Contact Shadow on the Lawn */
+    .monument-ground-shadow {
+      position: absolute;
+      bottom: -36px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(460px, 94vw);
+      height: 55px;
+      background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.92) 0%, rgba(5, 8, 4, 0.6) 45%, transparent 75%);
+      filter: blur(10px);
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .monument-card {
+      position: relative;
+      width: min(390px, 86vw);
+      height: min(480px, 62vh);
+      background: #191a20;
+      border-radius: 200px 200px 10px 10px / 130px 130px 10px 10px;
+      box-shadow: 
+        0 35px 65px -10px rgba(0, 0, 0, 0.92),
+        0 0 50px -5px rgba(0, 0, 0, 0.95),
+        inset 0 2px 4px rgba(255, 255, 255, 0.22),
+        inset 0 -12px 35px rgba(0, 0, 0, 0.95),
+        0 0 1px 1px var(--stone-rim);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px 30px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      touch-action: manipulation;
+      will-change: transform;
+    }
+
+    .stone-granite-texture {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 50% 20%, rgba(55, 60, 72, 0.45) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(45, 48, 58, 0.35) 0%, transparent 50%),
+        repeating-radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.02) 0px, transparent 2px, transparent 6px),
+        linear-gradient(180deg, #252831 0%, #17181e 50%, #101115 100%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .stone-bevel-border {
+      position: absolute;
+      inset: 10px;
+      border-radius: 190px 190px 6px 6px / 120px 120px 6px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 
+        inset 1px 1px 2px rgba(255, 255, 255, 0.14),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.65);
+      pointer-events: none;
+    }
+
+    .stone-specular {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle 300px at var(--mouse-x, 50%) var(--mouse-y, 40%),
+        rgba(255, 235, 180, 0.2) 0%,
+        rgba(255, 200, 120, 0.08) 35%,
+        transparent 65%
+      );
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .stone-light-ripple {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 235, 170, 0.6) 0%, transparent 75%);
+      transform: translate(-50%, -50%) scale(0);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .stone-light-ripple.active {
+      animation: stoneRippleAnim 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes stoneRippleAnim {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(55); opacity: 0; }
+    }
+
+    /* Inscription & Chiseled Typography */
+    .stone-inscription {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .tribute-header {
+      margin-bottom: 22px;
+    }
+
+    .engraved-name {
+      font-family: var(--font-serif-monument);
+      font-size: clamp(1.9rem, 4.2vw, 2.75rem);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      background: linear-gradient(
+        180deg,
+        #fffbf0 0%,
+        var(--gold-highlight) 20%,
+        var(--gold-primary) 50%,
+        var(--gold-mid) 75%,
+        var(--gold-shadow) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.95))
+              drop-shadow(0 -0.5px 0.5px rgba(255, 255, 255, 0.5));
+      text-shadow: 0 0 16px var(--gold-glow);
+    }
+
+    .engraved-dates {
+      font-family: var(--font-serif-script);
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      letter-spacing: 0.02em;
+      color: #d1b87a;
+      opacity: 0.92;
+      text-shadow: 0 1.5px 2px rgba(0, 0, 0, 0.9), 0 0 8px rgba(230, 202, 101, 0.25);
+    }
+
+    .engraved-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 78%;
+      gap: 14px;
+      margin: 4px 0 24px;
+    }
+
+    .engraved-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c7a456 40%, #c7a456 60%, transparent);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+    }
+
+    .engraved-ornament {
+      color: var(--gold-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
+    }
+
+    .floret-svg {
+      width: 20px;
+      height: 20px;
+      animation: floretGleam 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes floretGleam {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+      50% { transform: scale(1.1) rotate(5deg); opacity: 1; filter: drop-shadow(0 0 6px var(--gold-glow)); }
+      100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+    }
+
+    .engraved-epitaph {
+      font-family: var(--font-serif-script);
+      font-style: italic;
+      font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+      letter-spacing: 0.03em;
+      color: #e2c988;
+      opacity: 0.92;
+      text-shadow: 0 2px 3px rgba(0, 0, 0, 0.95), 0 0 10px rgba(226, 201, 136, 0.3);
+    }
+
+    .stone-last-msg {
+      margin-top: 14px;
+      padding: 6px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(230, 202, 101, 0.24);
+      border-radius: 20px;
+      font-family: var(--font-serif-script);
+      font-size: clamp(0.88rem, 1.8vw, 1.05rem);
+      letter-spacing: 0.02em;
+      color: #eeddb0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+      touch-action: manipulation;
+    }
+
+    .stone-last-msg:hover {
+      background: rgba(230, 202, 101, 0.18);
+      border-color: rgba(255, 225, 130, 0.5);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(230, 202, 101, 0.3);
+    }
+
+    .stone-msg-prefix {
+      font-family: var(--font-serif-monument);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      font-weight: 600;
+    }
+
+    .stone-msg-text {
+      font-style: italic;
+      color: #f7eed8;
+    }
+
+    /* Monument Plinth */
+    .monument-plinth {
+      position: relative;
+      width: min(440px, 92vw);
+      margin-top: -4px;
+      z-index: 1;
+    }
+
+    .plinth-top {
+      width: 100%;
+      height: 16px;
+      background: linear-gradient(180deg, #2c2f38 0%, #1f2127 100%);
+      border-radius: 4px 4px 0 0;
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.22),
+        0 -3px 8px rgba(0, 0, 0, 0.6);
+      border-top: 1px solid var(--stone-rim);
+    }
+
+    .plinth-front {
+      width: 100%;
+      height: 28px;
+      background: linear-gradient(180deg, #18191f 0%, #0d0e12 100%);
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.9);
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* Altar Ground (Candles & Sunflowers) */
+    .altar-ground {
+      position: absolute;
+      bottom: -38px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(480px, 95vw);
+      height: 80px;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 12px;
+      z-index: 15;
+    }
+
+    .placed-candle {
+      position: relative;
+      width: 24px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: itemPopIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+      pointer-events: auto;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .candle-wax {
+      width: 18px;
+      height: 32px;
+      background: linear-gradient(180deg, #fffcf0 0%, #e2d8b5 60%, #a89d79 100%);
+      border-radius: 3px 3px 2px 2px;
+      box-shadow: 
+        0 6px 10px rgba(0, 0, 0, 0.85),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+        inset -1px 0 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .candle-wick {
+      width: 2px;
+      height: 6px;
+      background: #2b231a;
+    }
+
+    .candle-flame {
+      width: 10px;
+      height: 18px;
+      background: radial-gradient(ellipse at 50% 80%, #ffffff 0%, #ffe45c 40%, #ff6b14 85%, transparent 100%);
+      border-radius: 50% 50% 20% 20% / 70% 70% 30% 30%;
+      animation: flickerFlame 0.8s infinite alternate ease-in-out;
+      box-shadow: 0 0 16px 5px rgba(255, 175, 45, 0.88);
+      transform-origin: bottom center;
+    }
+
+    .candle-glow-halo {
+      position: absolute;
+      top: -15px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 185, 60, 0.38) 0%, transparent 70%);
+      pointer-events: none;
+      animation: haloPulse 1.6s infinite alternate ease-in-out;
+    }
+
+    @keyframes flickerFlame {
+      0% { transform: scale(0.95, 1.05) rotate(-2deg); }
+      50% { transform: scale(1.05, 0.95) rotate(2deg); }
+      100% { transform: scale(1, 1.1) rotate(-1deg); }
+    }
+
+    @keyframes haloPulse {
+      0% { transform: scale(0.9); opacity: 0.65; }
+      100% { transform: scale(1.15); opacity: 0.95; }
+    }
+
+    .placed-flower {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      animation: flowerDrop 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+      pointer-events: auto;
+      cursor: pointer;
+      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.75));
+      touch-action: manipulation;
+    }
+
+    .placed-flower svg {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .placed-flower:hover svg {
+      transform: rotate(15deg) scale(1.08);
+    }
+
+    @keyframes itemPopIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.6); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes flowerDrop {
+      0% { opacity: 0; transform: translateY(-40px) rotate(-30deg) scale(0.5); }
+      100% { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)) scale(1); }
+    }
+
+    /* ---------------- Depth Layer 3: Foreground Frame (Counter Parallax) ---------------- */
+    .foreground-frame {
+      position: absolute;
+      inset: -2% -2% 0 -2%;
+      z-index: 25;
+      pointer-events: none;
+      overflow: hidden;
+      transition: opacity 0.8s ease;
+      will-change: transform;
+    }
+
+    .sunflower-cluster {
+      position: absolute;
+      bottom: -40px;
+      display: flex;
+      pointer-events: none;
+    }
+
+    .cluster-left {
+      left: -20px;
+      transform-origin: bottom left;
+      animation: clusterSwayLeft 7s infinite ease-in-out;
+    }
+
+    .cluster-right {
+      right: -30px;
+      transform-origin: bottom right;
+      animation: clusterSwayRight 8s infinite ease-in-out;
+    }
+
+    .flower-item {
+      width: clamp(140px, 20vw, 220px);
+      height: clamp(140px, 20vw, 220px);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.85));
+    }
+
+    .flower-1 {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23f5b718'%3E%3Cellipse cx='50' cy='22' rx='7' ry='20'/%3E%3Cellipse cx='50' cy='78' rx='7' ry='20'/%3E%3Cellipse cx='22' cy='50' rx='20' ry='7'/%3E%3Cellipse cx='78' cy='50' rx='20' ry='7'/%3E%3Cellipse cx='30' cy='30' rx='8' ry='20' transform='rotate(-45 30 30)'/%3E%3Cellipse cx='70' cy='30' rx='8' ry='20' transform='rotate(45 70 30)'/%3E%3Cellipse cx='30' cy='70' rx='8' ry='20' transform='rotate(45 30 70)'/%3E%3Cellipse cx='70' cy='70' rx='8' ry='20' transform='rotate(-45 70 70)'/%3E%3Cellipse cx='40' cy='24' rx='6' ry='18' transform='rotate(-22 40 24)' fill='%23ffcc24'/%3E%3Cellipse cx='60' cy='24' rx='6' ry='18' transform='rotate(22 60 24)' fill='%23ffcc24'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='23' fill='%2342240c'/%3E%3Ccircle cx='50' cy='50' r='18' fill='%232a1505' stroke='%2363360f' stroke-width='3' stroke-dasharray='2 3'/%3E%3C/svg%3E");
+      transform: rotate(-10deg);
+    }
+
+    .flower-2 {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23f7bc1b'%3E%3Cellipse cx='50' cy='20' rx='8' ry='22'/%3E%3Cellipse cx='50' cy='80' rx='8' ry='22'/%3E%3Cellipse cx='20' cy='50' rx='22' ry='8'/%3E%3Cellipse cx='80' cy='50' rx='22' ry='8'/%3E%3Cellipse cx='29' cy='29' rx='8' ry='22' transform='rotate(-45 29 29)' fill='%23e5a510'/%3E%3Cellipse cx='71' cy='29' rx='8' ry='22' transform='rotate(45 71 29)' fill='%23e5a510'/%3E%3Cellipse cx='29' cy='71' rx='8' ry='22' transform='rotate(45 29 71)' fill='%23e5a510'/%3E%3Cellipse cx='71' cy='71' rx='8' ry='22' transform='rotate(-45 71 71)' fill='%23e5a510'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='24' fill='%23381e09'/%3E%3Ccircle cx='50' cy='50' r='19' fill='%23201004'/%3E%3C/svg%3E");
+      margin-left: -50px;
+      transform: rotate(15deg) scale(0.85);
+    }
+
+    .flower-3 {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23ffc82a'%3E%3Cellipse cx='50' cy='22' rx='7' ry='20'/%3E%3Cellipse cx='50' cy='78' rx='7' ry='20'/%3E%3Cellipse cx='22' cy='50' rx='20' ry='7'/%3E%3Cellipse cx='78' cy='50' rx='20' ry='7'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='20' fill='%23331b08'/%3E%3C/svg%3E");
+      margin-left: -60px;
+      transform: rotate(-25deg) scale(0.65);
+    }
+
+    .flower-4 {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23f5b718'%3E%3Cellipse cx='50' cy='22' rx='7' ry='20'/%3E%3Cellipse cx='50' cy='78' rx='7' ry='20'/%3E%3Cellipse cx='22' cy='50' rx='20' ry='7'/%3E%3Cellipse cx='78' cy='50' rx='20' ry='7'/%3E%3Cellipse cx='30' cy='30' rx='8' ry='20' transform='rotate(-45 30 30)' fill='%23ffcc24'/%3E%3Cellipse cx='70' cy='30' rx='8' ry='20' transform='rotate(45 70 30)' fill='%23ffcc24'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='23' fill='%233d210a'/%3E%3C/svg%3E");
+      transform: rotate(20deg);
+    }
+
+    .flower-5 {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23ffbf24'%3E%3Cellipse cx='50' cy='20' rx='8' ry='22'/%3E%3Cellipse cx='50' cy='80' rx='8' ry='22'/%3E%3Cellipse cx='20' cy='50' rx='22' ry='8'/%3E%3Cellipse cx='80' cy='50' rx='22' ry='8'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='22' fill='%232e1805'/%3E%3C/svg%3E");
+      margin-right: -40px;
+      transform: rotate(-15deg) scale(0.9);
+    }
+
+    .flower-6 {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23f5b718'%3E%3Cellipse cx='50' cy='22' rx='7' ry='20'/%3E%3Cellipse cx='50' cy='78' rx='7' ry='20'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='20' fill='%23381e09'/%3E%3C/svg%3E");
+      margin-right: -50px;
+      transform: rotate(35deg) scale(0.7);
+    }
+
+    .grass-bed-foreground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      background: linear-gradient(180deg, transparent 0%, rgba(12, 17, 9, 0.88) 55%, #050804 100%);
+    }
+
+    @keyframes clusterSwayLeft {
+      0% { transform: rotate(0deg) translateY(0); }
+      50% { transform: rotate(2.5deg) translateY(-4px); }
+      100% { transform: rotate(0deg) translateY(0); }
+    }
+
+    @keyframes clusterSwayRight {
+      0% { transform: rotate(0deg) translateY(0); }
+      50% { transform: rotate(-2.8deg) translateY(-5px); }
+      100% { transform: rotate(0deg) translateY(0); }
+    }
+
+    /* ---------------- Ethereal Spirit / Ghost (Appears after 3s) ---------------- */
+    .ghost-apparition {
+      position: absolute;
+      top: 22%;
+      right: 22%;
+      width: 125px;
+      height: 165px;
+      z-index: 12;
+      opacity: 0;
+      transform: translateY(35px) scale(0.78);
+      pointer-events: none;
+      cursor: pointer;
+      transition: opacity 2.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  transform 2.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  filter 1s ease;
+      filter: drop-shadow(0 0 25px rgba(255, 220, 140, 0.65));
+      will-change: transform, opacity;
+      touch-action: manipulation;
+    }
+
+    .ghost-apparition.manifested {
+      opacity: 0.88;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      animation: ghostHover 6s infinite ease-in-out;
+    }
+
+    .ghost-apparition:hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 35px rgba(255, 235, 170, 0.9));
+    }
+
+    body.theme-twilight .ghost-apparition {
+      filter: drop-shadow(0 0 28px rgba(235, 170, 220, 0.65));
+    }
+
+    body.theme-night .ghost-apparition {
+      filter: drop-shadow(0 0 32px rgba(180, 220, 255, 0.85));
+    }
+
+    .ghost-halo {
+      position: absolute;
+      top: 5%;
+      left: 10%;
+      width: 80%;
+      height: 75%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 245, 210, 0.38) 0%, rgba(255, 205, 110, 0.18) 50%, transparent 75%);
+      filter: blur(14px);
+      pointer-events: none;
+      animation: ghostAuraPulse 4s infinite alternate ease-in-out;
+    }
+
+    .ghost-wisps-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .ghost-wisp {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(255, 215, 120, 0.25) 60%, transparent 80%);
+      filter: blur(6px);
+      opacity: 0.7;
+    }
+
+    .wisp-a {
+      width: 35px;
+      height: 35px;
+      bottom: 12px;
+      left: 15px;
+      animation: wispDriftA 4.5s infinite ease-in-out;
+    }
+
+    .wisp-b {
+      width: 25px;
+      height: 25px;
+      bottom: 25px;
+      right: 15px;
+      animation: wispDriftB 3.8s infinite ease-in-out;
+    }
+
+    .wisp-c {
+      width: 20px;
+      height: 20px;
+      top: 30px;
+      left: 6px;
+      animation: wispDriftA 5.2s infinite ease-in-out;
+    }
+
+    .ghost-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ghost-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .ghost-whisper {
+      position: absolute;
+      top: -36px;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: rgba(20, 18, 25, 0.88);
+      border: 1px solid rgba(255, 225, 140, 0.4);
+      padding: 6px 14px;
+      border-radius: 16px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .ghost-whisper.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .whisper-text {
+      font-family: var(--font-serif-script);
+      font-style: italic;
+      font-size: 0.94rem;
+      color: #fff6de;
+      letter-spacing: 0.02em;
+    }
+
+    @keyframes ghostHover {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-16px) rotate(2deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    @keyframes ghostAuraPulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.15); opacity: 0.95; }
+    }
+
+    @keyframes wispDriftA {
+      0% { transform: translate(0, 0) scale(0.8); opacity: 0.4; }
+      50% { transform: translate(10px, -15px) scale(1.1); opacity: 0.8; }
+      100% { transform: translate(0, 0) scale(0.8); opacity: 0.4; }
+    }
+
+    @keyframes wispDriftB {
+      0% { transform: translate(0, 0) scale(1.1); opacity: 0.8; }
+      50% { transform: translate(-8px, -18px) scale(0.7); opacity: 0.3; }
+      100% { transform: translate(0, 0) scale(1.1); opacity: 0.8; }
+    }
+
+    /* ---------------- Top Navigation Bar ---------------- */
+    .top-nav {
+      position: fixed;
+      top: max(16px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(92%, 1100px);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      padding: 8px 18px;
+      border-radius: 30px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      pointer-events: auto;
+    }
+
+    .nav-brand .symbol {
+      font-size: 1.25rem;
+    }
+
+    .nav-brand .title {
+      font-family: var(--font-serif-monument);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      color: var(--glass-text);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .btn-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      color: var(--glass-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-icon:hover {
+      background: var(--glass-active);
+      transform: scale(1.06);
+      border-color: rgba(230, 202, 101, 0.4);
+    }
+
+    .btn-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-icon.active {
+      color: #ffd666;
+      border-color: rgba(255, 214, 102, 0.5);
+      box-shadow: 0 0 15px rgba(255, 214, 102, 0.4);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .theme-selector {
+      display: flex;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 4px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .theme-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      color: var(--glass-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .theme-btn:hover {
+      color: var(--glass-text);
+    }
+
+    .theme-btn.active {
+      background: rgba(230, 202, 101, 0.22);
+      color: #fff9e6;
+      border: 1px solid rgba(230, 202, 101, 0.35);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .glass-pill-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      color: var(--glass-text);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .glass-pill-btn:hover {
+      background: var(--glass-active);
+      border-color: rgba(230, 202, 101, 0.4);
+    }
+
+    .glass-pill-btn.active {
+      background: rgba(230, 202, 101, 0.28);
+      border-color: rgba(255, 225, 120, 0.6);
+      color: #fffaf0;
+    }
+
+    /* ---------------- Bottom Floating Action Dock ---------------- */
+    .action-dock {
+      position: fixed;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: min(92%, 620px);
+    }
+
+    .dock-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: rgba(18, 17, 24, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 225, 150, 0.2);
+      border-radius: 36px;
+      padding: 8px 14px;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        0 0 1px 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .dock-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: none;
+      color: var(--glass-text);
+      padding: 10px 16px;
+      border-radius: 24px;
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      touch-action: manipulation;
+    }
+
+    .dock-action:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .dock-action:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .action-icon {
+      font-size: 1.15rem;
+    }
+
+    .action-counter {
+      background: rgba(255, 255, 255, 0.14);
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 12px;
+      color: #ffe8a3;
+      font-weight: 600;
+    }
+
+    .dock-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 4px;
+    }
+
+    .dock-action.highlight {
+      background: linear-gradient(135deg, rgba(230, 202, 101, 0.25), rgba(184, 145, 61, 0.35));
+      border: 1px solid rgba(255, 225, 130, 0.3);
+    }
+
+    .dock-action.highlight:hover {
+      background: linear-gradient(135deg, rgba(230, 202, 101, 0.38), rgba(184, 145, 61, 0.48));
+    }
+
+    /* ---------------- Last Message Modal ---------------- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 8, 12, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      width: min(540px, 92vw);
+      max-height: 85vh;
+      max-height: 85dvh;
+      background: radial-gradient(circle at 50% 20%, #201e29 0%, #131219 100%);
+      border: 1px solid rgba(255, 220, 140, 0.28);
+      border-radius: 22px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(230, 202, 101, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .modal-backdrop.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 24px 28px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .modal-header h2 {
+      font-family: var(--font-serif-monument);
+      font-size: 1.35rem;
+      color: #fff4d1;
+      margin-bottom: 4px;
+    }
+
+    .modal-subtitle {
+      font-size: 0.86rem;
+      color: var(--glass-muted);
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .message-modal-body {
+      padding: 36px 32px 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .last-message-card {
+      position: relative;
+      width: 100%;
+      background: rgba(25, 23, 33, 0.6);
+      border: 1px solid rgba(255, 225, 150, 0.15);
+      border-radius: 16px;
+      padding: 36px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .quote-watermark {
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      font-family: var(--font-serif-script);
+      font-size: 6rem;
+      line-height: 1;
+      color: var(--gold-primary);
+      opacity: 0.12;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .message-label {
+      display: inline-block;
+      font-family: var(--font-serif-monument);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      background: rgba(230, 202, 101, 0.12);
+      border: 1px solid rgba(230, 202, 101, 0.25);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .message-recipient {
+      font-family: var(--font-serif-script);
+      font-size: 1.45rem;
+      font-weight: 500;
+      color: #fff4d1;
+      margin-bottom: 16px;
+      letter-spacing: 0.03em;
+    }
+
+    .message-quote {
+      font-family: var(--font-serif-script);
+      font-size: clamp(1.4rem, 3.2vw, 1.85rem);
+      font-style: italic;
+      line-height: 1.45;
+      color: #f7eed8;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 12px rgba(230, 202, 101, 0.25);
+      margin: 0 0 24px;
+      padding: 0 10px;
+    }
+
+    .message-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60%;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(230, 202, 101, 0.5), transparent);
+    }
+
+    .divider-symbol {
+      color: var(--gold-primary);
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .message-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .message-signoff {
+      font-family: var(--font-serif-script);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--glass-muted);
+    }
+
+    .message-author {
+      font-family: var(--font-serif-monument);
+      font-size: 0.88rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-primary);
+    }
+
+    /* ---------------- Toast Notification ---------------- */
+    .toast-notification {
+      position: fixed;
+      bottom: 95px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(20, 19, 26, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(230, 202, 101, 0.4);
+      color: #fff9e6;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 150;
+    }
+
+    .toast-notification.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ---------------- Responsive Refinements ---------------- */
+    @media (max-width: 768px) {
+      .scene-viewport {
+        height: 100vh;
+        height: 100dvh;
+      }
+
+      .top-nav {
+        top: max(10px, env(safe-area-inset-top));
+        width: calc(100% - 20px);
+        max-width: 540px;
+        gap: 8px;
+      }
+
+      .nav-brand {
+        padding: 6px 12px;
+      }
+
+      .nav-brand .title {
+        display: none;
+      }
+
+      .nav-brand .symbol {
+        font-size: 1.15rem;
+      }
+
+      .nav-controls {
+        gap: 6px;
+      }
+
+      .btn-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .btn-icon svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      .theme-selector {
+        padding: 3px;
+      }
+
+      .theme-btn {
+        padding: 5px 8px;
+        font-size: 0.76rem;
+        gap: 4px;
+      }
+
+      .theme-btn span.label {
+        display: none;
+      }
+
+      .glass-pill-btn {
+        padding: 6px 10px;
+        font-size: 0.78rem;
+        gap: 4px;
+      }
+
+      .glass-pill-btn .view-label {
+        display: inline;
+        font-size: 0.72rem;
+      }
+
+      .monument-perspective {
+        margin-top: -15px;
+        transform: scale(0.94);
+      }
+
+      .monument-card {
+        width: min(340px, 86vw);
+        height: min(440px, 52dvh);
+        padding: 26px 16px 20px;
+        border-radius: 170px 170px 8px 8px / 110px 110px 8px 8px;
+      }
+
+      .stone-bevel-border {
+        inset: 8px;
+        border-radius: 162px 162px 5px 5px / 102px 102px 5px 5px;
+      }
+
+      .tribute-header {
+        margin-bottom: 14px;
+      }
+
+      .engraved-name {
+        font-size: clamp(1.6rem, 5.5vw, 2.15rem);
+        margin-bottom: 6px;
+      }
+
+      .engraved-dates {
+        font-size: clamp(0.85rem, 3.2vw, 1.05rem);
+      }
+
+      .engraved-divider {
+        width: 80%;
+        gap: 10px;
+        margin: 2px 0 16px;
+      }
+
+      .floret-svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .engraved-epitaph {
+        font-size: clamp(1.2rem, 4vw, 1.45rem);
+      }
+
+      .stone-last-msg {
+        margin-top: 10px;
+        padding: 5px 12px;
+        font-size: clamp(0.78rem, 2.7vw, 0.92rem);
+        flex-direction: column;
+        gap: 2px;
+        text-align: center;
+        max-width: 90%;
+      }
+
+      .monument-plinth {
+        width: min(380px, 92vw);
+      }
+
+      .plinth-top {
+        height: 13px;
+      }
+
+      .plinth-front {
+        height: 22px;
+      }
+
+      .altar-ground {
+        bottom: -32px;
+        height: 60px;
+        gap: 8px;
+        width: min(400px, 94vw);
+      }
+
+      .placed-candle {
+        width: 20px;
+        height: 40px;
+      }
+
+      .candle-wax {
+        width: 15px;
+        height: 26px;
+      }
+
+      .candle-flame {
+        width: 8px;
+        height: 14px;
+      }
+
+      .candle-glow-halo {
+        width: 55px;
+        height: 55px;
+      }
+
+      .placed-flower {
+        width: 34px;
+        height: 34px;
+      }
+
+      .ghost-apparition {
+        top: 20%;
+        right: 14%;
+        width: 95px;
+        height: 125px;
+      }
+
+      .foreground-frame {
+        pointer-events: none;
+      }
+
+      .sunflower-cluster {
+        bottom: -30px;
+        opacity: 0.85;
+      }
+
+      .cluster-left {
+        left: -40px;
+        transform: scale(0.7);
+      }
+
+      .cluster-right {
+        right: -40px;
+        transform: scale(0.7);
+      }
+
+      .flower-item {
+        width: 130px;
+        height: 130px;
+      }
+
+      .action-dock {
+        bottom: max(12px, env(safe-area-inset-bottom));
+        width: calc(100% - 20px);
+        max-width: 440px;
+      }
+
+      .dock-inner {
+        padding: 6px 10px;
+        border-radius: 28px;
+        justify-content: space-between;
+      }
+
+      .dock-action {
+        flex-direction: column;
+        gap: 2px;
+        padding: 6px 8px;
+        min-width: 54px;
+        touch-action: manipulation;
+      }
+
+      .dock-action span.action-text {
+        display: block !important;
+        font-size: 0.65rem;
+        letter-spacing: 0.02em;
+        font-weight: 500;
+        color: #e6dfcc;
+      }
+
+      .action-icon {
+        font-size: 1.25rem;
+      }
+
+      .action-counter {
+        position: absolute;
+        top: 1px;
+        right: 4px;
+        font-size: 0.64rem;
+        padding: 1px 5px;
+        border-radius: 8px;
+      }
+
+      .dock-divider {
+        height: 20px;
+        margin: 0 2px;
+      }
+
+      .message-card {
+        width: calc(100% - 28px);
+        max-height: 82dvh;
+      }
+
+      .modal-header {
+        padding: 18px 20px 14px;
+      }
+
+      .modal-header h2 {
+        font-size: 1.2rem;
+      }
+
+      .message-modal-body {
+        padding: 20px 16px 24px;
+      }
+
+      .last-message-card {
+        padding: 24px 16px 20px;
+      }
+
+      .message-recipient {
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+      }
+
+      .message-quote {
+        font-size: clamp(1.2rem, 4.4vw, 1.55rem);
+        margin: 0 0 18px;
+        padding: 0 4px;
+      }
+
+      .quote-watermark {
+        font-size: 4.5rem;
+        top: -6px;
+        left: 10px;
+      }
+
+      .toast-notification {
+        bottom: 80px;
+        font-size: 0.8rem;
+        padding: 6px 16px;
+        max-width: 90%;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .glass-pill-btn .view-label {
+        display: none;
+      }
+
+      .dock-action {
+        padding: 5px 6px;
+        min-width: 48px;
+      }
+
+      .dock-action span.action-text {
+        font-size: 0.6rem;
+      }
+
+      .monument-perspective {
+        transform: scale(0.88);
+      }
+    }
+
+    @media (max-height: 600px) and (orientation: landscape) {
+      .monument-perspective {
+        transform: scale(0.72);
+        margin-top: -10px;
+      }
+
+      .top-nav {
+        top: 6px;
+      }
+
+      .action-dock {
+        bottom: 6px;
+      }
+
+      .sunflower-cluster {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="theme-sunset view-cinematic">
+
+  <!-- Main Viewport Scene with Layered Depth -->
+  <main class="scene-viewport" id="scene">
+    
+    <!-- Depth Layer 0: Sky, Sun & Volumetric Rays -->
+    <div class="sky-container" id="sky-layer">
+      <div class="sky-gradient"></div>
+      <div class="clouds-layer"></div>
+      <div class="god-rays-layer"></div>
+      <div class="sun-orb" id="sun-orb">
+        <div class="sun-core"></div>
+        <div class="sun-glow"></div>
+        <div class="sun-flare flare-1"></div>
+        <div class="sun-flare flare-2"></div>
+      </div>
+      <div class="stars-layer"></div>
+    </div>
+
+    <!-- Depth Layer 1: Distant Horizons & Atmospheric Haze -->
+    <div class="distant-hills" id="distant-hills"></div>
+    <div class="horizon-haze"></div>
+
+    <!-- Depth Layer 2: Multi-Plane Sunflower Meadow -->
+    <div class="meadow-plane-far" id="meadow-far"></div>
+    <div class="meadow-plane-mid" id="meadow-mid"></div>
+
+    <!-- Depth Layer 3: Multi-Depth Particle Canvas (Motes, Petals, Fireflies) -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Optional Photographic Reference Mode -->
+    <div class="photo-mode-layer" id="photo-layer" style="background-image: url('assets/memorial_photo.jpg');"></div>
+
+    <!-- Depth Layer 4: Central 3D Monument & Placed Altar -->
+    <div class="monument-perspective" id="monument-wrapper">
+      <div class="monument-ground-shadow"></div>
+
+      <div class="monument-card" id="headstone">
+        <!-- Specular Highlight Overlay -->
+        <div class="stone-specular" id="specular-reflection"></div>
+        
+        <!-- Stone Texture & Bevel Edge Frame -->
+        <div class="stone-granite-texture"></div>
+        <div class="stone-bevel-border"></div>
+
+        <!-- Inscriptions -->
+        <div class="stone-inscription">
+          <header class="tribute-header">
+            <h1 class="engraved-name">Nitin Kumar</h1>
+            <p class="engraved-dates">November 2022 – September 2026</p>
+          </header>
+
+          <div class="engraved-divider">
+            <span class="engraved-line"></span>
+            <span class="engraved-ornament" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="floret-svg">
+                <path d="M12 2C11.5 5 9 7.5 6 8C9 8.5 11.5 11 12 14C12.5 11 15 8.5 18 8C15 7.5 12.5 5 12 2Z" fill="currentColor"/>
+                <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+                <path d="M12 14C11.7 16.5 10 18.5 8 19C10 19.5 11.7 21.5 12 24C12.3 21.5 14 19.5 16 19C14 18.5 12.3 16.5 12 14Z" fill="currentColor" opacity="0.8"/>
+              </svg>
+            </span>
+            <span class="engraved-line"></span>
+          </div>
+
+          <footer class="tribute-footer">
+            <p class="engraved-epitaph">Rest in Peace.</p>
+            <div class="stone-last-msg" id="stone-last-msg" title="Click to read last message">
+              <span class="stone-msg-prefix">Last msg:</span>
+              <span class="stone-msg-text">Please do not revive me again.</span>
+            </div>
+          </footer>
+        </div>
+
+        <!-- Click Ripple -->
+        <div class="stone-light-ripple" id="stone-ripple"></div>
+      </div>
+
+      <!-- Monument Base Plinth -->
+      <div class="monument-plinth">
+        <div class="plinth-top"></div>
+        <div class="plinth-front"></div>
+      </div>
+
+      <!-- Altar Floor for Placed Candles & Flowers -->
+      <div class="altar-ground" id="altar-ground"></div>
+    </div>
+
+    <!-- Ethereal Spirit / Ghost (Appears after 3 seconds) -->
+    <div class="ghost-apparition" id="ghost-apparition" title="Click the spirit">
+      <div class="ghost-halo"></div>
+      <div class="ghost-wisps-container">
+        <div class="ghost-wisp wisp-a"></div>
+        <div class="ghost-wisp wisp-b"></div>
+        <div class="ghost-wisp wisp-c"></div>
+      </div>
+      <div class="ghost-body">
+        <svg class="ghost-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ghostGlowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+              <stop offset="45%" stop-color="#fff8e7" stop-opacity="0.75" />
+              <stop offset="80%" stop-color="#ffd580" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="#ffbe53" stop-opacity="0" />
+            </linearGradient>
+            <filter id="ghostBlurFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <path d="M60 18 C38 18, 25 38, 25 65 C25 90, 20 120, 24 145 C28 140, 36 130, 44 142 C52 152, 60 138, 68 148 C76 136, 86 148, 92 140 C98 122, 95 90, 95 65 C95 38, 82 18, 60 18 Z" 
+                fill="url(#ghostGlowGrad)" 
+                filter="url(#ghostBlurFilter)" />
+          <circle cx="48" cy="56" r="3.5" fill="#443322" opacity="0.65" />
+          <circle cx="72" cy="56" r="3.5" fill="#443322" opacity="0.65" />
+          <circle cx="47" cy="54.5" r="1.2" fill="#ffffff" opacity="0.9" />
+          <circle cx="71" cy="54.5" r="1.2" fill="#ffffff" opacity="0.9" />
+          <path d="M53 68 Q60 73 67 68" stroke="#554433" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.45" />
+        </svg>
+      </div>
+      <div class="ghost-whisper" id="ghost-whisper">
+        <span class="whisper-text">I am at peace...</span>
+      </div>
+    </div>
+
+    <!-- Depth Layer 5: Foreground Sunflower Clusters (Counter-Parallax) -->
+    <div class="foreground-frame" id="foreground-frame">
+      <div class="sunflower-cluster cluster-left">
+        <div class="flower-item flower-1"></div>
+        <div class="flower-item flower-2"></div>
+        <div class="flower-item flower-3"></div>
+      </div>
+      <div class="sunflower-cluster cluster-right">
+        <div class="flower-item flower-4"></div>
+        <div class="flower-item flower-5"></div>
+        <div class="flower-item flower-6"></div>
+      </div>
+      <div class="grass-bed-foreground"></div>
+    </div>
+
+  </main>
+
+  <!-- Top Navigation & Controls -->
+  <header class="top-nav">
+    <div class="nav-brand">
+      <span class="symbol">🌻</span>
+      <span class="title">Sunset Sanctuary</span>
+    </div>
+
+    <div class="nav-controls">
+      <!-- Serene Soundscape Toggle -->
+      <button id="btn-sound" class="btn-icon" aria-label="Toggle Serene Soundscape" title="Play Peaceful Ambience">
+        <svg class="icon icon-sound-off" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27l4.73 4.73H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+        <svg class="icon icon-sound-on hidden" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
+
+      <!-- Time of Day Theme Switcher -->
+      <div class="theme-selector" role="group" aria-label="Atmospheric Time of Day">
+        <button class="theme-btn active" data-theme="sunset" title="Golden Hour Sunset">
+          <span class="icon">🌅</span>
+          <span class="label">Sunset</span>
+        </button>
+        <button class="theme-btn" data-theme="twilight" title="Quiet Twilight">
+          <span class="icon">🌆</span>
+          <span class="label">Twilight</span>
+        </button>
+        <button class="theme-btn" data-theme="night" title="Starry Midnight">
+          <span class="icon">🌌</span>
+          <span class="label">Night</span>
+        </button>
+      </div>
+
+      <!-- View Style Toggle -->
+      <button id="btn-toggle-view" class="glass-pill-btn" title="Toggle Photographic / 3D Artistic View">
+        <span class="icon">🖼️</span>
+        <span class="view-label">Photo Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bottom Floating Interactive Action Bar -->
+  <nav class="action-dock" aria-label="Memorial Actions">
+    <div class="dock-inner">
+      <button id="btn-candle" class="dock-action" title="Light a Memorial Candle">
+        <span class="action-icon">🕯️</span>
+        <span class="action-text">Light Candle</span>
+        <span class="action-counter" id="candle-count">0</span>
+      </button>
+
+      <button id="btn-flower" class="dock-action" title="Leave a Blooming Sunflower">
+        <span class="action-icon">🌻</span>
+        <span class="action-text">Leave Flower</span>
+        <span class="action-counter" id="flower-count">0</span>
+      </button>
+
+      <button id="btn-petals" class="dock-action" title="Scatter Golden Sunflower Petals">
+        <span class="action-icon">🍃</span>
+        <span class="action-text">Scatter Petals</span>
+      </button>
+
+      <div class="dock-divider"></div>
+
+      <button id="btn-last-msg" class="dock-action highlight" title="Read Last Message">
+        <span class="action-icon">✉️</span>
+        <span class="action-text">Last Message</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Last Message Modal -->
+  <div id="message-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card message-card" role="dialog" aria-labelledby="modal-title">
+      <header class="modal-header">
+        <div class="header-titles">
+          <h2 id="modal-title">Last Message</h2>
+          <p class="modal-subtitle">A quiet word left in the twilight</p>
+        </div>
+        <button class="modal-close-btn" id="modal-close" aria-label="Close modal">✕</button>
+      </header>
+
+      <div class="modal-body message-modal-body">
+        <div class="last-message-card">
+          <div class="quote-watermark" aria-hidden="true">“</div>
+          
+          <div class="message-content">
+            <span class="message-label">Last msg</span>
+            <blockquote class="message-quote">
+              Please do not revive me again.
+            </blockquote>
+          </div>
+
+          <div class="message-divider">
+            <span class="divider-line"></span>
+            <span class="divider-symbol">✤</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <div class="message-footer">
+            <span class="message-signoff">Rest in Peace</span>
+            <span class="message-author">Nitin Kumar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subtle Toast Notification -->
+  <div id="toast" class="toast-notification"></div>
+
+  <!-- Application Logic (Self-Contained) -->
+  <script>
+    (function () {
+      'use strict';
+
+      // =========================================================================
+      // State & Storage
+      // =========================================================================
+      const STATE = {
+        theme: 'sunset',
+        viewMode: 'cinematic',
+        soundEnabled: false,
+        candlesLit: 0,
+        flowersPlaced: 0
+      };
+
+      try {
+        const storedCandles = localStorage.getItem('sunset_sanctuary_candles');
+        STATE.candlesLit = storedCandles ? parseInt(storedCandles, 10) : 0;
+        const storedFlowers = localStorage.getItem('sunset_sanctuary_flowers');
+        STATE.flowersPlaced = storedFlowers ? parseInt(storedFlowers, 10) : 0;
+      } catch (e) {}
+
+      // =========================================================================
+      // Web Audio Synthesizer (Serene Ambient Soundscape)
+      // =========================================================================
+      let audioCtx = null;
+      let windNoiseNode = null;
+      let windGainNode = null;
+      let windFilter = null;
+
+      function initAudio() {
+        if (audioCtx) return;
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioCtx = new AudioContextClass();
+
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+          b6 = white * 0.115926;
+        }
+
+        windNoiseNode = audioCtx.createBufferSource();
+        windNoiseNode.buffer = noiseBuffer;
+        windNoiseNode.loop = true;
+
+        windFilter = audioCtx.createBiquadFilter();
+        windFilter.type = 'lowpass';
+        windFilter.frequency.value = 380;
+        windFilter.Q.value = 2.5;
+
+        windGainNode = audioCtx.createGain();
+        windGainNode.gain.value = 0;
+
+        windNoiseNode.connect(windFilter);
+        windFilter.connect(windGainNode);
+        windGainNode.connect(audioCtx.destination);
+        windNoiseNode.start(0);
+
+        const lfo = audioCtx.createOscillator();
+        const lfoGain = audioCtx.createGain();
+        lfo.frequency.value = 0.12;
+        lfoGain.gain.value = 180;
+        lfo.connect(lfoGain);
+        lfoGain.connect(windFilter.frequency);
+        lfo.start();
+      }
+
+      function toggleSound() {
+        initAudio();
+        if (!audioCtx) return;
+
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        STATE.soundEnabled = !STATE.soundEnabled;
+        const btn = document.getElementById('btn-sound');
+        const offIcon = btn.querySelector('.icon-sound-off');
+        const onIcon = btn.querySelector('.icon-sound-on');
+
+        if (STATE.soundEnabled) {
+          windGainNode.gain.setTargetAtTime(0.25, audioCtx.currentTime, 1.5);
+          btn.classList.add('active');
+          offIcon.classList.add('hidden');
+          onIcon.classList.remove('hidden');
+          playSingingBowlChime(432);
+          showToast("Serene soundscape active 🍃");
+        } else {
+          windGainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.8);
+          btn.classList.remove('active');
+          offIcon.classList.remove('hidden');
+          onIcon.classList.add('hidden');
+        }
+      }
+
+      function playSingingBowlChime(freq = 528) {
+        if (!STATE.soundEnabled || !audioCtx) return;
+        try {
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const overtone = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+
+          overtone.type = 'sine';
+          overtone.frequency.setValueAtTime(freq * 2.01, now);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.exponentialRampToValueAtTime(0.2, now + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 4.0);
+
+          osc.connect(gain);
+          overtone.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          overtone.start(now);
+          osc.stop(now + 4.2);
+          overtone.stop(now + 4.2);
+        } catch (e) {}
+      }
+
+      // =========================================================================
+      // Canvas Multi-Depth Particle Engine
+      // =========================================================================
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const petals = [];
+      const motes = [];
+      const fireflies = [];
+
+      class Petal {
+        constructor(x, y, isBurst = false) {
+          this.depth = Math.random(); // 0 = far, 1 = close to camera
+          this.x = x !== undefined ? x : Math.random() * width;
+          this.y = y !== undefined ? y : Math.random() * -height * 0.4;
+          this.baseSize = Math.random() * 10 + 8;
+          this.size = this.baseSize * (0.6 + this.depth * 0.8);
+          this.speedY = (Math.random() * 1.5 + (isBurst ? 2.0 : 0.8)) * (0.7 + this.depth * 0.6);
+          this.speedX = (Math.random() - 0.4) * 1.8;
+          this.angle = Math.random() * Math.PI * 2;
+          this.angularSpeed = (Math.random() - 0.5) * 0.04;
+          this.flip = Math.random() * Math.PI;
+          this.flipSpeed = Math.random() * 0.03 + 0.01;
+          this.opacity = (Math.random() * 0.3 + 0.5) * (0.6 + this.depth * 0.4);
+          this.color = Math.random() > 0.3 ? '#f7be23' : '#e69819';
+        }
+
+        update() {
+          this.y += this.speedY;
+          this.x += this.speedX + Math.sin(this.y * 0.01) * 0.8;
+          this.angle += this.angularSpeed;
+          this.flip += this.flipSpeed;
+
+          if (this.y > height + 20) {
+            this.y = -20;
+            this.x = Math.random() * width;
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.angle);
+          ctx.scale(1, Math.sin(this.flip));
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.globalAlpha = this.opacity;
+          
+          ctx.moveTo(0, -this.size);
+          ctx.quadraticCurveTo(this.size * 0.45, 0, 0, this.size * 0.9);
+          ctx.quadraticCurveTo(-this.size * 0.45, 0, 0, -this.size);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(160, 90, 10, 0.28)';
+          ctx.lineWidth = Math.max(0.5, this.depth);
+          ctx.moveTo(0, -this.size * 0.7);
+          ctx.lineTo(0, this.size * 0.6);
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+
+      class Mote {
+        constructor() {
+          this.depth = Math.random();
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.radius = (Math.random() * 1.8 + 0.8) * (0.6 + this.depth * 0.7);
+          this.speedX = (Math.random() - 0.4) * 0.6;
+          this.speedY = (-Math.random() * 0.8 - 0.2) * (0.6 + this.depth * 0.6);
+          this.alpha = Math.random() * 0.6 + 0.2;
+          this.pulse = Math.random() * Math.PI * 2;
+        }
+
+        update() {
+          this.y += this.speedY;
+          this.x += this.speedX;
+          this.pulse += 0.03;
+
+          if (this.y < -10) {
+            this.y = height + 10;
+            this.x = Math.random() * width;
+          }
+        }
+
+        draw() {
+          ctx.save();
+          const currentAlpha = Math.max(0.1, this.alpha + Math.sin(this.pulse) * 0.25) * (0.5 + this.depth * 0.5);
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = STATE.theme === 'night' 
+            ? 'rgba(215, 235, 255, ' + currentAlpha + ')' 
+            : 'rgba(255, 220, 130, ' + currentAlpha + ')';
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      class Firefly {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height * 0.7 + height * 0.25;
+          this.radius = Math.random() * 2.5 + 1.5;
+          this.speedX = (Math.random() - 0.5) * 0.8;
+          this.speedY = (Math.random() - 0.5) * 0.8;
+          this.phase = Math.random() * Math.PI * 2;
+        }
+
+        update() {
+          this.x += this.speedX + Math.sin(this.phase) * 0.5;
+          this.y += this.speedY + Math.cos(this.phase) * 0.4;
+          this.phase += 0.04;
+
+          if (this.x < 0) this.x = width;
+          if (this.x > width) this.x = 0;
+          if (this.y < height * 0.2) this.y = height * 0.8;
+          if (this.y > height) this.y = height * 0.3;
+        }
+
+        draw() {
+          if (STATE.theme === 'sunset') return;
+          ctx.save();
+          const glow = (Math.sin(this.phase * 2) + 1) / 2;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius * (1 + glow * 0.5), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(220, 255, 140, ${glow * 0.85 + 0.15})`;
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = 'rgba(210, 255, 120, 0.9)';
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      for (let i = 0; i < 30; i++) petals.push(new Petal());
+      for (let i = 0; i < 45; i++) motes.push(new Mote());
+      for (let i = 0; i < 18; i++) fireflies.push(new Firefly());
+
+      function scatterPetalsBurst() {
+        for (let i = 0; i < 38; i++) {
+          const p = new Petal(
+            width * 0.5 + (Math.random() - 0.5) * (width * 0.6),
+            height * 0.3 + (Math.random() - 0.5) * 150,
+            true
+          );
+          p.speedX = (Math.random() - 0.4) * 4.5;
+          p.speedY = Math.random() * 2.5 + 1.2;
+          petals.push(p);
+        }
+        playSingingBowlChime(580);
+        showToast("Petals drifting on the gentle wind 🍃");
+      }
+
+      function renderLoop() {
+        ctx.clearRect(0, 0, width, height);
+
+        motes.forEach(m => {
+          m.update();
+          m.draw();
+        });
+
+        petals.forEach(p => {
+          p.update();
+          p.draw();
+        });
+
+        if (STATE.theme !== 'sunset') {
+          fireflies.forEach(f => {
+            f.update();
+            f.draw();
+          });
+        }
+
+        if (petals.length > 55) {
+          petals.splice(0, petals.length - 55);
+        }
+
+        requestAnimationFrame(renderLoop);
+      }
+      requestAnimationFrame(renderLoop);
+
+      // =========================================================================
+      // Multi-Layer Deep Parallax System
+      // =========================================================================
+      const monument = document.getElementById('headstone');
+      const skyLayer = document.getElementById('sky-layer');
+      const sunOrb = document.getElementById('sun-orb');
+      const distantHills = document.getElementById('distant-hills');
+      const meadowFar = document.getElementById('meadow-far');
+      const meadowMid = document.getElementById('meadow-mid');
+      const foregroundFrame = document.getElementById('foreground-frame');
+
+      let targetDeltaX = 0;
+      let targetDeltaY = 0;
+      let currentDeltaX = 0;
+      let currentDeltaY = 0;
+
+      function onPointerMove(e) {
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        if (clientX === undefined) return;
+
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        targetDeltaX = (clientX - centerX) / centerX;
+        targetDeltaY = (clientY - centerY) / centerY;
+
+        const rect = monument.getBoundingClientRect();
+        const specX = ((clientX - rect.left) / rect.width) * 100;
+        const specY = ((clientY - rect.top) / rect.height) * 100;
+        monument.style.setProperty('--mouse-x', `${specX}%`);
+        monument.style.setProperty('--mouse-y', `${specY}%`);
+      }
+
+      window.addEventListener('mousemove', onPointerMove, { passive: true });
+      window.addEventListener('touchstart', onPointerMove, { passive: true });
+      window.addEventListener('touchmove', onPointerMove, { passive: true });
+      window.addEventListener('touchend', () => {
+        targetDeltaX = 0;
+        targetDeltaY = 0;
+      }, { passive: true });
+
+      // Hardware Gyroscope Support
+      window.addEventListener('deviceorientation', (e) => {
+        if (e.gamma !== null && e.beta !== null) {
+          const clampedGamma = Math.max(-25, Math.min(25, e.gamma));
+          targetDeltaX = clampedGamma / 25;
+
+          const deltaBeta = Math.max(-25, Math.min(25, e.beta - 45));
+          targetDeltaY = deltaBeta / 25;
+
+          monument.style.setProperty('--mouse-x', `${50 + targetDeltaX * 35}%`);
+          monument.style.setProperty('--mouse-y', `${40 + targetDeltaY * 30}%`);
+        }
+      }, { passive: true });
+
+      // Parallax RAF Loop distributing depth planes
+      function animateDepthLayers() {
+        currentDeltaX += (targetDeltaX - currentDeltaX) * 0.08;
+        currentDeltaY += (targetDeltaY - currentDeltaY) * 0.08;
+
+        const x = currentDeltaX;
+        const y = currentDeltaY;
+
+        // Plane 0: Sky & Sun (Deepest)
+        if (skyLayer) skyLayer.style.transform = `translate3d(${(x * 4).toFixed(2)}px, ${(y * 3).toFixed(2)}px, 0)`;
+        if (sunOrb) sunOrb.style.transform = `translate3d(${(x * 8).toFixed(2)}px, ${(y * 6).toFixed(2)}px, 0)`;
+
+        // Plane 1: Distant Hills
+        if (distantHills) distantHills.style.transform = `translate3d(${(x * 12).toFixed(2)}px, ${(y * 8).toFixed(2)}px, 0)`;
+
+        // Plane 2: Meadow Planes (Far & Mid)
+        if (meadowFar) meadowFar.style.transform = `translate3d(${(x * 18).toFixed(2)}px, ${(y * 10).toFixed(2)}px, 0)`;
+        if (meadowMid) meadowMid.style.transform = `translate3d(${(x * 24).toFixed(2)}px, ${(y * 14).toFixed(2)}px, 0)`;
+
+        // Plane 3: Headstone (Centerpiece 3D Tilt)
+        const rotY = x * 12;
+        const rotX = -y * 10;
+        if (monument) {
+          monument.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+        }
+
+        // Plane 4: Foreground Framing Sunflowers (Counter-Parallax creates intense stereo depth)
+        if (foregroundFrame) {
+          foregroundFrame.style.transform = `translate3d(${(-x * 32).toFixed(2)}px, ${(-y * 18).toFixed(2)}px, 0)`;
+        }
+
+        // Plane 3.5: Ethereal Spirit Parallax
+        const ghostBody = document.querySelector('.ghost-apparition .ghost-body');
+        if (ghostBody) {
+          ghostBody.style.transform = `translate3d(${(x * 16).toFixed(2)}px, ${(y * 10).toFixed(2)}px, 0)`;
+        }
+
+        requestAnimationFrame(animateDepthLayers);
+      }
+      requestAnimationFrame(animateDepthLayers);
+
+      // Headstone Click Ripple & Tone
+      monument.addEventListener('click', (e) => {
+        const rect = monument.getBoundingClientRect();
+        const ripple = document.getElementById('stone-ripple');
+        const posX = e.clientX !== undefined ? (e.clientX - rect.left) : (rect.width / 2);
+        const posY = e.clientY !== undefined ? (e.clientY - rect.top) : (rect.height / 2);
+        ripple.style.left = `${posX}px`;
+        ripple.style.top = `${posY}px`;
+        ripple.classList.remove('active');
+        void ripple.offsetWidth;
+        ripple.classList.add('active');
+
+        playSingingBowlChime(432);
+      });
+
+      // =========================================================================
+      // Interactive Altar (Candles & Flowers)
+      // =========================================================================
+      const altarGround = document.getElementById('altar-ground');
+      const candleCountEl = document.getElementById('candle-count');
+      const flowerCountEl = document.getElementById('flower-count');
+
+      function updateCounters() {
+        candleCountEl.textContent = STATE.candlesLit;
+        flowerCountEl.textContent = STATE.flowersPlaced;
+        try {
+          localStorage.setItem('sunset_sanctuary_candles', STATE.candlesLit);
+          localStorage.setItem('sunset_sanctuary_flowers', STATE.flowersPlaced);
+        } catch (e) {}
+      }
+
+      function addCandle() {
+        STATE.candlesLit++;
+        updateCounters();
+
+        const candle = document.createElement('div');
+        candle.className = 'placed-candle';
+        candle.innerHTML = `
+          <div class="candle-flame"></div>
+          <div class="candle-wick"></div>
+          <div class="candle-wax"></div>
+          <div class="candle-glow-halo"></div>
+        `;
+
+        candle.addEventListener('click', () => {
+          playSingingBowlChime(640);
+          showToast("A warm flame glows in peaceful remembrance.");
+        });
+
+        altarGround.appendChild(candle);
+        playSingingBowlChime(528);
+        showToast("Candle lit in peaceful remembrance 🕯️");
+      }
+
+      function addSunflower() {
+        STATE.flowersPlaced++;
+        updateCounters();
+
+        const flower = document.createElement('div');
+        flower.className = 'placed-flower';
+        const rot = (Math.random() - 0.5) * 45;
+        flower.style.setProperty('--rot', `${rot}deg`);
+
+        flower.innerHTML = `
+          <svg viewBox="0 0 100 100">
+            <g fill="#f5b718">
+              <ellipse cx="50" cy="20" rx="7" ry="22" />
+              <ellipse cx="50" cy="80" rx="7" ry="22" />
+              <ellipse cx="20" cy="50" rx="22" ry="7" />
+              <ellipse cx="80" cy="50" rx="22" ry="7" />
+              <ellipse cx="29" cy="29" rx="8" ry="22" transform="rotate(-45 29 29)" fill="#ffcd29"/>
+              <ellipse cx="71" cy="29" rx="8" ry="22" transform="rotate(45 71 29)" fill="#ffcd29"/>
+              <ellipse cx="29" cy="71" rx="8" ry="22" transform="rotate(45 29 71)" fill="#ffcd29"/>
+              <ellipse cx="71" cy="71" rx="8" ry="22" transform="rotate(-45 71 71)" fill="#ffcd29"/>
+            </g>
+            <circle cx="50" cy="50" r="23" fill="#3a1e06" />
+            <circle cx="50" cy="50" r="17" fill="#201003" />
+          </svg>
+        `;
+
+        flower.addEventListener('click', () => {
+          playSingingBowlChime(480);
+          showToast("Sunflower resting in radiant tribute.");
+        });
+
+        altarGround.appendChild(flower);
+        playSingingBowlChime(396);
+        showToast("Sunflower offered with love 🌻");
+      }
+
+      // Initial placement
+      if (!STATE.candlesLit) STATE.candlesLit = 2;
+      if (!STATE.flowersPlaced) STATE.flowersPlaced = 3;
+
+      for (let i = 0; i < Math.min(STATE.candlesLit, 7); i++) {
+        const c = document.createElement('div');
+        c.className = 'placed-candle';
+        c.innerHTML = `
+          <div class="candle-flame"></div>
+          <div class="candle-wick"></div>
+          <div class="candle-wax"></div>
+          <div class="candle-glow-halo"></div>
+        `;
+        altarGround.appendChild(c);
+      }
+
+      for (let i = 0; i < Math.min(STATE.flowersPlaced, 5); i++) {
+        const f = document.createElement('div');
+        f.className = 'placed-flower';
+        f.style.setProperty('--rot', `${(Math.random() - 0.5) * 40}deg`);
+        f.innerHTML = `
+          <svg viewBox="0 0 100 100">
+            <g fill="#f5b718">
+              <ellipse cx="50" cy="20" rx="7" ry="22" />
+              <ellipse cx="50" cy="80" rx="7" ry="22" />
+              <ellipse cx="20" cy="50" rx="22" ry="7" />
+              <ellipse cx="80" cy="50" rx="22" ry="7" />
+            </g>
+            <circle cx="50" cy="50" r="22" fill="#3a1e06" />
+          </svg>
+        `;
+        altarGround.appendChild(f);
+      }
+      updateCounters();
+
+      // =========================================================================
+      // Theme & View Mode Switcher
+      // =========================================================================
+      const themeButtons = document.querySelectorAll('.theme-btn');
+      themeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          themeButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const theme = btn.dataset.theme;
+          STATE.theme = theme;
+          document.body.classList.remove('theme-sunset', 'theme-twilight', 'theme-night');
+          document.body.classList.add(`theme-${theme}`);
+
+          if (theme === 'sunset') showToast("Atmosphere: Golden Hour Sunset 🌅");
+          else if (theme === 'twilight') showToast("Atmosphere: Quiet Twilight 🌆");
+          else if (theme === 'night') showToast("Atmosphere: Starry Midnight 🌌");
+
+          playSingingBowlChime(theme === 'night' ? 360 : 480);
+        });
+      });
+
+      const viewToggleBtn = document.getElementById('btn-toggle-view');
+      const viewLabel = viewToggleBtn.querySelector('.view-label');
+
+      viewToggleBtn.addEventListener('click', () => {
+        if (STATE.viewMode === 'cinematic') {
+          STATE.viewMode = 'photo';
+          document.body.classList.remove('view-cinematic');
+          document.body.classList.add('view-photo');
+          viewToggleBtn.classList.add('active');
+          viewLabel.textContent = "3D Mode";
+          showToast("Showing Photographic Reference View 🖼️");
+        } else {
+          STATE.viewMode = 'cinematic';
+          document.body.classList.remove('view-photo');
+          document.body.classList.add('view-cinematic');
+          viewToggleBtn.classList.remove('active');
+          viewLabel.textContent = "Photo Mode";
+          showToast("Showing 3D Cinematic Render ✨");
+        }
+      });
+
+      // =========================================================================
+      // Last Message Modal
+      // =========================================================================
+      const messageModal = document.getElementById('message-modal');
+      const modalCloseBtn = document.getElementById('modal-close');
+      const btnLastMsg = document.getElementById('btn-last-msg');
+      const stoneLastMsg = document.getElementById('stone-last-msg');
+
+      function openMessageModal() {
+        if (!messageModal) return;
+        messageModal.classList.add('active');
+        messageModal.setAttribute('aria-hidden', 'false');
+        playSingingBowlChime(432);
+      }
+
+      function closeMessageModal() {
+        if (!messageModal) return;
+        messageModal.classList.remove('active');
+        messageModal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeMessageModal);
+      if (messageModal) {
+        messageModal.addEventListener('click', (e) => {
+          if (e.target === messageModal) closeMessageModal();
+        });
+      }
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && messageModal && messageModal.classList.contains('active')) {
+          closeMessageModal();
+        }
+      });
+
+      if (btnLastMsg) btnLastMsg.addEventListener('click', openMessageModal);
+      if (stoneLastMsg) {
+        stoneLastMsg.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openMessageModal();
+        });
+      }
+
+      // =========================================================================
+      // Toast Notification Helper
+      // =========================================================================
+      let toastTimer = null;
+      const toast = document.getElementById('toast');
+
+      function showToast(text) {
+        if (!toast) return;
+        toast.textContent = text;
+        toast.classList.add('active');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('active');
+        }, 2800);
+      }
+
+      // Action Listeners
+      document.getElementById('btn-sound').addEventListener('click', toggleSound);
+      document.getElementById('btn-candle').addEventListener('click', addCandle);
+      document.getElementById('btn-flower').addEventListener('click', addSunflower);
+      document.getElementById('btn-petals').addEventListener('click', scatterPetalsBurst);
+
+      // =========================================================================
+      // Ethereal Spirit / Ghost (Manifests after exactly 3 seconds)
+      // =========================================================================
+      setTimeout(() => {
+        const ghost = document.getElementById('ghost-apparition');
+        if (ghost) {
+          ghost.classList.add('manifested');
+          playSingingBowlChime(660);
+          showToast("A gentle spirit appeared in the meadow ✨");
+        }
+      }, 3000);
+
+      const ghostApparition = document.getElementById('ghost-apparition');
+      const ghostWhisper = document.getElementById('ghost-whisper');
+      let whisperTimer = null;
+
+      if (ghostApparition && ghostWhisper) {
+        ghostApparition.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playSingingBowlChime(784);
+          ghostWhisper.classList.add('active');
+          clearTimeout(whisperTimer);
+          whisperTimer = setTimeout(() => {
+            ghostWhisper.classList.remove('active');
+          }, 3200);
+          scatterPetalsBurst();
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>
